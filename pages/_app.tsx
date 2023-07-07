@@ -1,8 +1,13 @@
-import '../styles/globals.scss'
 import type { AppProps } from 'next/app'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  return (
+    <div>
+      top bar
+      <Component {...pageProps} />
+
+    </div>
+  )
 }
 
 export default MyApp
