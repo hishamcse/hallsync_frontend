@@ -1,0 +1,58 @@
+@import './vars';
+$logoSectionWidth: 200px;
+$notSectionWidth : 200px;
+$circleColor : #00FFF5;
+$circleDiameter : 24px;
+$circleYShift : 4px;
+$circleRightMargin : 8px;
+$logoTextColor : #ffffff;
+$iconHW : 62px;
+
+.root{
+    background-color: $sbc;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+    // justify-content: center;
+}
+
+.logoSection{
+    // background-color: blue;
+    width: $logoSectionWidth;
+    font-size: 24px;
+    text-align: center;
+    color: $logoTextColor;
+    .logoCircle{
+        width: $circleDiameter;
+        height: $circleDiameter;
+        border-radius: 50%;
+        background-color: $circleColor;
+        display: inline-block;
+        transform: translateY($circleYShift);
+        margin-right: $circleRightMargin;
+    }
+}
+
+.tabSection{
+    background-color: orange;
+    flex-grow: 1;
+}
+
+.notSection{
+    // background-color: gray;
+    width: $notSectionWidth;
+    display: flex;
+    justify-content: space-around;
+}   
+
+.icon{
+    height: $iconHW;
+    width: $iconHW;
+    text-align: center;
+    background-color: $tbc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
