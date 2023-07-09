@@ -1,5 +1,4 @@
 @import './vars';
-$logoSectionWidth: 200px;
 $notSectionWidth : 200px;
 $circleColor : #00FFF5;
 $circleDiameter : 24px;
@@ -20,8 +19,11 @@ $iconHW : 62px;
 .logoSection{
     // background-color: blue;
     width: $logoSectionWidth;
+    // box-sizing: content-box;
+    box-sizing: border-box;
     font-size: 24px;
-    text-align: center;
+    // text-align: center;
+    padding-left: 60px;
     color: $logoTextColor;
     .logoCircle{
         width: $circleDiameter;

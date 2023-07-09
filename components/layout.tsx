@@ -1,14 +1,27 @@
 import topBarStyles from "../styles/topbar.module.scss"
+import sideBarStyles from '../styles/sidebar.module.scss'
+
+function SideBarIcon(
+    props : {
+        src : string
+    }
+){
+    return (
+        <div className={sideBarStyles.icon} >
+            <img src = {props.src} />
+        </div>
+    )
+}
 export function StudentNavBar(){
 
     return(
-        <ul>
-            <li>Application</li>
-            <li>Mess</li>
-            <li>Payments</li>
-            <li>Info</li>
-            <li>Complaints</li>
-            <li>Personal Info</li>
+        <ul className={sideBarStyles.sidebar} >
+            <li className={sideBarStyles.focus} > <SideBarIcon src="/application.svg" />  Application</li>
+            <li>  <SideBarIcon src="/mess.svg" />  Mess</li>
+            <li> <SideBarIcon src="/payments.svg" />  Payments</li>
+            <li> <SideBarIcon src="/info.svg" /> Info</li>
+            <li> <SideBarIcon src="/feAngry1.svg" /> Complaints</li>
+            <li> <SideBarIcon src="/feAngry2.svg" /> Personal Info</li>
         </ul>
     )
 }

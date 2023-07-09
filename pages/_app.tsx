@@ -4,18 +4,25 @@ import '../styles/global.scss'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div>
+    <div style={{
+      backgroundColor : "green"
+    }}>
       <div style={{
         height : "130px"
       }} >
         <TopBar />
       </div>
-      <div>
-        <StudentNavBar />
+      <div style={{
+        backgroundColor : "yellow"
+      }}>
+          <StudentNavBar />
+        <div style={{
+          backgroundColor : "blue",
+        }}>
+          <Component {...pageProps} />
+        </div>
       </div>
-      <div>
-        <Component {...pageProps} />
-      </div>
+      
     </div>
   )
 }
