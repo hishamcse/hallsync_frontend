@@ -37,8 +37,60 @@ $iconHW : 62px;
 }
 
 .tabSection{
-    background-color: orange;
+    // background-color: orange;
     flex-grow: 1;
+    display: flex;
+    height: 100%;
+    align-items: flex-end;
+    .tabs{
+        padding: 0px;
+        margin : 0px;
+        list-style-type: none;
+        display: inline-flex;
+        color: $inactiveTextColor ;
+        // background-color: green;
+        li{
+            // background-color: red;
+            // .liInsideDiv{
+
+                display: grid;
+                align-items: end;
+                // padding: 5px 40px;
+                div{
+                    grid-row: 1;
+                    grid-column: 1;
+                }
+    
+                .tabBackGround{
+                    transform: translate(0, 15px);
+                    visibility: hidden;
+                    // display : 
+                    // transform: scale(.8) translate(0, 15px);
+                    // background-color: yellow;
+                }
+                .active{
+                    visibility: visible;
+                    color: $logoTextColor;
+                }
+                .tabText{
+                    // background-color: red;
+                    display: flex;
+                    justify-content: center;
+                    align-items: flex-end;
+                    z-index: 2;
+                    // background-color: blue;
+                    height: 100%;
+                    box-sizing: border-box;
+                    padding-bottom: 15px;
+                }
+            // }
+            // transform: scale(.7);
+            // background-color: green;
+            // height: 50px;
+            // clip-path: url('../public/tabActive2.svg');
+            // border-top: white 1px solid;
+        }
+    }
 }
 
 .notSection{

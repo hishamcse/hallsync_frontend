@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       backgroundColor : "green"
     }}>
       <div style={{
-        height : "130px"
+        height : "80px"
       }} >
         <TopBar />
       </div>

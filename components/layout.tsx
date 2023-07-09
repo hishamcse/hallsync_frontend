@@ -26,6 +26,43 @@ export function StudentNavBar(){
     )
 }
 
+function Tabs(){
+    return(
+        <ul className={topBarStyles.tabs} >
+            <li>
+                {/* <div className={topBarStyles.liInsideDiv} > */}
+                    <div className={topBarStyles.tabBackGround + " " + topBarStyles.active} >
+                        <img src="/tabActiveRect.svg" />
+                    </div>
+                    <div className={topBarStyles.tabBackGround + " " + topBarStyles.active} >
+                        <img src="/tabActive.svg" />
+                    </div>
+                    
+                    <div className={topBarStyles.tabText + " " + topBarStyles.active} >
+                        New Application 
+                    </div>
+                {/* </div> */}
+                
+            </li>
+            <li>
+                {/* <div className={topBarStyles.liInsideDiv} > */}
+                    <div className={topBarStyles.tabBackGround} >
+                        <img src="/tabActiveRect.svg" />
+                    </div>
+                    <div className={topBarStyles.tabBackGround} >
+                        <img src="/tabActive.svg" />
+                    </div>
+                    
+                    <div className={topBarStyles.tabText} >
+                        Previous Application 
+                    </div>
+                {/* </div> */}
+
+            </li>
+        </ul>
+    )
+}
+
 
 export function TopBar(){
     return (
@@ -35,7 +72,8 @@ export function TopBar(){
                 HallSync
             </div>
             <div className={topBarStyles.tabSection}>
-                tab section
+                <Tabs />
+                {/* asdf */}
             </div>
             <div className={topBarStyles.notSection}>
                 <Icon src="/avatar.svg" />
