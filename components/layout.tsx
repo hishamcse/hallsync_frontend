@@ -1,5 +1,8 @@
 import topBarStyles from "../styles/topbar.module.scss"
 import sideBarStyles from '../styles/sidebar.module.scss'
+import Link from 'next/link'
+import { NextRouter, useRouter } from "next/router"
+
 
 function SideBarIcon(
     props : {
@@ -16,8 +19,20 @@ export function StudentNavBar(){
 
     return(
         <ul className={sideBarStyles.sidebar} >
-            <li className={sideBarStyles.focus} > <SideBarIcon src="/application.svg" />  Application</li>
-            <li>  <SideBarIcon src="/mess.svg" />  Mess</li>
+            <li className={sideBarStyles.focus} > 
+                <SideBarIcon src="/application.svg" />
+                <Link href="/application/newApplication"> 
+                    {/* <div> */}
+                    Application 
+                    {/* </div>  */}
+                </Link> 
+            </li>
+            <li>  <SideBarIcon src="/mess.svg" />  
+            <Link href="/mess">
+                Mess
+            </Link>
+            
+            </li>
             <li> <SideBarIcon src="/payments.svg" />  Payments</li>
             <li> <SideBarIcon src="/info.svg" /> Info</li>
             <li> <SideBarIcon src="/feAngry1.svg" /> Complaints</li>
@@ -26,45 +41,56 @@ export function StudentNavBar(){
     )
 }
 
+function Tab(
+    props :{
+    name : string,
+    isActive : boolean,
+    href : string
+}){
+    return (
+        <li>
+            <div className={topBarStyles.tabBackGround + " " + (props.isActive ? topBarStyles.active : '')} >
+                <img src="/tabActiveRect.svg" />
+            </div>
+            <div className={topBarStyles.tabBackGround + " " + (props.isActive ? topBarStyles.active : '')} >
+                <img src="/tabActive.svg" />
+            </div>
+            
+            <div className={topBarStyles.tabText + " " + (props.isActive ? topBarStyles.active : '')} >
+                <Link href={props.href}>
+                    {props.name} 
+                </Link>
+            </div>
+            
+        </li>
+    )
+}
+
+function checkRouteContains(router : NextRouter,str : string){
+    return router.pathname.includes(str);
+}
+
 function Tabs(){
+    const router = useRouter();
+    const routes = {
+        newApp : "newApplication",
+        prevApp : 'prevApplication'
+    }
+
+    // console.log(router.pathname);
+
     return(
         <ul className={topBarStyles.tabs} >
-            <li>
-                {/* <div className={topBarStyles.liInsideDiv} > */}
-                    <div className={topBarStyles.tabBackGround + " " + topBarStyles.active} >
-                        <img src="/tabActiveRect.svg" />
-                    </div>
-                    <div className={topBarStyles.tabBackGround + " " + topBarStyles.active} >
-                        <img src="/tabActive.svg" />
-                    </div>
-                    
-                    <div className={topBarStyles.tabText + " " + topBarStyles.active} >
-                        New Application 
-                    </div>
-                {/* </div> */}
-                
-            </li>
-            <li>
-                {/* <div className={topBarStyles.liInsideDiv} > */}
-                    <div className={topBarStyles.tabBackGround} >
-                        <img src="/tabActiveRect.svg" />
-                    </div>
-                    <div className={topBarStyles.tabBackGround} >
-                        <img src="/tabActive.svg" />
-                    </div>
-                    
-                    <div className={topBarStyles.tabText} >
-                        Previous Application 
-                    </div>
-                {/* </div> */}
-
-            </li>
+            <Tab href={"./" + routes.newApp} isActive = {checkRouteContains(router, routes.newApp)} name="New Application" />
+            <Tab href={"./" + routes.prevApp} isActive = {checkRouteContains(router, routes.prevApp)} name = "Previous Application" />
         </ul>
     )
 }
 
 
 export function TopBar(){
+    const router = useRouter();
+
     return (
         <div  className={topBarStyles.root}>
             <div className={topBarStyles.logoSection}>
@@ -72,7 +98,10 @@ export function TopBar(){
                 HallSync
             </div>
             <div className={topBarStyles.tabSection}>
-                <Tabs />
+                {
+                    router.pathname.includes('application') &&
+                    <Tabs />
+                }
                 {/* asdf */}
             </div>
             <div className={topBarStyles.notSection}>

@@ -1,28 +1,19 @@
 import type { AppProps } from 'next/app'
 import { StudentNavBar, TopBar } from '../components/layout'
 import '../styles/global.scss'
+import styles from '../styles/_app.module.scss'
+
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <div style={{
-      backgroundColor : "green"
-    }}>
-      <div style={{
-        height : "80px"
-      }} >
+    <div>
+      <StudentNavBar />
+      <div className = {styles.topBarContainer} >
         <TopBar />
       </div>
-      <div style={{
-        backgroundColor : "yellow"
-      }}>
-          <StudentNavBar />
-        <div style={{
-          backgroundColor : "blue",
-        }}>
-          <Component {...pageProps} />
-        </div>
+      <div>
+        <Component {...pageProps} />
       </div>
-      
     </div>
   )
 }

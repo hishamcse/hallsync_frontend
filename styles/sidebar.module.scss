@@ -2,11 +2,11 @@
 
 .sidebar{
     background-color: $sbc;
-    position: absolute;
-    width: $logoSectionWidth - 15px ;
+    position: fixed;
+    width: $sideBarWidth;
     box-sizing: border-box;
     height: calc(100vh - 150px);
-    top : 80px;
+    top : $topBarHeight + 10px;
     left : 10px;
     font-size: 18px;
     list-style-type: none;

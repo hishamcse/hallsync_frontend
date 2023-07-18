@@ -1,0 +1,6 @@
+@import './vars';
+.topBarContainer{
+    height: $topBarHeight;
+    position: sticky;
+    top : 0px;
+}
