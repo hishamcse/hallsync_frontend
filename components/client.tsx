@@ -1,7 +1,8 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 
-import { graphql } from '../types/__generated__';
+import { graphql } from '../graphql/__generated__';
+import { GET_DEPTS } from '../graphql/operations';
 
 // const GET_ROCKET_INVENTORY = gql(/* GraphQL */ `
 //   query GetRocketInventory($year: Int!) {
@@ -13,16 +14,6 @@ import { graphql } from '../types/__generated__';
 //     }
 //   }
 // `);
-
-const GET_DEPTS = graphql(`
-    query Departments {
-        departments {
-            deptCode
-            name
-            shortName
-        }
-    }
-`);
 
 export function RocketInventoryList() {
   // our query's result, data, is typed!

@@ -6,7 +6,7 @@ const config: CodegenConfig = {
   schema: serverUrl,
   documents: ['components/**/*.tsx'],
   generates: {
-    './types/__generated__/': {
+    './graphql/__generated__/': {
       preset: 'client',
     //   plugins : ['typescript']
     }

@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import type { AppProps } from 'next/app'
 import { TopBar } from '../components/TopBar'
 import { StudentNavBar } from '../components/SideBar'
