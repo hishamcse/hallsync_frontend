@@ -1,5 +1,6 @@
 import type { AppProps } from 'next/app'
-import { StudentNavBar, TopBar } from '../components/layout'
+import { TopBar } from '../components/TopBar'
+import { StudentNavBar } from '../components/SideBar'
 import '../styles/global.scss'
 import styles from '../styles/_app.module.scss'
 

@@ -1,10 +1,9 @@
 import type { NextPage } from 'next'
+import { Card } from '../components/card'
 
 const Test: NextPage = () => {
   return (
-    <div>
-      hello test
-    </div>
+    <Card title='Questionnaire' body={<div>Test</div>} />
   )
 }
 

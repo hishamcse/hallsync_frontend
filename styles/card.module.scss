@@ -1,0 +1,17 @@
+@import './vars';
+
+
+.root{
+    background-color: $sbc;
+    padding : 20px;
+    border-radius: 10px;
+    display: inline-block;
+    color: white;
+
+    .header{
+        padding : 10px;
+        padding-bottom: 20px;
+        font-size: x-large;
+    }
+}
+
