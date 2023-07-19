@@ -1,3 +1,5 @@
+import { RocketInventoryList } from "../components/client";
+
 function Mess(){
     return (
         <div style={{
@@ -5,6 +7,7 @@ function Mess(){
             backgroundColor : "green"
         }}>
             Mess
+            <RocketInventoryList />
         </div>
     )
 }

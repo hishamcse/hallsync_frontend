@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import sideBarStyles from '../styles/sidebar.module.scss'
+import { checkRouteContains } from './utilities'
+import { useRouter } from 'next/router'
 
 
 function SideBarIcon(
@@ -13,24 +15,43 @@ function SideBarIcon(
         </div>
     )
 }
+
+function ListItem(props : {
+    text : string,
+    imgPath : string,
+    active : boolean,
+    href : string
+}){
+     return (
+        <li className={props.active ? sideBarStyles.focus : ''} > 
+            <SideBarIcon src={props.imgPath} />
+            <Link href={props.href}> 
+                {props.text} 
+            </Link> 
+        </li>
+     )
+}
+
 export function StudentNavBar(){
+
+    const routes = {
+        app : "application/newApplication",
+        mess : 'mess'
+    }
+    const imgPaths = {
+        app : "/application.svg",
+        mess : '/mess.svg'
+    }
+    const texts = {
+        app : 'Application',
+        mess : 'Mess'
+    }
+    const router = useRouter();
 
     return(
         <ul className={sideBarStyles.sidebar} >
-            <li className={sideBarStyles.focus} > 
-                <SideBarIcon src="/application.svg" />
-                <Link href="/application/newApplication"> 
-                    {/* <div> */}
-                    Application 
-                    {/* </div>  */}
-                </Link> 
-            </li>
-            <li>  <SideBarIcon src="/mess.svg" />  
-            <Link href="/mess">
-                Mess
-            </Link>
-            
-            </li>
+            <ListItem active = {checkRouteContains(router,routes.app)} href={'/' + routes.app} imgPath={imgPaths.app} text={texts.app} />
+            <ListItem active = {checkRouteContains(router,routes.mess)} href={'/' + routes.mess} imgPath={imgPaths.mess} text={texts.mess} />
             <li> <SideBarIcon src="/payments.svg" />  Payments</li>
             <li> <SideBarIcon src="/info.svg" /> Info</li>
             <li> <SideBarIcon src="/feAngry1.svg" /> Complaints</li>

@@ -8,6 +8,10 @@ $logoTextColor : #ffffff;
 $iconHW : 62px;
 
 .root{
+    a, a:hover, a:focus, a:active {
+        text-decoration: none;
+        color: inherit;
+    }
     background-color: $sbc;
     display: flex;
     flex-direction: row;

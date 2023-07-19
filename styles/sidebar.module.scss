@@ -1,6 +1,10 @@
 @import './vars';
 
 .sidebar{
+    a, a:hover, a:focus, a:active {
+        text-decoration: none;
+        color: inherit;
+    }
     background-color: $sbc;
     position: fixed;
     width: $sideBarWidth;
