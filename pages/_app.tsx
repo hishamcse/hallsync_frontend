@@ -4,13 +4,14 @@ import { TopBar } from '../components/TopBar'
 import { StudentNavBar } from '../components/SideBar'
 import '../styles/global.scss'
 import styles from '../styles/_app.module.scss'
-import React from "react";
+import React, { ReactElement, ReactNode } from "react";
 import {
   ApolloClient,
   createHttpLink,
   InMemoryCache,
   ApolloProvider
 } from "@apollo/client";
+import { NextPage } from 'next';
 
 
 export const link = createHttpLink({
@@ -23,8 +24,17 @@ export const client = new ApolloClient({
 });
 
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return (
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode
+}
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
+
+
+function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout ?? ((page)=>(
     <ApolloProvider client={client}>
       <div>
         <StudentNavBar />
@@ -32,11 +42,26 @@ function MyApp({ Component, pageProps }: AppProps) {
           <TopBar />
         </div>
         <div>
-          <Component {...pageProps} />
+          {page}
+          {/* <Component {...pageProps} /> */}
         </div>
       </div>
     </ApolloProvider>
-  )
+  ));
+  // return getLayout(
+  //   <ApolloProvider client={client}>
+  //     <div>
+  //       <StudentNavBar />
+  //       <div className = {styles.topBarContainer} >
+  //         <TopBar />
+  //       </div>
+  //       <div>
+  //         <Component {...pageProps} />
+  //       </div>
+  //     </div>
+  //   </ApolloProvider>
+  // )
+  return getLayout(<Component {...pageProps} />)
 }
 
 export default MyApp

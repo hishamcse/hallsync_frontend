@@ -9,10 +9,15 @@ body{
     height: 100%;
     background-color: black;
     font-family: 'Montserrat', 'Courier New', Courier, monospace;
+    display: block;
 }
 
 .contentRoot{
     margin-left: $sideBarWidth + 20px;
     // background-color: red;
     margin-top: 30px;
+}
+
+#__next{
+    height: 100%;
 }

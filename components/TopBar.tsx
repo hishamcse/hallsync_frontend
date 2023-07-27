@@ -2,6 +2,7 @@ import Link from "next/link";
 import topBarStyles from "../styles/topbar.module.scss"
 import { NextRouter, useRouter } from "next/router"
 import { checkRouteContains } from "./utilities";
+import { CSSProperties } from "react";
 
 function Tab(
     props :{
@@ -46,16 +47,25 @@ function Tabs(){
     )
 }
 
+export function Logo(props : {
+    containerStyle? : CSSProperties,
+    containerClassName? : string
+}){
+    return(
+        <div className={topBarStyles.logo + ' ' + props.containerClassName}>
+            <div className={topBarStyles.logoCircle} />
+            HallSync
+        </div>
+    )
+}
+
 
 export function TopBar(){
     const router = useRouter();
 
     return (
         <div  className={topBarStyles.root}>
-            <div className={topBarStyles.logoSection}>
-                <div className={topBarStyles.logoCircle} />
-                HallSync
-            </div>
+            <Logo containerClassName={topBarStyles.logoSection} />
             <div className={topBarStyles.tabSection}>
                 {
                     router.pathname.includes('application') &&

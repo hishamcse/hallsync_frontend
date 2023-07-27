@@ -21,14 +21,9 @@ $iconHW : 62px;
     // justify-content: center;
 }
 
-.logoSection{
-    // background-color: blue;
-    width: $logoSectionWidth;
-    // box-sizing: content-box;
+.logo{
     box-sizing: border-box;
     font-size: 24px;
-    // text-align: center;
-    padding-left: 60px;
     color: $logoTextColor;
     .logoCircle{
         width: $circleDiameter;
@@ -39,6 +34,12 @@ $iconHW : 62px;
         transform: translateY($circleYShift);
         margin-right: $circleRightMargin;
     }
+}
+
+.logoSection{
+    // background-color: blue;
+    width: $logoSectionWidth;
+    padding-left: 60px;
 }
 
 .tabSection{

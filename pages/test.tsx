@@ -33,4 +33,5 @@ function QuestionnaireNewSeat(){
 
 
 
+
 export default MyCheckBox

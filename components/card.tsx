@@ -21,10 +21,11 @@
 //     )
 // }
 
+import React from 'react';
 import Card from 'react-bootstrap/Card';
 
 function MyCard(props : {
-    title : string,
+    title : string | React.JSX.Element,
     content : React.JSX.Element
 }) {
   return (

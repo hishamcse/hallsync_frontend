@@ -1,0 +1,32 @@
+.inputStyle{
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    height: 30px;
+    padding: 10px;
+}
+
+.mybutton{
+    border: none;
+    // padding: 5px 15px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-radius: 5px;
+}
+.submit{
+    background-color: #00868D ;
+}
+
+.submit:hover{
+    background-color: #00868D ;
+    opacity: .8;
+}
+
+.cancel{
+    background-color: #FF0000;
+}
+.cancel:hover{
+    background-color: #FF0000;
+    opacity: .8;
+}
