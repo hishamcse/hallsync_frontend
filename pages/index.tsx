@@ -8,6 +8,7 @@ import { MyInput } from '../components/input'
 import { MyButton } from '../components/button'
 import { useMutation, useQuery } from '@apollo/client'
 import { LOGIN } from '../graphql/operations'
+import { useRouter } from 'next/router'
 
 // function loginOnSubmit(id : string, pass : string){
 //   const { loading, data } = useQuery(
@@ -24,32 +25,42 @@ import { LOGIN } from '../graphql/operations'
 function Login(){
   const [id, setId] = useState<string>('');
   const [pass, setPass] = useState<string>('');
-
-  const [login, {error, data}] = useMutation(
+  const router = useRouter();
+  const [login, {error , loading, data}] = useMutation(
     LOGIN
-  )
+  , {
+    onError : ()=>{},
+    onCompleted : ()=>{
+      router.push('./application/newApplication');
+    }
+  })
 
   const title = (
     <div className={styles.logoContainer}> 
       <Logo /> 
     </div>
   )
-  
+  // console.log(error);
   const content = (
     <div>
       <div>
         <div className={styles.inputContainer}> 
           <MyInput type='text' value={id} onChange={setId} placeHolder='Id or username'/> 
         </div>
-        <div className={styles.inputContainer}>  <MyInput type='password' value={pass} onChange={setPass} placeHolder='password'/> </div>
+        <div className={styles.inputContainer}>
+          <MyInput type='password' value={pass} onChange={setPass} placeHolder='password'/> 
+        </div>
+        {error && <div className={styles.errorTextContainer}> {error.message} </div>}
+        {loading && <div className={styles.loadingTextContainer}> Loading </div>}
+
       </div>
       <div className={styles.buttonContainer}>
         <MyButton onClick={()=>login({variables : {
           loginId : id,
           password : pass
         }})} type='submit' text='login' className={styles.loginSubmitButton} />
-        {/* <MyButton type='cancel' text='cancel' /> */}
-        {/* {data && <div> {data.login.token} </div>} */}
+      </div>
+      <div>
       </div>
     </div>
   )

@@ -1,3 +1,5 @@
+@import './vars';
+
 .root{
     height: 100%;
     margin-left: auto;
@@ -29,4 +31,13 @@
     // width: 130px;
     // display: flex;
     flex-grow: 1;
+}
+.errorTextContainer{
+    color : red;
+    margin: 10px;
+    text-align: center;
+}
+.loadingTextContainer{
+    @extend .errorTextContainer;
+    color : $alertColor;
 }
