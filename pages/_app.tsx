@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import type { AppProps } from 'next/app'
 import { TopBar } from '../components/TopBar'
-import { StudentNavBar } from '../components/SideBar'
+import { AuthorityNabBar, StudentNavBar } from '../components/SideBar'
 import '../styles/global.scss'
 import styles from '../styles/_app.module.scss'
 import React, { ReactElement, ReactNode, useContext, useState } from "react";
@@ -79,7 +79,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     <ApolloProvider client={client}>
         <userContext.Provider value = {value}>
           <div>
-            <StudentNavBar />
+            { value.user && value.user.student && <StudentNavBar />}
+            { value.user && value.user.authority && <AuthorityNabBar />}
+
             <div className = {styles.topBarContainer} >
               <TopBar />
             </div>

@@ -59,3 +59,28 @@ export function StudentNavBar(){
         </ul>
     )
 }
+
+export function AuthorityNabBar(){
+    const routes = {
+        app : "seatManagement",
+        mess : 'mess'
+    }
+    const imgPaths = {
+        app : "/application.svg",
+        mess : '/mess.svg'
+    }
+    const texts = {
+        app : 'Seat Management',
+        mess : 'Mess Management'
+    }
+    const router = useRouter();
+
+    return(
+        <ul className={sideBarStyles.sidebar} >
+            <ListItem active = {checkRouteContains(router,routes.app)} href={'/' + routes.app} imgPath={imgPaths.app} text={texts.app} />
+            <ListItem active = {checkRouteContains(router,routes.mess)} href={'/' + routes.mess} imgPath={imgPaths.mess} text={texts.mess} />
+            <li> <SideBarIcon src="/info.svg" /> Info</li>
+            <li> <SideBarIcon src="/feAngry1.svg" /> Complaints</li>
+        </ul>
+    )
+}

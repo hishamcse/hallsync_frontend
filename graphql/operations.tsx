@@ -25,3 +25,28 @@ export const LOGIN = graphql(`
     }
     }
 `)
+
+export const APPLICATIONS = graphql(`
+    query Applications {
+    applications {
+        applicationId
+        createdAt
+        lastUpdate
+        status
+        student {
+        batch {
+            year
+        }
+        department {
+            name
+        }
+        levelTerm {
+            label
+        }
+        name
+        residencyStatus
+        studentId
+        }
+    }
+    }
+`)
