@@ -14,6 +14,17 @@ import { GET_DEPTS } from '../graphql/operations';
 //     }
 //   }
 // `);
+// const GET_DEPTS = graphql(`
+//     query Departments {
+//         departments {
+//             deptCode
+//             name
+//             shortName
+//         }
+//     }
+// `);
+
+
 
 export function RocketInventoryList() {
   // our query's result, data, is typed!

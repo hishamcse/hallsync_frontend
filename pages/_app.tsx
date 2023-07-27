@@ -35,7 +35,6 @@ type AppPropsWithLayout = AppProps & {
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page)=>(
-    <ApolloProvider client={client}>
       <div>
         <StudentNavBar />
         <div className = {styles.topBarContainer} >
@@ -46,7 +45,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           {/* <Component {...pageProps} /> */}
         </div>
       </div>
-    </ApolloProvider>
   ));
   // return getLayout(
   //   <ApolloProvider client={client}>
@@ -61,7 +59,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   //     </div>
   //   </ApolloProvider>
   // )
-  return getLayout(<Component {...pageProps} />)
+  return getLayout(
+    <ApolloProvider client={client}>
+      <Component {...pageProps} />
+    </ApolloProvider>
+  )
 }
 
 export default MyApp

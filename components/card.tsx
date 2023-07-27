@@ -32,9 +32,9 @@ function MyCard(props : {
     <Card style={{ color : "white", backgroundColor : "#202020", display : "inline-block" }}>
       <Card.Body>
         <Card.Title>{props.title}</Card.Title>
-        <Card.Text>
+        {/* <Card.Text> */}
             {props.content}
-        </Card.Text>
+        {/* </Card.Text> */}
       </Card.Body>
     </Card>
   );

@@ -4,7 +4,8 @@ const serverUrl = 'http://localhost:3000/graphql'
 
 const config: CodegenConfig = {
   schema: serverUrl,
-  documents: ['components/**/*.tsx'],
+  // documents: ['components/**/*.tsx'],
+  documents: ['graphql/operations.tsx'],
   generates: {
     './graphql/__generated__/': {
       preset: 'client',
