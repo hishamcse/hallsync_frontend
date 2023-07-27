@@ -50,3 +50,16 @@ export const APPLICATIONS = graphql(`
     }
     }
 `)
+
+export const FILTERS_DATA = graphql(`
+    query Query {
+    applicationStatus
+    applicationTypes
+    batches {
+        year
+    }
+    departments {
+        shortName
+    }
+    }
+`)

@@ -1,0 +1,12 @@
+.filtersContainer{
+    display: flex;
+    margin: 10px;    
+}
+
+.filtersRow{
+    margin: 5px;
+
+    >div{
+        margin : 15px 10px;
+    }
+}
