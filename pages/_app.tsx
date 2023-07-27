@@ -4,7 +4,7 @@ import { TopBar } from '../components/TopBar'
 import { StudentNavBar } from '../components/SideBar'
 import '../styles/global.scss'
 import styles from '../styles/_app.module.scss'
-import React, { ReactElement, ReactNode } from "react";
+import React, { ReactElement, ReactNode, useContext, useState } from "react";
 import {
   ApolloClient,
   createHttpLink,
@@ -12,6 +12,7 @@ import {
   ApolloProvider
 } from "@apollo/client";
 import { NextPage } from 'next';
+import { LoginMutation } from '../graphql/__generated__/graphql';
 
 
 export const link = createHttpLink({
@@ -32,37 +33,64 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
 
+export const userContext = React.createContext<{
+  user : LoginMutation['login'] | undefined,
+  setUser : (s : LoginMutation['login'])=>void
+}>({
+  user : undefined,
+  setUser : ()=>{}
+})
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-  const getLayout = Component.getLayout ?? ((page)=>(
-      <div>
-        <StudentNavBar />
-        <div className = {styles.topBarContainer} >
-          <TopBar />
-        </div>
-        <div>
-          {page}
-          {/* <Component {...pageProps} /> */}
-        </div>
-      </div>
-  ));
-  // return getLayout(
-  //   <ApolloProvider client={client}>
-  //     <div>
-  //       <StudentNavBar />
-  //       <div className = {styles.topBarContainer} >
-  //         <TopBar />
-  //       </div>
-  //       <div>
-  //         <Component {...pageProps} />
-  //       </div>
-  //     </div>
-  //   </ApolloProvider>
-  // )
-  return getLayout(
+
+  const [user, setUser] = useState<LoginMutation['login']>();
+  const ctx = useContext(userContext);
+  const value = {user, setUser};
+  // let getLayout;
+  if (Component.getLayout){
+    return (
+      <ApolloProvider client={client}>
+        <userContext.Provider value = {value}>
+          {Component.getLayout( <Component  {...pageProps} />)}
+        </userContext.Provider>
+      </ApolloProvider>
+    )
+  }
+
+  // const getLayout = (((page)=>(
+  //     <ApolloProvider client={client}>
+  //       <userContext.Provider value = {value}>
+  //         <div>
+  //           <StudentNavBar />
+  //           <div className = {styles.topBarContainer} >
+  //             <TopBar />
+  //           </div>
+  //           <div>
+  //             {page}
+  //             {/* <Component {...pageProps} /> */}
+  //           </div>
+  //         </div>
+  //       </userContext.Provider>
+  //     </ApolloProvider>
+  //     )
+  // ));
+
+  return (
     <ApolloProvider client={client}>
-      <Component {...pageProps} />
-    </ApolloProvider>
+        <userContext.Provider value = {value}>
+          <div>
+            <StudentNavBar />
+            <div className = {styles.topBarContainer} >
+              <TopBar />
+            </div>
+            <div>
+              <Component {...pageProps} />
+
+              {/* <Component {...pageProps} /> */}
+            </div>
+          </div>
+        </userContext.Provider>
+      </ApolloProvider>
   )
 }
 

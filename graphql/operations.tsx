@@ -11,13 +11,17 @@ export const GET_DEPTS = graphql(`
 `);
 
 export const LOGIN = graphql(`
-    mutation Mutation($password: String!, $loginId: String!) {
+    mutation Login($password: String!, $loginId: String!) {
     login(password: $password, id: $loginId) {
         student {
-        studentId
-        name
+        studentId,
+        residencyStatus
+        },
+        token,
+        authority {
+        authorityId,
+        role
         }
-        token
     }
     }
 `)

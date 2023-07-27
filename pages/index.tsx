@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
-import type {NextPageWithLayout}  from './_app'
-import { ReactElement, useState } from 'react'
+import {userContext, type NextPageWithLayout}  from './_app'
+import { ReactElement, useContext, useState } from 'react'
 import styles from '../styles/index.module.scss'
 import { Logo } from '../components/TopBar'
 import MyCard from '../components/card'
@@ -25,12 +25,15 @@ import { useRouter } from 'next/router'
 function Login(){
   const [id, setId] = useState<string>('');
   const [pass, setPass] = useState<string>('');
+  const {user, setUser} = useContext(userContext);
   const router = useRouter();
   const [login, {error , loading, data}] = useMutation(
     LOGIN
   , {
     onError : ()=>{},
-    onCompleted : ()=>{
+    onCompleted : (data)=>{
+      console.log(data);
+      setUser(data.login);
       router.push('./application/newApplication');
     }
   })
