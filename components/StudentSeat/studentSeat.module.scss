@@ -1,3 +1,35 @@
+.newSeat {
+  margin: 20px;
+  display: flex;
+  justify-content: space-between;
+  .doc {
+    margin-top: 50px;
+    margin-right: 20px;
+  }
+}
+
 .questionnaire {
   padding: 10px;
+}
+
+.agreement {
+    margin: 30px;
+    display: flex;
+    justify-content: space-around;
+    .agreement-text {
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+}
+
+.submit {
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 20px;
+
+    .submit-text {
+        margin-top: 10px;
+        margin-left: 10px;
+    }
 }
