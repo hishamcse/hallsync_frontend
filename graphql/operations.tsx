@@ -38,7 +38,7 @@ export const APPLICATIONS = graphql(`
             year
         }
         department {
-            name
+            shortName
         }
         levelTerm {
             label
@@ -46,6 +46,15 @@ export const APPLICATIONS = graphql(`
         name
         residencyStatus
         studentId
+        }
+        newApplication {
+        newApplicationId
+        }
+        roomChangeApplication {
+        roomChangeApplicationId
+        }
+        tempApplication {
+        applicationId
         }
     }
     }
