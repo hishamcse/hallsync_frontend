@@ -5,6 +5,7 @@
         text-decoration: none;
         color: inherit;
     }
+    margin-top: 10px;
     background-color: $sbc;
     position: fixed;
     width: $sideBarWidth;
@@ -12,7 +13,7 @@
     height: calc(100vh - 150px);
     top : $topBarHeight + 10px;
     left : 10px;
-    font-size: 18px;
+    font-size: 16px;
     list-style-type: none;
     color: $inactiveTextColor;
     border-radius: 10px;

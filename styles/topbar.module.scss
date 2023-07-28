@@ -5,7 +5,7 @@ $circleDiameter : 24px;
 $circleYShift : 4px;
 $circleRightMargin : 8px;
 $logoTextColor : #ffffff;
-$iconHW : 62px;
+$iconHW : 50px;
 
 .root{
     a, a:hover, a:focus, a:active {
@@ -23,7 +23,7 @@ $iconHW : 62px;
 
 .logo{
     box-sizing: border-box;
-    font-size: 24px;
+    font-size: 20px;
     color: $logoTextColor;
     .logoCircle{
         width: $circleDiameter;

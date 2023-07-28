@@ -13,6 +13,14 @@ import {
 } from "@apollo/client";
 import { NextPage } from 'next';
 import { LoginMutation } from '../graphql/__generated__/graphql';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 
 export const link = createHttpLink({
@@ -76,23 +84,24 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   // ));
 
   return (
-    <ApolloProvider client={client}>
-        <userContext.Provider value = {value}>
-          <div>
-            { value.user && value.user.student && <StudentNavBar />}
-            { value.user && value.user.authority && <AuthorityNabBar />}
-
-            <div className = {styles.topBarContainer} >
-              <TopBar />
-            </div>
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <ApolloProvider client={client}>
+          <userContext.Provider value = {value}>
             <div>
-              <Component {...pageProps} />
+              { value.user && value.user.student && <StudentNavBar />}
+              { value.user && value.user.authority && <AuthorityNabBar />}
 
-              {/* <Component {...pageProps} /> */}
+              <div className = {styles.topBarContainer} >
+                <TopBar />
+              </div>
+              <div>
+                <Component {...pageProps} />
+              </div>
             </div>
-          </div>
-        </userContext.Provider>
-      </ApolloProvider>
+          </userContext.Provider>
+        </ApolloProvider>
+      </ThemeProvider>
   )
 }
 

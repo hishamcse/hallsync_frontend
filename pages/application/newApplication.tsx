@@ -1,12 +1,11 @@
 
 import MyCard from '../../components/card';
-import styles from '../../styles/newApplication.module.scss'
-
+import StudentView from "../../components/StudentSeat/StudentView";
 
 function CreateApplication(){
     return (
         <div className={"contentRoot"}>
-            <MyCard content={<div> H </div>} title='Questionnaire' />
+            <StudentView />
         </div>
     )
 }

@@ -47,7 +47,7 @@ export function RocketInventoryList() {
           </thead>
           <tbody>
             {data && data.departments.map(dept => (
-              <tr>
+              <tr key={Math.random().toString()}>
                 <td>{dept.deptCode}</td>
                 <td>{dept.name}</td>
               </tr>
