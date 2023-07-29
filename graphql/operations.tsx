@@ -27,36 +27,39 @@ export const LOGIN = graphql(`
 `);
 
 export const APPLICATIONS = graphql(`
-  query Applications($filters: FilterInput, $sort : SortInput, $search : SearchInput) {
-    applications(filters: $filters, sort : $sort, search : $search) {
-      applicationId
-      createdAt
-      lastUpdate
-      status
-      student {
-        student9DigitId
-        batch {
-          year
-        }
-        department {
-          shortName
-        }
-        levelTerm {
-          label
-        }
-        name
-        residencyStatus
-        studentId
-      }
-      newApplication {
-        newApplicationId
-      }
-      roomChangeApplication {
-        roomChangeApplicationId
-      }
-      tempApplication {
+  query Applications($page : Float!, $filters: FilterInput, $sort : SortInput, $search : SearchInput) {
+    applications(page : $page, filters: $filters, sort : $sort, search : $search) {
+      applications {
         applicationId
+        createdAt
+        lastUpdate
+        status
+        student {
+          student9DigitId
+          batch {
+            year
+          }
+          department {
+            shortName
+          }
+          levelTerm {
+            label
+          }
+          name
+          residencyStatus
+          studentId
+        }
+        newApplication {
+          newApplicationId
+        }
+        roomChangeApplication {
+          roomChangeApplicationId
+        }
+        tempApplication {
+          applicationId
+        }
       }
+      count
     }
   }
 `);

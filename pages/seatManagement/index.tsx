@@ -8,6 +8,10 @@ import { ApplicationStatus, ApplicationsQuery } from "../../graphql/__generated_
 import { MyButton } from "../../components/button";
 import { MyInput } from "../../components/input";
 
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+import Skeleton from "@mui/material/Skeleton";
+
 function Filters(
     props : {
         batch : string | undefined,
@@ -72,7 +76,7 @@ function Filters(
             </div>
             <div className={styles.filtersRow}>
 
-                <MyDropDown items={data.applicationStatus}
+                <MyDropDown items={data.levelTerms.map(d=>d.label)}
                     onSelect={(v) => setLt(v)} toggleStyle={{ width: "170px" }}
                     selectedVal={lt ?? 'LevelTerm'} />
             </div>
@@ -85,8 +89,10 @@ function Filters(
 
     return <MyCard title={"Filters"} content={content ?? <div></div>} />
 }
+type application = ApplicationsQuery['applications']['applications'][0];
 
-type application = ApplicationsQuery['applications'][0];
+// type application = ApplicationsQuery['applications'][0];
+
 
 function getApplicaitonType(application: application) {
     if (application.newApplication)
@@ -174,6 +180,22 @@ function SortBy(
 
 }
 
+function PaginationControlled(props : {
+    page : number,
+    setPage : (v : number)=> void,
+    count : number
+}) {
+    const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+      props.setPage(value);
+    };
+  
+    return (
+      <Stack spacing={2}>
+        <Pagination count={props.count} page={props.page} onChange={handleChange} />
+      </Stack>
+    );
+  }
+
 function Applications() {
 
 
@@ -186,6 +208,10 @@ function Applications() {
     const [order, setOrder] = useState<string>('Newest');
     const [search, setSearch] = useState<string>('');
     const [searchGT3, setSearchGT3] = useState<string>('');
+    const [page, setPage] = useState(1);
+    const [count, setCount] = useState(0);
+
+    let skeletonHeight = 80;
 
     const { loading, data, error } = useQuery(
         APPLICATIONS,{
@@ -194,7 +220,8 @@ function Applications() {
                     batch : batch,
                     dept : dept,
                     status : status,
-                    type : type
+                    type : type,
+                    lt : lt
                 },
                 sort : {
                     order : order,
@@ -202,15 +229,30 @@ function Applications() {
                 },
                 search : {
                     searchBy : searchGT3
-                }
+                },
+                page : page
+            },
+            onCompleted : (data)=>{
+                setCount(Math.floor(data.applications.count / 10))
             }
         }
     )
+
+    function pageReset(s : (s : string)=>void){
+        return (v : string)=>{
+            s(v);
+            setPage(1);
+        }
+    }
 
     function setSearch_(s : string){
         setSearch(s);
         if(s.trim().length >= 3){
             setSearchGT3(s);
+            setPage(1);
+        }
+        else{
+            setSearchGT3('');
         }
     }
 
@@ -238,11 +280,11 @@ function Applications() {
                     status={status}
                     type={type}
                     lt={lt}
-                    setBatch={setBatch}
-                    setDept={setDept}
-                    setStatus={setStatus}
-                    setType={setType}
-                    setLt={setLt}
+                    setBatch={pageReset(setBatch)}
+                    setDept={pageReset(setDept)}
+                    setStatus={pageReset(setStatus)}
+                    setType={pageReset(setType)}
+                    setLt={pageReset(setLt)}
                     resetOnClick={filterResetOnClick}
                     applyOnClick={()=>{}}
                     />
@@ -268,11 +310,27 @@ function Applications() {
                             </div>
                             <MyInput className={styles.applicationListSearchBar} placeHolder="Search by Name or Id" onChange={setSearch_} type="text" value={search} />
                         </div>
+                        <div className={styles.paginationConrainer} >
+                        
+                        { 
+                            <PaginationControlled page={page} setPage={setPage} count={count} />
+                        }
+                        </div>
+                        {
+                            loading &&
+                            [1, 2, 3, 4, 5, 6, 7].map(v =>(
+                                <div key = {v} className={styles.loadingSkeletonContainer}> 
+                                    <Skeleton variant="rectangular" height={skeletonHeight} />
+                                </div>
+                            ))
+                        }
 
                         {
                             data && 
-                            data.applications.map(a => (<Application application={a} key={a.applicationId} />))
+                            data.applications.applications.map(a => (<Application application={a} key={a.applicationId} />))
                         }
+                        
+                        
                     </div>
                 }
             </div>

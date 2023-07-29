@@ -67,11 +67,12 @@ $listBgColor : #202020;
 .applicationListSearchBarContainer{
     margin-left: 20px;
     display: flex;
+    align-items: center;
 }
-.applicationListSearchBar{
-    height: 20px !important;
-    // border-radius: 10px;
-}
+// .applicationListSearchBar{
+//     height: 30px !important;
+//     // border-radius: 10px;
+// }
 .searchBarIconContainer{
     >img{
         height: 30px;
@@ -81,4 +82,14 @@ $listBgColor : #202020;
     display: flex;
     align-items: center;
     padding : 5px;
+}
+
+.paginationConrainer{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.loadingSkeletonContainer{
+    margin: 10px;
 }
