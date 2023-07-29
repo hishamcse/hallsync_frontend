@@ -11,23 +11,24 @@ import { MyInput } from "../../components/input";
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Skeleton from "@mui/material/Skeleton";
+import MultipleSelectCheckmarks from "../../components/MUIMultiSelectCheckbox";
 
 function Filters(
     props : {
-        batch : string | undefined,
-        setBatch : (s:string)=>void,
+        batch : string[],
+        setBatch : (s:string[])=>void,
         
-        dept : string | undefined,
-        setDept : (s:string)=>void,
+        dept : string[],
+        setDept : (s:string[])=>void,
         
-        status : string | undefined,
-        setStatus : (s:string)=>void,
+        status : string[],
+        setStatus : (s:string[])=>void,
         
-        type : string | undefined,
-        setType : (s:string)=>void,
+        type : string[],
+        setType : (s:string[])=>void,
 
-        lt : string | undefined,
-        setLt : (s:string)=>void,
+        lt : string[],
+        setLt : (s:string[])=>void,
 
 
         resetOnClick : ()=> void,
@@ -55,34 +56,58 @@ function Filters(
         <div className={styles.filtersContainer}>
 
             <div className={styles.filtersRow}>
+                <MultipleSelectCheckmarks 
+                    items={data.batches.map(b=>b.year)} 
+                    placeHolder="Batch"
+                    setVal={setBatch} 
+                    val={batch} 
+                />
 
-                <MyDropDown items={data.batches.map(b => b.year)}
-                    onSelect={(v) => setBatch(v)} toggleStyle={{ width: "170px" }}
-                    selectedVal={batch ?? 'Batch'} />
-
-                <MyDropDown items={data.departments.map(d => d.shortName)}
-                    onSelect={(v) => setDept(v)} toggleStyle={{ width: "170px" }}
-                    selectedVal={dept ?? 'Dept'} />
+                <MultipleSelectCheckmarks 
+                    items={data.departments.map(d=>d.shortName)} 
+                    placeHolder="Dept"
+                    setVal={setDept} 
+                    val={dept} 
+                />
+                
             </div>
             <div className={styles.filtersRow}>
 
-                <MyDropDown items={data.applicationStatus}
-                    onSelect={(v) => setStatus(v)} toggleStyle={{ width: "170px" }}
-                    selectedVal={status ?? 'Status'} />
+                <MultipleSelectCheckmarks 
+                    items={data.applicationStatus} 
+                    placeHolder="Status"
+                    setVal={setStatus} 
+                    val={status} 
+                />
 
-                <MyDropDown items={data.applicationTypes}
-                    onSelect={(v) => setType(v)} toggleStyle={{ width: "170px" }}
-                    selectedVal={type ?? 'Type'} />
+                <MultipleSelectCheckmarks 
+                    items={data.applicationTypes} 
+                    placeHolder="Type"
+                    setVal={setType} 
+                    val={type} 
+                />
+
+                
             </div>
             <div className={styles.filtersRow}>
+                <MultipleSelectCheckmarks 
+                    items={data.levelTerms.map(l =>l.label)} 
+                    placeHolder="LevelTerm"
+                    setVal={setLt} 
+                    val={lt} 
+                />
 
-                <MyDropDown items={data.levelTerms.map(d=>d.label)}
+                {/* <MyDropDown items={data.levelTerms.map(d=>d.label)}
                     onSelect={(v) => setLt(v)} toggleStyle={{ width: "170px" }}
-                    selectedVal={lt ?? 'LevelTerm'} />
+                    selectedVal={lt ?? 'LevelTerm'} /> */}
             </div>
             <div className={styles.filterButtonContainer}>
                 <MyButton onClick={resetOnClick} text="Apply" type="submit"  />
                 <MyButton onClick={resetOnClick} text="Clear" type="cancel"  />
+            </div>
+            
+            <div>
+                {/* <MultipleSelectCheckmarks /> */}
             </div>
         </div>
     );
@@ -199,11 +224,11 @@ function PaginationControlled(props : {
 function Applications() {
 
 
-    const [batch, setBatch] = useState<string | undefined>();
-    const [dept, setDept] = useState<string | undefined>();
-    const [status, setStatus] = useState<string | undefined>();
-    const [type, setType] = useState<string | undefined>();
-    const [lt, setLt] = useState<string | undefined>();
+    const [batch, setBatch] = useState<string[]>([]);
+    const [dept, setDept] = useState<string[]>([]);
+    const [status, setStatus] = useState<string[]>([]);
+    const [type, setType] = useState<string[]>([]);
+    const [lt, setLt] = useState<string[]>([]);
     const [orderBy, setOrderBy] = useState<string | undefined>();
     const [order, setOrder] = useState<string>('Newest');
     const [search, setSearch] = useState<string>('');
@@ -238,8 +263,8 @@ function Applications() {
         }
     )
 
-    function pageReset(s : (s : string)=>void){
-        return (v : string)=>{
+    function pageReset(s : (s : string[])=>void){
+        return (v : string[])=>{
             s(v);
             setPage(1);
         }
@@ -257,11 +282,11 @@ function Applications() {
     }
 
     function filterResetOnClick(){
-        setBatch(undefined);
-        setDept(undefined);
-        setStatus(undefined);
-        setType(undefined);
-        setLt(undefined);
+        setBatch([]);
+        setDept([]);
+        setStatus([]);
+        setType([]);
+        setLt([]);
     }
     function sortResetOnClick(){
         setOrder('Newest');

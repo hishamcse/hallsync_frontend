@@ -76,11 +76,11 @@ export type Department = {
 };
 
 export type FilterInput = {
-  batch?: InputMaybe<Scalars['String']['input']>;
-  dept?: InputMaybe<Scalars['String']['input']>;
-  lt?: InputMaybe<Scalars['String']['input']>;
-  status?: InputMaybe<Scalars['String']['input']>;
-  type?: InputMaybe<Scalars['String']['input']>;
+  batch: Array<Scalars['String']['input']>;
+  dept: Array<Scalars['String']['input']>;
+  lt: Array<Scalars['String']['input']>;
+  status: Array<Scalars['String']['input']>;
+  type: Array<Scalars['String']['input']>;
 };
 
 export type Floor = {
