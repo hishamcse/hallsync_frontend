@@ -4,7 +4,7 @@ import { checkRouteContains } from './utilities'
 import { useRouter } from 'next/router'
 
 
-function SideBarIcon(
+export function SideBarIcon(
     props : {
         src : string
     }
