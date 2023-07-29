@@ -5,9 +5,10 @@ import MyCard from "../card";
 import MUIDropdown from "../MUIDropdown";
 import * as React from "react";
 import QuestionBox from "./QuestionBox";
-import {Box, Button, Checkbox, Input, TextareaAutosize, Typography} from "@mui/material";
+import {Input} from "@mui/material";
 import Agreement from "./Agreement";
 import MUIStyledTextarea from "../MUITextArea";
+import Submit from "./Submit";
 
 const Questionnaire = () => {
     return (
@@ -48,31 +49,6 @@ const RoomPreference = () => {
     )
 }
 
-const Documents = () => {
-    return (
-        <div style={{justifyContent: 'left', width: 500}}>
-            <div style={{display: "flex", justifyContent: "space-between", padding: 5}}>
-                1. NID
-                <Button variant="outlined" color='inherit'>Upload</Button>
-            </div>
-            <div style={{display: "flex", justifyContent: "space-between", padding: 5}}>
-                2. Electric Bill
-                <Button variant="outlined" color='inherit'>Upload</Button>
-            </div>
-            <Button variant="outlined" color='inherit'>Upload others(if any)</Button>
-        </div>
-    )
-}
-
-const Submit = () => {
-    return (
-        <div style={{display: 'flex', justifyContent: 'space-between', margin: 10, width: 250}}>
-            <Button variant="contained" color='success'>Submit</Button>
-            <Button variant="contained" color='error'>Reset</Button>
-        </div>
-    )
-}
-
 const TempSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
     const [type, setType] = useState('Temporary Seat');
 
@@ -92,7 +68,7 @@ const TempSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
                         <MUIDropdown width={200} options={types} val={type} change={handleChange}/>
                     </div>
                     <div className={styles.doc}>
-                        <MyCard content={<ReasonForChange/>} title='Reason for change'/>
+                        <MyCard content={<ReasonForChange/>} title='Reason for Temporary Seat'/>
                     </div>
                     <div className={styles.doc}>
                         <MyCard content={<RoomPreference/>} title='Room Preference'/>

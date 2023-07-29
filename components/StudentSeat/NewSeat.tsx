@@ -1,4 +1,3 @@
-import {Checkbox, Typography} from "@mui/material";
 import MyCard from "../card";
 import styles from './studentSeat.module.scss';
 import {useState} from "react";
@@ -8,6 +7,7 @@ import {SelectChangeEvent} from "@mui/material/Select";
 import {Button} from "@mui/material";
 import QuestionBox from "./QuestionBox";
 import Agreement from "./Agreement";
+import Submit from "./Submit";
 
 const Questionnaire = () => {
     return (
@@ -35,15 +35,6 @@ const Documents = () => {
                <Button variant="outlined" color='inherit'>Upload</Button>
            </div>
             <Button variant="outlined" color='inherit'>Upload others(if any)</Button>
-        </div>
-    )
-}
-
-const Submit = () => {
-    return (
-        <div style={{display: 'flex', justifyContent: 'space-between', margin: 10, width: 250}}>
-            <Button variant="contained" color='success'>Submit</Button>
-            <Button variant="contained" color='error'>Reset</Button>
         </div>
     )
 }
