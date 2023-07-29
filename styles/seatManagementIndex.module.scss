@@ -4,8 +4,8 @@ $itemBgColor : #111111;
 $listBgColor : #202020;
 
 .filtersContainer{
-    display: flex;
-    margin: 10px;    
+    // display: flex;
+    margin: 10px;
 }
 
 .filtersRow{
@@ -14,6 +14,7 @@ $listBgColor : #202020;
     >div{
         margin : 15px 10px;
     }
+    display: flex;
 }
 
 .applicationListRoot{
@@ -43,4 +44,41 @@ $listBgColor : #202020;
 
 .pending{
     color : $alertColor;
+}
+
+.filterSortContainer{
+    display: flex;
+    align-items: flex-start;
+    >div{
+        margin : 10px;
+    }
+}
+
+.filterButtonContainer{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 15px;
+    
+    >button{
+        width: 100px;
+        margin-left: 10px;
+    }
+}
+.applicationListSearchBarContainer{
+    margin-left: 20px;
+    display: flex;
+}
+.applicationListSearchBar{
+    height: 20px !important;
+    // border-radius: 10px;
+}
+.searchBarIconContainer{
+    >img{
+        height: 30px;
+        padding-right: 15px;
+    }
+    // border: 1px green solid;
+    display: flex;
+    align-items: center;
+    padding : 5px;
 }

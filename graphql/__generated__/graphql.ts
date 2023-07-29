@@ -75,6 +75,14 @@ export type Department = {
   students: Array<Student>;
 };
 
+export type FilterInput = {
+  batch?: InputMaybe<Scalars['String']['input']>;
+  dept?: InputMaybe<Scalars['String']['input']>;
+  lt?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type Floor = {
   __typename?: 'Floor';
   floorId: Scalars['Float']['output'];
@@ -237,9 +245,17 @@ export type Query = {
   applications: Array<SeatApplication>;
   batches: Array<Batch>;
   departments: Array<Department>;
+  levelTerms: Array<LevelTerm>;
   myapplications: Array<SeatApplication>;
   pendingVotes: Array<Vote>;
   test: Scalars['String']['output'];
+};
+
+
+export type QueryApplicationsArgs = {
+  filters?: InputMaybe<FilterInput>;
+  search?: InputMaybe<SearchInput>;
+  sort?: InputMaybe<SortInput>;
 };
 
 export type Residency = {
@@ -278,6 +294,10 @@ export type RoomChangeApplication = {
   votes: Array<Vote>;
 };
 
+export type SearchInput = {
+  searchBy?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type SeatApplication = {
   __typename?: 'SeatApplication';
   applicationId: Scalars['Float']['output'];
@@ -289,6 +309,11 @@ export type SeatApplication = {
   student: Student;
   studentId: Scalars['Float']['output'];
   tempApplication?: Maybe<TempApplication>;
+};
+
+export type SortInput = {
+  order?: InputMaybe<Scalars['String']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Student = {
@@ -365,18 +390,28 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserWithToken', token: string, student?: { __typename?: 'Student', studentId: number, residencyStatus: ResidencyStatus } | null, authority?: { __typename?: 'Authority', authorityId: number, role: AuthorityRole } | null } };
 
-export type ApplicationsQueryVariables = Exact<{ [key: string]: never; }>;
+export type ApplicationsQueryVariables = Exact<{
+  filters?: InputMaybe<FilterInput>;
+  sort?: InputMaybe<SortInput>;
+  search?: InputMaybe<SearchInput>;
+}>;
 
 
-export type ApplicationsQuery = { __typename?: 'Query', applications: Array<{ __typename?: 'SeatApplication', applicationId: number, createdAt: any, lastUpdate: any, status: ApplicationStatus, student: { __typename?: 'Student', name: string, residencyStatus: ResidencyStatus, studentId: number, batch: { __typename?: 'Batch', year: string }, department: { __typename?: 'Department', shortName: string }, levelTerm: { __typename?: 'LevelTerm', label: string } }, newApplication?: { __typename?: 'NewApplication', newApplicationId: number } | null, roomChangeApplication?: { __typename?: 'RoomChangeApplication', roomChangeApplicationId: number } | null, tempApplication?: { __typename?: 'TempApplication', applicationId: number } | null }> };
+export type ApplicationsQuery = { __typename?: 'Query', applications: Array<{ __typename?: 'SeatApplication', applicationId: number, createdAt: any, lastUpdate: any, status: ApplicationStatus, student: { __typename?: 'Student', student9DigitId: string, name: string, residencyStatus: ResidencyStatus, studentId: number, batch: { __typename?: 'Batch', year: string }, department: { __typename?: 'Department', shortName: string }, levelTerm: { __typename?: 'LevelTerm', label: string } }, newApplication?: { __typename?: 'NewApplication', newApplicationId: number } | null, roomChangeApplication?: { __typename?: 'RoomChangeApplication', roomChangeApplicationId: number } | null, tempApplication?: { __typename?: 'TempApplication', applicationId: number } | null }> };
 
 export type QueryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type QueryQuery = { __typename?: 'Query', applicationStatus: Array<string>, applicationTypes: Array<string>, batches: Array<{ __typename?: 'Batch', year: string }>, departments: Array<{ __typename?: 'Department', shortName: string }> };
+export type QueryQuery = { __typename?: 'Query', applicationStatus: Array<string>, applicationTypes: Array<string>, batches: Array<{ __typename?: 'Batch', year: string }>, departments: Array<{ __typename?: 'Department', shortName: string }>, levelTerms: Array<{ __typename?: 'LevelTerm', label: string }> };
+
+export type BatchesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type BatchesQuery = { __typename?: 'Query', batches: Array<{ __typename?: 'Batch', year: string }> };
 
 
 export const DepartmentsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deptCode"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]} as unknown as DocumentNode<DepartmentsQuery, DepartmentsQueryVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"loginId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}},{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"loginId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"studentId"}},{"kind":"Field","name":{"kind":"Name","value":"residencyStatus"}}]}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"authority"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorityId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
-export const ApplicationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Applications"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applications"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applicationId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"lastUpdate"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"batch"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}}]}},{"kind":"Field","name":{"kind":"Name","value":"department"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"levelTerm"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"label"}}]}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"residencyStatus"}},{"kind":"Field","name":{"kind":"Name","value":"studentId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"newApplication"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"newApplicationId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"roomChangeApplication"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomChangeApplicationId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"tempApplication"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applicationId"}}]}}]}}]}}]} as unknown as DocumentNode<ApplicationsQuery, ApplicationsQueryVariables>;
-export const QueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Query"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applicationStatus"}},{"kind":"Field","name":{"kind":"Name","value":"applicationTypes"}},{"kind":"Field","name":{"kind":"Name","value":"batches"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}}]}},{"kind":"Field","name":{"kind":"Name","value":"departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]} as unknown as DocumentNode<QueryQuery, QueryQueryVariables>;
+export const ApplicationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Applications"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filters"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"FilterInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"SortInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"search"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"SearchInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applications"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filters"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}},{"kind":"Argument","name":{"kind":"Name","value":"search"},"value":{"kind":"Variable","name":{"kind":"Name","value":"search"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applicationId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"lastUpdate"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"student9DigitId"}},{"kind":"Field","name":{"kind":"Name","value":"batch"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}}]}},{"kind":"Field","name":{"kind":"Name","value":"department"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"levelTerm"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"label"}}]}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"residencyStatus"}},{"kind":"Field","name":{"kind":"Name","value":"studentId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"newApplication"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"newApplicationId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"roomChangeApplication"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomChangeApplicationId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"tempApplication"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applicationId"}}]}}]}}]}}]} as unknown as DocumentNode<ApplicationsQuery, ApplicationsQueryVariables>;
+export const QueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Query"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applicationStatus"}},{"kind":"Field","name":{"kind":"Name","value":"applicationTypes"}},{"kind":"Field","name":{"kind":"Name","value":"batches"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}}]}},{"kind":"Field","name":{"kind":"Name","value":"departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"levelTerms"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"label"}}]}}]}}]} as unknown as DocumentNode<QueryQuery, QueryQueryVariables>;
+export const BatchesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Batches"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"batches"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}}]}}]}}]} as unknown as DocumentNode<BatchesQuery, BatchesQueryVariables>;

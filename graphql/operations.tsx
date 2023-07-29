@@ -1,74 +1,86 @@
-import { graphql } from './__generated__';
+import { graphql } from "./__generated__";
 
 export const GET_DEPTS = graphql(`
-    query Departments {
-        departments {
-            deptCode
-            name
-            shortName
-        }
+  query Departments {
+    departments {
+      deptCode
+      name
+      shortName
     }
+  }
 `);
 
 export const LOGIN = graphql(`
-    mutation Login($password: String!, $loginId: String!) {
+  mutation Login($password: String!, $loginId: String!) {
     login(password: $password, id: $loginId) {
-        student {
-        studentId,
+      student {
+        studentId
         residencyStatus
-        },
-        token,
-        authority {
-        authorityId,
+      }
+      token
+      authority {
+        authorityId
         role
-        }
+      }
     }
-    }
-`)
+  }
+`);
 
 export const APPLICATIONS = graphql(`
-    query Applications {
-    applications {
-        applicationId
-        createdAt
-        lastUpdate
-        status
-        student {
+  query Applications($filters: FilterInput, $sort : SortInput, $search : SearchInput) {
+    applications(filters: $filters, sort : $sort, search : $search) {
+      applicationId
+      createdAt
+      lastUpdate
+      status
+      student {
+        student9DigitId
         batch {
-            year
+          year
         }
         department {
-            shortName
+          shortName
         }
         levelTerm {
-            label
+          label
         }
         name
         residencyStatus
         studentId
-        }
-        newApplication {
+      }
+      newApplication {
         newApplicationId
-        }
-        roomChangeApplication {
+      }
+      roomChangeApplication {
         roomChangeApplicationId
-        }
-        tempApplication {
+      }
+      tempApplication {
         applicationId
-        }
+      }
     }
-    }
-`)
+  }
+`);
 
 export const FILTERS_DATA = graphql(`
-    query Query {
+  query Query {
     applicationStatus
     applicationTypes
     batches {
-        year
+      year
     }
     departments {
-        shortName
+      shortName
     }
+    levelTerms {
+        label
     }
-`)
+  }
+`);
+
+export const SORT_DATA = graphql(`
+  query Batches {
+    batches {
+      year
+    }
+  }
+`);
