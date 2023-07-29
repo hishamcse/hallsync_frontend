@@ -16,7 +16,7 @@ const documents = {
     "\n  query Departments {\n    departments {\n      deptCode\n      name\n      shortName\n    }\n  }\n": types.DepartmentsDocument,
     "\n  mutation Login($password: String!, $loginId: String!) {\n    login(password: $password, id: $loginId) {\n      student {\n        studentId\n        residencyStatus\n      }\n      token\n      authority {\n        authorityId\n        role\n      }\n    }\n  }\n": types.LoginDocument,
     "\n  query Applications($page : Float!, $filters: FilterInput, $sort : SortInput, $search : SearchInput) {\n    applications(page : $page, filters: $filters, sort : $sort, search : $search) {\n      applications {\n        applicationId\n        createdAt\n        lastUpdate\n        status\n        student {\n          student9DigitId\n          batch {\n            year\n          }\n          department {\n            shortName\n          }\n          levelTerm {\n            label\n          }\n          name\n          residencyStatus\n          studentId\n        }\n        newApplication {\n          newApplicationId\n        }\n        roomChangeApplication {\n          roomChangeApplicationId\n        }\n        tempApplication {\n          applicationId\n        }\n      }\n      count\n    }\n  }\n": types.ApplicationsDocument,
-    "\n  query Query {\n    applicationStatus\n    applicationTypes\n    batches {\n      year\n    }\n    departments {\n      shortName\n    }\n    levelTerms {\n        label\n    }\n  }\n": types.QueryDocument,
+    "\n  query Query {\n    applicationStatus{\n      status\n      select\n    }\n    applicationTypes\n    batches {\n      year\n    }\n    departments {\n      shortName\n    }\n    levelTerms {\n        label\n    }\n  }\n": types.QueryDocument,
     "\n  query Batches {\n    batches {\n      year\n    }\n  }\n": types.BatchesDocument,
 };
 
@@ -49,7 +49,7 @@ export function graphql(source: "\n  query Applications($page : Float!, $filters
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query Query {\n    applicationStatus\n    applicationTypes\n    batches {\n      year\n    }\n    departments {\n      shortName\n    }\n    levelTerms {\n        label\n    }\n  }\n"): (typeof documents)["\n  query Query {\n    applicationStatus\n    applicationTypes\n    batches {\n      year\n    }\n    departments {\n      shortName\n    }\n    levelTerms {\n        label\n    }\n  }\n"];
+export function graphql(source: "\n  query Query {\n    applicationStatus{\n      status\n      select\n    }\n    applicationTypes\n    batches {\n      year\n    }\n    departments {\n      shortName\n    }\n    levelTerms {\n        label\n    }\n  }\n"): (typeof documents)["\n  query Query {\n    applicationStatus{\n      status\n      select\n    }\n    applicationTypes\n    batches {\n      year\n    }\n    departments {\n      shortName\n    }\n    levelTerms {\n        label\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

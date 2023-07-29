@@ -66,7 +66,10 @@ export const APPLICATIONS = graphql(`
 
 export const FILTERS_DATA = graphql(`
   query Query {
-    applicationStatus
+    applicationStatus{
+      status
+      select
+    }
     applicationTypes
     batches {
       year

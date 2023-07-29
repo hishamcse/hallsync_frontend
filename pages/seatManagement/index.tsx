@@ -41,7 +41,13 @@ function Filters(
         lt, setLt} = props;
 
     const { data, loading } = useQuery(
-        FILTERS_DATA
+        FILTERS_DATA,
+        {
+            onCompleted : (data)=>{
+                if(data)
+                    props.setStatus(data.applicationStatus.filter(s=>s.select).map(v => v.status))
+            }
+        }
     )
 
     // function resetOnClick(){
@@ -74,7 +80,7 @@ function Filters(
             <div className={styles.filtersRow}>
 
                 <MultipleSelectCheckmarks 
-                    items={data.applicationStatus} 
+                    items={data.applicationStatus.map(v => v.status)} 
                     placeHolder="Status"
                     setVal={setStatus} 
                     val={status} 
