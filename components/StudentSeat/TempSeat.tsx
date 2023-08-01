@@ -1,10 +1,10 @@
 import {useState} from "react";
-import styles from './studentSeat.module.scss';
+import styles from '../../styles/studentSeat.module.scss';
 import {SelectChangeEvent} from "@mui/material/Select";
 import MyCard from "../card";
 import MUIDropdown from "../MUIDropdown";
 import * as React from "react";
-import QuestionBox from "./QuestionBox";
+import QuestionBox from "../QuestionBox";
 import {Input} from "@mui/material";
 import Agreement from "./Agreement";
 import MUIStyledTextarea from "../MUITextArea";

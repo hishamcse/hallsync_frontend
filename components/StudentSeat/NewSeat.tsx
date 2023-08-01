@@ -1,11 +1,11 @@
 import MyCard from "../card";
-import styles from './studentSeat.module.scss';
+import styles from '../../styles/studentSeat.module.scss';
 import {useState} from "react";
 import MUIDropdown from "../MUIDropdown";
 import * as React from "react";
 import {SelectChangeEvent} from "@mui/material/Select";
 import {Button} from "@mui/material";
-import QuestionBox from "./QuestionBox";
+import QuestionBox from "../QuestionBox";
 import Agreement from "./Agreement";
 import Submit from "./Submit";
 
@@ -26,12 +26,16 @@ const Questionnaire = () => {
 const Documents = () => {
     return (
         <div style={{justifyContent: 'left', width: 500}}>
+            <div style={{display: "flex", justifyContent: "space-between", padding: 5}}>
+                1. Photo
+                <Button variant="outlined" color='inherit'>Upload</Button>
+            </div>
            <div style={{display: "flex", justifyContent: "space-between", padding: 5}}>
-               1. NID
+               2. NID
                <Button variant="outlined" color='inherit'>Upload</Button>
            </div>
            <div style={{display: "flex", justifyContent: "space-between", padding: 5}}>
-               2. Electric Bill
+               3. Electric Bill
                <Button variant="outlined" color='inherit'>Upload</Button>
            </div>
             <Button variant="outlined" color='inherit'>Upload others(if any)</Button>
