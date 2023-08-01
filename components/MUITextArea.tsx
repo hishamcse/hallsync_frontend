@@ -2,7 +2,7 @@ import * as React from 'react';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import { styled } from '@mui/system';
 
-const MUIStyledTextarea = (props: {rows: number, placeHolder: string}) => {
+const MUIStyledTextarea = (props: {rows: number, placeHolder: string, disabled?: boolean}) => {
     const blue = {
         100: '#DAECFF',
         200: '#b6daff',
@@ -61,6 +61,7 @@ const MUIStyledTextarea = (props: {rows: number, placeHolder: string}) => {
             aria-label="minimum height"
             minRows={props.rows}
             placeholder={props.placeHolder}
+            disabled={props.disabled}
         />
     );
 }

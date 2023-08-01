@@ -1,4 +1,4 @@
-import {application, student} from "../../pages/seatManagement";
+import {application} from "../../pages/seatManagement";
 import QuestionBox from "../QuestionBox";
 import {Button, Input} from "@mui/material";
 import * as React from "react";
@@ -11,24 +11,8 @@ import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DemoContainer} from "@mui/x-date-pickers/internals/demo";
 import dayjs, {Dayjs} from "dayjs";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ProfileInfo from "./ProfileInfo";
 
-const ProfileInfo = (props: {info : student}) => {
-    return (
-        <div style={{display: 'flex', justifyContent: 'space-around'}}>
-            <div className={styles.profile}>
-                <p>Name: {props.info.name}</p>
-                <p>Id: {props.info.student9DigitId}</p>
-                <p>Batch: {props.info.batch.year}</p>
-                <p>Department: {props.info.department.shortName.toUpperCase()}</p>
-                <p>Level/Term: {props.info.levelTerm.label}</p>
-            </div>
-            <div>
-                <AccountCircleIcon sx={{ fontSize: 180 }}/>
-            </div>
-        </div>
-    )
-}
 
 const Questionnaire = () => {
     return (
@@ -90,7 +74,7 @@ const ScheduleAppointment = () => {
     )
 }
 
-const NewSeatP = (props: {application: application}) => {
+const NewSeatP = (props: {application: application, resetHandler: () => void}) => {
     return (
         <div style={{marginBottom: 20}}>
             <Card style={{margin: 30, textAlign: 'center', padding: 10, border: "1px solid white",
@@ -118,6 +102,12 @@ const NewSeatP = (props: {application: application}) => {
 
             <div className={styles.submit}>
                 <MyCard content={<Confirmation/>} title=''/>
+            </div>
+
+            <div className={styles.submit}>
+                <Button variant="outlined" color="primary" style={{width: 200, height: 40}} onClick={props.resetHandler}>
+                    Go Back
+                </Button>
             </div>
         </div>
     )
