@@ -410,19 +410,19 @@ function Applications() {
             </div>
             }
 
-            {/*{*/}
-            {/*    application && application.newApplication &&*/}
-            {/*    <div  className={"contentRoot"}>*/}
-            {/*        <NewSeatP application={application} resetHandler={resetView}/>*/}
-            {/*    </div>*/}
-            {/*}*/}
-
             {
                 application && application.newApplication &&
                 <div  className={"contentRoot"}>
-                    <TempSeatP application={application} resetHandler={resetView}/>
+                    <NewSeatP application={application} resetHandler={resetView}/>
                 </div>
             }
+
+            {/*{*/}
+            {/*    application && application.newApplication &&*/}
+            {/*    <div  className={"contentRoot"}>*/}
+            {/*        <TempSeatP application={application} resetHandler={resetView}/>*/}
+            {/*    </div>*/}
+            {/*}*/}
 
             {
                 application && application.roomChangeApplication &&

@@ -7,9 +7,9 @@ import MyCard from "../card";
 import Card from "@mui/material/Card";
 import Confirmation from "./Confirmation";
 import {useState} from "react";
-import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import {DateTimePicker} from "@mui/x-date-pickers";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {DemoContainer} from "@mui/x-date-pickers/internals/demo";
 import dayjs, {Dayjs} from "dayjs";
 import ProfileInfo from "./ProfileInfo";
 
@@ -63,10 +63,8 @@ const ScheduleAppointment = () => {
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15, marginTop: 20}}>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={['DateTimePicker']}>
-                        <DateTimePicker label="Schedule date and time" value={dayjs(value)}
+                    <DateTimePicker label="Schedule date and time" value={dayjs(value)}
                                         onChange={(newValue) => setValue(newValue)}/>
-                    </DemoContainer>
                 </LocalizationProvider>
                 <Button variant="outlined" color='primary'>Confirm Appointment</Button>
             </div>
