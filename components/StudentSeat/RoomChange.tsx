@@ -1,5 +1,5 @@
 import {SelectChangeEvent} from "@mui/material/Select";
-import styles from './studentSeat.module.scss';
+import styles from '../../styles/studentSeat.module.scss';
 import {useState} from "react";
 import MyCard from "../card";
 import MUIDropdown from "../MUIDropdown";

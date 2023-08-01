@@ -4,13 +4,16 @@ import MyCard from "../../components/card";
 import MyDropDown from "../../components/dropdown";
 import { useReducer, useState } from "react";
 import styles from '../../styles/seatManagementIndex.module.scss'
-import { ApplicationStatus, ApplicationsQuery } from "../../graphql/__generated__/graphql";
+import {ApplicationStatus, ApplicationsQuery, Student} from "../../graphql/__generated__/graphql";
 import { MyButton } from "../../components/button";
 import { MyInput } from "../../components/input";
 
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Skeleton from "@mui/material/Skeleton";
+import NewSeatP from "../../components/ProvostSeat/NewSeatP";
+import TempSeatP from "../../components/ProvostSeat/TempSeatP";
+import RoomChangeP from "../../components/ProvostSeat/RoomChangeP";
 
 function Filters(
     props : {
@@ -89,7 +92,8 @@ function Filters(
 
     return <MyCard title={"Filters"} content={content ?? <div></div>} />
 }
-type application = ApplicationsQuery['applications']['applications'][0];
+export type application = ApplicationsQuery['applications']['applications'][0];
+export type student = Student;
 
 // type application = ApplicationsQuery['applications'][0];
 
@@ -211,6 +215,9 @@ function Applications() {
     const [page, setPage] = useState(1);
     const [count, setCount] = useState(0);
 
+    const [view, setView] = useState('');
+    const [application, setApplication] = useState<application | undefined>();
+
     let skeletonHeight = 80;
 
     const { loading, data, error } = useQuery(
@@ -237,6 +244,23 @@ function Applications() {
             }
         }
     )
+
+    const handleViewChange = (e: React.MouseEvent<HTMLDivElement>, a: application) => {
+        console.log(a);
+        if(a.newApplication){
+            setView('new seat');
+            setApplication(a);
+        } else if(a.roomChangeApplication){
+            setView('room change');
+            setApplication(a);
+        } else if(a.tempApplication){
+            setView('temp seat');
+            setApplication(a);
+        } else {
+            setView('');
+            setApplication(undefined)
+        }
+    }
 
     function pageReset(s : (s : string)=>void){
         return (v : string)=>{
@@ -269,71 +293,102 @@ function Applications() {
     }
 
     return (
-        <div className={"contentRoot"} style={{
-            color: "white"
-        }}>
-            <div className={styles.filterSortContainer}>
-                <div>
-                    <Filters
-                    batch={batch}
-                    dept={dept}
-                    status={status}
-                    type={type}
-                    lt={lt}
-                    setBatch={pageReset(setBatch)}
-                    setDept={pageReset(setDept)}
-                    setStatus={pageReset(setStatus)}
-                    setType={pageReset(setType)}
-                    setLt={pageReset(setLt)}
-                    resetOnClick={filterResetOnClick}
-                    applyOnClick={()=>{}}
-                    />
-                </div>
-                <div>
-                <SortBy
-                    orderBy={orderBy}
-                    order={order}
-                    setOrderBy={setOrderBy}
-                    setOrder={setOrder}
-                    resetOnClick={sortResetOnClick}
-                    applyOnClick={()=>{}}
-                    />
-                </div>
-            </div>
-            <div>
-                
-                {
-                    <div className={styles.applicationListRoot}>
-                        <div className={styles.applicationListSearchBarContainer}>
-                            <div className={styles.searchBarIconContainer}>
-                                <img src="/search.svg" />
-                            </div>
-                            <MyInput className={styles.applicationListSearchBar} placeHolder="Search by Name or Id" onChange={setSearch_} type="text" value={search} />
-                        </div>
-                        <div className={styles.paginationConrainer} >
-                        
-                        { 
-                            <PaginationControlled page={page} setPage={setPage} count={count} />
-                        }
-                        </div>
-                        {
-                            loading &&
-                            [1, 2, 3, 4, 5, 6, 7].map(v =>(
-                                <div key = {v} className={styles.loadingSkeletonContainer}> 
-                                    <Skeleton variant="rectangular" height={skeletonHeight} />
-                                </div>
-                            ))
-                        }
-
-                        {
-                            data && 
-                            data.applications.applications.map(a => (<Application application={a} key={a.applicationId} />))
-                        }
-                        
-                        
+        <div>
+            {!application &&
+                <div className={"contentRoot"} style={{
+                color: "white"
+            }}>
+                <div className={styles.filterSortContainer}>
+                    <div>
+                        <Filters
+                            batch={batch}
+                            dept={dept}
+                            status={status}
+                            type={type}
+                            lt={lt}
+                            setBatch={pageReset(setBatch)}
+                            setDept={pageReset(setDept)}
+                            setStatus={pageReset(setStatus)}
+                            setType={pageReset(setType)}
+                            setLt={pageReset(setLt)}
+                            resetOnClick={filterResetOnClick}
+                            applyOnClick={() => {
+                            }}
+                        />
                     </div>
-                }
+                    <div>
+                        <SortBy
+                            orderBy={orderBy}
+                            order={order}
+                            setOrderBy={setOrderBy}
+                            setOrder={setOrder}
+                            resetOnClick={sortResetOnClick}
+                            applyOnClick={() => {
+                            }}
+                        />
+                    </div>
+                </div>
+                <div>
+
+                    {
+                        <div className={styles.applicationListRoot}>
+                            <div className={styles.applicationListSearchBarContainer}>
+                                <div className={styles.searchBarIconContainer}>
+                                    <img src="/search.svg"/>
+                                </div>
+                                <MyInput className={styles.applicationListSearchBar} placeHolder="Search by Name or Id"
+                                         onChange={setSearch_} type="text" value={search}/>
+                            </div>
+                            <div className={styles.paginationConrainer}>
+
+                                {
+                                    <PaginationControlled page={page} setPage={setPage} count={count}/>
+                                }
+                            </div>
+                            {
+                                loading &&
+                                [1, 2, 3, 4, 5, 6, 7].map(v => (
+                                    <div key={v} className={styles.loadingSkeletonContainer}>
+                                        <Skeleton variant="rectangular" height={skeletonHeight}/>
+                                    </div>
+                                ))
+                            }
+
+                            {
+                                data &&
+                                data.applications.applications.map(a => (
+                                    <div key={a.applicationId} onClick={(e) => handleViewChange(e, a)}>
+                                        <Application application={a} key={a.applicationId}/>
+                                    </div>))
+                            }
+
+
+                        </div>
+                    }
+                </div>
             </div>
+            }
+
+            {
+                application && application.newApplication &&
+                <div  className={"contentRoot"}>
+                    <NewSeatP application={application} />
+                </div>
+            }
+
+            {
+                application && application.tempApplication &&
+                <div  className={"contentRoot"}>
+                    <TempSeatP application={application} />
+                </div>
+            }
+
+            {
+                application && application.roomChangeApplication &&
+                <div  className={"contentRoot"}>
+                   <RoomChangeP application={application} />
+                </div>
+            }
         </div>
     )
 }
