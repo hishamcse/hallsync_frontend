@@ -7,13 +7,14 @@ import MyCard from "../card";
 import Card from "@mui/material/Card";
 import Confirmation from "./Confirmation";
 import {useState} from "react";
-import {DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {DemoContainer} from "@mui/x-date-pickers/internals/demo";
+import {DateTimePicker} from "@mui/x-date-pickers";
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider'
 import dayjs, {Dayjs} from "dayjs";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { ApplicationDetailsQuery } from "../../graphql/__generated__/graphql";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 
-const ProfileInfo = (props: {info : student}) => {
+const ProfileInfo = (props: {info : ApplicationDetailsQuery['applicationDetails']['student']}) => {
     return (
         <div style={{display: 'flex', justifyContent: 'space-around'}}>
             <div className={styles.profile}>
@@ -79,10 +80,8 @@ const ScheduleAppointment = () => {
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15, marginTop: 20}}>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={['DateTimePicker']}>
                         <DateTimePicker label="Schedule date and time" value={dayjs(value)}
                                         onChange={(newValue) => setValue(newValue)}/>
-                    </DemoContainer>
                 </LocalizationProvider>
                 <Button variant="outlined" color='primary'>Confirm Appointment</Button>
             </div>
@@ -90,7 +89,7 @@ const ScheduleAppointment = () => {
     )
 }
 
-const NewSeatP = (props: {application: application}) => {
+const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetails']}) => {
     return (
         <div style={{marginBottom: 20}}>
             <Card style={{margin: 30, textAlign: 'center', padding: 10, border: "1px solid white",

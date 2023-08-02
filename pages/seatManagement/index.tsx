@@ -15,6 +15,7 @@ import MultipleSelectCheckmarks from "../../components/MUIMultiSelectCheckbox";
 import NewSeatP from "../../components/ProvostSeat/NewSeatP";
 import TempSeatP from "../../components/ProvostSeat/TempSeatP";
 import RoomChangeP from "../../components/ProvostSeat/RoomChangeP";
+import { useRouter } from "next/router";
 
 function Filters(
     props : {
@@ -132,7 +133,7 @@ export type student = Student;
 function getApplicaitonType(application: application) {
     if (application.newApplication)
         return 'new seat';
-    else if (application.roomChangeApplication) {
+    else if (application.seatChangeApplication) {
         return 'room change';
     }
     return 'temp seat';
@@ -141,6 +142,7 @@ function getApplicaitonType(application: application) {
 function Application(props: {
     application: application
 }) {
+    const router = useRouter();
     let { student } = props.application;
     let statusClassMap: any = {
         'PENDING': styles.pending,
@@ -148,7 +150,11 @@ function Application(props: {
         'REJECTED': styles.rejected,
     }
     return (
-        <div className={styles.applicationRoot}>
+        <div className={styles.applicationRoot} onClick={(e)=>{
+            if(props.application.newApplication){
+                router.push('/seatManagement/newApplication/' + props.application.applicationId)
+            }
+        }}>
             <div className={styles.applicationRow}>
                 <div>  {student.name} </div>
                 <div> Department: {student.department.shortName} </div>
@@ -281,7 +287,7 @@ function Applications() {
         if(a.newApplication){
             setView('new seat');
             setApplication(a);
-        } else if(a.roomChangeApplication){
+        } else if(a.seatChangeApplication){
             setView('room change');
             setApplication(a);
         } else if(a.tempApplication){
@@ -400,7 +406,7 @@ function Applications() {
             </div>
             }
 
-            {
+            {/* {
                 application && application.newApplication &&
                 <div  className={"contentRoot"}>
                     <NewSeatP application={application} />
@@ -415,11 +421,11 @@ function Applications() {
             }
 
             {
-                application && application.roomChangeApplication &&
+                application && application.seatChangeApplication &&
                 <div  className={"contentRoot"}>
                    <RoomChangeP application={application} />
                 </div>
-            }
+            } */}
         </div>
     )
 }

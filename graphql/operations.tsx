@@ -52,8 +52,8 @@ export const APPLICATIONS = graphql(`
         newApplication {
           newApplicationId
         }
-        roomChangeApplication {
-          roomChangeApplicationId
+        seatChangeApplication {
+          seatChangeApplicationId
         }
         tempApplication {
           applicationId
@@ -90,3 +90,32 @@ export const SORT_DATA = graphql(`
     }
   }
 `);
+
+export const GET_APPLICATION = graphql(`
+  query ApplicationDetails($applicationId: Float!) {
+    applicationDetails(applicationId: $applicationId) {
+      applicationId
+      createdAt
+      lastUpdate
+      newApplication {
+        newApplicationId
+      }
+      student {
+        name
+        email
+        student9DigitId
+        department {
+          name
+          shortName
+        }
+        batch {
+          year
+        }
+        phone
+        levelTerm{
+          label
+        }
+      }
+    }
+  }
+`)

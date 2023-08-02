@@ -144,9 +144,14 @@ export type Mutation = {
   __typename?: 'Mutation';
   addNewMealItem: CupCount;
   addOldMealItem: CupCount;
+  approveNewApplication: Residency;
+  approveSeatChangeApplication: Residency;
+  approveTempSeatApplication: TempResidency;
   login: UserWithToken;
   newSeatApplication: NewApplication;
-  roomChangeApplication: RoomChangeApplication;
+  rejectApplication: SeatApplication;
+  reviseApplication: Revision;
+  seatChangeApplication: SeatChangeApplication;
   tempSeatApplication: TempApplication;
   vote: Vote;
 };
@@ -171,6 +176,26 @@ export type MutationAddOldMealItemArgs = {
 };
 
 
+export type MutationApproveNewApplicationArgs = {
+  newApplicationId: Scalars['Float']['input'];
+  seatId: Scalars['Float']['input'];
+};
+
+
+export type MutationApproveSeatChangeApplicationArgs = {
+  seatChangeApplicationId: Scalars['Float']['input'];
+  seatId: Scalars['Float']['input'];
+};
+
+
+export type MutationApproveTempSeatApplicationArgs = {
+  applicationId: Scalars['Float']['input'];
+  days: Scalars['Float']['input'];
+  from: Scalars['String']['input'];
+  seatId: Scalars['Float']['input'];
+};
+
+
 export type MutationLoginArgs = {
   id: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -184,9 +209,20 @@ export type MutationNewSeatApplicationArgs = {
 };
 
 
-export type MutationRoomChangeApplicationArgs = {
+export type MutationRejectApplicationArgs = {
+  applicationId: Scalars['Float']['input'];
+};
+
+
+export type MutationReviseApplicationArgs = {
+  applicationId: Scalars['Float']['input'];
   reason: Scalars['String']['input'];
-  roomId: Scalars['Float']['input'];
+};
+
+
+export type MutationSeatChangeApplicationArgs = {
+  reason: Scalars['String']['input'];
+  seatId: Scalars['Float']['input'];
 };
 
 
@@ -240,15 +276,22 @@ export type Preference = {
 
 export type Query = {
   __typename?: 'Query';
+  applicationDetails: SeatApplication;
   applicationStatus: Array<StatusWithDefaultSelect>;
   applicationTypes: Array<Scalars['String']['output']>;
   applications: SeatApplicationsWithCount;
   batches: Array<Batch>;
   departments: Array<Department>;
+  freeSeat: Seat;
   levelTerms: Array<LevelTerm>;
   myapplications: Array<SeatApplication>;
   pendingVotes: Array<Vote>;
   test: Scalars['String']['output'];
+};
+
+
+export type QueryApplicationDetailsArgs = {
+  applicationId: Scalars['Float']['input'];
 };
 
 
@@ -263,8 +306,8 @@ export type Residency = {
   __typename?: 'Residency';
   from: Scalars['DateTime']['output'];
   residencyId: Scalars['Float']['output'];
-  room: Room;
-  roomId: Scalars['Float']['output'];
+  seat: Seat;
+  seatId: Scalars['Float']['output'];
   student: Student;
   studentId: Scalars['Float']['output'];
 };
@@ -275,28 +318,34 @@ export enum ResidencyStatus {
   TempResident = 'TEMP_RESIDENT'
 }
 
+export type Revision = {
+  __typename?: 'Revision';
+  application: SeatApplication;
+  applicationId: Scalars['Float']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  reason: Scalars['String']['output'];
+  revisionId: Scalars['Float']['output'];
+};
+
 export type Room = {
   __typename?: 'Room';
   floor: Floor;
   floorId: Scalars['Float']['output'];
-  roomCapacity: Scalars['Float']['output'];
   roomId: Scalars['Float']['output'];
   roomNo: Scalars['Float']['output'];
-};
-
-export type RoomChangeApplication = {
-  __typename?: 'RoomChangeApplication';
-  application: SeatApplication;
-  applicationId: Scalars['Float']['output'];
-  reason: Scalars['String']['output'];
-  roomChangeApplicationId: Scalars['Float']['output'];
-  toRoom: Room;
-  toRoomId: Scalars['Float']['output'];
-  votes: Array<Vote>;
+  seats: Array<Seat>;
 };
 
 export type SearchInput = {
   searchBy?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type Seat = {
+  __typename?: 'Seat';
+  residency?: Maybe<Residency>;
+  room: Room;
+  roomId: Scalars['Float']['output'];
+  seatId: Scalars['Float']['output'];
 };
 
 export type SeatApplication = {
@@ -305,7 +354,7 @@ export type SeatApplication = {
   createdAt: Scalars['DateTime']['output'];
   lastUpdate: Scalars['DateTime']['output'];
   newApplication?: Maybe<NewApplication>;
-  roomChangeApplication?: Maybe<RoomChangeApplication>;
+  seatChangeApplication?: Maybe<SeatChangeApplication>;
   status: ApplicationStatus;
   student: Student;
   studentId: Scalars['Float']['output'];
@@ -316,6 +365,17 @@ export type SeatApplicationsWithCount = {
   __typename?: 'SeatApplicationsWithCount';
   applications: Array<SeatApplication>;
   count: Scalars['Float']['output'];
+};
+
+export type SeatChangeApplication = {
+  __typename?: 'SeatChangeApplication';
+  application: SeatApplication;
+  applicationId: Scalars['Float']['output'];
+  reason: Scalars['String']['output'];
+  seatChangeApplicationId: Scalars['Float']['output'];
+  toSeat: Seat;
+  toSeatId: Scalars['Float']['output'];
+  votes: Array<Vote>;
 };
 
 export type SortInput = {
@@ -345,6 +405,7 @@ export type Student = {
   residencyStatus: ResidencyStatus;
   student9DigitId: Scalars['String']['output'];
   studentId: Scalars['Float']['output'];
+  tempResidencyHistory: Array<TempResidencyHistory>;
 };
 
 export type TempApplication = {
@@ -365,6 +426,26 @@ export type TempQuestionnaire = {
   questionnaireId: Scalars['Float']['output'];
 };
 
+export type TempResidency = {
+  __typename?: 'TempResidency';
+  days: Scalars['Float']['output'];
+  from: Scalars['DateTime']['output'];
+  residencyId: Scalars['Float']['output'];
+  seat: Seat;
+  seatId: Scalars['Float']['output'];
+  studentId: Scalars['Float']['output'];
+};
+
+export type TempResidencyHistory = {
+  __typename?: 'TempResidencyHistory';
+  from: Scalars['DateTime']['output'];
+  seat: Seat;
+  seatId: Scalars['Float']['output'];
+  studentId: Scalars['Float']['output'];
+  tempResidencyHistoryId: Scalars['Float']['output'];
+  to: Scalars['DateTime']['output'];
+};
+
 export type UserWithToken = {
   __typename?: 'UserWithToken';
   authority?: Maybe<Authority>;
@@ -376,8 +457,9 @@ export type Vote = {
   __typename?: 'Vote';
   lastUpdated: Scalars['DateTime']['output'];
   reason: Scalars['String']['output'];
-  roomChangeApplication: RoomChangeApplication;
-  roomChangeApplicationId: Scalars['Float']['output'];
+  roomChangeApplication: SeatChangeApplication;
+  seatChangeApplication: SeatChangeApplication;
+  seatChangeApplicationId: Scalars['Float']['output'];
   status: VoteStatus;
   student: Student;
   studentId: Scalars['Float']['output'];
@@ -411,7 +493,7 @@ export type ApplicationsQueryVariables = Exact<{
 }>;
 
 
-export type ApplicationsQuery = { __typename?: 'Query', applications: { __typename?: 'SeatApplicationsWithCount', count: number, applications: Array<{ __typename?: 'SeatApplication', applicationId: number, createdAt: any, lastUpdate: any, status: ApplicationStatus, student: { __typename?: 'Student', student9DigitId: string, name: string, residencyStatus: ResidencyStatus, studentId: number, batch: { __typename?: 'Batch', year: string }, department: { __typename?: 'Department', shortName: string }, levelTerm: { __typename?: 'LevelTerm', label: string } }, newApplication?: { __typename?: 'NewApplication', newApplicationId: number } | null, roomChangeApplication?: { __typename?: 'RoomChangeApplication', roomChangeApplicationId: number } | null, tempApplication?: { __typename?: 'TempApplication', applicationId: number } | null }> } };
+export type ApplicationsQuery = { __typename?: 'Query', applications: { __typename?: 'SeatApplicationsWithCount', count: number, applications: Array<{ __typename?: 'SeatApplication', applicationId: number, createdAt: any, lastUpdate: any, status: ApplicationStatus, student: { __typename?: 'Student', student9DigitId: string, name: string, residencyStatus: ResidencyStatus, studentId: number, batch: { __typename?: 'Batch', year: string }, department: { __typename?: 'Department', shortName: string }, levelTerm: { __typename?: 'LevelTerm', label: string } }, newApplication?: { __typename?: 'NewApplication', newApplicationId: number } | null, seatChangeApplication?: { __typename?: 'SeatChangeApplication', seatChangeApplicationId: number } | null, tempApplication?: { __typename?: 'TempApplication', applicationId: number } | null }> } };
 
 export type QueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -423,9 +505,17 @@ export type BatchesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type BatchesQuery = { __typename?: 'Query', batches: Array<{ __typename?: 'Batch', year: string }> };
 
+export type ApplicationDetailsQueryVariables = Exact<{
+  applicationId: Scalars['Float']['input'];
+}>;
+
+
+export type ApplicationDetailsQuery = { __typename?: 'Query', applicationDetails: { __typename?: 'SeatApplication', applicationId: number, createdAt: any, lastUpdate: any, newApplication?: { __typename?: 'NewApplication', newApplicationId: number } | null, student: { __typename?: 'Student', name: string, email: string, student9DigitId: string, phone: string, department: { __typename?: 'Department', name: string, shortName: string }, batch: { __typename?: 'Batch', year: string }, levelTerm: { __typename?: 'LevelTerm', label: string } } } };
+
 
 export const DepartmentsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deptCode"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]} as unknown as DocumentNode<DepartmentsQuery, DepartmentsQueryVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"loginId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}},{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"loginId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"studentId"}},{"kind":"Field","name":{"kind":"Name","value":"residencyStatus"}}]}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"authority"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorityId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
-export const ApplicationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Applications"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filters"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"FilterInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"SortInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"search"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"SearchInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applications"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filters"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}},{"kind":"Argument","name":{"kind":"Name","value":"search"},"value":{"kind":"Variable","name":{"kind":"Name","value":"search"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applications"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applicationId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"lastUpdate"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"student9DigitId"}},{"kind":"Field","name":{"kind":"Name","value":"batch"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}}]}},{"kind":"Field","name":{"kind":"Name","value":"department"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"levelTerm"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"label"}}]}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"residencyStatus"}},{"kind":"Field","name":{"kind":"Name","value":"studentId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"newApplication"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"newApplicationId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"roomChangeApplication"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomChangeApplicationId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"tempApplication"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applicationId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]} as unknown as DocumentNode<ApplicationsQuery, ApplicationsQueryVariables>;
+export const ApplicationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Applications"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filters"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"FilterInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"SortInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"search"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"SearchInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applications"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filters"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}},{"kind":"Argument","name":{"kind":"Name","value":"search"},"value":{"kind":"Variable","name":{"kind":"Name","value":"search"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applications"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applicationId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"lastUpdate"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"student9DigitId"}},{"kind":"Field","name":{"kind":"Name","value":"batch"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}}]}},{"kind":"Field","name":{"kind":"Name","value":"department"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"levelTerm"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"label"}}]}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"residencyStatus"}},{"kind":"Field","name":{"kind":"Name","value":"studentId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"newApplication"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"newApplicationId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"seatChangeApplication"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"seatChangeApplicationId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"tempApplication"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applicationId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]} as unknown as DocumentNode<ApplicationsQuery, ApplicationsQueryVariables>;
 export const QueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Query"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applicationStatus"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"select"}}]}},{"kind":"Field","name":{"kind":"Name","value":"applicationTypes"}},{"kind":"Field","name":{"kind":"Name","value":"batches"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}}]}},{"kind":"Field","name":{"kind":"Name","value":"departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"levelTerms"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"label"}}]}}]}}]} as unknown as DocumentNode<QueryQuery, QueryQueryVariables>;
 export const BatchesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Batches"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"batches"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}}]}}]}}]} as unknown as DocumentNode<BatchesQuery, BatchesQueryVariables>;
+export const ApplicationDetailsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ApplicationDetails"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"applicationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applicationDetails"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"applicationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"applicationId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applicationId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"lastUpdate"}},{"kind":"Field","name":{"kind":"Name","value":"newApplication"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"newApplicationId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"student9DigitId"}},{"kind":"Field","name":{"kind":"Name","value":"department"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"batch"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}}]}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"levelTerm"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"label"}}]}}]}}]}}]}}]} as unknown as DocumentNode<ApplicationDetailsQuery, ApplicationDetailsQueryVariables>;
