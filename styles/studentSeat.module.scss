@@ -37,3 +37,13 @@
         margin-left: 10px;
     }
 }
+
+.prevAllocations {
+  margin: 30px;
+  display: flex;
+  justify-content: space-around;
+  .agreement-text {
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+}

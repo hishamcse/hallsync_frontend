@@ -1,4 +1,4 @@
-import {application, student} from "../../pages/seatManagement";
+import {application} from "../../pages/seatManagement";
 import QuestionBox from "../QuestionBox";
 import {Button, Input} from "@mui/material";
 import * as React from "react";
@@ -7,12 +7,12 @@ import MyCard from "../card";
 import Card from "@mui/material/Card";
 import Confirmation from "./Confirmation";
 import {useState} from "react";
-import {DateTimePicker} from "@mui/x-date-pickers";
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider'
+import {DateTimePicker} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, {Dayjs} from "dayjs";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { ApplicationDetailsQuery } from "../../graphql/__generated__/graphql";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 
 const ProfileInfo = (props: {info : ApplicationDetailsQuery['applicationDetails']['student']}) => {
     return (
@@ -80,7 +80,7 @@ const ScheduleAppointment = () => {
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15, marginTop: 20}}>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DateTimePicker label="Schedule date and time" value={dayjs(value)}
+                    <DateTimePicker label="Schedule date and time" value={dayjs(value)}
                                         onChange={(newValue) => setValue(newValue)}/>
                 </LocalizationProvider>
                 <Button variant="outlined" color='primary'>Confirm Appointment</Button>
@@ -89,7 +89,7 @@ const ScheduleAppointment = () => {
     )
 }
 
-const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetails']}) => {
+const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetails'], resetHandler: () => void}) => {
     return (
         <div style={{marginBottom: 20}}>
             <Card style={{margin: 30, textAlign: 'center', padding: 10, border: "1px solid white",
@@ -117,6 +117,12 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
 
             <div className={styles.submit}>
                 <MyCard content={<Confirmation/>} title=''/>
+            </div>
+
+            <div className={styles.submit}>
+                <Button variant="outlined" color="primary" style={{width: 200, height: 40}} onClick={props.resetHandler}>
+                    Go Back
+                </Button>
             </div>
         </div>
     )

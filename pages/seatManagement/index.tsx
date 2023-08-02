@@ -2,9 +2,9 @@ import { useQuery } from "@apollo/client";
 import { APPLICATIONS, FILTERS_DATA, SORT_DATA } from "../../graphql/operations";
 import MyCard from "../../components/card";
 import MyDropDown from "../../components/dropdown";
-import { useReducer, useState } from "react";
+import {useEffect, useState} from "react";
 import styles from '../../styles/seatManagementIndex.module.scss'
-import {ApplicationStatus, ApplicationsQuery, Student} from "../../graphql/__generated__/graphql";
+import {ApplicationsQuery, Student} from "../../graphql/__generated__/graphql";
 import { MyButton } from "../../components/button";
 import { MyInput } from "../../components/input";
 
@@ -239,7 +239,6 @@ function PaginationControlled(props : {
 
 function Applications() {
 
-
     const [batch, setBatch] = useState<string[]>([]);
     const [dept, setDept] = useState<string[]>([]);
     const [status, setStatus] = useState<string[]>([]);
@@ -281,6 +280,12 @@ function Applications() {
             }
         }
     )
+
+    useEffect(()=>{
+        if(data){
+            setCount(Math.floor(data.applications.count / 10))
+        }
+    }, [])
 
     const handleViewChange = (e: React.MouseEvent<HTMLDivElement>, a: application) => {
         console.log(a);
@@ -327,6 +332,11 @@ function Applications() {
     function sortResetOnClick(){
         setOrder('Newest');
         setOrderBy(undefined);
+    }
+
+    function resetView(){
+        setView('');
+        setApplication(undefined);
     }
 
     return (
@@ -409,16 +419,16 @@ function Applications() {
             {/* {
                 application && application.newApplication &&
                 <div  className={"contentRoot"}>
-                    <NewSeatP application={application} />
+                    <NewSeatP application={application} resetHandler={resetView}/>
                 </div>
             }
 
-            {
-                application && application.tempApplication &&
-                <div  className={"contentRoot"}>
-                    <TempSeatP application={application} />
-                </div>
-            }
+            {/*{*/}
+            {/*    application && application.newApplication &&*/}
+            {/*    <div  className={"contentRoot"}>*/}
+            {/*        <TempSeatP application={application} resetHandler={resetView}/>*/}
+            {/*    </div>*/}
+            {/*}*/}
 
             {
                 application && application.seatChangeApplication &&
