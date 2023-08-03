@@ -4,7 +4,8 @@ import { ApplicationDetailsQuery } from "../../../graphql/__generated__/graphql"
 import { useQuery } from "@apollo/client";
 import { GET_APPLICATION } from "../../../graphql/operations";
 import { useRouter } from "next/router";
-export default function(){
+
+export default function NewSeatAppView(){
 
     const [app, setApp] = useState<ApplicationDetailsQuery['applicationDetails']>();
     const router = useRouter();
@@ -21,9 +22,6 @@ export default function(){
             }
         }
     )
-    
-    
-    
 
     return (
         <div className="contentRoot">
