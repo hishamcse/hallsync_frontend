@@ -4,6 +4,7 @@ import type { NextPage } from 'next'
 import MyDropDown from '../components/dropdown'
 import MyCard from '../components/card'
 import MyCheckBox from '../components/checkbox'
+import { UploadFile } from '../components/fileUpload'
 
 const items = ['New Seat', 'Temp Seat','Room Change']
 
@@ -26,7 +27,7 @@ const Test: NextPage = () => {
 function QuestionnaireNewSeat(){
   return (
     <div className='contentRoot'>
-      <MyCard title='Questionnaire' content={<div><MyCheckBox/></div>} />
+      <UploadFile />
     </div>
   )
 }
@@ -34,4 +35,4 @@ function QuestionnaireNewSeat(){
 
 
 
-export default MyCheckBox
+export default QuestionnaireNewSeat
