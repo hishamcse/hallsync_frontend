@@ -135,3 +135,39 @@ export const GET_INFO = graphql(`
     }
   }
 `)
+
+export const MY_APPLICATIONS = graphql(`
+  query Myapplications {
+  myapplications {
+    applicationId
+    createdAt
+    lastUpdate
+    status
+    student {
+      student9DigitId
+      batch {
+        year
+      }
+      department {
+        shortName
+      }
+      levelTerm {
+        label
+      }
+      name
+      residencyStatus
+      studentId
+    }
+    newApplication {
+      newApplicationId
+    }
+    seatChangeApplication {
+      seatChangeApplicationId
+    }
+    tempApplication {
+      applicationId
+    }
+  }
+}
+
+`)

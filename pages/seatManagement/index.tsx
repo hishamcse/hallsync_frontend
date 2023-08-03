@@ -139,10 +139,10 @@ function getApplicaitonType(application: application) {
     return 'temp seat';
 }
 
-function Application(props: {
-    application: application
+export function Application(props: {
+    application: application,
+    onClick : (a : application)=>void
 }) {
-    const router = useRouter();
     let { student } = props.application;
     let statusClassMap: any = {
         'PENDING': styles.pending,
@@ -151,9 +151,7 @@ function Application(props: {
     }
     return (
         <div className={styles.applicationRoot} onClick={(e)=>{
-            if(props.application.newApplication){
-                router.push('/seatManagement/newApplication/' + props.application.applicationId)
-            }
+            props.onClick(props.application)
         }}>
             <div className={styles.applicationRow}>
                 <div>  {student.name} </div>
@@ -237,6 +235,54 @@ function PaginationControlled(props : {
     );
   }
 
+
+export function ApplicationList(props : {
+    applications : ApplicationsQuery['applications']['applications'] | undefined,
+    search? : React.JSX.Element,
+    pagintaion? : React.JSX.Element,
+    loading : boolean,
+    itemOnClickHandler : (a : application)=>void
+
+}){
+    let skeletonHeight = 80;
+
+    return (
+        <div className={styles.applicationListRoot}>
+            <div className={styles.applicationListSearchBarContainer}>
+                {props.search && <div className={styles.searchBarIconContainer}>
+                    <img src="/search.svg"/>
+                </div>}
+                {props.search}
+            </div>
+            <div className={styles.paginationConrainer}>
+
+                {
+                    props.pagintaion
+                }
+            </div>
+            {
+                props.loading &&
+                [1, 2, 3, 4, 5, 6, 7].map(v => (
+                    <div key={v} className={styles.loadingSkeletonContainer}>
+                        <Skeleton variant="rectangular" height={skeletonHeight}/>
+                    </div>
+                ))
+            }
+
+            {
+                props.applications &&
+                props.applications.map(a => (
+                    <div key={a.applicationId} onClick={(e) => props.itemOnClickHandler(a)}>
+                        <Application onClick={props.itemOnClickHandler} application={a} key={a.applicationId}/>
+                    </div>))
+            }
+
+
+        </div>
+    )
+
+}
+
 function Applications() {
 
     const [batch, setBatch] = useState<string[]>([]);
@@ -251,8 +297,8 @@ function Applications() {
     const [page, setPage] = useState(1);
     const [count, setCount] = useState(0);
 
-    const [view, setView] = useState('');
-    const [application, setApplication] = useState<application | undefined>();
+    const router = useRouter()
+
 
     let skeletonHeight = 80;
 
@@ -287,22 +333,6 @@ function Applications() {
         }
     }, [])
 
-    const handleViewChange = (e: React.MouseEvent<HTMLDivElement>, a: application) => {
-        console.log(a);
-        if(a.newApplication){
-            setView('new seat');
-            setApplication(a);
-        } else if(a.seatChangeApplication){
-            setView('room change');
-            setApplication(a);
-        } else if(a.tempApplication){
-            setView('temp seat');
-            setApplication(a);
-        } else {
-            setView('');
-            setApplication(undefined)
-        }
-    }
 
     function pageReset(s : (s : string[])=>void){
         return (v : string[])=>{
@@ -334,14 +364,10 @@ function Applications() {
         setOrderBy(undefined);
     }
 
-    function resetView(){
-        setView('');
-        setApplication(undefined);
-    }
 
     return (
         <div>
-            {!application &&
+            {
                 <div className={"contentRoot"} style={{
                 color: "white"
             }}>
@@ -376,66 +402,21 @@ function Applications() {
                     </div>
                 </div>
                 <div>
-
-                    {
-                        <div className={styles.applicationListRoot}>
-                            <div className={styles.applicationListSearchBarContainer}>
-                                <div className={styles.searchBarIconContainer}>
-                                    <img src="/search.svg"/>
-                                </div>
-                                <MyInput className={styles.applicationListSearchBar} placeHolder="Search by Name or Id"
-                                         onChange={setSearch_} type="text" value={search}/>
-                            </div>
-                            <div className={styles.paginationConrainer}>
-
-                                {
-                                    <PaginationControlled page={page} setPage={setPage} count={count}/>
-                                }
-                            </div>
-                            {
-                                loading &&
-                                [1, 2, 3, 4, 5, 6, 7].map(v => (
-                                    <div key={v} className={styles.loadingSkeletonContainer}>
-                                        <Skeleton variant="rectangular" height={skeletonHeight}/>
-                                    </div>
-                                ))
-                            }
-
-                            {
-                                data &&
-                                data.applications.applications.map(a => (
-                                    <div key={a.applicationId} onClick={(e) => handleViewChange(e, a)}>
-                                        <Application application={a} key={a.applicationId}/>
-                                    </div>))
-                            }
-
-
-                        </div>
-                    }
+                    
+                    <ApplicationList 
+                    loading = {loading} 
+                    applications={data ? data.applications.applications : undefined}
+                    itemOnClickHandler={(a : application)=>{
+                        router.push('./seatManagement/newApplication/' + a.applicationId )
+                    }}
+                    search={<MyInput className={styles.applicationListSearchBar} placeHolder="Search by Name or Id"
+                    onChange={setSearch_} type="text" value={search}/>}
+                    pagintaion={<PaginationControlled page={page} setPage={setPage} count={count}/>}
+                     />
                 </div>
             </div>
             }
 
-            {/* {
-                application && application.newApplication &&
-                <div  className={"contentRoot"}>
-                    <NewSeatP application={application} resetHandler={resetView}/>
-                </div>
-            }
-
-            {/*{*/}
-            {/*    application && application.newApplication &&*/}
-            {/*    <div  className={"contentRoot"}>*/}
-            {/*        <TempSeatP application={application} resetHandler={resetView}/>*/}
-            {/*    </div>*/}
-            {/*}*/}
-
-            {
-                application && application.seatChangeApplication &&
-                <div  className={"contentRoot"}>
-                   <RoomChangeP application={application} />
-                </div>
-            } */}
         </div>
     )
 }

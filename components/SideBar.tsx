@@ -56,7 +56,6 @@ export function NavBar(){
                 onError : (err)=>{
                     setNotLoggedIn(true);
                 }
-                
             });
         }
         else{
@@ -92,12 +91,16 @@ export function StudentNavBar(){
         app : 'Application',
         mess : 'Mess'
     }
+    const activeIf = {
+        app : 'application/',
+        mess : 'mess'
+    }
     const router = useRouter();
 
     return(
         <ul  >
-            <ListItem active = {checkRouteContains(router,routes.app)} href={'/' + routes.app} imgPath={imgPaths.app} text={texts.app} />
-            <ListItem active = {checkRouteContains(router,routes.mess)} href={'/' + routes.mess} imgPath={imgPaths.mess} text={texts.mess} />
+            <ListItem active = {checkRouteContains(router,activeIf.app)} href={'/' + routes.app} imgPath={imgPaths.app} text={texts.app} />
+            <ListItem active = {checkRouteContains(router,activeIf.mess)} href={'/' + routes.mess} imgPath={imgPaths.mess} text={texts.mess} />
             <li> <SideBarIcon src="/payments.svg" />  Payments</li>
             <li> <SideBarIcon src="/info.svg" /> Info</li>
             <li> <SideBarIcon src="/feAngry1.svg" /> Complaints</li>

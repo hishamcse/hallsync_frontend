@@ -89,7 +89,7 @@ const ScheduleAppointment = () => {
     )
 }
 
-const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetails'], resetHandler: () => void}) => {
+const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetails']}) => {
     return (
         <div style={{marginBottom: 20}}>
             <Card style={{margin: 30, textAlign: 'center', padding: 10, border: "1px solid white",
@@ -117,12 +117,6 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
 
             <div className={styles.submit}>
                 <MyCard content={<Confirmation/>} title=''/>
-            </div>
-
-            <div className={styles.submit}>
-                <Button variant="outlined" color="primary" style={{width: 200, height: 40}} onClick={props.resetHandler}>
-                    Go Back
-                </Button>
             </div>
         </div>
     )
