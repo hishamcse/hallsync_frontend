@@ -32,9 +32,13 @@ function Login(){
   , {
     onError : ()=>{},
     onCompleted : (data)=>{
-      console.log(data);
+      // console.log(data);
       setUser(data.login);
-      router.push('./application/newApplication');
+      localStorage.setItem("token", data.login.token);
+      if(data.login.student)
+        router.push('./application/newApplication');
+      else
+        router.push('./seatManagement')
     }
   })
 
@@ -53,8 +57,10 @@ function Login(){
         <div className={styles.inputContainer}>
           <MyInput type='password' value={pass} onChange={setPass} placeHolder='password'/> 
         </div>
-        {error && <div className={styles.errorTextContainer}> {error.message} </div>}
-        {loading && <div className={styles.loadingTextContainer}> Loading </div>}
+        <div className={styles.messageContainer}>
+          {error && <span className={styles.errorTextContainer}> {error.message} </span>}
+          {loading && <span className={styles.loadingTextContainer}> Loading </span>}
+        </div>
 
       </div>
       <div className={styles.buttonContainer}>

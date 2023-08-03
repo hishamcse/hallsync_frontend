@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import type { AppProps } from 'next/app'
 import { TopBar } from '../components/TopBar'
-import { AuthorityNabBar, StudentNavBar } from '../components/SideBar'
+import { AuthorityNabBar, NavBar, StudentNavBar } from '../components/SideBar'
 import '../styles/global.scss'
 import styles from '../styles/_app.module.scss'
 import React, { ReactElement, ReactNode, useContext, useState } from "react";
@@ -15,6 +15,7 @@ import { NextPage } from 'next';
 import { LoginMutation } from '../graphql/__generated__/graphql';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { setContext } from '@apollo/client/link/context';
 
 const darkTheme = createTheme({
   palette: {
@@ -27,9 +28,20 @@ export const link = createHttpLink({
   uri: "http://localhost:3000/graphql"
 });
 
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('token');
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    }
+  }
+});
+
+
 export const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link,
+  link: authLink.concat(link)
 });
 
 
@@ -89,9 +101,9 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <ApolloProvider client={client}>
           <userContext.Provider value = {value}>
             <div>
-              { value.user && value.user.student && <StudentNavBar />}
-              { value.user && value.user.authority && <AuthorityNabBar />}
-
+              <NavBar />
+              {/* { value.user && value.user.student && <StudentNavBar />}
+              { value.user && value.user.authority && <AuthorityNabBar />} */}
               <div className = {styles.topBarContainer} >
                 <TopBar />
               </div>

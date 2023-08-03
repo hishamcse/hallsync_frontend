@@ -32,12 +32,17 @@
     // display: flex;
     flex-grow: 1;
 }
-.errorTextContainer{
-    color : red;
+
+.messageContainer{
+    
     margin: 10px;
     text-align: center;
+    min-height: 20px;
+}
+
+.errorTextContainer{
+    color : red;
 }
 .loadingTextContainer{
-    @extend .errorTextContainer;
     color : $alertColor;
 }

@@ -119,3 +119,19 @@ export const GET_APPLICATION = graphql(`
     }
   }
 `)
+
+export const GET_INFO = graphql(`
+  query SelfInfo {
+    selfInfo {
+      student {
+        studentId
+        residencyStatus
+      }
+      authority {
+        authorityId
+        role
+      }
+      token
+    }
+  }
+`)

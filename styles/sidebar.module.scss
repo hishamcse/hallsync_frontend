@@ -32,4 +32,18 @@
         background-color: $fbc;
         border-radius: 10px;
     }
+
+    ul{
+        all : unset;   
+    }
+}
+
+
+.loginContainer{
+    // background-color: red;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
