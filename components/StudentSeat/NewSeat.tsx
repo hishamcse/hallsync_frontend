@@ -1,6 +1,6 @@
 import MyCard from "../card";
 import styles from '../../styles/studentSeat.module.scss';
-import {ChangeEvent, FormEvent, useState} from "react";
+import {ChangeEvent, useState} from "react";
 import MUIDropdown from "../MUIDropdown";
 import * as React from "react";
 import {SelectChangeEvent} from "@mui/material/Select";
@@ -10,7 +10,7 @@ import Agreement from "./Agreement";
 import Submit from "./Submit";
 import {types} from "./StudentView";
 import {useMutation} from "@apollo/client";
-import {LOGIN, POST_NEW_APPLICATION} from "../../graphql/operations";
+import {POST_NEW_APPLICATION} from "../../graphql/operations";
 import {useRouter} from "next/router";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
@@ -49,7 +49,7 @@ const Documents = (props : {
                             alignItems : "center"
                         }}>
                             {f.name}
-                            <IconButton onClick={(e)=>props.removeFile(f)} >
+                            <IconButton onClick={(_)=>props.removeFile(f)} >
                                 <CloseOutlinedIcon />
                             </IconButton>
                         </div>
@@ -117,7 +117,6 @@ const NewSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
 
     const allQuestionsAnswered = [setQ1Ans, setQ2Ans];
 
-    
     function handleSubmit() {
         console.log("here");
         if(!agreed) {
@@ -155,7 +154,7 @@ const NewSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
                 }).then(r => {
                     console.log(r);
                 })
-                .catch(err =>{
+                .catch(_ =>{
                     setReqError(true)
                 })
             })
@@ -176,16 +175,13 @@ const NewSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
             }).then(r => {
                 console.log(r);
             })
-            .catch(err =>{
+            .catch(_ =>{
                 setReqError(true)
             })
         }
 
 
     }
-
-
-
 
     const handleChange = (event: SelectChangeEvent) => {
         setType(event.target.value as string);
@@ -196,14 +192,6 @@ const NewSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
         setAgreed(event.target.checked);
         setShowError(false);
     }
-
-    // const submission = () => {
-    //     console.log('submitted');
-    //     console.log(q1Ans);
-    //     console.log(q2Ans);
-    //     console.log(agreed);
-        
-    // }
 
     return (
         <div style={{marginBottom: 20}}>
@@ -220,9 +208,9 @@ const NewSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
             </div>
             <div className={styles.agreement}>
                 <MyCard content={<Agreement handleAgreement={handleAgreement}/>} title=''/>
-                {showError && <div style={{color: 'red', fontSize: 13, textAlign: 'center'}}>
+                {showError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
                     Please agree to the terms and conditions</div>}
-                {reqError && <div style={{color: 'red', fontSize: 13, textAlign: 'center'}}>
+                {reqError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
                     {reqErrorMsg}</div>}
             </div>
 

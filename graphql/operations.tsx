@@ -16,6 +16,17 @@ export const LOGIN = graphql(`
       student {
         studentId
         residencyStatus
+        residency {
+            seat {
+              room {
+                roomNo
+                floor {
+                  floorNo
+                  roomLabelLen
+                }
+              }
+            }
+        }
       }
       token
       authority {
@@ -126,6 +137,17 @@ export const GET_INFO = graphql(`
       student {
         studentId
         residencyStatus
+        residency {
+            seat {
+              room {
+                roomNo
+                floor {
+                  floorNo
+                  roomLabelLen
+                }
+              }
+            }
+        }
       }
       authority {
         authorityId
