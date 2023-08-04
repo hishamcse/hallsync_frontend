@@ -9,9 +9,10 @@ import {ResidencyStatus} from "../../graphql/__generated__/graphql";
 export const types = ['New Seat', 'Temporary Seat', 'Room Change'];
 
 const StudentView = () => {
-    const {user, setUser} = useContext(userContext);
+    const {user} = useContext(userContext);
     const [type, setType] = useState('');
     const [dropDownType, setDropDownType] = useState(0);
+    const [roomNumber, setRoomNumber] = useState(0);
 
     useEffect(() => {
         let item = localStorage.getItem('token');
@@ -19,11 +20,21 @@ const StudentView = () => {
         if(item && user?.student && user.student.residencyStatus == ResidencyStatus.Resident) {
             setType('Room Change');
             setDropDownType(1);
+            const room = user.student.residency?.seat.room;
+            if(room) {
+                const floor = room.floor.floorNo;
+                const block = room.floor.roomLabelLen;
+                const roomNo = room.roomNo;
+
+                let num = Math.pow(10, block - 1);
+                num = num * floor + roomNo;
+                setRoomNumber(num);
+            }
         } else {
             setType('New Seat');
             setDropDownType(0);
         }
-    }, [])
+    }, [user?.student])
 
     const handleChange = (event: SelectChangeEvent) => {
         setType(event.target.value as string);
@@ -33,7 +44,7 @@ const StudentView = () => {
         <div>
             {dropDownType == 0 && type == 'New Seat' && <NewSeat changeType={handleChange}/>}
             {dropDownType == 0 && type == 'Temporary Seat' && <TempSeat changeType={handleChange}/>}
-            {dropDownType == 1 && type == 'Room Change' && <RoomChange changeType={handleChange}/>}
+            {dropDownType == 1 && type == 'Room Change' && <RoomChange changeType={handleChange} room={roomNumber}/>}
         </div>
     )
 }
