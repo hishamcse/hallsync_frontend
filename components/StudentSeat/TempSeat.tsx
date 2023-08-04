@@ -10,40 +10,62 @@ import Agreement from "./Agreement";
 import MUIStyledTextarea from "../MUITextArea";
 import Submit from "./Submit";
 import {types} from "./StudentView";
+import {useRouter} from "next/router";
+import {useMutation} from "@apollo/client";
+import {POST_TEMP_APPLICATION} from "../../graphql/operations";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DatePicker} from "@mui/x-date-pickers";
+import dayjs, {Dayjs} from "dayjs";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 
-const Questionnaire = () => {
+const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boolean>>[]}) => {
     return (
         <div className={styles.questionnaire}>
-            <QuestionBox text="Dummy question" checkBox={true} />
+            <QuestionBox text="Dummy question" checkBox={true} answer={props.answers[0]}/>
             <QuestionBox text="Dummy question" checkBox={false} dropDown={["none", "hello", "hi"]}/>
-            <QuestionBox text="Dummy question" checkBox={true} />
+            <QuestionBox text="Dummy question" checkBox={true} answer={props.answers[1]}/>
         </div>
     )
 }
 
-const ReasonForChange = () => {
+const ReasonForChange = (props: {handleReason: (str: string) => void}) => {
     return (
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
-            <MUIStyledTextarea rows={10} placeHolder="State your reason here"/>
+            <MUIStyledTextarea rows={10} placeHolder="State your reason here" handleInput={props.handleReason}/>
         </div>
     )
 }
 
-const RoomPreference = () => {
+const RoomPreference = (props: {handleRoom: (event: React.ChangeEvent<HTMLInputElement>) => void,
+    handleDays: (event: SelectChangeEvent) => void, handleDate: (newValue: Dayjs | null) => void}) => {
+
+    const [value, setValue] = useState<Dayjs | null>();
+
     const [val, setVal] = useState('Days');
 
     const handleChange = (event: SelectChangeEvent) => {
         setVal(event.target.value as string);
+        props.handleDays(event);
     };
+
+    const handleDate = (newValue: Dayjs | null) => {
+        setValue(newValue);
+        props.handleDate(newValue);
+    }
 
     const items: string[] = ['Days', ...Array.from({ length: 11 },
         (_, index) => (index + 5).toString())];
 
     return (
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                   <Input placeholder="Room No" type={'number'}
-                          style={{background: 'black', padding: 2, borderRadius: 5, borderColor: 'white'}}/>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker label="Date of hall entrance" value={dayjs(value)}
+                                onChange={handleDate}/>
+            </LocalizationProvider>
+            <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 20}}>
+                <Input placeholder="Room No" type={'number'}
+                          style={{background: 'black', padding: 2, borderRadius: 5, borderColor: 'white'}}
+                          onChange={props.handleRoom}/>
                 <MUIDropdown width={120} options={items} val={val} change={handleChange}/>
             </div>
         </div>
@@ -52,6 +74,97 @@ const RoomPreference = () => {
 
 const TempSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
     const [type, setType] = useState('Temporary Seat');
+
+    const [q1Ans, setQ1Ans] = useState(false);
+    const [q2Ans, setQ2Ans] = useState(false);
+
+    const [reason, setReason] = useState('');
+    const [date, setDate] = useState<Dayjs | null>(null);
+    const [room, setRoom] = useState(0);
+    const [days, setDays] = useState(0);
+
+    const [agreed, setAgreed] = useState(false);
+    const [showError, setShowError] = useState(false);
+    const [blankError, setBlankError] = useState(false);
+    const [reqError, setReqError] = useState(false);
+    const [reqErrorMsg, setReqErrorMsg] = useState('');
+
+    const router = useRouter();
+
+    const [tempSeatApplication, {error, loading, data}] = useMutation(
+        POST_TEMP_APPLICATION
+        , {
+            onError : (error)=>{
+                setReqError(true)
+                setReqErrorMsg(error.message)
+            },
+            onCompleted : (data)=>{
+                console.log(data);
+                if(data.tempSeatApplication)
+                    router.push('./prevApplication');
+                else
+                    setReqError(true)
+            }
+        })
+
+    const allQuestionsAnswered = [setQ1Ans, setQ2Ans];
+
+    const handleReason = (val: string) => {
+        setReason(val);
+    }
+
+    const handleDate = (newValue: Dayjs | null) => {
+        setDate(newValue);
+    }
+
+    const handleRoom = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRoom(parseInt(event.target.value));
+    }
+
+    const handleDays = (event: SelectChangeEvent) => {
+        setDays(parseInt(event.target.value));
+    }
+
+    const handleAgreement = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setAgreed(event.target.checked);
+        setShowError(false);
+    }
+
+    const submission = (event: { preventDefault: () => void; }) => {
+        event.preventDefault();
+        console.log('submitted');
+        console.log(q1Ans);
+        console.log(q2Ans);
+        console.log(reason);
+        console.log(date?.format('YYYY-MM-DD'));
+        console.log(room);
+        console.log(days);
+        console.log(agreed);
+
+        if(!agreed) {
+            setShowError(true);
+            return;
+        }
+
+        if(reason === '' || date === null || room === 0 || days === 0) {
+            setBlankError(true);
+            return;
+        } else {
+            setBlankError(false);
+        }
+
+        tempSeatApplication({
+            variables: {
+                from: date?.format('YYYY-MM-DD').toString(),
+                roomPref: room,
+                days: days,
+                q1: q1Ans,
+                q2: q2Ans
+            }
+        }).then(r => {
+            console.log(r);
+        })
+    }
 
     const handleChange = (event: SelectChangeEvent) => {
         setType(event.target.value as string);
@@ -63,24 +176,32 @@ const TempSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
     return (
         <div style={{marginBottom: 20}}>
             <div className={styles.newSeat}>
-                <MyCard content={<Questionnaire/>} title='Questionnaire'/>
+                <MyCard content={<Questionnaire answers={allQuestionsAnswered}/>} title='Questionnaire'/>
                 <div>
                     <div style={{display: 'flex', justifyContent: 'right', marginRight: 20}}>
                         <MUIDropdown width={200} options={views} val={type} change={handleChange}/>
                     </div>
                     <div className={styles.doc}>
-                        <MyCard content={<ReasonForChange/>} title='Reason for Temporary Seat'/>
+                        <MyCard content={<ReasonForChange handleReason={handleReason}/>} title='Reason for Temporary Seat'/>
                     </div>
                     <div className={styles.doc}>
-                        <MyCard content={<RoomPreference/>} title='Room Preference'/>
+                        <MyCard content={<RoomPreference handleRoom={handleRoom} handleDays={handleDays} handleDate={handleDate}/>}
+                                title='Room Preference and Date'/>
                     </div>
                 </div>
             </div>
+
             <div className={styles.agreement}>
-                <MyCard content={<Agreement/>} title=''/>
+                <MyCard content={<Agreement handleAgreement={handleAgreement}/>} title=''/>
+                {showError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
+                    Please agree to the terms and conditions</div>}
+                {blankError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
+                    Please fill in all the fields</div>}
+                {reqError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
+                    {reqErrorMsg}</div>}
             </div>
 
-            <div className={styles.submit}>
+            <div className={styles.submit} onClick={submission}>
                 <MyCard content={<Submit/>} title=''/>
             </div>
         </div>

@@ -75,6 +75,7 @@ const NewSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
     const [agreed, setAgreed] = useState(false);
     const [showError, setShowError] = useState(false);
     const [reqError, setReqError] = useState(false);
+    const [reqErrorMsg, setReqErrorMsg] = useState('');
 
     const [files, setFiles] = useState<Blob[]>([])
 
@@ -101,7 +102,10 @@ const NewSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
     const [newSeatApplication, {error, loading, data}] = useMutation(
         POST_NEW_APPLICATION
         , {
-            onError : ()=>{},
+            onError : (error)=>{
+                setReqError(true)
+                setReqErrorMsg(error.message)
+            },
             onCompleted : (data)=>{
                 console.log(data);
                 if(data.newSeatApplication)
@@ -216,10 +220,10 @@ const NewSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
             </div>
             <div className={styles.agreement}>
                 <MyCard content={<Agreement handleAgreement={handleAgreement}/>} title=''/>
-                {showError && <div style={{color: 'red', fontSize: 12, textAlign: 'center'}}>
+                {showError && <div style={{color: 'red', fontSize: 13, textAlign: 'center'}}>
                     Please agree to the terms and conditions</div>}
-                {reqError && <div style={{color: 'red', fontSize: 12, textAlign: 'center'}}>
-                    Something went wrong for your application. Please try again</div>}
+                {reqError && <div style={{color: 'red', fontSize: 13, textAlign: 'center'}}>
+                    {reqErrorMsg}</div>}
             </div>
 
             <div className={styles.submit} onClick={handleSubmit}>
