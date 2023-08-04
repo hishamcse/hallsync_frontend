@@ -12,6 +12,7 @@ import {types} from "./StudentView";
 import {useMutation} from "@apollo/client";
 import {POST_SEAT_CHANGE_APPLICATION} from "../../graphql/operations";
 import {useRouter} from "next/router";
+import { FreeRoom } from "../freeRoom";
 
 const ReasonForChange = (props: {handleReason: (str: string) => void}) => {
     return (
@@ -21,13 +22,12 @@ const ReasonForChange = (props: {handleReason: (str: string) => void}) => {
     )
 }
 
-const RoomPreference = (props: {currentRoom: number, handleSeat: (event: React.ChangeEvent<HTMLInputElement>) => void}) => {
+const RoomPreference = (props: {currentRoom: number, setSeatId : (v : number | undefined)=>void,
+}) => {
     return (
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                <Input placeholder="Room No" type={'number'}
-                       style={{background: 'black', padding: 2, borderRadius: 5, borderColor: 'white'}}
-                       onChange={props.handleSeat}/>
+            <div style={{}}>
+                <FreeRoom setSeatId={props.setSeatId} />
                 <span>
                     Currently Allocated Room: {props.currentRoom}
                 </span>
@@ -40,7 +40,7 @@ const RoomChange = (props: {changeType: (event: SelectChangeEvent) => void, room
     const [type, setType] = useState('Room Change');
 
     const [reason, setReason] = useState('');
-    const [seatId, setSeatId] = useState(0);
+    const [seatId, setSeatId] = useState<number>();
 
     const [agreed, setAgreed] = useState(false);
     const [showError, setShowError] = useState(false);
@@ -74,13 +74,6 @@ const RoomChange = (props: {changeType: (event: SelectChangeEvent) => void, room
         setReqError(false)
     }
 
-    const handleSeat = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSeatId(parseInt(event.target.value));
-        setShowError(false);
-        setBlankError(false)
-        setReqError(false)
-    }
-
     const handleChange = (event: SelectChangeEvent) => {
         setType(event.target.value as string);
         props.changeType(event);
@@ -107,7 +100,7 @@ const RoomChange = (props: {changeType: (event: SelectChangeEvent) => void, room
             return;
         }
 
-        if(reason === '' || seatId === 0) {
+        if(reason === '' || seatId === undefined) {
             setBlankError(true);
             setReqError(false)
             setShowError(false)
@@ -137,7 +130,7 @@ const RoomChange = (props: {changeType: (event: SelectChangeEvent) => void, room
                         <MUIDropdown width={200} options={[types[2]]} val={type} change={handleChange}/>
                     </div>
                     <div className={styles.doc}>
-                        <MyCard content={<RoomPreference currentRoom={props.room} handleSeat={handleSeat}/>} title='Room Preference'/>
+                        <MyCard content={<RoomPreference currentRoom={props.room} setSeatId={setSeatId}/>} title='Room Preference'/>
                     </div>
                 </div>
             </div>
