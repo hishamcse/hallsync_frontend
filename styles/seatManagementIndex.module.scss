@@ -48,6 +48,14 @@ $listBgColor : #202020;
     color : $alertColor;
 }
 
+.accepted {
+    color : $successColor;
+}
+
+.rejected{
+    color : red;
+}
+
 .filterSortContainer{
     display: flex;
     align-items: flex-start;

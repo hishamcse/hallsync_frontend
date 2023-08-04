@@ -171,3 +171,44 @@ export const MY_APPLICATIONS = graphql(`
 }
 
 `)
+
+export const POST_NEW_APPLICATION = graphql(`
+    mutation NewSeatApplication($attachedFileIds: String!, $q2: Boolean!, $q1: Boolean!) {
+         newSeatApplication(attachedFileIds: $attachedFileIds, q2: $q2, q1: $q1) {
+            application {
+                createdAt
+            }
+            applicationId
+        }
+    }
+`)
+
+export const POST_TEMP_APPLICATION = graphql(`
+    mutation TempSeatApplication($from: String!, $days: Float!, $roomPref: Float!, $q2: Boolean!, $q1: Boolean!) {
+      tempSeatApplication(from: $from, days: $days, roomPref: $roomPref, q2: $q2, q1: $q1) {
+        applicationId
+        application {
+          createdAt
+          tempApplication {
+            days
+            applicationId
+          }
+        }
+      }
+    }
+`)
+
+export const POST_SEAT_CHANGE_APPLICATION = graphql(`
+    mutation SeatChangeApplication($reason: String!, $seatId: Float!) {
+      seatChangeApplication(reason: $reason, seatId: $seatId) {
+        applicationId
+        seatChangeApplicationId
+        application {
+          createdAt
+          seatChangeApplication {
+            reason
+          }
+        }
+      }
+    }
+`)

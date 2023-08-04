@@ -9,6 +9,7 @@ import {Input} from "@mui/material";
 import Agreement from "./Agreement";
 import MUIStyledTextarea from "../MUITextArea";
 import Submit from "./Submit";
+import {types} from "./StudentView";
 
 const Questionnaire = () => {
     return (
@@ -57,7 +58,7 @@ const TempSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
         props.changeType(event);
     };
 
-    const types = ['New Seat', 'Temporary Seat', 'Room Change'];
+    const views = [types[0], types[1]];
 
     return (
         <div style={{marginBottom: 20}}>
@@ -65,7 +66,7 @@ const TempSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
                 <MyCard content={<Questionnaire/>} title='Questionnaire'/>
                 <div>
                     <div style={{display: 'flex', justifyContent: 'right', marginRight: 20}}>
-                        <MUIDropdown width={200} options={types} val={type} change={handleChange}/>
+                        <MUIDropdown width={200} options={views} val={type} change={handleChange}/>
                     </div>
                     <div className={styles.doc}>
                         <MyCard content={<ReasonForChange/>} title='Reason for Temporary Seat'/>

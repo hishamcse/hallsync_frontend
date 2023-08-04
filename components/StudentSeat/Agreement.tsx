@@ -1,14 +1,14 @@
 import {Checkbox, Typography} from "@mui/material";
 import * as React from "react";
-import exp = require("constants");
 
-const Agreement = () => {
+const Agreement = (props: {handleAgreement: (e: React.ChangeEvent<HTMLInputElement>) => void}) => {
     return (
         <div style={{display: 'flex', justifyContent: 'left', width: 1000}}>
             <div>
                 <Checkbox
                     color="default"
                     inputProps={{'aria-label': 'secondary checkbox'}}
+                    onChange={props.handleAgreement}
                 />
             </div>
             &nbsp;&nbsp;

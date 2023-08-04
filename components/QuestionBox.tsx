@@ -5,7 +5,8 @@ import {Checkbox, Typography} from "@mui/material";
 import MUIDropdown from "./MUIDropdown";
 import * as React from "react";
 
-const QuestionBox = (props : {text: string, checkBox: boolean, dropDown?: string[]}) => {
+const QuestionBox = (props : {text: string, checkBox: boolean,
+    dropDown?: string[], answer?: React.Dispatch<React.SetStateAction<boolean>>}) => {
     const [val, setVal] = useState('none');
 
     const handleChange = (event: SelectChangeEvent) => {
@@ -23,6 +24,7 @@ const QuestionBox = (props : {text: string, checkBox: boolean, dropDown?: string
                 {props.checkBox && <Checkbox
                     color="default"
                     inputProps={{'aria-label': 'secondary checkbox'}}
+                    onChange={(e) => props.answer && props.answer(e.target.checked)}
                 />}
 
                 {props.dropDown && <MUIDropdown width={120} options={props.dropDown} val={val} change={handleChange}/>}
