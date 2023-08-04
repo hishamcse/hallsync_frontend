@@ -206,8 +206,8 @@ export const POST_NEW_APPLICATION = graphql(`
 `)
 
 export const POST_TEMP_APPLICATION = graphql(`
-    mutation TempSeatApplication($from: String!, $days: Float!, $roomPref: Float!, $q2: Boolean!, $q1: Boolean!) {
-      tempSeatApplication(from: $from, days: $days, roomPref: $roomPref, q2: $q2, q1: $q1) {
+    mutation TempSeatApplication($from: String!, $days: Float!, $prefSeatId: Float!, $q2: Boolean!, $q1: Boolean!) {
+      tempSeatApplication(from: $from, days: $days, prefSeatId: $prefSeatId, q2: $q2, q1: $q1) {
         applicationId
         application {
           createdAt

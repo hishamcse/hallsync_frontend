@@ -17,6 +17,7 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers";
 import dayjs, {Dayjs} from "dayjs";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import { FreeRoom } from "../freeRoom";
 
 const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boolean>>[]}) => {
     return (
@@ -36,12 +37,15 @@ const ReasonForChange = (props: {handleReason: (str: string) => void}) => {
     )
 }
 
-const RoomPreference = (props: {handleRoom: (event: React.ChangeEvent<HTMLInputElement>) => void,
-    handleDays: (event: SelectChangeEvent) => void, handleDate: (newValue: Dayjs | null) => void}) => {
+const RoomPreference = (props: {
+    handleDays: (event: SelectChangeEvent) => void, handleDate: (newValue: Dayjs | null) => void,
+    setSeatId : (v : number | undefined)=>void,
+}) => {
 
     const [value, setValue] = useState<Dayjs | null>();
 
     const [val, setVal] = useState('Days');
+
 
     const handleChange = (event: SelectChangeEvent) => {
         setVal(event.target.value as string);
@@ -62,11 +66,17 @@ const RoomPreference = (props: {handleRoom: (event: React.ChangeEvent<HTMLInputE
                 <DatePicker label="Date of hall entrance" value={dayjs(value)}
                                 onChange={handleDate}/>
             </LocalizationProvider>
-            <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 20}}>
-                <Input placeholder="Room No" type={'number'}
+            <div style={{ marginTop: 20}}>
+                <div>
+                    <FreeRoom setSeatId={props.setSeatId} containerStyle={{
+                    }}  />
+                </div>
+                {/* <Input placeholder="Room No" type={'number'}
                           style={{background: 'black', padding: 2, borderRadius: 5, borderColor: 'white'}}
-                          onChange={props.handleRoom}/>
-                <MUIDropdown width={120} options={items} val={val} change={handleChange}/>
+                          onChange={props.handleRoom}/> */}
+                <div>
+                    <MUIDropdown width={120} options={items} val={val} change={handleChange}/>
+                </div>
             </div>
         </div>
     )
@@ -80,7 +90,6 @@ const TempSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
 
     const [reason, setReason] = useState('');
     const [date, setDate] = useState<Dayjs | null>(null);
-    const [room, setRoom] = useState(0);
     const [days, setDays] = useState(0);
 
     const [agreed, setAgreed] = useState(false);
@@ -88,6 +97,7 @@ const TempSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
     const [blankError, setBlankError] = useState(false);
     const [reqError, setReqError] = useState(false);
     const [reqErrorMsg, setReqErrorMsg] = useState('');
+    const [seatId, setSeatId] = useState<number>();
 
     const router = useRouter();
 
@@ -117,10 +127,6 @@ const TempSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
         setDate(newValue);
     }
 
-    const handleRoom = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRoom(parseInt(event.target.value));
-    }
-
     const handleDays = (event: SelectChangeEvent) => {
         setDays(parseInt(event.target.value));
     }
@@ -137,7 +143,6 @@ const TempSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
         console.log(q2Ans);
         console.log(reason);
         console.log(date?.format('YYYY-MM-DD'));
-        console.log(room);
         console.log(days);
         console.log(agreed);
 
@@ -146,7 +151,7 @@ const TempSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
             return;
         }
 
-        if(reason === '' || date === null || room === 0 || days === 0) {
+        if(reason === '' || date === null ||  days === 0 || seatId === undefined) {
             setBlankError(true);
             return;
         } else {
@@ -156,7 +161,7 @@ const TempSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
         tempSeatApplication({
             variables: {
                 from: date?.format('YYYY-MM-DD').toString(),
-                roomPref: room,
+                prefSeatId: seatId,
                 days: days,
                 q1: q1Ans,
                 q2: q2Ans
@@ -185,7 +190,7 @@ const TempSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
                         <MyCard content={<ReasonForChange handleReason={handleReason}/>} title='Reason for Temporary Seat'/>
                     </div>
                     <div className={styles.doc}>
-                        <MyCard content={<RoomPreference handleRoom={handleRoom} handleDays={handleDays} handleDate={handleDate}/>}
+                        <MyCard content={<RoomPreference setSeatId={setSeatId}  handleDays={handleDays} handleDate={handleDate}/>}
                                 title='Room Preference and Date'/>
                     </div>
                 </div>
