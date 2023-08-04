@@ -11,7 +11,7 @@ import { MyInput } from "../../components/input";
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Skeleton from "@mui/material/Skeleton";
-import MultipleSelectCheckmarks from "../../components/MUIMultiSelectCheckbox";
+import MUISelectStyled from "../../components/MUIMultiSelectCheckbox";
 import NewSeatP from "../../components/ProvostSeat/NewSeatP";
 import TempSeatP from "../../components/ProvostSeat/TempSeatP";
 import RoomChangeP from "../../components/ProvostSeat/RoomChangeP";
@@ -66,45 +66,45 @@ function Filters(
         <div className={styles.filtersContainer}>
 
             <div className={styles.filtersRow}>
-                <MultipleSelectCheckmarks 
+                <MUISelectStyled type="multiple"
                     items={data.batches.map(b=>b.year)} 
                     placeHolder="Batch"
-                    setVal={setBatch} 
-                    val={batch} 
+                    setVals={setBatch} 
+                    vals={batch} 
                 />
 
-                <MultipleSelectCheckmarks 
+                <MUISelectStyled  type="multiple"
                     items={data.departments.map(d=>d.shortName)} 
                     placeHolder="Dept"
-                    setVal={setDept} 
-                    val={dept} 
+                    setVals={setDept} 
+                    vals={dept} 
                 />
                 
             </div>
             <div className={styles.filtersRow}>
 
-                <MultipleSelectCheckmarks 
+                <MUISelectStyled  type="multiple"
                     items={data.applicationStatus.map(v => v.status)} 
                     placeHolder="Status"
-                    setVal={setStatus} 
-                    val={status} 
+                    setVals={setStatus} 
+                    vals={status} 
                 />
 
-                <MultipleSelectCheckmarks 
+                <MUISelectStyled  type="multiple"
                     items={data.applicationTypes} 
                     placeHolder="Type"
-                    setVal={setType} 
-                    val={type} 
+                    setVals={setType} 
+                    vals={type} 
                 />
 
                 
             </div>
             <div className={styles.filtersRow}>
-                <MultipleSelectCheckmarks 
+                <MUISelectStyled  type="multiple"
                     items={data.levelTerms.map(l =>l.label)} 
                     placeHolder="LevelTerm"
-                    setVal={setLt} 
-                    val={lt} 
+                    setVals={setLt} 
+                    vals={lt} 
                 />
 
                 {/* <MyDropDown items={data.levelTerms.map(d=>d.label)}

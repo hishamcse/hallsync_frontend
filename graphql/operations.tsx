@@ -212,3 +212,31 @@ export const POST_SEAT_CHANGE_APPLICATION = graphql(`
       }
     }
 `)
+
+
+export const GET_FREE_FLOORS = graphql(`
+  query FreeFloors {
+    freeFloors {
+      floorId
+      floorNo
+    }
+  }
+`)
+
+export const GET_FREE_ROOMS_IN_FLOOR = graphql(`
+  query FreeRoomInFloor($floorNo: Float!) {
+    freeRoomInFloor(floorNo: $floorNo) {
+      roomNo
+      roomId
+    }
+  }
+`)
+
+export const GET_FREE_SEATS_IN_ROOM = graphql(`
+  query FreeSeatInRoom($floorNo:Float!, $roomNo: Float!) {
+    freeSeatInRoom(floorNo:$floorNo,roomNo: $roomNo) {
+      seatId
+      seatLabel
+    }
+  }
+`)

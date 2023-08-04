@@ -25,13 +25,12 @@ export enum ApplicationStatus {
   Revise = 'REVISE'
 }
 
-export type AttachedFiles = {
-  __typename?: 'AttachedFiles';
-  application: NewApplication;
-  fileId: Scalars['Float']['output'];
-  fileName: Scalars['String']['output'];
-  filePath: Scalars['String']['output'];
-  newApplicationId: Scalars['Float']['output'];
+export type AttachedFile = {
+  __typename?: 'AttachedFile';
+  application: SeatApplication;
+  applicationId: Scalars['Float']['output'];
+  uploadedFile: UploadedFile;
+  uploadedFileId: Scalars['Float']['output'];
 };
 
 export type Authority = {
@@ -249,7 +248,6 @@ export type NewApplication = {
   __typename?: 'NewApplication';
   application: SeatApplication;
   applicationId: Scalars['Float']['output'];
-  attachedFiles: Array<AttachedFiles>;
   newApplicationId: Scalars['Float']['output'];
   questionnaire: NewSeatQuestionnaire;
   questionnaireId: Scalars['Float']['output'];
@@ -286,7 +284,10 @@ export type Query = {
   applications: SeatApplicationsWithCount;
   batches: Array<Batch>;
   departments: Array<Department>;
+  freeFloors: Array<Floor>;
+  freeRoomInFloor: Array<Room>;
   freeSeat: Seat;
+  freeSeatInRoom: Array<Seat>;
   levelTerms: Array<LevelTerm>;
   myapplications: Array<SeatApplication>;
   pendingVotes: Array<Vote>;
@@ -305,6 +306,17 @@ export type QueryApplicationsArgs = {
   page: Scalars['Float']['input'];
   search?: InputMaybe<SearchInput>;
   sort?: InputMaybe<SortInput>;
+};
+
+
+export type QueryFreeRoomInFloorArgs = {
+  floorNo: Scalars['Float']['input'];
+};
+
+
+export type QueryFreeSeatInRoomArgs = {
+  floorNo: Scalars['Float']['input'];
+  roomNo: Scalars['Float']['input'];
 };
 
 export type Residency = {
@@ -351,11 +363,13 @@ export type Seat = {
   room: Room;
   roomId: Scalars['Float']['output'];
   seatId: Scalars['Float']['output'];
+  seatLabel: Scalars['String']['output'];
 };
 
 export type SeatApplication = {
   __typename?: 'SeatApplication';
   applicationId: Scalars['Float']['output'];
+  attachedFiles?: Maybe<Array<AttachedFile>>;
   createdAt: Scalars['DateTime']['output'];
   lastUpdate: Scalars['DateTime']['output'];
   newApplication?: Maybe<NewApplication>;
@@ -449,6 +463,15 @@ export type TempResidencyHistory = {
   studentId: Scalars['Float']['output'];
   tempResidencyHistoryId: Scalars['Float']['output'];
   to: Scalars['DateTime']['output'];
+};
+
+export type UploadedFile = {
+  __typename?: 'UploadedFile';
+  fileName: Scalars['String']['output'];
+  filePath: Scalars['String']['output'];
+  student: Student;
+  studentId: Scalars['Float']['output'];
+  uploadedFileId: Scalars['Float']['output'];
 };
 
 export type UserWithToken = {
@@ -555,6 +578,26 @@ export type SeatChangeApplicationMutationVariables = Exact<{
 
 export type SeatChangeApplicationMutation = { __typename?: 'Mutation', seatChangeApplication: { __typename?: 'SeatChangeApplication', applicationId: number, seatChangeApplicationId: number, application: { __typename?: 'SeatApplication', createdAt: any, seatChangeApplication?: { __typename?: 'SeatChangeApplication', reason: string } | null } } };
 
+export type FreeFloorsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type FreeFloorsQuery = { __typename?: 'Query', freeFloors: Array<{ __typename?: 'Floor', floorId: number, floorNo: number }> };
+
+export type FreeRoomInFloorQueryVariables = Exact<{
+  floorNo: Scalars['Float']['input'];
+}>;
+
+
+export type FreeRoomInFloorQuery = { __typename?: 'Query', freeRoomInFloor: Array<{ __typename?: 'Room', roomNo: number, roomId: number }> };
+
+export type FreeSeatInRoomQueryVariables = Exact<{
+  floorNo: Scalars['Float']['input'];
+  roomNo: Scalars['Float']['input'];
+}>;
+
+
+export type FreeSeatInRoomQuery = { __typename?: 'Query', freeSeatInRoom: Array<{ __typename?: 'Seat', seatId: number, seatLabel: string }> };
+
 
 export const DepartmentsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deptCode"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]} as unknown as DocumentNode<DepartmentsQuery, DepartmentsQueryVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"loginId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}},{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"loginId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"studentId"}},{"kind":"Field","name":{"kind":"Name","value":"residencyStatus"}}]}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"authority"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorityId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
@@ -567,3 +610,6 @@ export const MyapplicationsDocument = {"kind":"Document","definitions":[{"kind":
 export const NewSeatApplicationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"NewSeatApplication"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"attachedFileIds"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"IntArray"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"q2"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"q1"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"newSeatApplication"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"attachedFileIds"},"value":{"kind":"Variable","name":{"kind":"Name","value":"attachedFileIds"}}},{"kind":"Argument","name":{"kind":"Name","value":"q2"},"value":{"kind":"Variable","name":{"kind":"Name","value":"q2"}}},{"kind":"Argument","name":{"kind":"Name","value":"q1"},"value":{"kind":"Variable","name":{"kind":"Name","value":"q1"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"application"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"applicationId"}}]}}]}}]} as unknown as DocumentNode<NewSeatApplicationMutation, NewSeatApplicationMutationVariables>;
 export const TempSeatApplicationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"TempSeatApplication"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"from"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"days"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"roomPref"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"q2"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"q1"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tempSeatApplication"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"from"},"value":{"kind":"Variable","name":{"kind":"Name","value":"from"}}},{"kind":"Argument","name":{"kind":"Name","value":"days"},"value":{"kind":"Variable","name":{"kind":"Name","value":"days"}}},{"kind":"Argument","name":{"kind":"Name","value":"roomPref"},"value":{"kind":"Variable","name":{"kind":"Name","value":"roomPref"}}},{"kind":"Argument","name":{"kind":"Name","value":"q2"},"value":{"kind":"Variable","name":{"kind":"Name","value":"q2"}}},{"kind":"Argument","name":{"kind":"Name","value":"q1"},"value":{"kind":"Variable","name":{"kind":"Name","value":"q1"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applicationId"}},{"kind":"Field","name":{"kind":"Name","value":"application"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"tempApplication"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"days"}},{"kind":"Field","name":{"kind":"Name","value":"applicationId"}}]}}]}}]}}]}}]} as unknown as DocumentNode<TempSeatApplicationMutation, TempSeatApplicationMutationVariables>;
 export const SeatChangeApplicationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SeatChangeApplication"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"reason"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"seatId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"seatChangeApplication"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"reason"},"value":{"kind":"Variable","name":{"kind":"Name","value":"reason"}}},{"kind":"Argument","name":{"kind":"Name","value":"seatId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"seatId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applicationId"}},{"kind":"Field","name":{"kind":"Name","value":"seatChangeApplicationId"}},{"kind":"Field","name":{"kind":"Name","value":"application"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"seatChangeApplication"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reason"}}]}}]}}]}}]}}]} as unknown as DocumentNode<SeatChangeApplicationMutation, SeatChangeApplicationMutationVariables>;
+export const FreeFloorsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FreeFloors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"freeFloors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"floorId"}},{"kind":"Field","name":{"kind":"Name","value":"floorNo"}}]}}]}}]} as unknown as DocumentNode<FreeFloorsQuery, FreeFloorsQueryVariables>;
+export const FreeRoomInFloorDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FreeRoomInFloor"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"floorNo"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"freeRoomInFloor"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"floorNo"},"value":{"kind":"Variable","name":{"kind":"Name","value":"floorNo"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomNo"}},{"kind":"Field","name":{"kind":"Name","value":"roomId"}}]}}]}}]} as unknown as DocumentNode<FreeRoomInFloorQuery, FreeRoomInFloorQueryVariables>;
+export const FreeSeatInRoomDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FreeSeatInRoom"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"floorNo"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"roomNo"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"freeSeatInRoom"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"floorNo"},"value":{"kind":"Variable","name":{"kind":"Name","value":"floorNo"}}},{"kind":"Argument","name":{"kind":"Name","value":"roomNo"},"value":{"kind":"Variable","name":{"kind":"Name","value":"roomNo"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"seatId"}},{"kind":"Field","name":{"kind":"Name","value":"seatLabel"}}]}}]}}]} as unknown as DocumentNode<FreeSeatInRoomQuery, FreeSeatInRoomQueryVariables>;

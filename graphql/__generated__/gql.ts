@@ -24,6 +24,9 @@ const documents = {
     "\n    mutation NewSeatApplication($attachedFileIds: IntArray!, $q2: Boolean!, $q1: Boolean!) {\n         newSeatApplication(attachedFileIds: $attachedFileIds, q2: $q2, q1: $q1) {\n            application {\n                createdAt\n            }\n            applicationId\n        }\n    }\n": types.NewSeatApplicationDocument,
     "\n    mutation TempSeatApplication($from: String!, $days: Float!, $roomPref: Float!, $q2: Boolean!, $q1: Boolean!) {\n      tempSeatApplication(from: $from, days: $days, roomPref: $roomPref, q2: $q2, q1: $q1) {\n        applicationId\n        application {\n          createdAt\n          tempApplication {\n            days\n            applicationId\n          }\n        }\n      }\n    }\n": types.TempSeatApplicationDocument,
     "\n    mutation SeatChangeApplication($reason: String!, $seatId: Float!) {\n      seatChangeApplication(reason: $reason, seatId: $seatId) {\n        applicationId\n        seatChangeApplicationId\n        application {\n          createdAt\n          seatChangeApplication {\n            reason\n          }\n        }\n      }\n    }\n": types.SeatChangeApplicationDocument,
+    "\n  query FreeFloors {\n    freeFloors {\n      floorId\n      floorNo\n    }\n  }\n": types.FreeFloorsDocument,
+    "\n  query FreeRoomInFloor($floorNo: Float!) {\n    freeRoomInFloor(floorNo: $floorNo) {\n      roomNo\n      roomId\n    }\n  }\n": types.FreeRoomInFloorDocument,
+    "\n  query FreeSeatInRoom($floorNo:Float!, $roomNo: Float!) {\n    freeSeatInRoom(floorNo:$floorNo,roomNo: $roomNo) {\n      seatId\n      seatLabel\n    }\n  }\n": types.FreeSeatInRoomDocument,
 };
 
 /**
@@ -84,6 +87,18 @@ export function graphql(source: "\n    mutation TempSeatApplication($from: Strin
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n    mutation SeatChangeApplication($reason: String!, $seatId: Float!) {\n      seatChangeApplication(reason: $reason, seatId: $seatId) {\n        applicationId\n        seatChangeApplicationId\n        application {\n          createdAt\n          seatChangeApplication {\n            reason\n          }\n        }\n      }\n    }\n"): (typeof documents)["\n    mutation SeatChangeApplication($reason: String!, $seatId: Float!) {\n      seatChangeApplication(reason: $reason, seatId: $seatId) {\n        applicationId\n        seatChangeApplicationId\n        application {\n          createdAt\n          seatChangeApplication {\n            reason\n          }\n        }\n      }\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query FreeFloors {\n    freeFloors {\n      floorId\n      floorNo\n    }\n  }\n"): (typeof documents)["\n  query FreeFloors {\n    freeFloors {\n      floorId\n      floorNo\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query FreeRoomInFloor($floorNo: Float!) {\n    freeRoomInFloor(floorNo: $floorNo) {\n      roomNo\n      roomId\n    }\n  }\n"): (typeof documents)["\n  query FreeRoomInFloor($floorNo: Float!) {\n    freeRoomInFloor(floorNo: $floorNo) {\n      roomNo\n      roomId\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query FreeSeatInRoom($floorNo:Float!, $roomNo: Float!) {\n    freeSeatInRoom(floorNo:$floorNo,roomNo: $roomNo) {\n      seatId\n      seatLabel\n    }\n  }\n"): (typeof documents)["\n  query FreeSeatInRoom($floorNo:Float!, $roomNo: Float!) {\n    freeSeatInRoom(floorNo:$floorNo,roomNo: $roomNo) {\n      seatId\n      seatLabel\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
