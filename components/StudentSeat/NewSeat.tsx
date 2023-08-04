@@ -1,10 +1,10 @@
 import MyCard from "../card";
 import styles from '../../styles/studentSeat.module.scss';
-import {useState} from "react";
+import {ChangeEvent, FormEvent, useState} from "react";
 import MUIDropdown from "../MUIDropdown";
 import * as React from "react";
 import {SelectChangeEvent} from "@mui/material/Select";
-import {Button} from "@mui/material";
+import {Button, IconButton} from "@mui/material";
 import QuestionBox from "../QuestionBox";
 import Agreement from "./Agreement";
 import Submit from "./Submit";
@@ -12,6 +12,7 @@ import {types} from "./StudentView";
 import {useMutation} from "@apollo/client";
 import {LOGIN, POST_NEW_APPLICATION} from "../../graphql/operations";
 import {useRouter} from "next/router";
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boolean>>[]}) => {
     return (
@@ -27,22 +28,40 @@ const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boo
     )
 }
 
-const Documents = () => {
+const Documents = (props : {
+    onChange : (e : ChangeEvent<HTMLInputElement>) => void,
+    files : Blob[],
+    removeFile  : (f : Blob)=>void
+}) => {
     return (
         <div style={{justifyContent: 'left', width: 500}}>
-            <div style={{display: "flex", justifyContent: "space-between", padding: 5}}>
-                1. Photo
-                <Button variant="outlined" color='inherit'>Upload</Button>
-            </div>
-           <div style={{display: "flex", justifyContent: "space-between", padding: 5}}>
-               2. NID
-               <Button variant="outlined" color='inherit'>Upload</Button>
-           </div>
-           <div style={{display: "flex", justifyContent: "space-between", padding: 5}}>
-               3. Electric Bill
-               <Button variant="outlined" color='inherit'>Upload</Button>
-           </div>
-            <Button variant="outlined" color='inherit'>Upload others(if any)</Button>
+            <ol style = {{
+                margin : "5px"
+            }}>
+                {
+                    props.files.map(f => (
+                        <li style = {{
+                            padding : "5px",
+                        }}  key = {f.name}> 
+                        <div style={{
+                            display : "flex",
+                            justifyContent : "space-between",
+                            alignItems : "center"
+                        }}>
+                            {f.name}
+                            <IconButton onClick={(e)=>props.removeFile(f)} >
+                                <CloseOutlinedIcon />
+                            </IconButton>
+                        </div>
+                        </li>
+                    )
+                    )
+                }
+            </ol>
+            <Button variant="outlined" component="label"  >
+                Upload file
+                <input type="file" hidden onChange={props.onChange}  />
+            </Button>
         </div>
     )
 }
@@ -56,6 +75,26 @@ const NewSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
     const [agreed, setAgreed] = useState(false);
     const [showError, setShowError] = useState(false);
     const [reqError, setReqError] = useState(false);
+
+    const [files, setFiles] = useState<Blob[]>([])
+
+    function handleFileChange(event : ChangeEvent<HTMLInputElement>) {
+        console.log(event)
+        setFiles((f) => {
+            if(event.target.files)
+                return [...f , event.target.files[0]]
+            return f;
+        })
+    }
+    function removeFile(f1: Blob){
+        setFiles(f =>{
+            let fc = [...f]
+            fc.splice(fc.indexOf(f1))
+            return fc
+        } )
+        // files.splice(files.indexOf(f));
+    }
+    
 
     const router = useRouter();
 
@@ -74,6 +113,76 @@ const NewSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
 
     const allQuestionsAnswered = [setQ1Ans, setQ2Ans];
 
+    
+    function handleSubmit() {
+        console.log("here");
+        if(!agreed) {
+            setShowError(true);
+            return;
+        }        
+        if(files.length > 0){
+
+            const url = 'http://localhost:3000/upload';
+            const formData = new FormData();
+            files.forEach(f =>{
+                formData.append('file', f);
+                formData.append('filename', f.name);
+            })
+            let token = localStorage.getItem('token');
+    
+            fetch(url, {
+                method : 'post',
+                body : formData,
+                headers : {
+                    'authorization' : 'Bearer ' + token
+                }
+                // ... config
+            }).then(resp => resp.json()).then(data =>{
+                console.log(data);
+    
+                newSeatApplication({
+                    variables: {
+                        attachedFileIds: {
+                            array : data.id
+                        } ,
+                        q1: q1Ans,
+                        q2: q2Ans
+                    }
+                }).then(r => {
+                    console.log(r);
+                })
+                .catch(err =>{
+                    setReqError(true)
+                })
+            })
+            .catch(err =>{
+                console.log(err);
+                setReqError(true);
+            })
+        }
+        else{
+            newSeatApplication({
+                variables: {
+                    attachedFileIds: {
+                        array : []
+                    } ,
+                    q1: q1Ans,
+                    q2: q2Ans
+                }
+            }).then(r => {
+                console.log(r);
+            })
+            .catch(err =>{
+                setReqError(true)
+            })
+        }
+
+
+    }
+
+
+
+
     const handleChange = (event: SelectChangeEvent) => {
         setType(event.target.value as string);
         props.changeType(event);
@@ -84,26 +193,13 @@ const NewSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
         setShowError(false);
     }
 
-    const submission = () => {
-        console.log('submitted');
-        console.log(q1Ans);
-        console.log(q2Ans);
-        console.log(agreed);
-        if(!agreed) {
-            setShowError(true);
-            return;
-        }
-
-        newSeatApplication({
-            variables: {
-                attachedFileIds: "",
-                q1: q1Ans,
-                q2: q2Ans
-            }
-        }).then(r => {
-            console.log(r);
-        })
-    }
+    // const submission = () => {
+    //     console.log('submitted');
+    //     console.log(q1Ans);
+    //     console.log(q2Ans);
+    //     console.log(agreed);
+        
+    // }
 
     return (
         <div style={{marginBottom: 20}}>
@@ -114,7 +210,7 @@ const NewSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
                       <MUIDropdown width={200} options={[types[0], types[1]]} val={type} change={handleChange}/>
                     </div>
                     <div className={styles.doc}>
-                        <MyCard content={<Documents/>} title='Upload Documents'/>
+                        <MyCard content={<Documents removeFile={removeFile} files = {files} onChange={handleFileChange}/>} title='Upload Documents'/>
                     </div>
                 </div>
             </div>
@@ -126,7 +222,7 @@ const NewSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
                     Something went wrong for your application. Please try again</div>}
             </div>
 
-            <div className={styles.submit} onClick={submission}>
+            <div className={styles.submit} onClick={handleSubmit}>
                 <MyCard content={<Submit/>} title=''/>
             </div>
         </div>

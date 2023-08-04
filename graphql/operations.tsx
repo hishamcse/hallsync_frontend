@@ -173,7 +173,7 @@ export const MY_APPLICATIONS = graphql(`
 `)
 
 export const POST_NEW_APPLICATION = graphql(`
-    mutation NewSeatApplication($attachedFileIds: String!, $q2: Boolean!, $q1: Boolean!) {
+    mutation NewSeatApplication($attachedFileIds: IntArray!, $q2: Boolean!, $q1: Boolean!) {
          newSeatApplication(attachedFileIds: $attachedFileIds, q2: $q2, q1: $q1) {
             application {
                 createdAt
