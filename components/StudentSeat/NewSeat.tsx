@@ -8,12 +8,16 @@ import {Button} from "@mui/material";
 import QuestionBox from "../QuestionBox";
 import Agreement from "./Agreement";
 import Submit from "./Submit";
+import {types} from "./StudentView";
+import {useMutation} from "@apollo/client";
+import {LOGIN, POST_NEW_APPLICATION} from "../../graphql/operations";
+import {useRouter} from "next/router";
 
-const Questionnaire = () => {
+const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boolean>>[]}) => {
     return (
         <div className={styles.questionnaire}>
-            <QuestionBox text="From Outside of Dhaka" checkBox={true} />
-            <QuestionBox text="No Close Realtive in Dhaka" checkBox={true} />
+            <QuestionBox text="From Outside of Dhaka" checkBox={true} answer={props.answers[0]}/>
+            <QuestionBox text="No Close Realtive in Dhaka" checkBox={true} answer={props.answers[1]}/>
             <QuestionBox text="College Outside of Dhaka" checkBox={true} />
             <QuestionBox text="School Outside of Dhaka" checkBox={true} />
             <QuestionBox text="Dummy question" checkBox={true} />
@@ -46,20 +50,68 @@ const Documents = () => {
 const NewSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
     const [type, setType] = useState('New Seat');
 
+    const [q1Ans, setQ1Ans] = useState(false);
+    const [q2Ans, setQ2Ans] = useState(false);
+
+    const [agreed, setAgreed] = useState(false);
+    const [showError, setShowError] = useState(false);
+    const [reqError, setReqError] = useState(false);
+
+    const router = useRouter();
+
+    const [newSeatApplication, {error, loading, data}] = useMutation(
+        POST_NEW_APPLICATION
+        , {
+            onError : ()=>{},
+            onCompleted : (data)=>{
+                console.log(data);
+                if(data.newSeatApplication)
+                    router.push('./prevApplication');
+                else
+                    setReqError(true)
+            }
+        })
+
+    const allQuestionsAnswered = [setQ1Ans, setQ2Ans];
+
     const handleChange = (event: SelectChangeEvent) => {
         setType(event.target.value as string);
         props.changeType(event);
     };
 
-    const types = ['New Seat', 'Temporary Seat', 'Room Change'];
+    const handleAgreement = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setAgreed(event.target.checked);
+        setShowError(false);
+    }
+
+    const submission = () => {
+        console.log('submitted');
+        console.log(q1Ans);
+        console.log(q2Ans);
+        console.log(agreed);
+        if(!agreed) {
+            setShowError(true);
+            return;
+        }
+
+        newSeatApplication({
+            variables: {
+                attachedFileIds: "",
+                q1: q1Ans,
+                q2: q2Ans
+            }
+        }).then(r => {
+            console.log(r);
+        })
+    }
 
     return (
         <div style={{marginBottom: 20}}>
             <div className={styles.newSeat}>
-                <MyCard content={<Questionnaire/>} title='Questionnaire'/>
+                <MyCard content={<Questionnaire answers={allQuestionsAnswered}/>} title='Questionnaire'/>
                 <div>
                     <div style={{display: 'flex', justifyContent: 'right', marginRight: 20}}>
-                      <MUIDropdown width={200} options={types} val={type} change={handleChange}/>
+                      <MUIDropdown width={200} options={[types[0], types[1]]} val={type} change={handleChange}/>
                     </div>
                     <div className={styles.doc}>
                         <MyCard content={<Documents/>} title='Upload Documents'/>
@@ -67,10 +119,14 @@ const NewSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
                 </div>
             </div>
             <div className={styles.agreement}>
-                <MyCard content={<Agreement/>} title=''/>
+                <MyCard content={<Agreement handleAgreement={handleAgreement}/>} title=''/>
+                {showError && <div style={{color: 'red', fontSize: 12, textAlign: 'center'}}>
+                    Please agree to the terms and conditions</div>}
+                {reqError && <div style={{color: 'red', fontSize: 12, textAlign: 'center'}}>
+                    Something went wrong for your application. Please try again</div>}
             </div>
 
-            <div className={styles.submit}>
+            <div className={styles.submit} onClick={submission}>
                 <MyCard content={<Submit/>} title=''/>
             </div>
         </div>

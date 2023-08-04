@@ -1,5 +1,3 @@
-
-import MyCard from '../../components/card';
 import StudentView from "../../components/StudentSeat/StudentView";
 
 function CreateApplication(){
