@@ -62,20 +62,19 @@ const RoomPreference = (props: {
 
     return (
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker label="Date of hall entrance" value={dayjs(value)}
-                                onChange={handleDate}/>
-            </LocalizationProvider>
+            <div style={{display: 'flex', justifyContent: 'space-between', margin: 'auto'}}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker label="Date of hall entrance" value={dayjs(value)}
+                                    onChange={handleDate}/>
+                </LocalizationProvider>
+                <div>
+                    <MUIDropdown width={120} options={items} val={val} change={handleChange}/>
+                </div>
+            </div>
             <div style={{ marginTop: 20}}>
                 <div>
                     <FreeRoom setSeatId={props.setSeatId} containerStyle={{
                     }}  />
-                </div>
-                {/* <Input placeholder="Room No" type={'number'}
-                          style={{background: 'black', padding: 2, borderRadius: 5, borderColor: 'white'}}
-                          onChange={props.handleRoom}/> */}
-                <div>
-                    <MUIDropdown width={120} options={items} val={val} change={handleChange}/>
                 </div>
             </div>
         </div>

@@ -1,4 +1,3 @@
-import {application} from "../../pages/seatManagement";
 import QuestionBox from "../QuestionBox";
 import {Button, Input} from "@mui/material";
 import * as React from "react";

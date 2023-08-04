@@ -27,10 +27,10 @@ const RoomPreference = (props: {currentRoom: number, setSeatId : (v : number | u
     return (
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
             <div style={{}}>
-                <FreeRoom setSeatId={props.setSeatId} />
-                <span>
+                <span style={{marginLeft: 5}}>
                     Currently Allocated Room: {props.currentRoom}
                 </span>
+                <FreeRoom setSeatId={props.setSeatId} />
             </div>
         </div>
     )
