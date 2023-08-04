@@ -2,31 +2,30 @@ import * as React from 'react';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import { styled } from '@mui/system';
 
-const MUIStyledTextarea = (props: {rows: number, placeHolder: string, disabled?: boolean}) => {
-    const blue = {
-        100: '#DAECFF',
-        200: '#b6daff',
-        400: '#3399FF',
-        500: '#007FFF',
-        600: '#0072E5',
-        900: '#003A75',
-    };
+const blue = {
+    100: '#DAECFF',
+    200: '#b6daff',
+    400: '#3399FF',
+    500: '#007FFF',
+    600: '#0072E5',
+    900: '#003A75',
+};
 
-    const grey = {
-        50: '#f6f8fa',
-        100: '#eaeef2',
-        200: '#d0d7de',
-        300: '#afb8c1',
-        400: '#8c959f',
-        500: '#6e7781',
-        600: '#57606a',
-        700: '#424a53',
-        800: '#32383f',
-        900: '#24292f',
-    };
+const grey = {
+    50: '#f6f8fa',
+    100: '#eaeef2',
+    200: '#d0d7de',
+    300: '#afb8c1',
+    400: '#8c959f',
+    500: '#6e7781',
+    600: '#57606a',
+    700: '#424a53',
+    800: '#32383f',
+    900: '#24292f',
+};
 
-    const StyledTextarea = styled(TextareaAutosize)(
-        ({ theme }) => `
+const StyledTextarea = styled(TextareaAutosize)(
+    ({ theme }) => `
     width: 470px;
     margin: auto;
     font-family: IBM Plex Sans, sans-serif;
@@ -36,7 +35,7 @@ const MUIStyledTextarea = (props: {rows: number, placeHolder: string, disabled?:
     padding: 12px;
     border-radius: 12px 12px 0 12px;
     color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
-    background: ${'black'};
+    background: black;
     border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
     box-shadow: 0px 2px 2px ${theme.palette.mode === 'dark' ? grey[900] : grey[50]};
   
@@ -54,7 +53,20 @@ const MUIStyledTextarea = (props: {rows: number, placeHolder: string, disabled?:
       outline: 0;
     }
   `,
-    );
+);
+
+const MUIStyledTextarea = (props: {rows: number, placeHolder: string,
+    disabled?: boolean, handleInput?: (str: string) => void}) => {
+
+    const [value, setValue] = React.useState('');
+
+    const handleBlur = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        if(props.handleInput) props.handleInput(event.target.value);
+    }
+
+    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setValue(event.target.value);
+    }
 
     return (
         <StyledTextarea
@@ -62,6 +74,9 @@ const MUIStyledTextarea = (props: {rows: number, placeHolder: string, disabled?:
             minRows={props.rows}
             placeholder={props.placeHolder}
             disabled={props.disabled}
+            onBlur={handleBlur}
+            onChange={handleChange}
+            value={value}
         />
     );
 }
