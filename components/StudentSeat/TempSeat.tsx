@@ -5,7 +5,6 @@ import MyCard from "../card";
 import MUIDropdown from "../MUIDropdown";
 import * as React from "react";
 import QuestionBox from "../QuestionBox";
-import {Input} from "@mui/material";
 import Agreement from "./Agreement";
 import MUIStyledTextarea from "../MUITextArea";
 import Submit from "./Submit";

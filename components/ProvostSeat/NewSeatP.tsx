@@ -1,5 +1,5 @@
 import QuestionBox from "../QuestionBox";
-import {Button, Input} from "@mui/material";
+import {Button} from "@mui/material";
 import * as React from "react";
 import styles from '../../styles/studentSeat.module.scss';
 import MyCard from "../card";
@@ -10,29 +10,12 @@ import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider'
 import {DateTimePicker} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, {Dayjs} from "dayjs";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { ApplicationDetailsQuery } from "../../graphql/__generated__/graphql";
 import { FreeRoom } from "../freeRoom";
-import { APPROVE_NEW_SEAT_APPLICATION, GET_FREE_SEAT, REJECT_APPLICATION } from "../../graphql/operations";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { APPROVE_NEW_SEAT_APPLICATION, REJECT_APPLICATION } from "../../graphql/operations";
+import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
-
-const ProfileInfo = (props: {info : ApplicationDetailsQuery['applicationDetails']['student']}) => {
-    return (
-        <div style={{display: 'flex', justifyContent: 'space-around'}}>
-            <div className={styles.profile}>
-                <p>Name: {props.info.name}</p>
-                <p>Id: {props.info.student9DigitId}</p>
-                <p>Batch: {props.info.batch.year}</p>
-                <p>Department: {props.info.department.shortName.toUpperCase()}</p>
-                <p>Level/Term: {props.info.levelTerm.label}</p>
-            </div>
-            <div>
-                <AccountCircleIcon sx={{ fontSize: 180 }}/>
-            </div>
-        </div>
-    )
-}
+import ProfileInfo from "./ProfileInfo";
 
 const Questionnaire = (props: {answers: boolean[]}) => {
     return (
@@ -69,15 +52,6 @@ const Documents = (props : {
                     )
                 })
             }
-            {/* <div style={{display: "flex", justifyContent: "space-between", padding: 5}}>
-                1. NID
-                <Button variant="outlined" color='inherit'>Check</Button>
-            </div>
-            <div style={{display: "flex", justifyContent: "space-between", padding: 5}}>
-                2. Electric Bill
-                <Button variant="outlined" color='inherit'>Check</Button>
-            </div>
-            <Button variant="outlined" color='inherit'>Check others(if any)</Button> */}
         </ol>
     )
 }
@@ -115,6 +89,10 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
     const router = useRouter();
     const [seatId ,setSeatId] = useState<number>();
 
+    const [blankError, setBlankError] = useState(false);
+    const [reqError, setReqError] = useState(false);
+    const [reqErrorMsg, setReqErrorMsg] = useState('');
+
     let newApplication = props.application.newApplication;
 
     let answers = [false, false];
@@ -123,11 +101,13 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
         answers = [newApplication.questionnaire.q1, newApplication.questionnaire.q2]
     }
 
-    const [approveMutation, {error, loading, data}] = useMutation(
+    const [approveMutation, {}] = useMutation(
         APPROVE_NEW_SEAT_APPLICATION
         , {
             onError : (error)=>{
-
+                setReqError(true)
+                setReqErrorMsg(error.message)
+                setBlankError(false);
             },
             onCompleted : (data)=>{
                 // console.log(data);
@@ -139,7 +119,9 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
         REJECT_APPLICATION
         , {
             onError : (error)=>{
-
+                setReqError(true)
+                setReqErrorMsg(error.message)
+                setBlankError(false);
             },
             onCompleted : (data)=>{
                 // console.log(data);
@@ -147,27 +129,34 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
             }
         }
     )
-    
 
     function approve(){
         if(!seatId){
+            setBlankError(true);
             return;
         }
+
+        setBlankError(false);
+
         approveMutation({
             variables : {
                 newApplicationId : props.application.applicationId,
                 seatId : seatId
             }
+        }).then(r => {
+            console.log(r)
         })
     }
 
     function reject(){
         rejectMutation({
-            variables : {
-                applicationId : props.application.applicationId
+            variables: {
+                applicationId: props.application.applicationId
             }
+        }).then(r => {
+            console.log(r)
         })
-    }
+     }
 
 
     return (
@@ -197,8 +186,12 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
 
             { (props.application.status == "PENDING")  &&
                 <div className={styles.submit}>
+                    {blankError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
+                        Please fill in all the fields</div>}
+                    {reqError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
+                        {reqErrorMsg}</div>}
                     <MyCard content={<Confirmation rejectHandler={reject} successHandler={approve}/>} title=''/>
-                    </div>
+                </div>
             }
         </div>
     )

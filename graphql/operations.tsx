@@ -129,6 +129,19 @@ export const GET_APPLICATION = graphql(`
           name
           residencyStatus
           studentId
+          tempResidencyHistory {
+            from
+            to
+            seat {
+              room {
+                roomNo
+                floor {
+                  floorNo
+                  roomLabelLen
+                }
+              }
+            }
+          }
         }
         newApplication {
           newApplicationId
@@ -139,20 +152,18 @@ export const GET_APPLICATION = graphql(`
           }
         }
         tempApplication {
-          questionnaire {
-            questionnaireId
-          }
-          prefRoom {
-            roomNo
-            floor {
-              floorNo
-              roomLabelLen
+          from
+          prefSeat {
+            room {
+              roomNo
+              floor {
+                floorNo
+                roomLabelLen
+              }
             }
+            seatLabel
           }
           days
-          fromTime
-          prefRoomId
-          applicationId
         }
         seatChangeApplication {
           reason
@@ -326,6 +337,25 @@ mutation Mutation($seatId: Float!, $newApplicationId: Float!) {
     residencyId
   }
 }`)
+
+export const APPROVE_TEMP_SEAT_APPLICATION = graphql(`
+    mutation ApproveTempSeatApplication($from: String!, $days: Float!, $seatId: Float!, $applicationId: Float!) {
+      approveTempSeatApplication(from: $from, days: $days, seatId: $seatId, applicationId: $applicationId) {
+        days
+        from
+        seat {
+          room {
+            roomNo
+            floor {
+              floorNo
+              roomLabelLen
+            }
+          }
+        }
+      }
+    }
+
+`)
 
 export const REJECT_APPLICATION = graphql(`
   mutation RejectApplication($applicationId: Float!) {

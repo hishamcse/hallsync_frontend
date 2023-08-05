@@ -1,9 +1,8 @@
 import NewSeatP from "../../../components/ProvostSeat/NewSeatP";
-import {useState} from 'react'
-import { ApplicationDetailsQuery } from "../../../graphql/__generated__/graphql";
 import { useQuery } from "@apollo/client";
 import { GET_APPLICATION } from "../../../graphql/operations";
 import { useRouter } from "next/router";
+import TempSeatP from "../../../components/ProvostSeat/TempSeatP";
 
 export default function NewSeatAppView(){
 
@@ -30,8 +29,13 @@ export default function NewSeatAppView(){
     return (
         <div className="contentRoot">
             {
-                data &&
+                data && data.applicationDetails.newApplication &&
                 <NewSeatP application={data.applicationDetails}  />
+            }
+
+            {
+                data && data.applicationDetails.tempApplication &&
+                <TempSeatP application={data.applicationDetails}  />
             }
         </div>
     )
