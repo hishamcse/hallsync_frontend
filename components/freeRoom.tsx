@@ -1,5 +1,4 @@
-import { Button, Input, SelectChangeEvent } from "@mui/material";
-import MUIDropdown from "./MUIDropdown";
+import { Button } from "@mui/material";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import { GET_FREE_FLOORS, GET_FREE_ROOMS_IN_FLOOR, GET_FREE_SEAT, GET_FREE_SEATS_IN_ROOM } from "../graphql/operations";
 import { CSSProperties, useState } from "react";
@@ -94,7 +93,7 @@ export function FreeRoom(props : {
         <div style={{
             ... props.containerStyle
         }}>
-            <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 20}}>
+            <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 10}}>
                 {
                     <MUISelectStyled items={ floors ? floors.freeFloors.map(f => f.floorNo.toString()) : []}
                     placeHolder="Floor"
@@ -126,7 +125,7 @@ export function FreeRoom(props : {
                     />
                 }          
             </div>
-            <div>
+            <div style={{margin: 10}}>
                 {
                     props.autoAssign && 
                     <Button variant="outlined" color='primary' onClick={autoAssignOnClick}>Auto assign</Button>
