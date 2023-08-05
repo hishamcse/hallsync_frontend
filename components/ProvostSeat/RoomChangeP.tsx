@@ -1,13 +1,16 @@
-import {application} from "../../pages/seatManagement";
 import Card from "@mui/material/Card";
 import styles from "../../styles/studentSeat.module.scss";
 import MyCard from "../card";
 import ProfileInfo from "./ProfileInfo";
 import Confirmation from "./Confirmation";
-import {Button} from "@mui/material";
 import * as React from "react";
 import MUIStyledTextarea from "../MUITextArea";
 import ResidentTable from "./ResidentTable";
+import {ApplicationDetailsQuery} from "../../graphql/__generated__/graphql";
+import {useState} from "react";
+import {useMutation} from "@apollo/client";
+import {APPROVE_SEAT_CHANGE_APPLICATION, REJECT_APPLICATION} from "../../graphql/operations";
+import {useRouter} from "next/router";
 
 const ReasonForChange = (props : {reason: string}) => {
     return (
@@ -29,41 +32,94 @@ const RoomPreference = (props: {room: number}) => {
     )
 }
 
-export class RoomResident {
-    name: string;
-    dept: string;
-    agreementStatus: string;
-    constructor(name: string, dept: string, agreementStatus: string) {
-        this.name = name;
-        this.dept = dept;
-        this.agreementStatus = agreementStatus;
-    }
-}
+const RoomResidents = (props: {room: number,
+    seatChangeApp: ApplicationDetailsQuery['applicationDetails']['seatChangeApplication']}) => {
 
-const RoomResidents = (props: {room: number, residents: RoomResident[]}) => {
     return (
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15, margin: 'auto'}}>
             <div style={{marginBottom: 20}}>
                 <h5>Room No: {props.room.toString()}</h5>
             </div>
             <div>
-                <ResidentTable residents={props.residents}/>
+                <ResidentTable seatChangeApp={props.seatChangeApp}/>
             </div>
         </div>
     )
 }
 
-const RoomChangeP = (props: {application: application, resetHandler: () => void}) => {
+const RoomChangeP = (props: {application: ApplicationDetailsQuery['applicationDetails']}) => {
 
-    const temp_chng = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque eligendi eum inventore " +
-        "iste natus neque odio quod repudiandae, similique voluptas! Aliquid dignissimos nisi optio placeat repellat. Assumenda " +
-        "commodi ipsam laudantium."
+    const router = useRouter();
+    const [reqError, setReqError] = useState(false);
+    const [reqErrorMsg, setReqErrorMsg] = useState('');
 
-    const temp_allocations: RoomResident[] = [
-        new RoomResident("John Doe", "CSE", "Agreed"),
-        new RoomResident("Jane Doe", "EEE", "Pending"),
-        new RoomResident("John Smith", "ME", "Pending"),
-    ]
+    const temp_chng = props.application.seatChangeApplication?.reason;
+    const seat = props.application.seatChangeApplication?.toSeat;
+
+    const floor = seat?.room.floor.floorNo;
+    const block = seat?.room.floor.roomLabelLen;
+    const roomNo = seat?.room.roomNo;
+
+    let num = 0;
+
+    if(floor && block && roomNo) {
+        num = Math.pow(10, block - 1);
+        num = num * floor + roomNo;
+    }
+
+    const [approveMutation, {}] = useMutation(
+        APPROVE_SEAT_CHANGE_APPLICATION
+        , {
+            onError : (error)=>{
+                setReqError(true)
+                setReqErrorMsg(error.message)
+            },
+            onCompleted : (data)=>{
+                // console.log(data);
+                router.push('/seatManagement');
+            }
+        }
+    )
+
+    const [rejectMutation, {}] = useMutation(
+        REJECT_APPLICATION
+        , {
+            onError : (error)=>{
+                setReqError(true)
+                setReqErrorMsg(error.message)
+            },
+            onCompleted : (data)=>{
+                // console.log(data);
+                router.push('/seatManagement');
+            }
+        }
+    )
+
+    function approve(){
+        const seatId = props.application.seatChangeApplication?.toSeatId;
+
+        console.log(seatId)
+        console.log(props.application.seatChangeApplication?.seatChangeApplicationId)
+
+        approveMutation({
+            variables : {
+                seatChangeApplicationId : props.application.seatChangeApplication?.seatChangeApplicationId || 0,
+                seatId: seatId || 0
+            }
+        }).then(r => {
+            console.log(r)
+        })
+    }
+
+    function reject(){
+        rejectMutation({
+            variables: {
+                applicationId: props.application.applicationId
+            }
+        }).then(r => {
+            console.log(r)
+        })
+    }
 
     return (
         <div style={{marginBottom: 20}}>
@@ -74,10 +130,11 @@ const RoomChangeP = (props: {application: application, resetHandler: () => void}
             <div className={styles.newSeat} style={{display: 'flex', justifyContent: 'space-between'}}>
                 <div style={{margin: 25,}}>
                     <div style={{marginBottom: 50}}>
-                        <MyCard content={<ReasonForChange reason={temp_chng}/>} title='Reason for change'/>
+                        <MyCard content={<ReasonForChange reason={temp_chng || ''}/>} title='Reason for change'/>
                     </div>
                     <div>
-                        <MyCard content={<RoomResidents room={100} residents={temp_allocations}/>} title='Room Residents'/>
+                        <MyCard content={<RoomResidents room={num} seatChangeApp={props.application.seatChangeApplication}/>}
+                                title='Room Residents'/>
                     </div>
                 </div>
                 <div style={{margin: 25, marginRight: 25}}>
@@ -85,20 +142,19 @@ const RoomChangeP = (props: {application: application, resetHandler: () => void}
                         <MyCard content={<ProfileInfo info={props.application.student}/>} title='Profile'/>
                     </div>
                     <div>
-                        <MyCard content={<RoomPreference room={100}/>} title='Given Room Preference' />
+                        <MyCard content={<RoomPreference room={num}/>} title='Given Room Preference' />
                     </div>
                 </div>
             </div>
 
-            <div className={styles.submit}>
-                <MyCard content={<Confirmation/>} title=''/>
-            </div>
+            { (props.application.status == "PENDING")  &&
+                <div className={styles.submit}>
+                    {reqError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
+                        {reqErrorMsg}</div>}
+                    <MyCard content={<Confirmation rejectHandler={reject} successHandler={approve}/>} title=''/>
+                </div>
+            }
 
-            <div className={styles.submit}>
-                <Button variant="outlined" color="primary" style={{width: 200, height: 40}} onClick={props.resetHandler}>
-                    Go Back
-                </Button>
-            </div>
         </div>
     )
 }
