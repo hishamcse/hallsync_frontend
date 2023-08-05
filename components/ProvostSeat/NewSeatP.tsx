@@ -34,14 +34,14 @@ const ProfileInfo = (props: {info : ApplicationDetailsQuery['applicationDetails'
     )
 }
 
-const Questionnaire = () => {
+const Questionnaire = (props: {answers: boolean[]}) => {
     return (
         <div className={styles.questionnaire}>
-            <QuestionBox text="From Outside of Dhaka" checkBox={true} />
-            <QuestionBox text="No Close Realtive in Dhaka" checkBox={true} />
-            <QuestionBox text="College Outside of Dhaka" checkBox={true} />
-            <QuestionBox text="School Outside of Dhaka" checkBox={true} />
-            <QuestionBox text="Dummy question" checkBox={true} />
+            <QuestionBox text="From Outside of Dhaka" checkBox={true} checked={props.answers[0]} disabled={true}/>
+            <QuestionBox text="No Close Realtive in Dhaka" checkBox={true} checked={props.answers[1]} disabled={true}/>
+            <QuestionBox text="College Outside of Dhaka" checkBox={true} disabled={true}/>
+            <QuestionBox text="School Outside of Dhaka" checkBox={true} disabled={true}/>
+            <QuestionBox text="Dummy question" checkBox={true} disabled={true}/>
             <QuestionBox text="Dummy question" checkBox={false} dropDown={["none", "hello", "hi"]}/>
             <QuestionBox text="Dummy question" checkBox={true} />
         </div>
@@ -85,15 +85,11 @@ const Documents = (props : {
 const RoomAllotment = (props : {
     setSeatId : (v : number | undefined)=>void
 }) => {
-    
 
     return (
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15, marginTop: 20}}>
             <div style={{ justifyContent: 'space-between'}}>
                 <FreeRoom setSeatId={props.setSeatId} autoAssign />
-                {/* <Input placeholder="Room No" type={'number'}
-                       style={{background: 'black', padding: 2, borderRadius: 5, borderColor: 'white'}}/> */}
-                {/* <Button variant="outlined" color='primary'>Auto assign</Button> */}
             </div>
         </div>
     )
@@ -118,6 +114,14 @@ const ScheduleAppointment = () => {
 const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetails']}) => {
     const router = useRouter();
     const [seatId ,setSeatId] = useState<number>();
+
+    let newApplication = props.application.newApplication;
+
+    let answers = [false, false];
+
+    if(newApplication) {
+        answers = [newApplication.questionnaire.q1, newApplication.questionnaire.q2]
+    }
 
     const [query, {error, loading, data}] = useMutation(
         APPROVE_NEW_SEAT_APPLICATION
@@ -153,7 +157,7 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
                 <div style={{display: 'inline-grid', margin: 15}}>
                     <MyCard content={<ProfileInfo info={props.application.student}/>} title='Profile'/>
                     <br/><br/>
-                    <MyCard content={<Questionnaire/>} title='Questionnaire'/>
+                    <MyCard content={<Questionnaire answers={answers}/>} title='Questionnaire'/>
                 </div>
                 <div style={{display: 'inline-block', margin: 15}}>
                     <div>

@@ -104,43 +104,71 @@ export const SORT_DATA = graphql(`
 
 export const GET_APPLICATION = graphql(`
   query ApplicationDetails($applicationId: Float!) {
-    applicationDetails(applicationId: $applicationId) {
-      applicationId
-      createdAt
-      lastUpdate
-      status
-      attachedFiles {
-        uploadedFile {
-          uploadedFileId
-          fileName
-        }
-      }
-      student {
-        student9DigitId
-        batch {
-          year
-        }
-        department {
-          shortName
-        }
-        levelTerm {
-          label
-        }
-        name
-        residencyStatus
-        studentId
-      }
-      newApplication {
-        newApplicationId
-      }
-      seatChangeApplication {
-        seatChangeApplicationId
-      }
-      tempApplication {
+      applicationDetails(applicationId: $applicationId) {
         applicationId
+        createdAt
+        lastUpdate
+        status
+        attachedFiles {
+          uploadedFile {
+            fileName
+            uploadedFileId
+          }
+        }
+        student {
+          student9DigitId
+          batch {
+            year
+          }
+          department {
+            shortName
+          }
+          levelTerm {
+            label
+          }
+          name
+          residencyStatus
+          studentId
+        }
+        newApplication {
+          newApplicationId
+          questionnaire {
+            q1
+            q2
+            questionnaireId
+          }
+        }
+        tempApplication {
+          questionnaire {
+            questionnaireId
+          }
+          prefRoom {
+            roomNo
+            floor {
+              floorNo
+              roomLabelLen
+            }
+          }
+          days
+          fromTime
+          prefRoomId
+          applicationId
+        }
+        seatChangeApplication {
+          reason
+          seatChangeApplicationId
+          toSeat {
+            room {
+              floor {
+                floorNo
+                roomLabelLen
+              }
+              roomNo
+            }
+          }
+        }
       }
-    }
-  }
+   }
 
 `)
 

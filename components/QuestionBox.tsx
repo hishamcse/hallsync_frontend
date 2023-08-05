@@ -6,7 +6,8 @@ import MUIDropdown from "./MUIDropdown";
 import * as React from "react";
 
 const QuestionBox = (props : {text: string, checkBox: boolean,
-    dropDown?: string[], answer?: React.Dispatch<React.SetStateAction<boolean>>}) => {
+    dropDown?: string[], answer?: React.Dispatch<React.SetStateAction<boolean>>,
+    checked?: boolean, disabled?: boolean}) => {
     const [val, setVal] = useState('none');
 
     const handleChange = (event: SelectChangeEvent) => {
@@ -25,6 +26,7 @@ const QuestionBox = (props : {text: string, checkBox: boolean,
                     color="default"
                     inputProps={{'aria-label': 'secondary checkbox'}}
                     onChange={(e) => props.answer && props.answer(e.target.checked)}
+                    checked={props?.checked}
                 />}
 
                 {props.dropDown && <MUIDropdown width={120} options={props.dropDown} val={val} change={handleChange}/>}
