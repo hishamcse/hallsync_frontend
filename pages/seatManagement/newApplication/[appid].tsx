@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 
 export default function NewSeatAppView(){
 
-    const [app, setApp] = useState<ApplicationDetailsQuery['applicationDetails']>();
+    // const [app, setApp] = useState<ApplicationDetailsQuery['applicationDetails']>();
     const router = useRouter();
     let appid = - 1;
 
@@ -22,7 +22,8 @@ export default function NewSeatAppView(){
             },
             onCompleted : (d)=>{
                 console.log(d)
-            }
+            },
+            fetchPolicy : 'no-cache'
         }
     )
 

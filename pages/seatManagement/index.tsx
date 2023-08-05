@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import { APPLICATIONS, FILTERS_DATA, SORT_DATA } from "../../graphql/operations";
 import MyCard from "../../components/card";
 import MyDropDown from "../../components/dropdown";
@@ -36,7 +36,9 @@ function Filters(
 
 
         resetOnClick : ()=> void,
-        applyOnClick : ()=> void
+        applyOnClick : ()=> void,
+
+        initialSetStatus : (s : string[]) => void
     }
 ) {
 
@@ -44,15 +46,18 @@ function Filters(
          setDept, status, setStatus, type, setType, resetOnClick,applyOnClick,
         lt, setLt} = props;
 
-    const { data, loading } = useQuery(
-        FILTERS_DATA,
-        {
+    const [query , {data}] = useLazyQuery(
+        FILTERS_DATA
+    )
+
+    useEffect(()=>{
+        query({
             onCompleted : (data)=>{
                 if(data)
-                    props.setStatus(data.applicationStatus.filter(s=>s.select).map(v => v.status))
+                    props.initialSetStatus(data.applicationStatus.filter(s=>s.select).map(v => v.status))
             }
-        }
-    )
+        });
+    }, [])
 
     // function resetOnClick(){
     //     setBatch(undefined);
@@ -302,7 +307,7 @@ function Applications() {
 
     let skeletonHeight = 80;
 
-    const { loading, data, error } = useQuery(
+    const { loading, data, error, refetch } = useQuery(
         APPLICATIONS,{
             variables : {
                 filters : {
@@ -327,10 +332,34 @@ function Applications() {
         }
     )
 
+    function InitialStatusSelectReset(v : string[]){
+        refetch({
+            filters : {
+                batch : batch,
+                dept : dept,
+                status : v,
+                type : type,
+                lt : lt
+            },
+            sort : {
+                order : order,
+                orderBy : orderBy
+            },
+            search : {
+                searchBy : searchGT3
+            },
+            page : page
+        });
+        setStatus(v);
+    }
+        
     useEffect(()=>{
+        console.log("use effect");
         if(data){
             setCount(Math.floor(data.applications.count / 10))
         }
+        console.log(status);
+        
     }, [])
 
 
@@ -387,6 +416,7 @@ function Applications() {
                             resetOnClick={filterResetOnClick}
                             applyOnClick={() => {
                             }}
+                            initialSetStatus={InitialStatusSelectReset}
                         />
                     </div>
                     <div>

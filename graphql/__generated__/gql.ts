@@ -29,6 +29,7 @@ const documents = {
     "\n  query FreeSeatInRoom($floorNo:Float!, $roomNo: Float!) {\n    freeSeatInRoom(floorNo:$floorNo,roomNo: $roomNo) {\n      seatId\n      seatLabel\n    }\n  }\n": types.FreeSeatInRoomDocument,
     "\n  query FreeSeatQuery {\n    freeSeat {\n      seatId\n      room {\n        roomNo\n        floor {\n          floorNo\n        }\n      }\n      seatLabel\n    }\n  }\n": types.FreeSeatQueryDocument,
     "\n\nmutation Mutation($seatId: Float!, $newApplicationId: Float!) {\n  approveNewApplication(seatId: $seatId, newApplicationId: $newApplicationId) {\n    residencyId\n  }\n}": types.MutationDocument,
+    "\n  mutation RejectApplication($applicationId: Float!) {\n    rejectApplication(applicationId: $applicationId) {\n      applicationId\n    }\n  }\n": types.RejectApplicationDocument,
 };
 
 /**
@@ -109,6 +110,10 @@ export function graphql(source: "\n  query FreeSeatQuery {\n    freeSeat {\n    
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n\nmutation Mutation($seatId: Float!, $newApplicationId: Float!) {\n  approveNewApplication(seatId: $seatId, newApplicationId: $newApplicationId) {\n    residencyId\n  }\n}"): (typeof documents)["\n\nmutation Mutation($seatId: Float!, $newApplicationId: Float!) {\n  approveNewApplication(seatId: $seatId, newApplicationId: $newApplicationId) {\n    residencyId\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation RejectApplication($applicationId: Float!) {\n    rejectApplication(applicationId: $applicationId) {\n      applicationId\n    }\n  }\n"): (typeof documents)["\n  mutation RejectApplication($applicationId: Float!) {\n    rejectApplication(applicationId: $applicationId) {\n      applicationId\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

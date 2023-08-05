@@ -298,3 +298,11 @@ mutation Mutation($seatId: Float!, $newApplicationId: Float!) {
     residencyId
   }
 }`)
+
+export const REJECT_APPLICATION = graphql(`
+  mutation RejectApplication($applicationId: Float!) {
+    rejectApplication(applicationId: $applicationId) {
+      applicationId
+    }
+  }
+`)

@@ -13,7 +13,7 @@ import dayjs, {Dayjs} from "dayjs";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { ApplicationDetailsQuery } from "../../graphql/__generated__/graphql";
 import { FreeRoom } from "../freeRoom";
-import { APPROVE_NEW_SEAT_APPLICATION, GET_FREE_SEAT } from "../../graphql/operations";
+import { APPROVE_NEW_SEAT_APPLICATION, GET_FREE_SEAT, REJECT_APPLICATION } from "../../graphql/operations";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 
@@ -119,7 +119,7 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
     const router = useRouter();
     const [seatId ,setSeatId] = useState<number>();
 
-    const [query, {error, loading, data}] = useMutation(
+    const [approveMutation, {error, loading, data}] = useMutation(
         APPROVE_NEW_SEAT_APPLICATION
         , {
             onError : (error)=>{
@@ -129,15 +129,38 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
                 // console.log(data);
                 router.push('/seatManagement');
             }
-        })
+        }
+    )
+    const [rejectMutation, {}] = useMutation(
+        REJECT_APPLICATION
+        , {
+            onError : (error)=>{
+
+            },
+            onCompleted : (data)=>{
+                // console.log(data);
+                router.push('/seatManagement');
+            }
+        }
+    )
+    
+
     function approve(){
         if(!seatId){
             return;
         }
-        query({
+        approveMutation({
             variables : {
                 newApplicationId : props.application.applicationId,
                 seatId : seatId
+            }
+        })
+    }
+
+    function reject(){
+        rejectMutation({
+            variables : {
+                applicationId : props.application.applicationId
             }
         })
     }
@@ -170,7 +193,7 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
 
             { (props.application.status == "PENDING")  &&
                 <div className={styles.submit}>
-                    <MyCard content={<Confirmation successHandler={approve}/>} title=''/>
+                    <MyCard content={<Confirmation rejectHandler={reject} successHandler={approve}/>} title=''/>
                     </div>
             }
         </div>
