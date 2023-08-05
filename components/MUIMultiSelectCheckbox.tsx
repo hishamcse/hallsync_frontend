@@ -21,7 +21,8 @@ type Props = {
 	items: string[],
 	placeHolder: string,
 	prefix? : string,
-	width? : number
+	width? : number,
+	disabled? : boolean
 
 } & (CheckBoxProps | SigleSelectProps);
 
@@ -76,7 +77,7 @@ export default function MUISelectStyled(props: Props) {
 			<FormControl sx={{ m: 1, width: props.width ?? 180 }}>
 				<SelectWrapper option1={props.type == 'single' ? singleProps : undefined}
 					option2={props.type == 'multiple' ? multiProps : undefined}
-
+					disabled = {props.disabled}
 				>
 					{props.items.map((val) => (
 						<MenuItem key={val} value={val}>
@@ -98,6 +99,7 @@ function SelectWrapper(props: {
 	children: ReactNode
 	option1?: SelectProps<string>,
 	option2?: SelectProps<string[]>,
+	disabled?: boolean
 }
 ) {
 	let sx = {
@@ -124,6 +126,7 @@ function SelectWrapper(props: {
 	if(props.option1){
 		return (
 			<Select
+				disabled = {props.disabled}
 				sx={sx}
 				displayEmpty
 				input={<OutlinedInput />}
@@ -139,6 +142,7 @@ function SelectWrapper(props: {
 	else if(props.option2){
 		return (
 			<Select
+				disabled = {props.disabled}
 				sx={sx}
 				displayEmpty
 				input={<OutlinedInput />}
@@ -153,6 +157,7 @@ function SelectWrapper(props: {
 	}
 	return (
 		<Select
+			disabled = {props.disabled}
 			sx={sx}
 			displayEmpty
 			input={<OutlinedInput />}

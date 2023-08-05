@@ -41,8 +41,8 @@ function Tabs(){
 
     return(
         <ul className={topBarStyles.tabs} >
-            <Tab href={"./" + routes.newApp} isActive = {checkRouteContains(router, routes.newApp)} name="New Application" />
-            <Tab href={"./" + routes.prevApp} isActive = {checkRouteContains(router, routes.prevApp)} name = "Previous Application" />
+            <Tab href={"/application/" + routes.newApp} isActive = {checkRouteContains(router, routes.newApp)} name="New Application" />
+            <Tab href={"/application/" + routes.prevApp} isActive = {checkRouteContains(router, routes.prevApp)} name = "Previous Application" />
         </ul>
     )
 }

@@ -13,6 +13,7 @@ import {useMutation} from "@apollo/client";
 import {POST_NEW_APPLICATION} from "../../graphql/operations";
 import {useRouter} from "next/router";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import { ApplicationDetailsQuery } from "../../graphql/__generated__/graphql";
 
 const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boolean>>[]}) => {
     return (
@@ -31,7 +32,8 @@ const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boo
 const Documents = (props : {
     onChange : (e : ChangeEvent<HTMLInputElement>) => void,
     files : Blob[],
-    removeFile  : (f : Blob)=>void
+    removeFile  : (f : Blob)=>void,
+    disabled? : boolean
 }) => {
     return (
         <div style={{justifyContent: 'left', width: 500}}>
@@ -58,15 +60,21 @@ const Documents = (props : {
                     )
                 }
             </ol>
-            <Button variant="outlined" component="label"  >
-                Upload file
-                <input type="file" hidden onChange={props.onChange}  />
-            </Button>
+            {   !props.disabled &&
+                <Button variant="outlined" component="label"  >
+                    Upload file
+                    <input type="file" hidden onChange={props.onChange} />
+                </Button>
+            }
         </div>
     )
 }
 
-const NewSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
+const NewSeat = (props: {
+    changeType: (event: SelectChangeEvent) => void,
+    application? : ApplicationDetailsQuery['applicationDetails']
+
+}) => {
     const [type, setType] = useState('New Seat');
 
     const [q1Ans, setQ1Ans] = useState(false);
@@ -193,30 +201,39 @@ const NewSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
         setShowError(false);
     }
 
+    let docUploadDisabled = props.application && (props.application.status !== 'REVISE')
+    let agreementDisabled = props.application != undefined;
+
     return (
         <div style={{marginBottom: 20}}>
             <div className={styles.newSeat}>
                 <MyCard content={<Questionnaire answers={allQuestionsAnswered}/>} title='Questionnaire'/>
                 <div>
-                    <div style={{display: 'flex', justifyContent: 'right', marginRight: 20}}>
-                      <MUIDropdown width={200} options={[types[0], types[1]]} val={type} change={handleChange}/>
-                    </div>
+                    {!props.application &&
+                        <div style={{display: 'flex', justifyContent: 'right', marginRight: 20}}>
+                        <MUIDropdown width={200} options={[types[0], types[1]]} val={type} change={handleChange}/>
+                        </div>
+                    }
                     <div className={styles.doc}>
-                        <MyCard content={<Documents removeFile={removeFile} files = {files} onChange={handleFileChange}/>} title='Upload Documents'/>
+                        <MyCard content={<Documents disabled = {docUploadDisabled} removeFile={removeFile} files = {files} onChange={handleFileChange}/>} title='Upload Documents'/>
                     </div>
                 </div>
             </div>
             <div className={styles.agreement}>
-                <MyCard content={<Agreement handleAgreement={handleAgreement}/>} title=''/>
+                <MyCard content={<Agreement disabled = {agreementDisabled} handleAgreement={handleAgreement}/>} title=''/>
                 {showError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
                     Please agree to the terms and conditions</div>}
                 {reqError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
                     {reqErrorMsg}</div>}
             </div>
 
-            <div className={styles.submit} onClick={handleSubmit}>
-                <MyCard content={<Submit/>} title=''/>
-            </div>
+                <div className={styles.submit} onClick={handleSubmit}>
+                    {
+                        !agreementDisabled &&
+                        <MyCard content={<Submit/>} title=''/>
+                    }
+                </div>
+            
         </div>
     )
 }

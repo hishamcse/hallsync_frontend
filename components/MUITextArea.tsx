@@ -55,10 +55,13 @@ const StyledTextarea = styled(TextareaAutosize)(
   `,
 );
 
-const MUIStyledTextarea = (props: {rows: number, placeHolder: string,
-    disabled?: boolean, handleInput?: (str: string) => void}) => {
+const MUIStyledTextarea = (props: {
+  rows: number, placeHolder: string,
+    disabled?: boolean, handleInput?: (str: string) => void,
+    val? : string
+  }) => {
 
-    const [value, setValue] = React.useState('');
+    const [value, setValue] = React.useState(props.val ?? '');
 
     const handleBlur = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         if(props.handleInput) props.handleInput(event.target.value);

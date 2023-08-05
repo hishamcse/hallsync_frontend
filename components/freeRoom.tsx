@@ -4,17 +4,23 @@ import { GET_FREE_FLOORS, GET_FREE_ROOMS_IN_FLOOR, GET_FREE_SEAT, GET_FREE_SEATS
 import { CSSProperties, useState } from "react";
 import MUISelectStyled from "./MUIMultiSelectCheckbox";
 
-
+type InitVal = {
+    roomNo : number,
+    floorNo : number,
+    seatLabel :  string
+}
 
 export function FreeRoom(props : {
     setSeatId : (v : number | undefined)=>void,
     containerStyle? : CSSProperties,
-    autoAssign? : boolean
+    autoAssign? : boolean,
+    initVal? : InitVal,
+    disabled? : boolean
 }){
 
-    let [floor, setFloor] = useState<number | undefined>();
-    let [room, setRoom] = useState<number|undefined>();
-    let [seat, setSeat] = useState<string|undefined>();
+    let [floor, setFloor] = useState<number | undefined>(props.initVal?.floorNo);
+    let [room, setRoom] = useState<number|undefined>(props.initVal?.roomNo);
+    let [seat, setSeat] = useState<string|undefined>(props.initVal?.seatLabel);
 
     let [query ,{data }] = useLazyQuery(
         GET_FREE_SEAT
@@ -95,7 +101,9 @@ export function FreeRoom(props : {
         }}>
             <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 10}}>
                 {
-                    <MUISelectStyled items={ floors ? floors.freeFloors.map(f => f.floorNo.toString()) : []}
+                    <MUISelectStyled 
+                    disabled = {props.disabled}
+                    items={ floors ? floors.freeFloors.map(f => f.floorNo.toString()) : []}
                     placeHolder="Floor"
                     setVal={onFloorChange}
                     val={floor? floor.toString() : "" }
@@ -106,6 +114,7 @@ export function FreeRoom(props : {
                 }     
                 {
                     <MUISelectStyled items={rooms ? rooms.freeRoomInFloor.map(r => r.roomNo.toString()) : []}
+                    disabled = {props.disabled}
                     placeHolder="Room"
                     setVal={onRoomChange}
                     val={room? room.toString() : "" }
@@ -116,6 +125,7 @@ export function FreeRoom(props : {
                 }      
                 {
                     <MUISelectStyled items={ seats ?  seats.freeSeatInRoom.map(s => s.seatLabel) : []}
+                    disabled = {props.disabled}
                     placeHolder="Seat"
                     setVal={onSeatChange}
                     val={seat? seat.toString() : "" }
@@ -128,7 +138,9 @@ export function FreeRoom(props : {
             <div style={{margin: 10}}>
                 {
                     props.autoAssign && 
-                    <Button variant="outlined" color='primary' onClick={autoAssignOnClick}>Auto assign</Button>
+                    <Button 
+                    disabled = {props.disabled}
+                    variant="outlined" color='primary' onClick={autoAssignOnClick}>Auto assign</Button>
 
                 }
             </div>

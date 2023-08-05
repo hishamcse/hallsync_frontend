@@ -18,6 +18,7 @@ import {DatePicker} from "@mui/x-date-pickers";
 import dayjs, {Dayjs} from "dayjs";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import { FreeRoom } from "../freeRoom";
+import { ApplicationDetailsQuery } from "../../graphql/__generated__/graphql";
 
 const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boolean>>[]}) => {
     return (
@@ -29,10 +30,17 @@ const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boo
     )
 }
 
-const ReasonForChange = (props: {handleReason: (str: string) => void}) => {
+export const ReasonForChange = (props: {
+    handleReason: (str: string) => void,
+    initialVal? : string,
+    disabled? : boolean
+}) => {
     return (
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
-            <MUIStyledTextarea rows={10} placeHolder="State your reason here" handleInput={props.handleReason}/>
+            <MUIStyledTextarea val={props.initialVal}
+             rows={10} placeHolder="State your reason here" handleInput={props.handleReason}
+             disabled = {props.disabled}
+             />
         </div>
     )
 }
@@ -40,11 +48,26 @@ const ReasonForChange = (props: {handleReason: (str: string) => void}) => {
 const RoomPreference = (props: {
     handleDays: (event: SelectChangeEvent) => void, handleDate: (newValue: Dayjs | null) => void,
     setSeatId : (v : number | undefined)=>void,
+    date? : string,
+    disable? : boolean,
+    days? : number,
+    seat? : NonNullable<ApplicationDetailsQuery['applicationDetails']['tempApplication']>['prefSeat']
 }) => {
 
+    let initDate = null;
+    if(props.date){
+        initDate = dayjs(props.date, 'yyyy-mm-dd');
+        // initDate = dayjs("2023-08-03T00:00:00.000Z", 'yyyy-mm-dd');
+        console.log(initDate)
+    }
+    let initDays = 'Days'
+    if(props.days){
+        initDays = props.days.toString()
+    }
+    
     const [value, setValue] = useState<Dayjs | null>();
 
-    const [val, setVal] = useState('Days');
+    const [val, setVal] = useState(initDays);
 
 
     const handleChange = (event: SelectChangeEvent) => {
@@ -64,32 +87,51 @@ const RoomPreference = (props: {
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
             <div style={{display: 'flex', justifyContent: 'space-between', margin: 'auto'}}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker label="Date of hall entrance" value={dayjs(value)}
+                    <DatePicker disabled = {props.disable} label="Date of hall entrance" value={dayjs(value)}
                                     onChange={handleDate}/>
                 </LocalizationProvider>
                 <div>
-                    <MUIDropdown width={120} options={items} val={val} change={handleChange}/>
+                    <MUIDropdown width={120} disable = {props.disable} options={items} val={val} change={handleChange}/>
                 </div>
             </div>
             <div style={{ marginTop: 20}}>
                 <div>
-                    <FreeRoom setSeatId={props.setSeatId} containerStyle={{
-                    }}  />
+                    <FreeRoom initVal={props.seat ? {
+                        floorNo : props.seat.room.floor.floorNo,
+                        roomNo : props.seat.room.roomNo,
+                        seatLabel : props.seat.seatLabel
+                    } : undefined} disabled = {props.disable} setSeatId={props.setSeatId} containerStyle={{
+                    }} />
                 </div>
             </div>
         </div>
     )
 }
 
-const TempSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
+const TempSeat = (props: {
+    changeType: (event: SelectChangeEvent) => void,
+    application? : ApplicationDetailsQuery['applicationDetails']
+}) => {
+
+    let initDate = null;
+    // if(props.application?.tempApplication?.from){
+    //     initDate = dayjs(props.application?.tempApplication?.from, 'yyyy-mm-dd');
+    //     initDate = dayjs("2023-08-03T00:00:00.000Z", 'yyyy-mm-dd');
+    //     console.log(initDate)
+    // }
+
+    let initDays = 0;
+    if(props.application?.tempApplication){
+        initDays = props.application.tempApplication.days;
+    }
     const [type, setType] = useState('Temporary Seat');
 
     const [q1Ans, setQ1Ans] = useState(false);
     const [q2Ans, setQ2Ans] = useState(false);
 
     const [reason, setReason] = useState('');
-    const [date, setDate] = useState<Dayjs | null>(null);
-    const [days, setDays] = useState(0);
+    const [date, setDate] = useState<Dayjs | null>(initDate);
+    const [days, setDays] = useState(initDays);
 
     const [agreed, setAgreed] = useState(false);
     const [showError, setShowError] = useState(false);
@@ -176,27 +218,35 @@ const TempSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
     };
 
     const views = [types[0], types[1]];
-
+    let textAreaDisabled = props.application && (props.application.status !== 'REVISE')
+    let agreementDisabled = props.application != undefined;
     return (
         <div style={{marginBottom: 20}}>
             <div className={styles.newSeat}>
                 <MyCard content={<Questionnaire answers={allQuestionsAnswered}/>} title='Questionnaire'/>
                 <div>
-                    <div style={{display: 'flex', justifyContent: 'right', marginRight: 20}}>
-                        <MUIDropdown width={200} options={views} val={type} change={handleChange}/>
+                    { !props.application &&
+                        <div style={{display: 'flex', justifyContent: 'right', marginRight: 20}}>
+                            <MUIDropdown width={200} options={views} val={type} change={handleChange}/>
+                        </div>
+                    }
+                    <div className={styles.doc}>
+                        <MyCard content={<ReasonForChange initialVal = {' '} handleReason={handleReason} disabled = {textAreaDisabled} />} title='Reason for Temporary Seat'
+                        />
                     </div>
                     <div className={styles.doc}>
-                        <MyCard content={<ReasonForChange handleReason={handleReason}/>} title='Reason for Temporary Seat'/>
-                    </div>
-                    <div className={styles.doc}>
-                        <MyCard content={<RoomPreference setSeatId={setSeatId}  handleDays={handleDays} handleDate={handleDate}/>}
+                        <MyCard content={<RoomPreference disable={textAreaDisabled} 
+                        date={props.application?.tempApplication?.from} setSeatId={setSeatId}  handleDays={handleDays} handleDate={handleDate}
+                        days={props.application?.tempApplication?.days}
+                        seat={props.application?.tempApplication?.prefSeat}
+                        />}
                                 title='Room Preference and Date'/>
                     </div>
                 </div>
             </div>
 
             <div className={styles.agreement}>
-                <MyCard content={<Agreement handleAgreement={handleAgreement}/>} title=''/>
+                <MyCard content={<Agreement disabled = {agreementDisabled} handleAgreement={handleAgreement}/>} title=''/>
                 {showError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
                     Please agree to the terms and conditions</div>}
                 {blankError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
@@ -206,7 +256,10 @@ const TempSeat = (props: {changeType: (event: SelectChangeEvent) => void}) => {
             </div>
 
             <div className={styles.submit} onClick={submission}>
-                <MyCard content={<Submit/>} title=''/>
+
+                { !agreementDisabled &&
+                    <MyCard content={<Submit/>} title=''/>
+                }
             </div>
         </div>
     )

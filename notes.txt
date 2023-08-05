@@ -1,1 +1,2 @@
 new seat P error handling
+curr room no in viewing room change app from student 

@@ -138,26 +138,12 @@ export const GET_APPLICATION = graphql(`
             questionnaireId
           }
         }
-        tempApplication {
-          questionnaire {
-            questionnaireId
-          }
-          prefRoom {
-            roomNo
-            floor {
-              floorNo
-              roomLabelLen
-            }
-          }
-          days
-          fromTime
-          prefRoomId
-          applicationId
-        }
+        
         seatChangeApplication {
           reason
           seatChangeApplicationId
           toSeat {
+            seatLabel
             room {
               floor {
                 floorNo
@@ -167,9 +153,21 @@ export const GET_APPLICATION = graphql(`
             }
           }
         }
+        tempApplication {
+          from
+          days
+          prefSeat {
+            seatLabel
+            room {
+              roomNo
+              floor {
+                floorNo
+              }
+            }
+          }
+        }
       }
    }
-
 `)
 
 export const GET_INFO = graphql(`

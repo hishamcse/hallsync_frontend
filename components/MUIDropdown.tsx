@@ -8,7 +8,8 @@ const MuiDropdown = (props: {
     width: number,
     options: string[],
     val: string,
-    change: (event: SelectChangeEvent) => void
+    change: (event: SelectChangeEvent) => void,
+    disable? : boolean
 }) => {
 
     return (
@@ -21,6 +22,7 @@ const MuiDropdown = (props: {
                     defaultValue={props.options[0]}
                     onChange={props.change}
                     size='small'
+                    disabled = {props.disable}
                 >
                     {props.options.map((v) => (
                         <MenuItem key={Math.random().toString()} value={v}>{v}</MenuItem>

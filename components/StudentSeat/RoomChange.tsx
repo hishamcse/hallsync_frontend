@@ -13,16 +13,23 @@ import {useMutation} from "@apollo/client";
 import {POST_SEAT_CHANGE_APPLICATION} from "../../graphql/operations";
 import {useRouter} from "next/router";
 import { FreeRoom } from "../freeRoom";
+import { ReasonForChange } from "./TempSeat";
+import { ApplicationDetailsQuery } from "../../graphql/__generated__/graphql";
 
-const ReasonForChange = (props: {handleReason: (str: string) => void}) => {
-    return (
-        <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
-            <MUIStyledTextarea rows={10} placeHolder="State your reason here" handleInput={props.handleReason}/>
-        </div>
-    )
-}
+// const ReasonForChange = (props: {handleReason: (str: string) => void}) => {
+//     return (
+//         <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
+//             <MUIStyledTextarea rows={10} placeHolder="State your reason here" handleInput={props.handleReason}/>
+//         </div>
+//     )
+// }
 
-const RoomPreference = (props: {currentRoom: number, setSeatId : (v : number | undefined)=>void,
+const RoomPreference = (props: {
+    currentRoom: number,
+    setSeatId : (v : number | undefined)=>void,
+    disable? : boolean,
+    seat? : NonNullable<ApplicationDetailsQuery['applicationDetails']['seatChangeApplication']>['toSeat']
+
 }) => {
     return (
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
@@ -30,13 +37,23 @@ const RoomPreference = (props: {currentRoom: number, setSeatId : (v : number | u
                 <span style={{marginLeft: 5}}>
                     Currently Allocated Room: {props.currentRoom}
                 </span>
-                <FreeRoom setSeatId={props.setSeatId} />
+                <FreeRoom initVal={props.seat ? {
+                        floorNo : props.seat.room.floor.floorNo,
+                        roomNo : props.seat.room.roomNo,
+                        seatLabel : props.seat.seatLabel
+                    } : undefined} disabled = {props.disable} setSeatId={props.setSeatId}  />
+                {/* <FreeRoom setSeatId={props.setSeatId} /> */}
             </div>
         </div>
     )
 }
 
-const RoomChange = (props: {changeType: (event: SelectChangeEvent) => void, room: number}) => {
+const RoomChange = (props: {
+    changeType: (event: SelectChangeEvent) => void,
+    room: number,
+    application? : ApplicationDetailsQuery['applicationDetails']
+
+}) => {
     const [type, setType] = useState('Room Change');
 
     const [reason, setReason] = useState('');
@@ -118,24 +135,36 @@ const RoomChange = (props: {changeType: (event: SelectChangeEvent) => void, room
             console.log(r);
         })
     }
-
+    let textAreaDisabled = props.application && (props.application.status !== 'REVISE')
+    let agreementDisabled = props.application != undefined;
+    
     return (
         <div style={{marginBottom: 20}}>
             <div className={styles.newSeat}>
                 <div className={styles.doc}>
-                    <MyCard content={<ReasonForChange handleReason={handleReason}/>} title='Reason for change'/>
+                    <MyCard content={<ReasonForChange disabled = {textAreaDisabled} initialVal={props.application?.seatChangeApplication?.reason} handleReason={handleReason}/>} title='Reason for change'/>
                 </div>
                 <div>
+                { !props.application &&
+
                     <div style={{display: 'flex', justifyContent: 'right', marginRight: 20}}>
                         <MUIDropdown width={200} options={[types[2]]} val={type} change={handleChange}/>
                     </div>
+                }
                     <div className={styles.doc}>
-                        <MyCard content={<RoomPreference currentRoom={props.room} setSeatId={setSeatId}/>} title='Room Preference'/>
+                        <MyCard content={
+                        <RoomPreference
+                        currentRoom={props.room} setSeatId={setSeatId}
+                        seat={props.application?.seatChangeApplication?.toSeat}
+                        disable={textAreaDisabled} 
+                         />
+                         
+                         } title='Room Preference'/>
                     </div>
                 </div>
             </div>
             <div className={styles.agreement}>
-                <MyCard content={<Agreement handleAgreement={handleAgreement}/>} title=''/>
+                <MyCard content={<Agreement disabled = {agreementDisabled} handleAgreement={handleAgreement}/>} title=''/>
                 {showError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
                     Please agree to the terms and conditions</div>}
                 {blankError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
@@ -143,9 +172,11 @@ const RoomChange = (props: {changeType: (event: SelectChangeEvent) => void, room
                 {reqError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
                     {reqErrorMsg}</div>}
             </div>
-
+            
             <div className={styles.submit} onClick={submission}>
-                <MyCard content={<Submit/>} title=''/>
+                { !textAreaDisabled && 
+                    <MyCard content={<Submit/>} title=''/>
+                }
             </div>
         </div>
     )
