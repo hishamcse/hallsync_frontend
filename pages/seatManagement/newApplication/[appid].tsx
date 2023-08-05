@@ -3,6 +3,7 @@ import { useQuery } from "@apollo/client";
 import { GET_APPLICATION } from "../../../graphql/operations";
 import { useRouter } from "next/router";
 import TempSeatP from "../../../components/ProvostSeat/TempSeatP";
+import RoomChangeP from "../../../components/ProvostSeat/RoomChangeP";
 
 export default function NewSeatAppView(){
 
@@ -36,6 +37,11 @@ export default function NewSeatAppView(){
             {
                 data && data.applicationDetails.tempApplication &&
                 <TempSeatP application={data.applicationDetails}  />
+            }
+
+            {
+                data && data.applicationDetails.seatChangeApplication &&
+                <RoomChangeP application={data.applicationDetails}  />
             }
         </div>
     )
