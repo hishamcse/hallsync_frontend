@@ -1,9 +1,9 @@
-import {student} from "../../pages/seatManagement";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import * as React from "react";
 import styles from '../../styles/studentSeat.module.scss';
+import {ApplicationDetailsQuery} from "../../graphql/__generated__/graphql";
 
-const ProfileInfo = (props: {info : student}) => {
+const ProfileInfo = (props: {info : ApplicationDetailsQuery['applicationDetails']['student']}) => {
     return (
         <div style={{display: 'flex', justifyContent: 'space-around'}}>
             <div className={styles.profile}>

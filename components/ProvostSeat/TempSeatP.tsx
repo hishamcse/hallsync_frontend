@@ -1,17 +1,18 @@
-import {application} from "../../pages/seatManagement";
 import styles from "../../styles/studentSeat.module.scss";
 import QuestionBox from "../QuestionBox";
 import * as React from "react";
 import MUIStyledTextarea from "../MUITextArea";
 import {useState} from "react";
-import {SelectChangeEvent} from "@mui/material/Select";
-import {Button, Input, TextField} from "@mui/material";
-import MUIDropdown from "../MUIDropdown";
 import Card from "@mui/material/Card";
 import MyCard from "../card";
 import ProfileInfo from "./ProfileInfo";
-import Confirmation from "./Confirmation";
 import DateRangeIcon from '@mui/icons-material/DateRange';
+import {ApplicationDetailsQuery} from "../../graphql/__generated__/graphql";
+import {useRouter} from "next/router";
+import {useMutation} from "@apollo/client";
+import {APPROVE_TEMP_SEAT_APPLICATION, REJECT_APPLICATION} from "../../graphql/operations";
+import {FreeRoom} from "../freeRoom";
+import Confirmation from "./Confirmation";
 
 const Questionnaire = (props: {reason: string}) => {
     return (
@@ -35,69 +36,79 @@ const ReasonForChange = (props : {reason: string}) => {
     )
 }
 
-const RoomPreference = (props: {room: number, days: number}) => {
-    const [val, setVal] = useState('Days');
+const RoomPreference = (props : {
+    setSeatId : (v : number | undefined)=>void,
+    tmpApp: ApplicationDetailsQuery['applicationDetails']['tempApplication'] }) => {
 
-    const handleChange = (event: SelectChangeEvent) => {
-        setVal(event.target.value as string);
-    };
+    const floor = props.tmpApp?.prefSeat?.room.floor.floorNo;
+    const block = props.tmpApp?.prefSeat?.room.floor.roomLabelLen;
+    const roomNo = props.tmpApp?.prefSeat?.room.roomNo;
 
-    const items: string[] = ['Days', ...Array.from({ length: 11 },
-        (_, index) => (index + 5).toString())];
+    let num = 0;
+
+    if(floor && block && roomNo) {
+        num = Math.pow(10, block - 1);
+        num = num * floor + roomNo;
+    }
+
+    const entranceDate = new Date(props.tmpApp?.from.toString().split("T")[0]).toLocaleDateString()
 
     return (
-        <div style={{justifyContent: 'left', width: 400, paddingTop: 15, margin: 'auto'}}>
+        <div style={{justifyContent: 'left', width: 450, paddingTop: 15, margin: 'auto'}}>
             <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: 20}}>
                 <div>
-                    Room Preference: {props.room.toString()}
+                    Room Preference: {num.toString()}
                 </div>
                 <div>
-                    Days: {props.days.toString()}
+                    Hall Entrance: {entranceDate}
+                </div>
+                <div>
+                    Days: {props.tmpApp?.days.toString()}
                 </div>
             </div>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                <Input placeholder="Room No" type={'number'}
-                       style={{background: 'black', padding: 2, borderRadius: 5, borderColor: 'white'}}/>
-                <MUIDropdown width={120} options={items} val={val} change={handleChange}/>
-            </div>
-            <div style={{marginTop: 20}}>
-                <Button variant="outlined" color='primary'>Auto assign</Button>
+            <div style={{justifyContent: 'left', width: 450, paddingTop: 10, marginTop: 10}}>
+                <div style={{ justifyContent: 'space-between'}}>
+                    <FreeRoom setSeatId={props.setSeatId} autoAssign />
+                </div>
             </div>
         </div>
     )
 }
 
-class TempAllocation {
-    room: number;
-    days: number;
-    date: Date;
-    constructor(room: number, days: number, date: Date) {
-        this.room = room;
-        this.days = days;
-        this.date = date;
-    }
-}
+const SingleApplication = (props: {allocation:
+        ApplicationDetailsQuery['applicationDetails']['student']['tempResidencyHistory'][0]}) => {
 
-const SingleApplication = (props: {allocation: TempAllocation}) => {
+    const floor = props.allocation.seat?.room.floor.floorNo;
+    const block = props.allocation.seat?.room.floor.roomLabelLen;
+    const roomNo = props.allocation.seat?.room.roomNo;
+
+    let num = 0;
+
+    if(floor && block && roomNo) {
+        num = Math.pow(10, block - 1);
+        num = num * floor + roomNo;
+    }
+
+    const fromDate = new Date(props.allocation.from.toString().split("T")[0]).toLocaleDateString();
+    const toDate = new Date(props.allocation.to.toString().split("T")[0]).toLocaleDateString();
+
     return (
         <div>
             <div style={{margin: 10}}>
-                <DateRangeIcon />&nbsp;
-                {props.allocation.date.toDateString()}
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <h6>Room No: {num.toString()}</h6>
+                </div>
             </div>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                <div>
-                    <h6>Room No: {props.allocation.room.toString()}</h6>
-                </div>
-                <div>
-                    <h6>Days: {props.allocation.days.toString()}</h6>
-                </div>
+                <DateRangeIcon />&nbsp;
+                <i>{fromDate} &nbsp; to &nbsp; {toDate}</i>
             </div>
         </div>
     )
 }
 
-const PreviousTempAllocation = (props: {allocations: TempAllocation[]}) => {
+const PreviousTempAllocation = (props: {allocations:
+        ApplicationDetailsQuery['applicationDetails']['student']['tempResidencyHistory']}) => {
     return (
         <div style={{display: 'flex', justifyContent: 'left', paddingTop: 15}}>
             {props.allocations.map((allocation, index) => {
@@ -107,7 +118,6 @@ const PreviousTempAllocation = (props: {allocations: TempAllocation[]}) => {
                             borderRadius: 10, backgroundColor: 'black'}}>
                             <SingleApplication allocation={allocation}/>
                         </Card>
-                      {/*<MyCard title='' content={<SingleApplication allocation={allocation}/>} />*/}
                     </div>
                 )
             })}
@@ -115,17 +125,82 @@ const PreviousTempAllocation = (props: {allocations: TempAllocation[]}) => {
     )
 }
 
-const TempSeatP = (props: { application: application, resetHandler: () => void }) => {
+const TempSeatP = (props: {application: ApplicationDetailsQuery['applicationDetails']}) => {
+
+    const router = useRouter();
+    const [seatId ,setSeatId] = useState<number>();
+
+    const [blankError, setBlankError] = useState(false);
+    const [reqError, setReqError] = useState(false);
+    const [reqErrorMsg, setReqErrorMsg] = useState('');
 
     const temp_chng = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque eligendi eum inventore " +
         "iste natus neque odio quod repudiandae, similique voluptas! Aliquid dignissimos nisi optio placeat repellat. Assumenda " +
         "commodi ipsam laudantium."
 
-    const allocations: TempAllocation[] = [
-        new TempAllocation(100, 7, new Date()),
-        new TempAllocation(102, 9, new Date()),
-        new TempAllocation(120, 7, new Date()),
-    ]
+
+    const allocations = props.application?.student.tempResidencyHistory;
+
+    const [approveMutation, {}] = useMutation(
+        APPROVE_TEMP_SEAT_APPLICATION
+        , {
+            onError : (error)=>{
+                setReqError(true)
+                setReqErrorMsg(error.message)
+                setBlankError(false);
+            },
+            onCompleted : (data)=>{
+                // console.log(data);
+                router.push('/seatManagement');
+            }
+        }
+    )
+
+    const [rejectMutation, {}] = useMutation(
+        REJECT_APPLICATION
+        , {
+            onError : (error)=>{
+                setReqError(true)
+                setReqErrorMsg(error.message)
+                setBlankError(false);
+            },
+            onCompleted : (data)=>{
+                // console.log(data);
+                router.push('/seatManagement');
+            }
+        }
+    )
+
+    function approve(){
+        if(!seatId){
+            setBlankError(true)
+            return;
+        }
+        setBlankError(false);
+
+        console.log(seatId)
+
+        approveMutation({
+            variables : {
+                applicationId : props.application.applicationId,
+                seatId : seatId,
+                from: props.application?.tempApplication?.from.toString(),
+                days: props.application?.tempApplication?.days || 5
+            }
+        }).then(r => {
+            console.log(r)
+        })
+    }
+
+    function reject(){
+        rejectMutation({
+            variables: {
+                applicationId: props.application.applicationId
+            }
+        }).then(r => {
+            console.log(r)
+        })
+    }
 
     return (
         <div style={{marginBottom: 20}}>
@@ -142,7 +217,8 @@ const TempSeatP = (props: { application: application, resetHandler: () => void }
                         <MyCard content={<ProfileInfo info={props.application.student}/>} title='Profile'/>
                     </div>
                     <div>
-                        <MyCard content={<RoomPreference room={100} days={7}/>} title='Room Allotment' />
+                        <MyCard content={<RoomPreference tmpApp={props.application?.tempApplication}
+                                                         setSeatId={setSeatId}/>} title='Room Allotment' />
                     </div>
                 </div>
             </div>
@@ -151,15 +227,16 @@ const TempSeatP = (props: { application: application, resetHandler: () => void }
                 <MyCard content={<PreviousTempAllocation allocations={allocations}/>} title='Previous Allocations'/>
             </div>
 
-            <div className={styles.submit}>
-                <MyCard content={<Confirmation/>} title=''/>
-            </div>
+            { (props.application.status == "PENDING")  &&
+                <div className={styles.submit}>
+                    {blankError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
+                        Please fill in all the fields</div>}
+                    {reqError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
+                        {reqErrorMsg}</div>}
+                    <MyCard content={<Confirmation rejectHandler={reject} successHandler={approve}/>} title=''/>
+                </div>
+            }
 
-            <div className={styles.submit}>
-                <Button variant="outlined" color="primary" style={{width: 200, height: 40}} onClick={props.resetHandler}>
-                    Go Back
-                </Button>
-            </div>
         </div>
     )
 }
