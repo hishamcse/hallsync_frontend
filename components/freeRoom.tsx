@@ -1,7 +1,7 @@
-import { Input, SelectChangeEvent } from "@mui/material";
+import { Button, Input, SelectChangeEvent } from "@mui/material";
 import MUIDropdown from "./MUIDropdown";
-import { useQuery } from "@apollo/client";
-import { GET_FREE_FLOORS, GET_FREE_ROOMS_IN_FLOOR, GET_FREE_SEATS_IN_ROOM } from "../graphql/operations";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import { GET_FREE_FLOORS, GET_FREE_ROOMS_IN_FLOOR, GET_FREE_SEAT, GET_FREE_SEATS_IN_ROOM } from "../graphql/operations";
 import { CSSProperties, useState } from "react";
 import MUISelectStyled from "./MUIMultiSelectCheckbox";
 
@@ -9,13 +9,19 @@ import MUISelectStyled from "./MUIMultiSelectCheckbox";
 
 export function FreeRoom(props : {
     setSeatId : (v : number | undefined)=>void,
-    containerStyle? : CSSProperties
+    containerStyle? : CSSProperties,
+    autoAssign? : boolean
 }){
 
     let [floor, setFloor] = useState<number | undefined>();
     let [room, setRoom] = useState<number|undefined>();
     let [seat, setSeat] = useState<string|undefined>();
 
+    let [query ,{data }] = useLazyQuery(
+        GET_FREE_SEAT
+    )
+    
+    
 
     let {data : floors, loading, error} = useQuery(
         GET_FREE_FLOORS
@@ -68,6 +74,19 @@ export function FreeRoom(props : {
         setSeat(v);
     }
 
+    function autoAssignOnClick(){
+        query({
+            onCompleted : (data)=>{
+                setFloor(data.freeSeat.room.floor.floorNo);
+                setRoom(data.freeSeat.room.roomNo);
+                setSeat(data.freeSeat.seatLabel)
+                props.setSeatId(data.freeSeat.seatId);
+            },
+            onError : (err)=>{
+            }
+        });
+    }
+
     const width = 130
 
     return (
@@ -106,6 +125,13 @@ export function FreeRoom(props : {
                     width={width}
                     />
                 }          
+            </div>
+            <div>
+                {
+                    props.autoAssign && 
+                    <Button variant="outlined" color='primary' onClick={autoAssignOnClick}>Auto assign</Button>
+
+                }
             </div>
         </div>
     )

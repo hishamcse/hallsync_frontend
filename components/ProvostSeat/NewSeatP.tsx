@@ -12,6 +12,9 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, {Dayjs} from "dayjs";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { ApplicationDetailsQuery } from "../../graphql/__generated__/graphql";
+import { FreeRoom } from "../freeRoom";
+import { GET_FREE_SEAT } from "../../graphql/operations";
+import { useLazyQuery } from "@apollo/client";
 
 const ProfileInfo = (props: {info : ApplicationDetailsQuery['applicationDetails']['student']}) => {
     return (
@@ -44,10 +47,28 @@ const Questionnaire = () => {
     )
 }
 
-const Documents = () => {
+const Documents = (props : {
+    files : ApplicationDetailsQuery['applicationDetails']['attachedFiles']
+}) => {
     return (
-        <div style={{justifyContent: 'left', width: 500}}>
-            <div style={{display: "flex", justifyContent: "space-between", padding: 5}}>
+        <ol style={{justifyContent: 'left', width: 500}}>
+            {
+                props.files  &&
+                props.files.map(f =>{
+                    return (
+                        <li key={f.uploadedFile.uploadedFileId} style={{justifyContent: "space-between", padding: 5}}>
+                            <div style={{
+                                display : 'flex',
+                                justifyContent: "space-between",
+                                alignContent : "center"
+                            }}>
+                                {f.uploadedFile.fileName}
+                            </div>
+                        </li>
+                    )
+                })
+            }
+            {/* <div style={{display: "flex", justifyContent: "space-between", padding: 5}}>
                 1. NID
                 <Button variant="outlined" color='inherit'>Check</Button>
             </div>
@@ -55,18 +76,23 @@ const Documents = () => {
                 2. Electric Bill
                 <Button variant="outlined" color='inherit'>Check</Button>
             </div>
-            <Button variant="outlined" color='inherit'>Check others(if any)</Button>
-        </div>
+            <Button variant="outlined" color='inherit'>Check others(if any)</Button> */}
+        </ol>
     )
 }
 
-const RoomAllotment = () => {
+const RoomAllotment = (props : {
+    setSeatId : (v : number | undefined)=>void
+}) => {
+    
+
     return (
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15, marginTop: 20}}>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                <Input placeholder="Room No" type={'number'}
-                       style={{background: 'black', padding: 2, borderRadius: 5, borderColor: 'white'}}/>
-                <Button variant="outlined" color='primary'>Auto assign</Button>
+            <div style={{ justifyContent: 'space-between'}}>
+                <FreeRoom setSeatId={props.setSeatId} autoAssign />
+                {/* <Input placeholder="Room No" type={'number'}
+                       style={{background: 'black', padding: 2, borderRadius: 5, borderColor: 'white'}}/> */}
+                {/* <Button variant="outlined" color='primary'>Auto assign</Button> */}
             </div>
         </div>
     )
@@ -89,6 +115,9 @@ const ScheduleAppointment = () => {
 }
 
 const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetails']}) => {
+
+    const [seatId ,setSeatId] = useState<number>();
+
     return (
         <div style={{marginBottom: 20}}>
             <Card style={{margin: 30, textAlign: 'center', padding: 10, border: "1px solid white",
@@ -103,10 +132,10 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
                 </div>
                 <div style={{display: 'inline-block', margin: 15}}>
                     <div>
-                        <MyCard content={<Documents/>} title='Documents'/>
+                        <MyCard content={<Documents files={props.application.attachedFiles}/>} title='Documents'/>
                     </div>
                     <div style={{marginTop: 50}}>
-                        <MyCard content={<RoomAllotment />} title='Room Allotment' />
+                        <MyCard content={<RoomAllotment setSeatId={setSeatId} />} title='Room Allotment' />
                     </div>
                     <div style={{marginTop: 50}}>
                         <MyCard content={<ScheduleAppointment />} title='Schedule Appointment' />

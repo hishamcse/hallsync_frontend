@@ -108,27 +108,40 @@ export const GET_APPLICATION = graphql(`
       applicationId
       createdAt
       lastUpdate
-      newApplication {
-        newApplicationId
+      status
+      attachedFiles {
+        uploadedFile {
+          uploadedFileId
+          fileName
+        }
       }
       student {
-        name
-        email
         student9DigitId
-        department {
-          name
-          shortName
-        }
         batch {
           year
         }
-        phone
-        levelTerm{
+        department {
+          shortName
+        }
+        levelTerm {
           label
         }
+        name
+        residencyStatus
+        studentId
+      }
+      newApplication {
+        newApplicationId
+      }
+      seatChangeApplication {
+        seatChangeApplicationId
+      }
+      tempApplication {
+        applicationId
       }
     }
   }
+
 `)
 
 export const GET_INFO = graphql(`
@@ -258,6 +271,21 @@ export const GET_FREE_SEATS_IN_ROOM = graphql(`
   query FreeSeatInRoom($floorNo:Float!, $roomNo: Float!) {
     freeSeatInRoom(floorNo:$floorNo,roomNo: $roomNo) {
       seatId
+      seatLabel
+    }
+  }
+`)
+
+export const GET_FREE_SEAT = graphql(`
+  query FreeSeatQuery {
+    freeSeat {
+      seatId
+      room {
+        roomNo
+        floor {
+          floorNo
+        }
+      }
       seatLabel
     }
   }

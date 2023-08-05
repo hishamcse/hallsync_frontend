@@ -19,6 +19,9 @@ export default function NewSeatAppView(){
         {
             variables : {
                 applicationId : appid 
+            },
+            onCompleted : (d)=>{
+                console.log(d)
             }
         }
     )
