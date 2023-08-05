@@ -169,7 +169,6 @@ export const GET_APPLICATION = graphql(`
           reason
           seatChangeApplicationId
           toSeat {
-            seatLabel
             room {
               floor {
                 floorNo
@@ -178,9 +177,28 @@ export const GET_APPLICATION = graphql(`
               roomNo
             }
           }
+          toSeatId
+          applicationId
+          votes {
+            status
+            reason
+            student {
+              name
+              department {
+                shortName
+              }
+              batch {
+                year
+              }
+              levelTerm {
+                label
+              }
+            }
+          }
         }
       }
    }
+   
 `)
 
 export const GET_INFO = graphql(`
@@ -351,6 +369,18 @@ export const APPROVE_TEMP_SEAT_APPLICATION = graphql(`
               roomLabelLen
             }
           }
+        }
+      }
+    }
+
+`)
+
+export const APPROVE_SEAT_CHANGE_APPLICATION = graphql(`
+    mutation ApproveSeatChangeApplication($seatId: Float!, $seatChangeApplicationId: Float!) {
+      approveSeatChangeApplication(seatId: $seatId, seatChangeApplicationId: $seatChangeApplicationId) {
+        seatId
+        student {
+          name
         }
       }
     }

@@ -4,7 +4,7 @@ import {SelectChangeEvent} from "@mui/material/Select";
 import TempSeat from "./TempSeat";
 import RoomChange from "./RoomChange";
 import {userContext} from "../../pages/_app";
-import {ResidencyStatus, Room} from "../../graphql/__generated__/graphql";
+import {ResidencyStatus} from "../../graphql/__generated__/graphql";
 
 export const types = ['New Seat', 'Temporary Seat', 'Room Change'];
 
@@ -35,7 +35,7 @@ const StudentView = () => {
             setType('New Seat');
             setDropDownType(0);
         }
-    }, [user?.student])
+    }, [])
 
     const handleChange = (event: SelectChangeEvent) => {
         setType(event.target.value as string);
