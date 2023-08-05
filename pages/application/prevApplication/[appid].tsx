@@ -1,6 +1,4 @@
-import NewSeatP from "../../../components/ProvostSeat/NewSeatP";
-import {useContext, useState} from 'react'
-import { ApplicationDetailsQuery } from "../../../graphql/__generated__/graphql";
+import {useContext} from 'react'
 import { useQuery } from "@apollo/client";
 import { GET_APPLICATION } from "../../../graphql/operations";
 import { useRouter } from "next/router";

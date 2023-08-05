@@ -38,7 +38,7 @@ const RoomResidents = (props: {room: number,
     return (
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15, margin: 'auto'}}>
             <div style={{marginBottom: 20}}>
-                <h5>Room No: {props.room.toString()}</h5>
+                <h5>Room No: &nbsp; {props.room.toString()}</h5>
             </div>
             <div>
                 <ResidentTable seatChangeApp={props.seatChangeApp}/>
@@ -130,7 +130,10 @@ const RoomChangeP = (props: {application: ApplicationDetailsQuery['applicationDe
             <div className={styles.newSeat} style={{display: 'flex', justifyContent: 'space-between'}}>
                 <div style={{margin: 25,}}>
                     <div style={{marginBottom: 50}}>
-                        <MyCard content={<ReasonForChange reason={temp_chng || ''}/>} title='Reason for change'/>
+                        <MyCard style={{
+                            display : "block",
+                            flexGrow : "1", paddingLeft: 10
+                        }} content={<ReasonForChange reason={temp_chng || ''}/>} title='Reason for change'/>
                     </div>
                     <div>
                         <MyCard content={<RoomResidents room={num} seatChangeApp={props.application.seatChangeApplication}/>}
@@ -139,10 +142,16 @@ const RoomChangeP = (props: {application: ApplicationDetailsQuery['applicationDe
                 </div>
                 <div style={{margin: 25, marginRight: 25}}>
                     <div style={{marginBottom: 80}}>
-                        <MyCard content={<ProfileInfo info={props.application.student}/>} title='Profile'/>
+                        <MyCard style={{
+                            display : "block",
+                            flexGrow : "1"
+                        }} content={<ProfileInfo info={props.application.student}/>} title='Profile'/>
                     </div>
                     <div>
-                        <MyCard content={<RoomPreference room={num}/>} title='Given Room Preference' />
+                        <MyCard style={{
+                            display : "block",
+                            flexGrow : "1"
+                        }} content={<RoomPreference room={num}/>} title='Given Room Preference' />
                     </div>
                 </div>
             </div>

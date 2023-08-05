@@ -37,7 +37,7 @@ const ReasonForChange = (props : {reason: string}) => {
 }
 
 const RoomPreference = (props : {
-    setSeatId : (v : number | undefined)=>void,
+    setSeatId : (v : number | undefined)=>void, disabled: boolean,
     tmpApp: ApplicationDetailsQuery['applicationDetails']['tempApplication'] }) => {
 
     const floor = props.tmpApp?.prefSeat?.room.floor.floorNo;
@@ -68,7 +68,12 @@ const RoomPreference = (props : {
             </div>
             <div style={{justifyContent: 'left', width: 450, paddingTop: 10, marginTop: 10}}>
                 <div style={{ justifyContent: 'space-between'}}>
-                    <FreeRoom setSeatId={props.setSeatId} autoAssign />
+                    <FreeRoom initVal={props.tmpApp?.prefSeat ? {
+                        floorNo : floor || 0,
+                        roomNo : roomNo || 0,
+                        seatLabel : props.tmpApp?.prefSeat?.seatLabel
+                    } : undefined} disabled = {props.disabled} setSeatId={props.setSeatId} containerStyle={{
+                    }} />
                 </div>
             </div>
         </div>
@@ -99,9 +104,14 @@ const SingleApplication = (props: {allocation:
                     <h6>Room No: {num.toString()}</h6>
                 </div>
             </div>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <span style={{marginLeft : 10}}>From:</span>
+                <span>To:</span>
+                <span></span>
+            </div>
             <div style={{display: 'flex', justifyContent: 'space-between', padding : 10}}>
                 <div style={{
-                    marginRight : 20
+                    marginRight : 10
                 }}>
                     <DateRangeIcon  />
                 </div>
@@ -109,7 +119,13 @@ const SingleApplication = (props: {allocation:
                     display : "flex",
                     alignItems : "center"
                 }}>
-                    {fromDate} &nbsp; To &nbsp; {toDate}
+                    {fromDate}
+                    <div style={{
+                        marginRight : 10,
+                        marginLeft: 30
+                    }}>
+                        <DateRangeIcon  />
+                    </div>{toDate}
                 </div>
             </div>
         </div>
@@ -223,7 +239,7 @@ const TempSeatP = (props: {application: ApplicationDetailsQuery['applicationDeta
                     <MyCard content={<Questionnaire reason={temp_chng}/>} title='Questionnaire'/>
                 </div>
                 <div style={{margin: 25, marginRight: 20}}>
-                    <div style={{marginBottom: 80}}>
+                    <div style={{marginBottom: 60}}>
                         <MyCard style={{
                             display : "block",
                             flexGrow : "1"
@@ -231,6 +247,7 @@ const TempSeatP = (props: {application: ApplicationDetailsQuery['applicationDeta
                     </div>
                     <div>
                         <MyCard content={<RoomPreference tmpApp={props.application?.tempApplication}
+                                disabled={props.application.status == "ACCEPTED" || props.application.status == "REJECTED"}
                                                          setSeatId={setSeatId}/>} title='Room Allotment' />
                     </div>
                 </div>
