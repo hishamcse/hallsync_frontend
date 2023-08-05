@@ -13,6 +13,12 @@ import {useMutation} from "@apollo/client";
 import {APPROVE_TEMP_SEAT_APPLICATION, REJECT_APPLICATION} from "../../graphql/operations";
 import {FreeRoom} from "../freeRoom";
 import Confirmation from "./Confirmation";
+import dayjs, {Dayjs} from "dayjs";
+import {SelectChangeEvent} from "@mui/material/Select";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DatePicker} from "@mui/x-date-pickers";
+import MUIDropdown from "../MUIDropdown";
 
 const Questionnaire = (props: {reason: string}) => {
     return (
@@ -53,19 +59,39 @@ const RoomPreference = (props : {
 
     const entranceDate = new Date(props.tmpApp?.from.toString().split("T")[0]).toLocaleDateString()
 
+    let initDate = null;
+    if(props.tmpApp?.from){
+        initDate = dayjs(props.tmpApp?.from, 'yyyy-mm-dd');
+        // initDate = dayjs("2023-08-03T00:00:00.000Z", 'yyyy-mm-dd');
+        console.log(initDate)
+    }
+    let initDays = 'Days'
+    if(props.tmpApp?.days){
+        initDays = props.tmpApp?.days.toString()
+    }
+
+    const [value, setValue] = useState<Dayjs | null>();
+
+    const [val, setVal] = useState(initDays);
+
+    const handleChange = (event: SelectChangeEvent) => {
+        setVal(event.target.value as string);
+    };
+
+    const items: string[] = ['Days', ...Array.from({ length: 11 },
+        (_, index) => (index + 5).toString())];
+
     return (
         <div style={{justifyContent: 'left', width: 450, paddingTop: 15, margin: 'auto'}}>
-            <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: 20}}>
+            <div style={{display: 'flex', justifyContent: 'space-between', margin: 'auto'}}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker disabled = {true} label="Date of hall entrance" value={dayjs(value)}/>
+                </LocalizationProvider>
                 <div>
-                    Room Preference: {num.toString()}
-                </div>
-                <div>
-                    Hall Entrance: {entranceDate}
-                </div>
-                <div>
-                    Days: {props.tmpApp?.days.toString()}
+                    <MUIDropdown width={120} disable = {true} options={items} val={val} change={handleChange}/>
                 </div>
             </div>
+
             <div style={{justifyContent: 'left', width: 450, paddingTop: 10, marginTop: 10}}>
                 <div style={{ justifyContent: 'space-between'}}>
                     <FreeRoom initVal={props.tmpApp?.prefSeat ? {
