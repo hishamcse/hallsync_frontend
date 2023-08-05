@@ -13,8 +13,9 @@ import dayjs, {Dayjs} from "dayjs";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { ApplicationDetailsQuery } from "../../graphql/__generated__/graphql";
 import { FreeRoom } from "../freeRoom";
-import { GET_FREE_SEAT } from "../../graphql/operations";
-import { useLazyQuery } from "@apollo/client";
+import { APPROVE_NEW_SEAT_APPLICATION, GET_FREE_SEAT } from "../../graphql/operations";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import { useRouter } from "next/router";
 
 const ProfileInfo = (props: {info : ApplicationDetailsQuery['applicationDetails']['student']}) => {
     return (
@@ -115,8 +116,32 @@ const ScheduleAppointment = () => {
 }
 
 const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetails']}) => {
-
+    const router = useRouter();
     const [seatId ,setSeatId] = useState<number>();
+
+    const [query, {error, loading, data}] = useMutation(
+        APPROVE_NEW_SEAT_APPLICATION
+        , {
+            onError : (error)=>{
+
+            },
+            onCompleted : (data)=>{
+                // console.log(data);
+                router.push('/seatManagement');
+            }
+        })
+    function approve(){
+        if(!seatId){
+            return;
+        }
+        query({
+            variables : {
+                newApplicationId : props.application.applicationId,
+                seatId : seatId
+            }
+        })
+    }
+
 
     return (
         <div style={{marginBottom: 20}}>
@@ -143,9 +168,11 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
                 </div>
             </div>
 
-            <div className={styles.submit}>
-                <MyCard content={<Confirmation/>} title=''/>
-            </div>
+            { (props.application.status == "PENDING")  &&
+                <div className={styles.submit}>
+                    <MyCard content={<Confirmation successHandler={approve}/>} title=''/>
+                    </div>
+            }
         </div>
     )
 }

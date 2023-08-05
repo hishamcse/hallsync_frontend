@@ -290,3 +290,11 @@ export const GET_FREE_SEAT = graphql(`
     }
   }
 `)
+
+export const APPROVE_NEW_SEAT_APPLICATION = graphql(`
+
+mutation Mutation($seatId: Float!, $newApplicationId: Float!) {
+  approveNewApplication(seatId: $seatId, newApplicationId: $newApplicationId) {
+    residencyId
+  }
+}`)
