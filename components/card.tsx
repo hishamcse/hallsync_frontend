@@ -21,15 +21,16 @@
 //     )
 // }
 
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import Card from 'react-bootstrap/Card';
 
 function MyCard(props : {
     title : string | React.JSX.Element,
-    content : React.JSX.Element
+    content : React.JSX.Element,
+    style? : CSSProperties
 }) {
   return (
-    <Card style={{ color : "white", backgroundColor : "#202020", display : "inline-block" }}>
+    <Card style={{ color : "white", backgroundColor : "#202020", display : "inline-block", ... props.style }}>
       <Card.Body>
         <Card.Title>{props.title}</Card.Title>
         {/* <Card.Text> */}

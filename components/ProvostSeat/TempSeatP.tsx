@@ -99,9 +99,18 @@ const SingleApplication = (props: {allocation:
                     <h6>Room No: {num.toString()}</h6>
                 </div>
             </div>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                <DateRangeIcon />&nbsp;
-                <i>{fromDate} &nbsp; to &nbsp; {toDate}</i>
+            <div style={{display: 'flex', justifyContent: 'space-between', padding : 10}}>
+                <div style={{
+                    marginRight : 20
+                }}>
+                    <DateRangeIcon  />
+                </div>
+                <div style={{
+                    display : "flex",
+                    alignItems : "center"
+                }}>
+                    {fromDate} &nbsp; To &nbsp; {toDate}
+                </div>
             </div>
         </div>
     )
@@ -148,6 +157,7 @@ const TempSeatP = (props: {application: ApplicationDetailsQuery['applicationDeta
                 setReqError(true)
                 setReqErrorMsg(error.message)
                 setBlankError(false);
+                console.log(error)
             },
             onCompleted : (data)=>{
                 // console.log(data);
@@ -214,7 +224,10 @@ const TempSeatP = (props: {application: ApplicationDetailsQuery['applicationDeta
                 </div>
                 <div style={{margin: 25, marginRight: 20}}>
                     <div style={{marginBottom: 80}}>
-                        <MyCard content={<ProfileInfo info={props.application.student}/>} title='Profile'/>
+                        <MyCard style={{
+                            display : "block",
+                            flexGrow : "1"
+                        }} content={<ProfileInfo info={props.application.student}/>} title='Profile'/>
                     </div>
                     <div>
                         <MyCard content={<RoomPreference tmpApp={props.application?.tempApplication}
@@ -226,13 +239,26 @@ const TempSeatP = (props: {application: ApplicationDetailsQuery['applicationDeta
             <div className={styles.prevAllocations}>
                 <MyCard content={<PreviousTempAllocation allocations={allocations}/>} title='Previous Allocations'/>
             </div>
-
+            <div style={{
+                margin : "20px"
+            }}>
+                
+                    {
+                        blankError && 
+                        <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
+                            Please fill in all the fields
+                        </div>
+                    }
+                    {
+                    reqError && 
+                        <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
+                            {reqErrorMsg}
+                        </div>
+                    }
+            </div>
             { (props.application.status == "PENDING")  &&
                 <div className={styles.submit}>
-                    {blankError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
-                        Please fill in all the fields</div>}
-                    {reqError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
-                        {reqErrorMsg}</div>}
+                    
                     <MyCard content={<Confirmation rejectHandler={reject} successHandler={approve}/>} title=''/>
                 </div>
             }
