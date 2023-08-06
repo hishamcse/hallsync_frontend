@@ -312,7 +312,7 @@ export type Query = {
   freeSeatInRoom: Array<Seat>;
   levelTerms: Array<LevelTerm>;
   myapplications: Array<SeatApplication>;
-  notifications: Array<NotificationWithCount>;
+  notifications: NotificationWithCount;
   pendingVotes: Array<Vote>;
   selfInfo: UserWithToken;
   test: Scalars['String']['output'];
@@ -663,7 +663,7 @@ export type RejectApplicationMutation = { __typename?: 'Mutation', rejectApplica
 export type NotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type NotificationsQuery = { __typename?: 'Query', notifications: Array<{ __typename?: 'NotificationWithCount', unseenCount: number, notifications: Array<{ __typename?: 'Notification', time: any, text: string, seen: boolean, notificationId: number, applicationId?: number | null, voteId?: number | null }> }> };
+export type NotificationsQuery = { __typename?: 'Query', notifications: { __typename?: 'NotificationWithCount', unseenCount: number, notifications: Array<{ __typename?: 'Notification', time: any, text: string, seen: boolean, notificationId: number, applicationId?: number | null, voteId?: number | null }> } };
 
 
 export const DepartmentsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deptCode"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]} as unknown as DocumentNode<DepartmentsQuery, DepartmentsQueryVariables>;
