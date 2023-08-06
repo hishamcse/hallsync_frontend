@@ -55,7 +55,7 @@ type AppPropsWithLayout = AppProps & {
 
 export const userContext = React.createContext<{
   user : LoginMutation['login'] | undefined,
-  setUser : (s : LoginMutation['login'])=>void
+  setUser : (s : LoginMutation['login'] | undefined)=>void
 }>({
   user : undefined,
   setUser : ()=>{}

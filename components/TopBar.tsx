@@ -2,7 +2,10 @@ import Link from "next/link";
 import topBarStyles from "../styles/topbar.module.scss"
 import { NextRouter, useRouter } from "next/router"
 import { checkRouteContains } from "./utilities";
-import { CSSProperties } from "react";
+import { CSSProperties, useContext, useEffect } from "react";
+import { userContext } from "../pages/_app";
+import { useLazyQuery } from "@apollo/client";
+import { GET_NOTIFICATIONS } from "../graphql/operations";
 
 function Tab(
     props :{
@@ -62,6 +65,19 @@ export function Logo(props : {
 
 export function TopBar(){
     const router = useRouter();
+    let {user} = useContext(userContext);
+
+    let [query , {data, loading}] = useLazyQuery(
+        GET_NOTIFICATIONS
+    )
+
+    useEffect(()=>{
+        query({
+            onCompleted : (d)=>console.log(d),
+            onError : (err)=>console.log(err)
+        });
+
+    }, [user?.student]);
 
     return (
         <div  className={topBarStyles.root}>

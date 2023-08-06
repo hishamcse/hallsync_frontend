@@ -11,12 +11,13 @@ import { MyButton } from './button'
 
 export function SideBarIcon(
     props : {
-        src : string
+        src : string,
+        width? : number
     }
 ){
     return (
         <div className={sideBarStyles.icon} >
-            <img src = {props.src} />
+            <img width={props.width} src = {props.src} />
         </div>
     )
 }
@@ -25,11 +26,13 @@ function ListItem(props : {
     text : string,
     imgPath : string,
     active : boolean,
-    href : string
+    href : string,
+    onClick? : ()=>void,
+    width? : number
 }){
      return (
-        <li className={props.active ? sideBarStyles.focus : ''} > 
-            <SideBarIcon src={props.imgPath} />
+        <li className={props.active ? sideBarStyles.focus : ''} onClick={props.onClick} > 
+            <SideBarIcon src={props.imgPath} width={props.width} />
             <Link href={props.href}> 
                 {props.text} 
             </Link> 
@@ -55,13 +58,14 @@ export function NavBar(){
                 },
                 onError : (err)=>{
                     setNotLoggedIn(true);
-                }
+                },
+                fetchPolicy : "no-cache"
             });
         }
         else{
             setNotLoggedIn(true);
         }
-    }, [])
+    }, [user])
     return(
         <div className={sideBarStyles.sidebar}>
             {user && user.authority && <AuthorityNabBar />}
@@ -79,6 +83,16 @@ export function NavBar(){
 
 export function StudentNavBar(){
 
+    let {user, setUser} = useContext(userContext);
+    const router = useRouter();
+
+    function logOutOnClick(){
+        console.log("logged out");
+        localStorage.removeItem("token");
+        setUser(undefined);
+        // router.push('/')
+    }
+
     const routes = {
         app : "application/newApplication",
         mess : 'mess'
@@ -95,7 +109,6 @@ export function StudentNavBar(){
         app : 'application/',
         mess : 'mess'
     }
-    const router = useRouter();
 
     return(
         <ul  >
@@ -105,11 +118,21 @@ export function StudentNavBar(){
             <li> <SideBarIcon src="/info.svg" /> Info</li>
             <li> <SideBarIcon src="/feAngry1.svg" /> Complaints</li>
             <li> <SideBarIcon src="/feAngry2.svg" /> Personal Info</li>
+            <ListItem width={25} href='/' imgPath='/logout.svg' active = {false} text='logout' onClick={logOutOnClick}  />
         </ul>
     )
 }
 
 export function AuthorityNabBar(){
+    let {user, setUser} = useContext(userContext);
+    const router = useRouter();
+
+    function logOutOnClick(){
+        console.log("logged out");
+        localStorage.removeItem("token");
+        setUser(undefined);
+        // router.push('/')
+    }
     const routes = {
         app : "seatManagement",
         mess : 'mess'
@@ -122,7 +145,6 @@ export function AuthorityNabBar(){
         app : 'Seat Management',
         mess : 'Mess Management'
     }
-    const router = useRouter();
 
     return(
         <ul >
@@ -130,6 +152,7 @@ export function AuthorityNabBar(){
             <ListItem active = {checkRouteContains(router,routes.mess)} href={'/' + routes.mess} imgPath={imgPaths.mess} text={texts.mess} />
             <li> <SideBarIcon src="/info.svg" /> Info</li>
             <li> <SideBarIcon src="/feAngry1.svg" /> Complaints</li>
+            <ListItem width={25} href='/' imgPath='/logout.svg' active = {false} text='logout' onClick={logOutOnClick}  />
         </ul>
     )
 }

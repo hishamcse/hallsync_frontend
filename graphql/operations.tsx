@@ -394,3 +394,20 @@ export const REJECT_APPLICATION = graphql(`
     }
   }
 `)
+
+
+export const GET_NOTIFICATIONS = graphql(`
+  query Notifications {
+    notifications {
+      notifications {
+        time
+        text
+        seen
+        notificationId
+        applicationId
+        voteId
+      }
+      unseenCount
+    }
+  }
+`)

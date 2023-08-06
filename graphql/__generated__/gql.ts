@@ -32,6 +32,7 @@ const documents = {
     "\n    mutation ApproveTempSeatApplication($from: String!, $days: Float!, $seatId: Float!, $applicationId: Float!) {\n      approveTempSeatApplication(from: $from, days: $days, seatId: $seatId, applicationId: $applicationId) {\n        days\n        from\n        seat {\n          room {\n            roomNo\n            floor {\n              floorNo\n              roomLabelLen\n            }\n          }\n        }\n      }\n    }\n\n": types.ApproveTempSeatApplicationDocument,
     "\n    mutation ApproveSeatChangeApplication($seatId: Float!, $seatChangeApplicationId: Float!) {\n      approveSeatChangeApplication(seatId: $seatId, seatChangeApplicationId: $seatChangeApplicationId) {\n        seatId\n        student {\n          name\n        }\n      }\n    }\n\n": types.ApproveSeatChangeApplicationDocument,
     "\n  mutation RejectApplication($applicationId: Float!) {\n    rejectApplication(applicationId: $applicationId) {\n      applicationId\n    }\n  }\n": types.RejectApplicationDocument,
+    "\n  query Notifications {\n    notifications {\n      notifications {\n        time\n        text\n        seen\n        notificationId\n        applicationId\n        voteId\n      }\n      unseenCount\n    }\n  }\n": types.NotificationsDocument,
 };
 
 /**
@@ -124,6 +125,10 @@ export function graphql(source: "\n    mutation ApproveSeatChangeApplication($se
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation RejectApplication($applicationId: Float!) {\n    rejectApplication(applicationId: $applicationId) {\n      applicationId\n    }\n  }\n"): (typeof documents)["\n  mutation RejectApplication($applicationId: Float!) {\n    rejectApplication(applicationId: $applicationId) {\n      applicationId\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query Notifications {\n    notifications {\n      notifications {\n        time\n        text\n        seen\n        notificationId\n        applicationId\n        voteId\n      }\n      unseenCount\n    }\n  }\n"): (typeof documents)["\n  query Notifications {\n    notifications {\n      notifications {\n        time\n        text\n        seen\n        notificationId\n        applicationId\n        voteId\n      }\n      unseenCount\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
