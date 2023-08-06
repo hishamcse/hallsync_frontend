@@ -259,12 +259,7 @@ export function ApplicationList(props : {
                 </div>}
                 {props.search}
             </div>
-            <div className={styles.paginationConrainer}>
 
-                {
-                    props.pagintaion
-                }
-            </div>
             {
                 props.loading &&
                 [1, 2, 3, 4, 5, 6, 7].map(v => (
@@ -281,7 +276,12 @@ export function ApplicationList(props : {
                         <Application onClick={props.itemOnClickHandler} application={a} key={a.applicationId}/>
                     </div>))
             }
+            <div className={styles.paginationConrainer}>
 
+                {
+                    props.pagintaion
+                }
+            </div>
 
         </div>
     )
@@ -447,26 +447,6 @@ function Applications() {
             </div>
             }
 
-            {/*{*/}
-            {/*    application && application.newApplication &&*/}
-            {/*    <div  className={"contentRoot"}>*/}
-            {/*        <NewSeatP application={application} resetHandler={resetView}/>*/}
-            {/*    </div>*/}
-            {/*}*/}
-
-            {/*{*/}
-            {/*    application && application.tempApplication &&*/}
-            {/*    <div  className={"contentRoot"}>*/}
-            {/*        <TempSeatP application={application} resetHandler={resetView}/>*/}
-            {/*    </div>*/}
-            {/*}*/}
-
-            {/*{*/}
-            {/*    application && application.newApplication &&*/}
-            {/*    <div  className={"contentRoot"}>*/}
-            {/*       <RoomChangeP application={application} resetHandler={resetView}/>*/}
-            {/*    </div>*/}
-            {/*}*/}
         </div>
     )
 }
