@@ -6,6 +6,7 @@ import MyCard from '../components/card'
 import MyCheckBox from '../components/checkbox'
 import { UploadFile } from '../components/fileUpload'
 import { FreeRoom } from '../components/freeRoom'
+import AlignItemsList from '../components/notification'
 
 const items = ['New Seat', 'Temp Seat','Room Change']
 
@@ -28,7 +29,7 @@ const Test: NextPage = () => {
 function QuestionnaireNewSeat(){
   return (
     <div className='contentRoot'>
-      <FreeRoom setSeatId={()=>{}}/>
+      {/* <FreeRoom setSeatId={()=>{}}/> */}
     </div>
   )
 }

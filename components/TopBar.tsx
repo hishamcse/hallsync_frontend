@@ -2,10 +2,11 @@ import Link from "next/link";
 import topBarStyles from "../styles/topbar.module.scss"
 import { NextRouter, useRouter } from "next/router"
 import { checkRouteContains } from "./utilities";
-import { CSSProperties, useContext, useEffect } from "react";
+import { CSSProperties, MutableRefObject, RefObject, createRef, useContext, useEffect, useRef, useState } from "react";
 import { userContext } from "../pages/_app";
 import { useLazyQuery } from "@apollo/client";
 import { GET_NOTIFICATIONS } from "../graphql/operations";
+import NotificationsList from "./notification";
 
 function Tab(
     props :{
@@ -66,18 +67,20 @@ export function Logo(props : {
 export function TopBar(){
     const router = useRouter();
     let {user} = useContext(userContext);
+    const [showNotification , setShowNotification] = useState<boolean>(false);
+    const divRef = useRef<HTMLDivElement>(null);
 
     let [query , {data, loading}] = useLazyQuery(
         GET_NOTIFICATIONS
     )
 
-    // useEffect(()=>{
-    //     query({
-    //         onCompleted : (d)=>console.log(d),
-    //         onError : (err)=>console.log(err)
-    //     });
+    useEffect(()=>{
+        query({
+            onCompleted : (d)=>console.log(d),
+            onError : (err)=>console.log(err)
+        });
 
-    // }, [user?.student]);
+    }, [user?.student?.studentId]);
 
     return (
         <div  className={topBarStyles.root}>
@@ -90,18 +93,32 @@ export function TopBar(){
                 {/* asdf */}
             </div>
             <div className={topBarStyles.notSection}>
+                <Icon src="/bell.svg" onClick={()=>{
+                    console.log("lkjasdf");
+                    setShowNotification((f)=>!f)
+                }} refForDiv = {divRef} />
                 <Icon src="/avatar.svg" />
-                <Icon src="/bell.svg" />
             </div>
+            {
+                data && showNotification &&
+                <div className={topBarStyles.notificationContainer} style={{
+                    // left : divRef.current?.offsetLeft,
+                    // top :  divRef.current?.offsetHeight
+                }} >
+                    <NotificationsList notifications={data.notifications} />
+                </div>
+            }
         </div>
     )
 }
 
 function Icon(props : {
-    src : string
+    src : string,
+    onClick? : ()=>void,
+    refForDiv? : RefObject<HTMLDivElement>
 }){
     return (
-        <div className={topBarStyles.icon}>
+        <div className={topBarStyles.icon} onClick={props.onClick} ref={props.refForDiv}>
             <div>
                 <img src={props.src}  />
 

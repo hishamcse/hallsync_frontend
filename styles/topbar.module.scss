@@ -116,3 +116,9 @@ $iconHW : 50px;
     align-items: center;
     justify-content: center;
 }
+
+.notificationContainer{
+    position: absolute;
+    top : $topBarHeight;
+    right: 2 * $iconHW;
+}
