@@ -129,6 +129,18 @@ export const GET_APPLICATION = graphql(`
           name
           residencyStatus
           studentId
+          residency {
+            seat {
+              room {
+                roomNo
+                floor {
+                  floorNo
+                  roomLabelLen
+                }
+              }
+              seatLabel
+            }
+          }
           tempResidencyHistory {
             from
             to

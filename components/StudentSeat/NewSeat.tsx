@@ -31,6 +31,7 @@ const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boo
 
 const Documents = (props : {
     onChange : (e : ChangeEvent<HTMLInputElement>) => void,
+    alreadyAdded?: ApplicationDetailsQuery['applicationDetails']['attachedFiles'],
     files : Blob[],
     removeFile  : (f : Blob)=>void,
     disabled? : boolean
@@ -60,6 +61,27 @@ const Documents = (props : {
                     )
                 }
             </ol>
+            {
+                props.disabled &&
+                <ol style={{justifyContent: 'left', width: 500}}>
+                    {
+                        props.alreadyAdded  &&
+                        props.alreadyAdded.map(f =>{
+                            return (
+                                <li key={f.uploadedFile.uploadedFileId} style={{justifyContent: "space-between", padding: 5}}>
+                                    <div style={{
+                                        display : 'flex',
+                                        justifyContent: "space-between",
+                                        alignContent : "center"
+                                    }}>
+                                        {f.uploadedFile.fileName}
+                                    </div>
+                                </li>
+                            )
+                        })
+                    }
+                </ol>
+            }
             {   !props.disabled &&
                 <Button variant="outlined" component="label"  >
                     Upload file
@@ -215,7 +237,9 @@ const NewSeat = (props: {
                         </div>
                     }
                     <div className={styles.doc}>
-                        <MyCard content={<Documents disabled = {docUploadDisabled} removeFile={removeFile} files = {files} onChange={handleFileChange}/>} title='Upload Documents'/>
+                        <MyCard content={<Documents disabled = {docUploadDisabled} removeFile={removeFile}
+                                                    files = {files} onChange={handleFileChange}
+                                                    alreadyAdded={props?.application?.attachedFiles} />} title='Upload Documents'/>
                     </div>
                 </div>
             </div>
