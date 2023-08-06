@@ -65,7 +65,7 @@ export function NavBar(){
         else{
             setNotLoggedIn(true);
         }
-    }, [user])
+    }, [user?.student?.studentId])
     return(
         <div className={sideBarStyles.sidebar}>
             {user && user.authority && <AuthorityNabBar />}

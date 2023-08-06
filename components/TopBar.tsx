@@ -71,13 +71,13 @@ export function TopBar(){
         GET_NOTIFICATIONS
     )
 
-    useEffect(()=>{
-        query({
-            onCompleted : (d)=>console.log(d),
-            onError : (err)=>console.log(err)
-        });
+    // useEffect(()=>{
+    //     query({
+    //         onCompleted : (d)=>console.log(d),
+    //         onError : (err)=>console.log(err)
+    //     });
 
-    }, [user?.student]);
+    // }, [user?.student]);
 
     return (
         <div  className={topBarStyles.root}>

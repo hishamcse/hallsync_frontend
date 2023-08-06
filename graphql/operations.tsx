@@ -169,6 +169,7 @@ export const GET_APPLICATION = graphql(`
           reason
           seatChangeApplicationId
           toSeat {
+            seatLabel
             room {
               floor {
                 floorNo
