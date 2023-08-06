@@ -62,9 +62,19 @@ const RoomAllotment = (props : {
     student?: ApplicationDetailsQuery['applicationDetails']['student']
 }) => {
 
-    const floor = props?.student?.residency?.seat.room.floor.floorNo;
-    const roomNo = props?.student?.residency?.seat.room.roomNo;
-    const seatLabel = props?.student?.residency?.seat.seatLabel;
+    let floor, roomNo, seatLabel;
+    let initVal = undefined;
+    if(props?.student?.residency?.seat){
+        floor = props?.student?.residency?.seat.room.floor.floorNo;
+        roomNo = props?.student?.residency?.seat.room.roomNo;
+        seatLabel = props?.student?.residency?.seat.seatLabel;
+        initVal =  {
+            floorNo : floor,
+            roomNo : roomNo,
+            seatLabel : seatLabel
+        };
+    }
+
 
     return (
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15, marginTop: 20}}>
@@ -75,11 +85,7 @@ const RoomAllotment = (props : {
                 }
                 {
                     props.disabled &&
-                    <FreeRoom initVal={props?.student?.residency?.seat ? {
-                        floorNo : floor || 0,
-                        roomNo : roomNo || 0,
-                        seatLabel : seatLabel || ''
-                    } : undefined} disabled = {props.disabled} setSeatId={props.setSeatId} containerStyle={{
+                    <FreeRoom initVal={initVal} disabled = {props.disabled} setSeatId={props.setSeatId} containerStyle={{
                     }} />
                 }
             </div>
@@ -149,7 +155,7 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
     )
 
     function approve(){
-        if(!seatId){
+        if(!seatId || !props.application?.newApplication?.newApplicationId){
             setBlankError(true);
             return;
         }
@@ -158,7 +164,7 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
 
         approveMutation({
             variables : {
-                newApplicationId : props.application.applicationId,
+                newApplicationId : props.application?.newApplication?.newApplicationId,
                 seatId : seatId
             }
         }).then(r => {
@@ -196,7 +202,7 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
                     <div style={{marginTop: 50}}>
                         <MyCard content={<RoomAllotment setSeatId={setSeatId}
                         disabled={props.application.status == ApplicationStatus.Accepted ||
-                        props.application.status == ApplicationStatus.Rejected}/>} title='Room Allotment' />
+                        props.application.status == ApplicationStatus.Rejected} student={props.application.student} />} title='Room Allotment' />
                     </div>
                     <div style={{marginTop: 50}}>
                         <MyCard content={<ScheduleAppointment />} title='Schedule Appointment' />

@@ -13,7 +13,8 @@ import {useMutation} from "@apollo/client";
 import {POST_NEW_APPLICATION} from "../../graphql/operations";
 import {useRouter} from "next/router";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import { ApplicationDetailsQuery } from "../../graphql/__generated__/graphql";
+import {ApplicationDetailsQuery, ApplicationStatus} from "../../graphql/__generated__/graphql";
+import {FreeRoom} from "../freeRoom";
 
 const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boolean>>[]}) => {
     return (
@@ -25,6 +26,34 @@ const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boo
             <QuestionBox text="Dummy question" checkBox={true} />
             <QuestionBox text="Dummy question" checkBox={false} dropDown={["none", "hello", "hi"]}/>
             <QuestionBox text="Dummy question" checkBox={true} />
+        </div>
+    )
+}
+
+const RoomAlloted = (props : {
+    student?: ApplicationDetailsQuery['applicationDetails']['student']
+}) => {
+
+    let floor, roomNo, seatLabel;
+    let initVal = undefined;
+    if(props?.student?.residency?.seat){
+        floor = props?.student?.residency?.seat.room.floor.floorNo;
+        roomNo = props?.student?.residency?.seat.room.roomNo;
+        seatLabel = props?.student?.residency?.seat.seatLabel;
+        initVal =  {
+            floorNo : floor,
+            roomNo : roomNo,
+            seatLabel : seatLabel
+        };
+    }
+
+
+    return (
+        <div style={{justifyContent: 'left', width: 500, paddingTop: 15, marginTop: 20}}>
+            <div style={{ justifyContent: 'space-between'}}>
+                <FreeRoom initVal={initVal} disabled = {true} setSeatId={()=> {}} containerStyle={{
+                }} />
+            </div>
         </div>
     )
 }
@@ -240,6 +269,13 @@ const NewSeat = (props: {
                         <MyCard content={<Documents disabled = {docUploadDisabled} removeFile={removeFile}
                                                     files = {files} onChange={handleFileChange}
                                                     alreadyAdded={props?.application?.attachedFiles} />} title='Upload Documents'/>
+                        {
+                            (props?.application?.status == ApplicationStatus.Accepted ||
+                                props?.application?.status == ApplicationStatus.Rejected) &&
+                            <div style={{marginTop: 50}}>
+                                <MyCard content={<RoomAlloted student={props?.application.student} />} title='Room Allotment' />
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
