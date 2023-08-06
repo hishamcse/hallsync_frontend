@@ -1,20 +1,20 @@
 import QuestionBox from "../QuestionBox";
 import {Button} from "@mui/material";
 import * as React from "react";
+import {useState} from "react";
 import styles from '../../styles/studentSeat.module.scss';
 import MyCard from "../card";
 import Card from "@mui/material/Card";
 import Confirmation from "./Confirmation";
-import {useState} from "react";
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider'
 import {DateTimePicker} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, {Dayjs} from "dayjs";
-import { ApplicationDetailsQuery } from "../../graphql/__generated__/graphql";
-import { FreeRoom } from "../freeRoom";
-import { APPROVE_NEW_SEAT_APPLICATION, REJECT_APPLICATION } from "../../graphql/operations";
-import { useMutation } from "@apollo/client";
-import { useRouter } from "next/router";
+import {ApplicationDetailsQuery, ApplicationStatus} from "../../graphql/__generated__/graphql";
+import {FreeRoom} from "../freeRoom";
+import {APPROVE_NEW_SEAT_APPLICATION, REJECT_APPLICATION} from "../../graphql/operations";
+import {useMutation} from "@apollo/client";
+import {useRouter} from "next/router";
 import ProfileInfo from "./ProfileInfo";
 
 const Questionnaire = (props: {answers: boolean[]}) => {
@@ -57,13 +57,31 @@ const Documents = (props : {
 }
 
 const RoomAllotment = (props : {
-    setSeatId : (v : number | undefined)=>void
+    setSeatId : (v : number | undefined)=>void,
+    disabled: boolean,
+    student?: ApplicationDetailsQuery['applicationDetails']['student']
 }) => {
+
+    const floor = props?.student?.residency?.seat.room.floor.floorNo;
+    const roomNo = props?.student?.residency?.seat.room.roomNo;
+    const seatLabel = props?.student?.residency?.seat.seatLabel;
 
     return (
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15, marginTop: 20}}>
             <div style={{ justifyContent: 'space-between'}}>
-                <FreeRoom setSeatId={props.setSeatId} autoAssign />
+                {
+                    !props.disabled &&
+                    <FreeRoom setSeatId={props.setSeatId} autoAssign />
+                }
+                {
+                    props.disabled &&
+                    <FreeRoom initVal={props?.student?.residency?.seat ? {
+                        floorNo : floor || 0,
+                        roomNo : roomNo || 0,
+                        seatLabel : seatLabel || ''
+                    } : undefined} disabled = {props.disabled} setSeatId={props.setSeatId} containerStyle={{
+                    }} />
+                }
             </div>
         </div>
     )
@@ -176,7 +194,9 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
                         <MyCard content={<Documents files={props.application.attachedFiles}/>} title='Documents'/>
                     </div>
                     <div style={{marginTop: 50}}>
-                        <MyCard content={<RoomAllotment setSeatId={setSeatId} />} title='Room Allotment' />
+                        <MyCard content={<RoomAllotment setSeatId={setSeatId}
+                        disabled={props.application.status == ApplicationStatus.Accepted ||
+                        props.application.status == ApplicationStatus.Rejected}/>} title='Room Allotment' />
                     </div>
                     <div style={{marginTop: 50}}>
                         <MyCard content={<ScheduleAppointment />} title='Schedule Appointment' />
