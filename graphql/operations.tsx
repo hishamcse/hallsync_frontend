@@ -437,3 +437,17 @@ export const GET_PARTICIPATIONS = graphql(`
     }
   }
 `)
+
+
+export const GET_ABSENTEES = graphql(`
+query Absentees($take: Float!, $from: String!) {
+  absentees(take: $take, from: $from) {
+    _count
+    residency {
+      student {
+        student9DigitId
+      }
+    }
+  }
+}
+`)

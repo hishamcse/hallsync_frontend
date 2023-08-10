@@ -15,6 +15,7 @@ const items = ['New Seat', 'Temp Seat','Room Change']
 
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import ParticipationBarChart from '../components/ParticipationBarChart'
+import { AbsenteesBarChart } from '../components/AbsenteesBarChart'
 
 const data = [
   {
@@ -101,6 +102,7 @@ function QuestionnaireNewSeat(){
     <div className='contentRoot'>
 		{/* <MyBarChart /> */}
 		<ParticipationBarChart />
+		<AbsenteesBarChart />
     </div>
   )
 }

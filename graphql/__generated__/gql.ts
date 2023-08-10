@@ -34,6 +34,7 @@ const documents = {
     "\n  mutation RejectApplication($applicationId: Float!) {\n    rejectApplication(applicationId: $applicationId) {\n      applicationId\n    }\n  }\n": types.RejectApplicationDocument,
     "\n  query Notifications {\n    notifications {\n      notifications {\n        time\n        text\n        seen\n        notificationId\n        applicationId\n        voteId\n      }\n      unseenCount\n    }\n  }\n": types.NotificationsDocument,
     "\n  query Participants($mealTime: String!, $from: String!) {\n    participants(mealTime: $mealTime, from: $from) {\n      _count\n      mealPlan {\n        mealPlanId\n        day\n      }\n    }\n  }\n": types.ParticipantsDocument,
+    "\nquery Absentees($take: Float!, $from: String!) {\n  absentees(take: $take, from: $from) {\n    _count\n    residency {\n      student {\n        student9DigitId\n      }\n    }\n  }\n}\n": types.AbsenteesDocument,
 };
 
 /**
@@ -134,6 +135,10 @@ export function graphql(source: "\n  query Notifications {\n    notifications {\
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query Participants($mealTime: String!, $from: String!) {\n    participants(mealTime: $mealTime, from: $from) {\n      _count\n      mealPlan {\n        mealPlanId\n        day\n      }\n    }\n  }\n"): (typeof documents)["\n  query Participants($mealTime: String!, $from: String!) {\n    participants(mealTime: $mealTime, from: $from) {\n      _count\n      mealPlan {\n        mealPlanId\n        day\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\nquery Absentees($take: Float!, $from: String!) {\n  absentees(take: $take, from: $from) {\n    _count\n    residency {\n      student {\n        student9DigitId\n      }\n    }\n  }\n}\n"): (typeof documents)["\nquery Absentees($take: Float!, $from: String!) {\n  absentees(take: $take, from: $from) {\n    _count\n    residency {\n      student {\n        student9DigitId\n      }\n    }\n  }\n}\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

@@ -9,10 +9,80 @@ import { Dayjs } from "dayjs";
 import MuiDropdown from "./MUIDropdown";
 import { SelectChangeEvent } from "@mui/material";
 
+
+export function BarChartCard(props : {
+    date : Dayjs | null,
+    handleDate : (newValue: Dayjs | null) => void,
+    handleOptionChange : (e : SelectChangeEvent )  => void,
+    options : string[],
+    mealTime : string,
+    barChart : React.JSX.Element,
+    showDropDown: boolean,
+    title : string,
+    titleExtraContent? : React.JSX.Element
+}){
+    
+    return(
+        <div>
+            {
+                <MyCard content={
+                    <div style={{
+                        margin : "30px",
+                        padding : "20px",
+                        textAlign : "center",
+                        backgroundColor : "black",
+                        borderRadius : "10px"
+                    }}>
+                        {props.barChart}
+                    </div>
+                } title={
+                <div style={{
+                    display : "flex",
+                    alignItems : "center",
+                    justifyContent : "space-between"
+                }}>
+                    <h3> {props.title} </h3>
+                    <div style={{
+                        display : "flex",
+                        alignItems : "center"
+                    }}>
+                        <div>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DatePicker sx={{
+                                    width : "160px",
+                                }} value={props.date} 
+                                                onChange={props.handleDate}/>
+                            </LocalizationProvider>
+                                
+                        </div>{
+                            props.showDropDown &&
+                        <div style={{
+                            padding : "10px"
+                        }}>
+                            <MuiDropdown
+                             change={props.handleOptionChange} options={props.options}
+                            val={props.mealTime} width={150} />
+                        </div>}
+                        {
+                            props.titleExtraContent
+                        }
+
+                        
+                    </div>
+                </div>
+            } style={{
+                    display : "block",
+                    margin : "20px"
+                }} />
+            }
+        </div>
+    )
+}
+
 export default function ParticipationBarChart(){
 
-    const [mData, setmData] = useState<any[]>();
-    const [date, setDate] = useState<Dayjs | null>();
+    const [mData, setmData] = useState<any[]>([]);
+    const [date, setDate] = useState<Dayjs | null>(null);
     const [mealTime, setMealTime] = useState("DINNER");
     const options = ['DINNER', "LUNCH"]
     const handleOptionChange = (e : SelectChangeEvent ) =>{
@@ -24,7 +94,7 @@ export default function ParticipationBarChart(){
     }
 
 
-    let {data, loading} = useQuery(
+    let {loading} = useQuery(
         GET_PARTICIPATIONS,
         {
             variables : {
@@ -42,64 +112,17 @@ export default function ParticipationBarChart(){
             }
         }
     )
-    console.log(data)
 
-    return(
-        <div>
-            {
-                mData && 
-                <MyCard content={
-                    <div style={{
-                        margin : "30px",
-                        padding : "20px",
-                        textAlign : "center",
-                        backgroundColor : "black",
-                        borderRadius : "10px"
-                    }}>
-                        <BarChartWhite barDataKey="_count" data={mData}
-                        xAxisDataKey="day" />
-                    </div>
-                } title={
-                <div style={{
-                    display : "flex",
-                    alignItems : "center",
-                    justifyContent : "space-between"
-                }}>
-                    <h3> Participation List </h3>
-                    <div style={{
-                        display : "flex",
-                        alignItems : "center"
-                    }}>
-                        <div>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker sx={{
-                                    width : "160px",
-                                }} value={date} 
-                                                onChange={handleDate}/>
-                            </LocalizationProvider>
-                                
-                        </div>
-                        <div style={{
-                            padding : "10px"
-                        }}>
-                            <MuiDropdown
-                             change={handleOptionChange} options={options}
-                            val={mealTime} width={150} />
-                        </div>
-                        
-                    </div>
-                </div>
-            } style={{
-                    display : "block",
-                    margin : "20px"
-                }} />
-            }
-        </div>
+    return (
+        <BarChartCard barChart={
+            <BarChartWhite barDataKey="_count" data={mData} xAxisDataKey="day" />
+        }  date={date} handleDate={handleDate} handleOptionChange={handleOptionChange}
+        mealTime={mealTime} options={options} showDropDown title="Participations List"  />
     )
 }
 
 
-function BarChartWhite(
+export function BarChartWhite(
     props : {
         data : any[],
         xAxisDataKey : string,
@@ -109,10 +132,14 @@ function BarChartWhite(
 
     return (
         <ResponsiveContainer width="95%" height={300} >
-            <BarChart height={250} data={props.data} >
+            <BarChart  data={props.data} >
             {/* <CartesianGrid strokeDasharray="3 3" stroke='#ffffff' /> */}
-            <XAxis dataKey={props.xAxisDataKey} stroke='#ffffff' />
-            <YAxis stroke='#ffffff' />
+            <XAxis dataKey={props.xAxisDataKey} stroke='#ffffff' padding={{
+                left : 10,
+            }} />
+            <YAxis  stroke='#ffffff' padding={{
+                top : 20
+            }} />
             <Tooltip cursor = {{
                 
             }} contentStyle={{
@@ -126,4 +153,4 @@ function BarChartWhite(
             </BarChart>
         </ResponsiveContainer>
     );
-  }
+}
