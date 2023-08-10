@@ -41,19 +41,19 @@ export default function ApplicationTable(props: {
                             <b><i>Name</i></b> <br/>
                             <b><i>Roll</i></b>
                         </TableCell>
-                        <TableCell align="right" >
+                        <TableCell align="left" >
                             <b><i>Dept</i></b> <br/>
                             <b><i>Date</i></b>
                         </TableCell>
-                        <TableCell align="right" >
+                        <TableCell align="left" >
                             <b><i>Batch</i></b> <br/>
                             <b><i>Application Type</i></b>
                         </TableCell>
-                        <TableCell align="right" >
+                        <TableCell align="left" >
                             <b><i>Level/Term</i></b> <br/>
                             <b><i>Status</i></b>
                         </TableCell>
-                        <TableCell align="right" >
+                        <TableCell align="center" >
                             <b><i>Action</i></b> <br/>
                         </TableCell>
                     </TableRow>
@@ -70,22 +70,22 @@ export default function ApplicationTable(props: {
                                 {row.student.student9DigitId}
                             </TableCell>
 
-                            <TableCell align="right">
+                            <TableCell align="left">
                                 {row.student.department.shortName} <br />
                                 {new Date(row.createdAt).toLocaleDateString()}
                             </TableCell>
 
-                            <TableCell align="right">
+                            <TableCell align="left">
                                 {row.student.batch.year} <br />
                                 {getApplicationType(row)}
                             </TableCell>
 
-                            <TableCell align="right">
+                            <TableCell align="left">
                                 {row.student.levelTerm.label} <br/>
                                 <span className={statusClassMap[row.status]}>{row.status}</span>
                             </TableCell>
 
-                            <TableCell align="right">
+                            <TableCell align="center">
                                 <Button variant='outlined' color='inherit'
                                         onClick={_=>props.onClick(row)}>
                                     View Details
