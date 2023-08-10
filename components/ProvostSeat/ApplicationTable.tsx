@@ -11,6 +11,8 @@ import {ApplicationsQuery} from "../../graphql/__generated__/graphql";
 import styles from "../../styles/seatManagementIndex.module.scss";
 import {Button} from "@mui/material";
 
+const fontSize = 16;
+
 function getApplicationType(application: application) {
     if (application.newApplication)
         return 'new seat';
@@ -37,23 +39,23 @@ export default function ApplicationTable(props: {
                 height: "max-content", overflowY: "scroll"}} aria-label="sticky table">
                 <TableHead>
                     <TableRow>
-                        <TableCell>
+                        <TableCell sx={{ fontSize: fontSize }}>
                             <b><i>Name</i></b> <br/>
                             <b><i>Roll</i></b>
                         </TableCell>
-                        <TableCell align="left" >
+                        <TableCell align="left" sx={{ fontSize: fontSize }}>
                             <b><i>Dept</i></b> <br/>
                             <b><i>Date</i></b>
                         </TableCell>
-                        <TableCell align="left" >
+                        <TableCell align="left" sx={{ fontSize: fontSize }}>
                             <b><i>Batch</i></b> <br/>
                             <b><i>Application Type</i></b>
                         </TableCell>
-                        <TableCell align="left" >
+                        <TableCell align="left" sx={{ fontSize: fontSize }}>
                             <b><i>Level/Term</i></b> <br/>
                             <b><i>Status</i></b>
                         </TableCell>
-                        <TableCell align="center" >
+                        <TableCell align="center" sx={{ fontSize: fontSize }}>
                             <b><i>Action</i></b> <br/>
                         </TableCell>
                     </TableRow>
@@ -65,27 +67,27 @@ export default function ApplicationTable(props: {
                             key={row.student.name + Math.random().toString()}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
-                            <TableCell component='th'>
+                            <TableCell component='th' sx={{ fontSize: fontSize }}>
                                 {row.student.name} <br />
                                 {row.student.student9DigitId}
                             </TableCell>
 
-                            <TableCell align="left">
+                            <TableCell align="left" sx={{ fontSize: fontSize }}>
                                 {row.student.department.shortName} <br />
                                 {new Date(row.createdAt).toLocaleDateString()}
                             </TableCell>
 
-                            <TableCell align="left">
+                            <TableCell align="left" sx={{ fontSize: fontSize }}>
                                 {row.student.batch.year} <br />
-                                {getApplicationType(row)}
+                                {getApplicationType(row)} application
                             </TableCell>
 
-                            <TableCell align="left">
+                            <TableCell align="left" sx={{ fontSize: fontSize }}>
                                 {row.student.levelTerm.label} <br/>
                                 <span className={statusClassMap[row.status]}>{row.status}</span>
                             </TableCell>
 
-                            <TableCell align="center">
+                            <TableCell align="center" sx={{ fontSize: fontSize }}>
                                 <Button variant='outlined' color='inherit'
                                         onClick={_=>props.onClick(row)}>
                                     View Details
