@@ -138,6 +138,12 @@ export type MealPlan = {
   preferences: Array<Preference>;
 };
 
+export type MealPlanWithCount = {
+  __typename?: 'MealPlanWithCount';
+  _count: Scalars['Float']['output'];
+  mealPlan: MealPlan;
+};
+
 export enum MealTime {
   Dinner = 'DINNER',
   Lunch = 'LUNCH'
@@ -163,9 +169,9 @@ export type Mutation = {
 export type MutationAddNewMealItemArgs = {
   cupCount: Scalars['Float']['input'];
   date: Scalars['String']['input'];
+  fileId: Scalars['Float']['input'];
   mealTime: Scalars['String']['input'];
   name: Scalars['String']['input'];
-  photoLocation: Scalars['String']['input'];
   type: Scalars['String']['input'];
 };
 
@@ -300,6 +306,7 @@ export type Preference = {
 
 export type Query = {
   __typename?: 'Query';
+  absentees: Array<ResidencyWithParticipationCount>;
   applicationDetails: SeatApplication;
   applicationStatus: Array<StatusWithDefaultSelect>;
   applicationTypes: Array<Scalars['String']['output']>;
@@ -313,9 +320,17 @@ export type Query = {
   levelTerms: Array<LevelTerm>;
   myapplications: Array<SeatApplication>;
   notifications: NotificationWithCount;
+  participants: Array<MealPlanWithCount>;
   pendingVotes: Array<Vote>;
   selfInfo: UserWithToken;
   test: Scalars['String']['output'];
+};
+
+
+export type QueryAbsenteesArgs = {
+  from: Scalars['String']['input'];
+  mealTime: Scalars['String']['input'];
+  take: Scalars['Float']['input'];
 };
 
 
@@ -342,6 +357,12 @@ export type QueryFreeSeatInRoomArgs = {
   roomNo: Scalars['Float']['input'];
 };
 
+
+export type QueryParticipantsArgs = {
+  from: Scalars['String']['input'];
+  mealTime: Scalars['String']['input'];
+};
+
 export type Residency = {
   __typename?: 'Residency';
   from: Scalars['DateTime']['output'];
@@ -357,6 +378,12 @@ export enum ResidencyStatus {
   Resident = 'RESIDENT',
   TempResident = 'TEMP_RESIDENT'
 }
+
+export type ResidencyWithParticipationCount = {
+  __typename?: 'ResidencyWithParticipationCount';
+  _count: Scalars['Float']['output'];
+  residency: Residency;
+};
 
 export type Revision = {
   __typename?: 'Revision';
@@ -665,6 +692,14 @@ export type NotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type NotificationsQuery = { __typename?: 'Query', notifications: { __typename?: 'NotificationWithCount', unseenCount: number, notifications: Array<{ __typename?: 'Notification', time: any, text: string, seen: boolean, notificationId: number, applicationId?: number | null, voteId?: number | null }> } };
 
+export type ParticipantsQueryVariables = Exact<{
+  mealTime: Scalars['String']['input'];
+  from: Scalars['String']['input'];
+}>;
+
+
+export type ParticipantsQuery = { __typename?: 'Query', participants: Array<{ __typename?: 'MealPlanWithCount', _count: number, mealPlan: { __typename?: 'MealPlan', mealPlanId: number, day: any } }> };
+
 
 export const DepartmentsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deptCode"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]} as unknown as DocumentNode<DepartmentsQuery, DepartmentsQueryVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"loginId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}},{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"loginId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"studentId"}},{"kind":"Field","name":{"kind":"Name","value":"residencyStatus"}},{"kind":"Field","name":{"kind":"Name","value":"residency"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"seat"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomNo"}},{"kind":"Field","name":{"kind":"Name","value":"floor"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"floorNo"}},{"kind":"Field","name":{"kind":"Name","value":"roomLabelLen"}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"authority"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorityId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
@@ -686,3 +721,4 @@ export const ApproveTempSeatApplicationDocument = {"kind":"Document","definition
 export const ApproveSeatChangeApplicationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ApproveSeatChangeApplication"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"seatId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"seatChangeApplicationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"approveSeatChangeApplication"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"seatId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"seatId"}}},{"kind":"Argument","name":{"kind":"Name","value":"seatChangeApplicationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"seatChangeApplicationId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"seatId"}},{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<ApproveSeatChangeApplicationMutation, ApproveSeatChangeApplicationMutationVariables>;
 export const RejectApplicationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RejectApplication"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"applicationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"rejectApplication"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"applicationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"applicationId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applicationId"}}]}}]}}]} as unknown as DocumentNode<RejectApplicationMutation, RejectApplicationMutationVariables>;
 export const NotificationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Notifications"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"notifications"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"notifications"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"seen"}},{"kind":"Field","name":{"kind":"Name","value":"notificationId"}},{"kind":"Field","name":{"kind":"Name","value":"applicationId"}},{"kind":"Field","name":{"kind":"Name","value":"voteId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"unseenCount"}}]}}]}}]} as unknown as DocumentNode<NotificationsQuery, NotificationsQueryVariables>;
+export const ParticipantsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Participants"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"mealTime"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"from"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"participants"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"mealTime"},"value":{"kind":"Variable","name":{"kind":"Name","value":"mealTime"}}},{"kind":"Argument","name":{"kind":"Name","value":"from"},"value":{"kind":"Variable","name":{"kind":"Name","value":"from"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_count"}},{"kind":"Field","name":{"kind":"Name","value":"mealPlan"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mealPlanId"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}}]}}]}}]} as unknown as DocumentNode<ParticipantsQuery, ParticipantsQueryVariables>;

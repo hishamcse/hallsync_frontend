@@ -424,3 +424,16 @@ export const GET_NOTIFICATIONS = graphql(`
     }
   }
 `)
+
+
+export const GET_PARTICIPATIONS = graphql(`
+  query Participants($mealTime: String!, $from: String!) {
+    participants(mealTime: $mealTime, from: $from) {
+      _count
+      mealPlan {
+        mealPlanId
+        day
+      }
+    }
+  }
+`)

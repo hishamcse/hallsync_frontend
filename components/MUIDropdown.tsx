@@ -9,7 +9,7 @@ const MuiDropdown = (props: {
     options: string[],
     val: string,
     change: (event: SelectChangeEvent) => void,
-    disable? : boolean
+    disable? : boolean,
 }) => {
 
     return (

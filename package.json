@@ -25,6 +25,7 @@
     "react": "18.2.0",
     "react-bootstrap": "^2.8.0",
     "react-dom": "18.2.0",
+    "recharts": "^2.7.3",
     "sass": "^1.63.6"
   },
   "devDependencies": {
