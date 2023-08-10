@@ -1,5 +1,5 @@
 import { useLazyQuery, useQuery } from "@apollo/client";
-import { APPLICATIONS, FILTERS_DATA, SORT_DATA } from "../../graphql/operations";
+import { APPLICATIONS, FILTERS_DATA } from "../../graphql/operations";
 import MyCard from "../../components/card";
 import MyDropDown from "../../components/dropdown";
 import {useEffect, useState} from "react";
@@ -12,10 +12,9 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import Skeleton from "@mui/material/Skeleton";
 import MUISelectStyled from "../../components/MUIMultiSelectCheckbox";
-import NewSeatP from "../../components/ProvostSeat/NewSeatP";
-import TempSeatP from "../../components/ProvostSeat/TempSeatP";
-import RoomChangeP from "../../components/ProvostSeat/RoomChangeP";
 import { useRouter } from "next/router";
+import {Button} from "@mui/material";
+import ApplicationTable from "../../components/ProvostSeat/ApplicationTable";
 
 function Filters(
     props : {
@@ -117,7 +116,7 @@ function Filters(
                     selectedVal={lt ?? 'LevelTerm'} /> */}
             </div>
             <div className={styles.filterButtonContainer}>
-                <MyButton onClick={resetOnClick} text="Apply" type="submit"  />
+                {/*<MyButton onClick={resetOnClick} text="Apply" type="submit"  />*/}
                 <MyButton onClick={resetOnClick} text="Clear" type="cancel"  />
             </div>
             
@@ -155,31 +154,31 @@ export function Application(props: {
         'REJECTED': styles.rejected,
     }
     return (
-        <div className={styles.applicationRoot} onClick={(e)=>{
-            props.onClick(props.application)
-        }}>
-            <div className={styles.applicationRow}>
-                <div>  {student.name} </div>
-                <div> Department: {student.department.shortName} </div>
-                <div> Batch: {student.batch.year} </div>
-                <div> L/T:  {student.levelTerm.label} </div>
+            <div className={styles.applicationRoot} onClick={(e) => {
+                props.onClick(props.application)
+            }}>
+                <div className={styles.applicationRow}>
+                    <div>  {student.name} </div>
+                    <div> Department: {student.department.shortName} </div>
+                    <div> Batch: {student.batch.year} </div>
+                    <div> L/T: {student.levelTerm.label} </div>
+                </div>
+                <div className={styles.applicationRow}>
+                    <div>
+                        {student.student9DigitId}
+                    </div>
+                    <div>
+                        Date : {new Date(props.application.createdAt).toLocaleDateString()}
+                    </div>
+                    <div>
+                        {getApplicaitonType(props.application)} application
+                    </div>
+                    <div>
+                        status : <span
+                        className={statusClassMap[props.application.status]}>{props.application.status}</span>
+                    </div>
+                </div>
             </div>
-            <div className={styles.applicationRow}>
-                <div>
-                    {student.student9DigitId}
-                </div>
-
-                <div>
-                    Date : {new Date(props.application.createdAt).toLocaleDateString()}
-                </div>
-                <div>
-                    {getApplicaitonType(props.application)} application
-                </div>
-                <div >
-                    status : <span className={statusClassMap[props.application.status]}>{props.application.status}</span>
-                </div>
-            </div>
-        </div>
     )
 }
 
@@ -212,7 +211,7 @@ function SortBy(
             </div>
 
             <div className={styles.filterButtonContainer}>
-                <MyButton onClick={applyOnClick} text="Apply" type="submit"  />
+                {/*<MyButton onClick={applyOnClick} text="Apply" type="submit"  />*/}
                 <MyButton onClick={resetOnClick} text="Clear" type="cancel"  />
             </div>
         </div>
@@ -269,13 +268,21 @@ export function ApplicationList(props : {
                 ))
             }
 
+            {/*{*/}
+            {/*    props.applications &&*/}
+            {/*    props.applications.map(a => (*/}
+            {/*    <div key={a.applicationId} onClick={(e) => props.itemOnClickHandler(a)}>*/}
+            {/*        <Application onClick={props.itemOnClickHandler} application={a} key={a.applicationId}/>*/}
+            {/*    </div>))*/}
+            {/*}*/}
+
             {
                 props.applications &&
-                props.applications.map(a => (
-                    <div key={a.applicationId} onClick={(e) => props.itemOnClickHandler(a)}>
-                        <Application onClick={props.itemOnClickHandler} application={a} key={a.applicationId}/>
-                    </div>))
+                <div style={{margin: 15}}>
+                    <ApplicationTable applications={props.applications} onClick={props.itemOnClickHandler} />
+                </div>
             }
+
             <div className={styles.paginationConrainer}>
 
                 {
