@@ -9,6 +9,8 @@ import { Dayjs } from "dayjs";
 import MuiDropdown from "./MUIDropdown";
 import { SelectChangeEvent } from "@mui/material";
 import { getDayAndMonthString } from "./utilities";
+import { MyDatePicker } from "./DatePicker";
+import { MealTimeDropDown } from "./MealTimeDropDown";
 
 
 export function BarChartCard(props : {
@@ -44,12 +46,7 @@ export function BarChartCard(props : {
                         alignItems : "center"
                     }}>
                         <div>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker sx={{
-                                    width : "160px",
-                                }} value={props.date} 
-                                                onChange={props.handleDate}/>
-                            </LocalizationProvider>
+                            <MyDatePicker date={props.date} handleDate={props.handleDate} />
                                 
                         </div>
                         {
@@ -108,9 +105,7 @@ export default function ParticipationBarChart(){
             <div style={{
                 padding : "10px"
             }}>
-                <MuiDropdown
-                 change={handleOptionChange} options={options}
-                val={mealTime} width={150} />
+                <MealTimeDropDown val={mealTime} setVal={setMealTime} />
             </div>
         }
         />

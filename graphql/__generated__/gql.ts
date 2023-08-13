@@ -36,6 +36,7 @@ const documents = {
     "\n  query Participants($mealTime: String!, $from: String!) {\n    participants(mealTime: $mealTime, from: $from) {\n      _count\n      mealPlan {\n        mealPlanId\n        day\n      }\n    }\n  }\n": types.ParticipantsDocument,
     "\nquery Absentees($take: Float!, $from: String!) {\n  absentees(take: $take, from: $from) {\n    _count\n    residency {\n      student {\n        student9DigitId\n      }\n    }\n  }\n}\n": types.AbsenteesDocument,
     "\nquery ExampleQuery($date: String!) {\n  ratings(date: $date) {\n    avg\n    type\n    feedback {\n      feedbackId\n      startMealPlan {\n        day\n      }\n      endMealPlan {\n        day\n      }\n    }\n  }\n}\n": types.ExampleQueryDocument,
+    "\n  query OptOutQuery($mealTime: String!, $date: String!) {\n    optedOutStats(mealTime: $mealTime, date: $date) {\n      optedOut\n      total\n    }\n  }\n": types.OptOutQueryDocument,
 };
 
 /**
@@ -144,6 +145,10 @@ export function graphql(source: "\nquery Absentees($take: Float!, $from: String!
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\nquery ExampleQuery($date: String!) {\n  ratings(date: $date) {\n    avg\n    type\n    feedback {\n      feedbackId\n      startMealPlan {\n        day\n      }\n      endMealPlan {\n        day\n      }\n    }\n  }\n}\n"): (typeof documents)["\nquery ExampleQuery($date: String!) {\n  ratings(date: $date) {\n    avg\n    type\n    feedback {\n      feedbackId\n      startMealPlan {\n        day\n      }\n      endMealPlan {\n        day\n      }\n    }\n  }\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query OptOutQuery($mealTime: String!, $date: String!) {\n    optedOutStats(mealTime: $mealTime, date: $date) {\n      optedOut\n      total\n    }\n  }\n"): (typeof documents)["\n  query OptOutQuery($mealTime: String!, $date: String!) {\n    optedOutStats(mealTime: $mealTime, date: $date) {\n      optedOut\n      total\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

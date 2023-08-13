@@ -469,3 +469,13 @@ query ExampleQuery($date: String!) {
   }
 }
 `)
+
+
+export const GET_OPT_OUTS = graphql(`
+  query OptOutQuery($mealTime: String!, $date: String!) {
+    optedOutStats(mealTime: $mealTime, date: $date) {
+      optedOut
+      total
+    }
+  }
+`)
