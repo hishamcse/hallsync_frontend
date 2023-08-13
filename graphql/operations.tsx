@@ -451,3 +451,21 @@ query Absentees($take: Float!, $from: String!) {
   }
 }
 `)
+
+export const GET_RATINGS = graphql(`
+query ExampleQuery($date: String!) {
+  ratings(date: $date) {
+    avg
+    type
+    feedback {
+      feedbackId
+      startMealPlan {
+        day
+      }
+      endMealPlan {
+        day
+      }
+    }
+  }
+}
+`)

@@ -8,6 +8,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Dayjs } from "dayjs";
 import MuiDropdown from "./MUIDropdown";
 import { SelectChangeEvent } from "@mui/material";
+import { getDayAndMonthString } from "./utilities";
 
 
 export function BarChartCard(props : {
@@ -104,10 +105,7 @@ export default function ParticipationBarChart(){
             onCompleted : (data)=>{
                 setmData(data.participants.map(d =>({
                     ... d,
-                    day : new Date(d.mealPlan.day).toLocaleString('default',{
-                        day : 'numeric',
-                        month : 'short'
-                    })
+                    day : getDayAndMonthString(d.mealPlan.day)
                 })))
             }
         }
@@ -115,7 +113,7 @@ export default function ParticipationBarChart(){
 
     return (
         <BarChartCard barChart={
-            <BarChartWhite barDataKey="_count" data={mData} xAxisDataKey="day" />
+            <BarChartWhite barDataKey={["_count"]} data={mData} xAxisDataKey="day" />
         }  date={date} handleDate={handleDate} handleOptionChange={handleOptionChange}
         mealTime={mealTime} options={options} showDropDown title="Participations List"  />
     )
@@ -126,7 +124,8 @@ export function BarChartWhite(
     props : {
         data : any[],
         xAxisDataKey : string,
-        barDataKey : string
+        barDataKey : string[],
+        colors? : string[]
     }
 ) {
 
@@ -145,11 +144,15 @@ export function BarChartWhite(
             }} contentStyle={{
                 backgroundColor : "black"
             }} />
-            {/* <Legend /> */}
-            <Bar label = {{
-                fill : "#ffffff",
-                position : "top"
-            }}  dataKey={props.barDataKey} fill="#8884d8" />
+            { props.barDataKey.length > 1  &&
+                <Legend />}
+            {
+                props.barDataKey.map((bd, i) =>(
+                    <Bar key={bd} label = {{
+                        position : "top"
+                    }}  dataKey={bd} fill= { (props.colors && props.colors[i]) ? props.colors[i] : "#8884d8"} />
+                ))
+            }
             </BarChart>
         </ResponsiveContainer>
     );

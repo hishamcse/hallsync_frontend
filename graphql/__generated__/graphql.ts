@@ -18,6 +18,18 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type Announcement = {
+  __typename?: 'Announcement';
+  announcementId: Scalars['Float']['output'];
+  authority?: Maybe<Authority>;
+  authorityId?: Maybe<Scalars['Float']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  details: Scalars['String']['output'];
+  messManager?: Maybe<MessManager>;
+  messManagerId?: Maybe<Scalars['Float']['output']>;
+  title: Scalars['String']['output'];
+};
+
 export enum ApplicationStatus {
   Accepted = 'ACCEPTED',
   Pending = 'PENDING',
@@ -35,6 +47,7 @@ export type AttachedFile = {
 
 export type Authority = {
   __typename?: 'Authority';
+  announcements?: Maybe<Array<Announcement>>;
   authorityId: Scalars['Float']['output'];
   email: Scalars['String']['output'];
   name: Scalars['String']['output'];
@@ -74,6 +87,25 @@ export type Department = {
   students: Array<Student>;
 };
 
+export type Feedback = {
+  __typename?: 'Feedback';
+  endMealPlan: MealPlan;
+  endMealPlanId: Scalars['Float']['output'];
+  feedbackId: Scalars['Float']['output'];
+  messManager: MessManager;
+  messManagerId: Scalars['Float']['output'];
+  startDate: Scalars['DateTime']['output'];
+  startMealPlan: MealPlan;
+  startMealPlanId: Scalars['Float']['output'];
+};
+
+export type FeedbackWithRating = {
+  __typename?: 'FeedbackWithRating';
+  avg: Scalars['Float']['output'];
+  feedback: Feedback;
+  type: RatingType;
+};
+
 export type FilterInput = {
   batch: Array<Scalars['String']['input']>;
   dept: Array<Scalars['String']['input']>;
@@ -100,8 +132,8 @@ export type Item = {
   itemId: Scalars['Float']['output'];
   meals: Array<Meal>;
   name: Scalars['String']['output'];
-  photo: Photo;
-  photoId: Scalars['Float']['output'];
+  photo?: Maybe<Photo>;
+  photoId?: Maybe<Scalars['Float']['output']>;
   type: ItemType;
 };
 
@@ -135,7 +167,7 @@ export type MealPlan = {
   mealPlanId: Scalars['Float']['output'];
   mealTime: MealTime;
   optedOut: Array<Student>;
-  preferences: Array<Preference>;
+  preferences?: Maybe<Array<Preference>>;
 };
 
 export type MealPlanWithCount = {
@@ -144,20 +176,40 @@ export type MealPlanWithCount = {
   mealPlan: MealPlan;
 };
 
+export type MealPreferenceStats = {
+  __typename?: 'MealPreferenceStats';
+  count: Scalars['Float']['output'];
+  item: Item;
+  order: Scalars['Float']['output'];
+};
+
 export enum MealTime {
   Dinner = 'DINNER',
   Lunch = 'LUNCH'
 }
 
+export type MessManager = {
+  __typename?: 'MessManager';
+  announcements?: Maybe<Array<Announcement>>;
+  from: Scalars['DateTime']['output'];
+  messManagerId: Scalars['Float']['output'];
+  student: Student;
+  studentStudentId: Scalars['Float']['output'];
+  to: Scalars['DateTime']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  addAnnouncement: Announcement;
   addNewMealItem: CupCount;
   addOldMealItem: CupCount;
+  addPreferences: Array<Preference>;
   approveNewApplication: Residency;
   approveSeatChangeApplication: Residency;
   approveTempSeatApplication: TempResidency;
   login: UserWithToken;
   newSeatApplication: NewApplication;
+  optOut: OptedOut;
   rejectApplication: SeatApplication;
   reviseApplication: Revision;
   seatChangeApplication: SeatChangeApplication;
@@ -166,12 +218,18 @@ export type Mutation = {
 };
 
 
+export type MutationAddAnnouncementArgs = {
+  details: Scalars['String']['input'];
+  title: Scalars['String']['input'];
+};
+
+
 export type MutationAddNewMealItemArgs = {
   cupCount: Scalars['Float']['input'];
   date: Scalars['String']['input'];
-  fileId: Scalars['Float']['input'];
   mealTime: Scalars['String']['input'];
   name: Scalars['String']['input'];
+  photoId: Scalars['Float']['input'];
   type: Scalars['String']['input'];
 };
 
@@ -179,9 +237,14 @@ export type MutationAddNewMealItemArgs = {
 export type MutationAddOldMealItemArgs = {
   cupCount: Scalars['Float']['input'];
   date: Scalars['String']['input'];
+  itemId: Scalars['Float']['input'];
   mealTime: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-  type: Scalars['String']['input'];
+};
+
+
+export type MutationAddPreferencesArgs = {
+  mealPlanId: Scalars['Float']['input'];
+  preferences: PreferenceInput;
 };
 
 
@@ -215,6 +278,11 @@ export type MutationNewSeatApplicationArgs = {
   attachedFileIds: IntArray;
   q1: Scalars['Boolean']['input'];
   q2: Scalars['Boolean']['input'];
+};
+
+
+export type MutationOptOutArgs = {
+  mealPlanId: Scalars['Float']['input'];
 };
 
 
@@ -287,10 +355,26 @@ export type NotificationWithCount = {
   unseenCount: Scalars['Float']['output'];
 };
 
+export type OptedOut = {
+  __typename?: 'OptedOut';
+  mealPlan: MealPlan;
+  mealPlanId: Scalars['Float']['output'];
+  residency: Residency;
+  residencyId: Scalars['Float']['output'];
+  time: Scalars['DateTime']['output'];
+};
+
+export type OptedOutCount = {
+  __typename?: 'OptedOutCount';
+  optedOut: Scalars['Float']['output'];
+  total: Scalars['Float']['output'];
+};
+
 export type Photo = {
   __typename?: 'Photo';
-  filePath: Scalars['String']['output'];
+  file: UploadedFile;
   photoId: Scalars['Float']['output'];
+  uploadedFileId: Scalars['Float']['output'];
 };
 
 export type Preference = {
@@ -302,6 +386,10 @@ export type Preference = {
   order: Scalars['Float']['output'];
   student: Student;
   studentId: Scalars['Float']['output'];
+};
+
+export type PreferenceInput = {
+  preferences: Array<SinglePreferenceInput>;
 };
 
 export type Query = {
@@ -317,11 +405,19 @@ export type Query = {
   freeRoomInFloor: Array<Room>;
   freeSeat: Seat;
   freeSeatInRoom: Array<Seat>;
+  getAnnouncement: Announcement;
+  getAnnouncements: Array<Announcement>;
+  getMealPlan: MealPlan;
+  getMealPlans: Array<MealPlan>;
+  getOldItems: Array<Item>;
   levelTerms: Array<LevelTerm>;
+  mealPreferenceStats: Array<MealPreferenceStats>;
   myapplications: Array<SeatApplication>;
   notifications: NotificationWithCount;
+  optedOutStats: OptedOutCount;
   participants: Array<MealPlanWithCount>;
   pendingVotes: Array<Vote>;
+  ratings: Array<FeedbackWithRating>;
   selfInfo: UserWithToken;
   test: Scalars['String']['output'];
 };
@@ -357,10 +453,50 @@ export type QueryFreeSeatInRoomArgs = {
 };
 
 
+export type QueryGetAnnouncementArgs = {
+  announcementId: Scalars['Float']['input'];
+};
+
+
+export type QueryGetMealPlanArgs = {
+  date: Scalars['String']['input'];
+  mealTime: Scalars['String']['input'];
+};
+
+
+export type QueryGetMealPlansArgs = {
+  from: Scalars['String']['input'];
+  to: Scalars['String']['input'];
+};
+
+
+export type QueryMealPreferenceStatsArgs = {
+  date: Scalars['String']['input'];
+  mealTime: Scalars['String']['input'];
+};
+
+
+export type QueryOptedOutStatsArgs = {
+  date: Scalars['String']['input'];
+  mealTime: Scalars['String']['input'];
+};
+
+
 export type QueryParticipantsArgs = {
   from: Scalars['String']['input'];
   mealTime: Scalars['String']['input'];
 };
+
+
+export type QueryRatingsArgs = {
+  date: Scalars['String']['input'];
+};
+
+export enum RatingType {
+  Management = 'MANAGEMENT',
+  Quality = 'QUALITY',
+  Quantity = 'QUANTITY'
+}
 
 export type Residency = {
   __typename?: 'Residency';
@@ -446,6 +582,11 @@ export type SeatChangeApplication = {
   votes: Array<Vote>;
 };
 
+export type SinglePreferenceInput = {
+  itemId: Scalars['Float']['input'];
+  order: Scalars['Float']['input'];
+};
+
 export type SortInput = {
   order?: InputMaybe<Scalars['String']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
@@ -527,6 +668,7 @@ export type UploadedFile = {
 export type UserWithToken = {
   __typename?: 'UserWithToken';
   authority?: Maybe<Authority>;
+  messManager?: Maybe<MessManager>;
   student?: Maybe<Student>;
   token: Scalars['String']['output'];
 };
@@ -707,6 +849,13 @@ export type AbsenteesQueryVariables = Exact<{
 
 export type AbsenteesQuery = { __typename?: 'Query', absentees: Array<{ __typename?: 'ResidencyWithParticipationCount', _count: number, residency: { __typename?: 'Residency', student: { __typename?: 'Student', student9DigitId: string } } }> };
 
+export type ExampleQueryQueryVariables = Exact<{
+  date: Scalars['String']['input'];
+}>;
+
+
+export type ExampleQueryQuery = { __typename?: 'Query', ratings: Array<{ __typename?: 'FeedbackWithRating', avg: number, type: RatingType, feedback: { __typename?: 'Feedback', feedbackId: number, startMealPlan: { __typename?: 'MealPlan', day: any }, endMealPlan: { __typename?: 'MealPlan', day: any } } }> };
+
 
 export const DepartmentsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deptCode"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]} as unknown as DocumentNode<DepartmentsQuery, DepartmentsQueryVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"loginId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}},{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"loginId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"studentId"}},{"kind":"Field","name":{"kind":"Name","value":"residencyStatus"}},{"kind":"Field","name":{"kind":"Name","value":"residency"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"seat"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomNo"}},{"kind":"Field","name":{"kind":"Name","value":"floor"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"floorNo"}},{"kind":"Field","name":{"kind":"Name","value":"roomLabelLen"}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"authority"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorityId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
@@ -730,3 +879,4 @@ export const RejectApplicationDocument = {"kind":"Document","definitions":[{"kin
 export const NotificationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Notifications"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"notifications"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"notifications"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"seen"}},{"kind":"Field","name":{"kind":"Name","value":"notificationId"}},{"kind":"Field","name":{"kind":"Name","value":"applicationId"}},{"kind":"Field","name":{"kind":"Name","value":"voteId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"unseenCount"}}]}}]}}]} as unknown as DocumentNode<NotificationsQuery, NotificationsQueryVariables>;
 export const ParticipantsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Participants"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"mealTime"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"from"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"participants"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"mealTime"},"value":{"kind":"Variable","name":{"kind":"Name","value":"mealTime"}}},{"kind":"Argument","name":{"kind":"Name","value":"from"},"value":{"kind":"Variable","name":{"kind":"Name","value":"from"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_count"}},{"kind":"Field","name":{"kind":"Name","value":"mealPlan"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mealPlanId"}},{"kind":"Field","name":{"kind":"Name","value":"day"}}]}}]}}]}}]} as unknown as DocumentNode<ParticipantsQuery, ParticipantsQueryVariables>;
 export const AbsenteesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Absentees"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"take"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"from"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"absentees"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"take"},"value":{"kind":"Variable","name":{"kind":"Name","value":"take"}}},{"kind":"Argument","name":{"kind":"Name","value":"from"},"value":{"kind":"Variable","name":{"kind":"Name","value":"from"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_count"}},{"kind":"Field","name":{"kind":"Name","value":"residency"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"student9DigitId"}}]}}]}}]}}]}}]} as unknown as DocumentNode<AbsenteesQuery, AbsenteesQueryVariables>;
+export const ExampleQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ExampleQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"date"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"ratings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"date"},"value":{"kind":"Variable","name":{"kind":"Name","value":"date"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"avg"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"feedback"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"feedbackId"}},{"kind":"Field","name":{"kind":"Name","value":"startMealPlan"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"endMealPlan"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"day"}}]}}]}}]}}]}}]} as unknown as DocumentNode<ExampleQueryQuery, ExampleQueryQueryVariables>;

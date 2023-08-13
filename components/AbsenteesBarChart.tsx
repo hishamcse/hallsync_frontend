@@ -40,7 +40,7 @@ export function AbsenteesBarChart(){
 
     return (
         <BarChartCard barChart={
-            <BarChartWhite barDataKey="absent" data={mData} xAxisDataKey="id" />
+            <BarChartWhite barDataKey={["absent"]} data={mData} xAxisDataKey="id" />
         }  date={date} handleDate={handleDate} handleOptionChange={handleOptionChange}
         mealTime={mealTime} options={options} showDropDown = {false} 
         title="Absentees List" titleExtraContent={
