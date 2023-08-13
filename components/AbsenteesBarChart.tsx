@@ -6,13 +6,13 @@ import { SelectChangeEvent, TextField } from "@mui/material";
 import { BarChartCard, BarChartWhite } from "./ParticipationBarChart";
 
 
-export function AbsenteesBarChart(){
+export function AbsenteesBarChart() {
 
     const [mData, setmData] = useState<any[]>([]);
     const [date, setDate] = useState<Dayjs | null>(null);
     const [mealTime, setMealTime] = useState("DINNER");
     const options = ['DINNER', "LUNCH"]
-    const handleOptionChange = (e : SelectChangeEvent ) =>{
+    const handleOptionChange = (e: SelectChangeEvent) => {
         setMealTime(e.target.value);
     }
     const [top, setTop] = useState(10);
@@ -22,17 +22,17 @@ export function AbsenteesBarChart(){
     }
 
 
-    let {loading} = useQuery(
+    let { loading } = useQuery(
         GET_ABSENTEES,
         {
-            variables : {
-                from : date == undefined ? new Date().toString() : date.toString(),
-                take : top
+            variables: {
+                from: date == undefined ? new Date().toString() : date.toString(),
+                take: top
             },
-            onCompleted : (data)=>{
-                setmData(data.absentees.map(d =>({
-                    absent : d._count,
-                    id : d.residency.student.student9DigitId.substring(2)
+            onCompleted: (data) => {
+                setmData(data.absentees.map(d => ({
+                    absent: d._count,
+                    id: d.residency.student.student9DigitId.substring(2)
                 })))
             }
         }
@@ -41,25 +41,24 @@ export function AbsenteesBarChart(){
     return (
         <BarChartCard barChart={
             <BarChartWhite barDataKey={["absent"]} data={mData} xAxisDataKey="id" />
-        }  date={date} handleDate={handleDate} handleOptionChange={handleOptionChange}
-        mealTime={mealTime} options={options} showDropDown = {false} 
-        title="Absentees List" titleExtraContent={
-            <div>
-                <TextField
-                    sx = {{
-                        width : 120,
-                        marginLeft : "10px"
-                    }}
-                    label="Top"
-                    variant="outlined"
-                    type="number"
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    value = {top}
-                    onChange = {(e : any)=>setTop(parseInt(e.target.value))}
-                />
-            </div>
-        } />
+        } date={date} handleDate={handleDate}
+            title="Absentees List" titleExtraContent={
+                <div>
+                    <TextField
+                        sx={{
+                            width: 120,
+                            marginLeft: "10px"
+                        }}
+                        label="Top"
+                        variant="outlined"
+                        type="number"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                        value={top}
+                        onChange={(e: any) => setTop(parseInt(e.target.value))}
+                    />
+                </div>
+            } />
     )
 }

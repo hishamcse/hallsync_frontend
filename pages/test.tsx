@@ -102,8 +102,8 @@ function QuestionnaireNewSeat(){
   return (
     <div className='contentRoot'>
 		{/* <MyBarChart /> */}
-		{/* <ParticipationBarChart />
-		<AbsenteesBarChart /> */}
+		<ParticipationBarChart />
+		<AbsenteesBarChart />
     <RatingBarChart />
     </div>
   )

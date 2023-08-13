@@ -54,7 +54,7 @@ export function RatingBarChart(){
     return (
         <BarChartCard barChart={
             <BarChartWhite colors={['#8884d8','#FCB07E','#EBE9E9', ]} barDataKey={["QUALITY","QUANTITY","MANAGEMENT"]} data={mData} xAxisDataKey="range" />
-        }  date={date} handleDate={handleDate} handleOptionChange={()=>{}}
-        mealTime={""} options={[]} showDropDown = {false} title="Ratings"  />
+        }  date={date} handleDate={handleDate}
+        title="Ratings"  />
     )
 }

@@ -14,11 +14,7 @@ import { getDayAndMonthString } from "./utilities";
 export function BarChartCard(props : {
     date : Dayjs | null,
     handleDate : (newValue: Dayjs | null) => void,
-    handleOptionChange : (e : SelectChangeEvent )  => void,
-    options : string[],
-    mealTime : string,
     barChart : React.JSX.Element,
-    showDropDown: boolean,
     title : string,
     titleExtraContent? : React.JSX.Element
 }){
@@ -55,15 +51,7 @@ export function BarChartCard(props : {
                                                 onChange={props.handleDate}/>
                             </LocalizationProvider>
                                 
-                        </div>{
-                            props.showDropDown &&
-                        <div style={{
-                            padding : "10px"
-                        }}>
-                            <MuiDropdown
-                             change={props.handleOptionChange} options={props.options}
-                            val={props.mealTime} width={150} />
-                        </div>}
+                        </div>
                         {
                             props.titleExtraContent
                         }
@@ -114,8 +102,18 @@ export default function ParticipationBarChart(){
     return (
         <BarChartCard barChart={
             <BarChartWhite barDataKey={["_count"]} data={mData} xAxisDataKey="day" />
-        }  date={date} handleDate={handleDate} handleOptionChange={handleOptionChange}
-        mealTime={mealTime} options={options} showDropDown title="Participations List"  />
+        }  date={date} handleDate={handleDate} 
+        title="Participations List" 
+        titleExtraContent={
+            <div style={{
+                padding : "10px"
+            }}>
+                <MuiDropdown
+                 change={handleOptionChange} options={options}
+                val={mealTime} width={150} />
+            </div>
+        }
+        />
     )
 }
 
