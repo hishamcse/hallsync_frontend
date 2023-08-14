@@ -479,3 +479,16 @@ export const GET_OPT_OUTS = graphql(`
     }
   }
 `)
+
+export const GET_MEAL_PREF_STATS = graphql(`
+  query MealPreferenceStats($mealTime: String!, $date: String!) {
+    mealPreferenceStats(mealTime: $mealTime, date: $date) {
+      count
+      order
+      item {
+        itemId
+        name
+      }
+    }
+  }
+`)

@@ -18,35 +18,7 @@ import ParticipationBarChart from '../components/ParticipationBarChart'
 import { AbsenteesBarChart } from '../components/AbsenteesBarChart'
 import { RatingBarChart } from '../components/RatingsStat'
 import { OptInPieChart } from '../components/OptIn'
-
-const data01 = [
-  { name: 'Group A', value: 400 },
-  { name: 'Group B', value: 300 },
-  { name: 'Group C', value: 300 },
-  { name: 'Group D', value: 200 },
-];
-const data02 = [
-  { name: 'A1', value: 300, color : "#FFE605" },
-  { name: 'A2', value: 100 , color : "#FFFFFF"},
-];
-
-function PieChart_() {
-
-    return (
-        <PieChart width={400} height={400}>
-          {/* <Pie data={data01} dataKey="value" cx="50%" cy="50%" outerRadius={60} fill="#8884d8" /> */}
-          <Pie data={data02} dataKey="value" cx="50%" cy="50%" innerRadius={70} outerRadius={90} fill="#FFE605" label paddingAngle={5} >
-            {
-              data02.map(d =>(
-                <Cell key={d.name} fill={d.color} />
-              ))
-            }
-          </Pie>
-          <Tooltip />
-          <Legend  layout='vertical' align='right' verticalAlign='middle' />
-        </PieChart>
-    );
-}
+import { MealPreferencesBarChart } from '../components/PreferencesBarChart'
 
 
 
@@ -74,7 +46,8 @@ function QuestionnaireNewSeat(){
 		<AbsenteesBarChart />
     <RatingBarChart /> */}
     {/* <PieChart_ /> */}
-    <OptInPieChart />
+    {/* <OptInPieChart /> */}
+    <MealPreferencesBarChart />
     </div>
   )
 }
