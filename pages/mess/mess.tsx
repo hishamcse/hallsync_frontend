@@ -14,7 +14,7 @@
 
 // export default Mess;
 
-import MealView from "../components/Meals/meals";
+import MealView from "../../components/Meals/meals";
 //import StudentView from "../components/Meals/meals";
 
 function CreateMealView(){
