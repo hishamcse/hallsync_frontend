@@ -41,15 +41,17 @@ const dummyData: DateInfo[] = [
       foodItems: [
         { name: "Rice", image: "/images/rice.png" },
         { name: "Meat", image: "/images/meat.png", cupCount: 150 },
-        { name: "Fish", image: "/images/fish.png", cupCount: 120 },
+        { name: "Egg", image: "/images/egg.png", cupCount: 80 },
+        { name: "Alu Bhaji", image: "/images/aluBhaji.png" },
       ],
       optOut: false,
     },
     dinner: {
       foodItems: [
         { name: "Rice", image: "/images/rice.png" },
-        { name: "Meat", image: "/images/meat.png", cupCount: 150 },
-        { name: "Fish", image: "/images/fish.png", cupCount: 120 },
+        { name: "Fish", image: "/images/fish.png", cupCount: 150 },
+        { name: "Egg", image: "/images/egg.png", cupCount: 80 },
+        { name: "Alu Bhaji", image: "/images/aluBhaji.png" },
       ],
       optOut: false,
     },
@@ -60,15 +62,17 @@ const dummyData: DateInfo[] = [
       foodItems: [
         { name: "Rice", image: "/images/rice.png" },
         { name: "Meat", image: "/images/meat.png", cupCount: 150 },
-        { name: "Fish", image: "/images/fish.png", cupCount: 120 },
+        { name: "Egg", image: "/images/egg.png", cupCount: 80 },
+        { name: "Alu Bhaji", image: "/images/aluBhaji.png" },
       ],
       optOut: false,
     },
     dinner: {
       foodItems: [
         { name: "Rice", image: "/images/rice.png" },
-        { name: "Meat", image: "/images/meat.png", cupCount: 150 },
-        { name: "Fish", image: "/images/fish.png", cupCount: 120 },
+        { name: "Fish", image: "/images/fish.png", cupCount: 150 },
+        { name: "Egg", image: "/images/egg.png", cupCount: 80 },
+        { name: "Alu Bhaji", image: "/images/aluBhaji.png" },
       ],
       optOut: false,
     },
@@ -80,7 +84,7 @@ const MealView: React.FC = () => {
   return (
     <div>
       {dummyData.map((dateInfo, index) => (
-        <Card key={index} style={{ marginBottom: "16px", maxWidth: "600px"}}>
+        <Card key={index} style={{ marginBottom: "16px", maxWidth: "650px"}}>
           <CardContent>
             <Typography variant="h6">{dateInfo.date}</Typography>
             <div style={{ display: "flex", borderTop: "1px solid #ccc", marginTop: "8px", marginBottom: "16px" }}>
@@ -91,15 +95,15 @@ const MealView: React.FC = () => {
                     <div key={foodIndex}>
                       <img src={`${foodItem.image}`} alt={foodItem.name} width={100} height={70} />
                       <Typography variant="body2">
-                        {foodItem.name} {foodItem.name === "Meat" ? "(150 cups)" : foodItem.name === "Fish" ? "(120 cups)" : ""}
+                        {foodItem.name} {foodItem.cupCount !== undefined ? `(${foodItem.cupCount} cups)` : ""}
                       </Typography>
                     </div>
                   ))}
                 </div>
               </div>
-              <div style={{ borderLeft: "1px solid #ccc", paddingLeft: "16px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", borderLeft: "1px solid #ccc", paddingLeft: "16px" }}>
+                <Typography variant="body2" color="red">Opt Out </Typography>
                 <Checkbox checked={dateInfo.lunch.optOut} />
-                <Typography variant="body2" color="red">Opt Out</Typography>
               </div>
             </div>
             <div style={{ display: "flex", borderTop: "1px solid #ccc", marginTop: "16px", paddingTop: "16px" }}>
@@ -110,15 +114,15 @@ const MealView: React.FC = () => {
                     <div key={foodIndex}>
                       <img src={`${foodItem.image}`} alt={foodItem.name} width={100} height={70} />
                       <Typography variant="body2">
-                        {foodItem.name} {foodItem.name === "Meat" ? "(150 cups)" : foodItem.name === "Fish" ? "(120 cups)" : ""}
+                        {foodItem.name} {foodItem.cupCount !== undefined ? `(${foodItem.cupCount} cups)` : ""}
                       </Typography>
                     </div>
                   ))}
                 </div>
               </div>
-              <div style={{ borderLeft: "1px solid #ccc", paddingLeft: "16px" }}>
-                <Checkbox checked={dateInfo.dinner.optOut} />
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", borderLeft: "1px solid #ccc", paddingLeft: "16px" }}>
                 <Typography variant="body2" color="red">Opt Out</Typography>
+                <Checkbox checked={dateInfo.dinner.optOut} />
               </div>
             </div>
           </CardContent>

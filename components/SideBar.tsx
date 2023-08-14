@@ -95,7 +95,7 @@ export function StudentNavBar(){
 
     const routes = {
         app : "application/newApplication",
-        mess : 'mess/mess'
+        mess : 'mess/meals'
     }
     const imgPaths = {
         app : "/application.svg",
@@ -135,7 +135,7 @@ export function AuthorityNabBar(){
     }
     const routes = {
         app : "seatManagement",
-        mess : 'mess'
+        mess : 'mess/meals'
     }
     const imgPaths = {
         app : "/application.svg",
