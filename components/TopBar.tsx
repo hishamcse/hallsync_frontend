@@ -54,7 +54,7 @@ function Tabs(){
 function MessTabs() {
     const router = useRouter();
     const routes = {
-      meals: "mess",
+      meals: "meals",
       application: "application",
       announcement: "announcement",
       feedbacks: "feedbacks",
@@ -111,7 +111,7 @@ export function TopBar(){
                     <Tabs />
                 }
                 {
-                    router.pathname.includes('mess/mess') &&
+                    router.pathname.includes('mess/') &&
                     <MessTabs />
                 }
                 {/* asdf */}
