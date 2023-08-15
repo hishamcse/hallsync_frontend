@@ -8,6 +8,7 @@ import { MyDatePicker } from "./DatePicker";
 import { MealPreferenceStatsQuery } from "../graphql/__generated__/graphql";
 import { BarChartWhite } from "./ParticipationBarChart";
 import { PieChart_ } from "./OptInPieChart";
+import { TitleMealTimeDate } from "./TitleMealTimeDate";
 
 const pieCharColors = ['#FF05C8', '#FFE605', '#00FFF5']
 
@@ -98,27 +99,15 @@ export function MealPreferencesBarChart(){
 
     return(
         <MyCard title={
-            <div style={{
-                display : "flex",
-                justifyContent : "space-between",
-                alignItems : "center"
-            }}>
-                <h4>
-                    Preferences
-                </h4>
-                <div style={{
-                    display : "flex",
-                    alignItems : "center"
-                }}>
-                    <div style={{
-                        padding : "10px"
-                    }}>
-                        <MealTimeDropDown setVal={setMealTime_} val={mealTime} />
-                    </div>
-                    <MyDatePicker date={date} handleDate={handleDate} />
-                </div>
-            </div>
-        } content={
+        <TitleMealTimeDate
+            date={date}
+            handleDate={handleDate}
+            mealTime={mealTime}
+            setMealTime={setMealTime_}
+            title="Preferences"
+         />
+    
+    } content={
             <div>
                 <div style={{
                     // display : "flex",

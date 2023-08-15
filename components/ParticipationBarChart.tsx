@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client"
+import { useLazyQuery, useQuery } from "@apollo/client"
 import { GET_PARTICIPATIONS } from "../graphql/operations"
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Label } from 'recharts';
 import { useState } from "react";
@@ -11,6 +11,7 @@ import { SelectChangeEvent } from "@mui/material";
 import { getDayAndMonthString } from "./utilities";
 import { MyDatePicker } from "./DatePicker";
 import { MealTimeDropDown } from "./MealTimeDropDown";
+import { TitleMealTimeDate } from "./TitleMealTimeDate";
 
 
 export function BarChartCard(props: {
@@ -30,7 +31,7 @@ export function BarChartCard(props: {
                         padding: "20px",
                         textAlign: "center",
                         backgroundColor: "black",
-                        borderRadius: "10px"
+                        borderRadius: "10px",
                     }}>
                         {props.barChart}
                     </div>
@@ -58,7 +59,7 @@ export function BarChartCard(props: {
                     </div>
                 } style={{
                     display: "block",
-                    margin: "20px"
+                    marginRight : 10
                 }} />
             }
         </div>
@@ -71,43 +72,62 @@ export default function ParticipationBarChart() {
     const [date, setDate] = useState<Dayjs | null>(null);
     const [mealTime, setMealTime] = useState("DINNER");
     const options = ['DINNER', "LUNCH"]
-    const handleOptionChange = (e: SelectChangeEvent) => {
-        setMealTime(e.target.value);
+
+    function getData(date : Dayjs | null, mealTime : string){
+        if(date){
+            query({
+                variables : {
+                    from : date?.toString(),
+                    mealTime : mealTime
+                },
+                onCompleted: (data) => {
+                    setmData(data.participants.map(d => ({
+                        ...d,
+                        day: getDayAndMonthString(d.mealPlan.day)
+                    })))
+                }
+            })
+        }
+    }
+
+    function setMealTimeWrapper(s : string){
+        setMealTime(s);
+        getData(date, s);
     }
 
     const handleDate = (newValue: Dayjs | null) => {
         setDate(newValue);
+        getData(newValue, mealTime);
     }
 
 
-    let { loading } = useQuery(
-        GET_PARTICIPATIONS,
-        {
-            variables: {
-                from: date == undefined ? new Date().toString() : date.toString(),
-                mealTime: mealTime
-            },
-            onCompleted: (data) => {
-                setmData(data.participants.map(d => ({
-                    ...d,
-                    day: getDayAndMonthString(d.mealPlan.day)
-                })))
-            }
-        }
+    let [query, {}] = useLazyQuery(
+        GET_PARTICIPATIONS
     )
 
     return (
-        <BarChartCard barChart={
-            <BarChartWhite barDataKey={["_count"]} data={mData} xAxisDataKey="day" />
-        } date={date} handleDate={handleDate}
-            title="Participations List"
-            titleExtraContent={
-                <div style={{
-                    padding: "10px"
-                }}>
-                    <MealTimeDropDown val={mealTime} setVal={setMealTime} />
-                </div>
-            }
+        <MyCard 
+        title={
+            <TitleMealTimeDate
+            date={date}
+            handleDate={handleDate}
+            mealTime={mealTime}
+            setMealTime={setMealTimeWrapper}
+            title="Participations"
+         />
+        }
+        content={
+            <div>
+                {
+                    mData.length > 0 &&
+                    <BarChartWhite barDataKey={["_count"]} data={mData} xAxisDataKey="day" />
+                }
+            </div>
+        }
+        style = {{
+            display : "block",
+            marginRight : 10
+        }}
         />
     )
 }

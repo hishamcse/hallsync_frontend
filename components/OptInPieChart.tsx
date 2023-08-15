@@ -8,6 +8,7 @@ import { useLazyQuery, useQuery } from "@apollo/client";
 import { MyDatePicker } from "./DatePicker";
 import { MealTimeDropDown } from "./MealTimeDropDown";
 import { Typography } from "@mui/material";
+import { TitleMealTimeDate } from "./TitleMealTimeDate";
 
 
 export function OptInPieChart(){
@@ -64,27 +65,13 @@ export function OptInPieChart(){
 
         <MyCard
             title={
-                <div style={{
-                    display : "flex",
-                    justifyContent : "space-between",
-                    alignItems : "center"
-                }}>
-                    <h4>
-                        Opted Out
-                    </h4>
-                    <div style={{
-                        display : "flex",
-                        justifyContent : "flex-end",
-                        alignItems : "center"
-                    }}>
-                        <div style={{
-                            padding : "10px"
-                        }}>
-                            <MealTimeDropDown setVal={setMealTime_} val={mealTime} />
-                        </div>
-                        <MyDatePicker date={date} handleDate={handleDate} />
-                    </div>
-                </div>
+                <TitleMealTimeDate
+                date={date}
+                handleDate={handleDate}
+                mealTime={mealTime}
+                setMealTime={setMealTime_}
+                title="Opted In-Out"
+            />
             }
             content={
                 <div style={{
@@ -115,7 +102,6 @@ export function OptInPieChart(){
             }
 
             style={{
-                marginBottom : 20,
                 minWidth : 650
             }}
         />

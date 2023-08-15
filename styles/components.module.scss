@@ -30,3 +30,17 @@
     background-color: #FF0000;
     opacity: .8;
 }
+
+.titleDateRoot{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .titleDateRootRight{
+        display: flex;
+        align-items: center;
+        > div{
+            margin-left: 10px;
+        }
+    }
+}
