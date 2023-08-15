@@ -58,6 +58,7 @@ function MessTabs() {
       application: "application",
       announcement: "announcement",
       feedbacks: "feedbacks",
+      stats : "stats"
     };
   
     return (
@@ -66,6 +67,8 @@ function MessTabs() {
         <Tab href={"/mess/" + routes.meals} isActive={checkRouteContains(router, routes.meals)} name="Meals" />
         <Tab href={"/mess/" + routes.announcement} isActive={checkRouteContains(router, routes.announcement)} name="Announcement" />
         <Tab href={"/mess/" + routes.feedbacks} isActive={checkRouteContains(router, routes.feedbacks)} name="Feedbacks" />
+        <Tab href={"/mess/" + routes.stats} isActive={checkRouteContains(router, routes.stats)} name="Stats" />
+
       </ul>
     );
   }

@@ -17,7 +17,7 @@ import {PieChart, Pie, BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip
 import ParticipationBarChart from '../components/ParticipationBarChart'
 import { AbsenteesBarChart } from '../components/AbsenteesBarChart'
 import { RatingBarChart } from '../components/RatingsStat'
-import { OptInPieChart } from '../components/OptIn'
+import { OptInPieChart } from '../components/OptInPieChart'
 import { MealPreferencesBarChart } from '../components/PreferencesBarChart'
 
 

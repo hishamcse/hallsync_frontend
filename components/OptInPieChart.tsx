@@ -69,9 +69,9 @@ export function OptInPieChart(){
                     justifyContent : "space-between",
                     alignItems : "center"
                 }}>
-                    <h3>
+                    <h4>
                         Opted Out
-                    </h3>
+                    </h4>
                     <div style={{
                         display : "flex",
                         justifyContent : "flex-end",
@@ -91,7 +91,7 @@ export function OptInPieChart(){
                     display : "flex",
                     alignItems : "center"
                 }}>
-                    <PieChart_ colors={['#FFE605', '#FFFFFF']} data={mData} dataKey="count" h={400} w={400} />
+                    <PieChart_ colors={['#FFE605', '#FFFFFF']} data={mData} dataKey="count" h={250} w={400} />
                     <div>
                         {
                             data &&
@@ -102,15 +102,22 @@ export function OptInPieChart(){
 
                             </div>
                         }
-                        <div  style={textDivStyle}>
-                            <Typography variant="subtitle2" > Total Opted Out </Typography>
-                            <Typography  variant="h5"> {data?.optedOutStats.optedOut} </Typography>
+                        { data &&
+                            <div style={textDivStyle}>
+                                <Typography variant="subtitle2" > Total Opted Out </Typography>
+                                <Typography variant="h5"> {data?.optedOutStats.optedOut} </Typography>
+                            </div>
+                        }
 
                             
-                        </div>
                     </div>
                 </div>
             }
+
+            style={{
+                marginBottom : 20,
+                minWidth : 650
+            }}
         />
     )
 }
@@ -139,7 +146,7 @@ export function PieChart_(
               ))
             }
           </Pie>
-          <Tooltip />
+          {/* <Tooltip /> */}
           <Legend  layout='vertical' align='right' verticalAlign='middle' />
           <Label>asdlfjsladfj sladkfj</Label>
         </PieChart>

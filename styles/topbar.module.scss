@@ -70,6 +70,9 @@ $iconHW : 50px;
                 .tabBackGround{
                     transform: translate(0, 15px);
                     visibility: hidden;
+                    img{
+                        width: 220px;
+                    }
                     // display : 
                     // transform: scale(.8) translate(0, 15px);
                     // background-color: yellow;
@@ -87,7 +90,7 @@ $iconHW : 50px;
                     // background-color: blue;
                     height: 100%;
                     box-sizing: border-box;
-                    padding-bottom: 15px;
+                    padding-bottom: 10px;
                 }
             // }
             // transform: scale(.7);
