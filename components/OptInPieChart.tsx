@@ -1,7 +1,7 @@
 import { SelectChangeEvent } from "@mui/material/Select";
 import { Dayjs } from "dayjs";
 import { CSSProperties, useState } from "react";
-import { Cell, Legend, Pie, PieChart, Tooltip } from "recharts";
+import { Cell, Label, Legend, Pie, PieChart, Tooltip } from "recharts";
 import MyCard from "./card";
 import { GET_OPT_OUTS } from "../graphql/operations";
 import { useLazyQuery, useQuery } from "@apollo/client";
@@ -141,6 +141,7 @@ export function PieChart_(
           </Pie>
           <Tooltip />
           <Legend  layout='vertical' align='right' verticalAlign='middle' />
+          <Label>asdlfjsladfj sladkfj</Label>
         </PieChart>
     );
 }

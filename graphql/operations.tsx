@@ -488,6 +488,7 @@ export const GET_MEAL_PREF_STATS = graphql(`
       item {
         itemId
         name
+        type
       }
     }
   }

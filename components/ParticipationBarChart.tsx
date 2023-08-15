@@ -128,7 +128,7 @@ export function BarChartWhite(
     if(props.doNotUseResponsive){
         hwProps = {
             height : 250,
-            width : 200
+            width : 450
         }
     }
     let Inner = (
@@ -142,7 +142,7 @@ export function BarChartWhite(
             }}>
                 {
                     props.xLabel &&
-                    <Label value={props.xLabel} offset={-5} position="insideBottom" />
+                    <Label  value={props.xLabel} offset={-5} position="insideBottom" />
                 }
             </XAxis>
             <YAxis stroke='#ffffff' padding={{
