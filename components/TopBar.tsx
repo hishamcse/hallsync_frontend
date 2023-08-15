@@ -38,7 +38,7 @@ function Tabs(){
     const router = useRouter();
     const routes = {
         newApp : "newApplication",
-        prevApp : 'prevApplication'
+        prevApp : 'prevApplication',
     }
 
     // console.log(router.pathname);
@@ -50,6 +50,26 @@ function Tabs(){
         </ul>
     )
 }
+
+function MessTabs() {
+    const router = useRouter();
+    const routes = {
+      meals: "meals",
+      application: "application",
+      announcement: "announcement",
+      feedbacks: "feedbacks",
+    };
+  
+    return (
+      <ul className={topBarStyles.tabs}>
+        <Tab href={"/mess/" + routes.application} isActive={checkRouteContains(router, routes.application)} name="Application" />
+        <Tab href={"/mess/" + routes.meals} isActive={checkRouteContains(router, routes.meals)} name="Meals" />
+        <Tab href={"/mess/" + routes.announcement} isActive={checkRouteContains(router, routes.announcement)} name="Announcement" />
+        <Tab href={"/mess/" + routes.feedbacks} isActive={checkRouteContains(router, routes.feedbacks)} name="Feedbacks" />
+      </ul>
+    );
+  }
+  
 
 export function Logo(props : {
     containerStyle? : CSSProperties,
@@ -89,6 +109,10 @@ export function TopBar(){
                 {
                     router.pathname.includes('application') &&
                     <Tabs />
+                }
+                {
+                    router.pathname.includes('mess/') &&
+                    <MessTabs />
                 }
                 {/* asdf */}
             </div>
