@@ -13,7 +13,11 @@ export function MyDatePicker(
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker sx={{
-                width : props.width ?? 160,
+                width : props.width ?? 180,
+                backgroundColor : "black",
+                '& input' : {
+                    padding : '9px'
+                }
             }} value={props.date} 
                             onChange={props.handleDate}/>
         </LocalizationProvider>

@@ -12,8 +12,10 @@ export function MealTimeDropDown(
         props.setVal(e.target.value);
     }
     return (
-        <MuiDropdown
+        <MuiDropdown sx={{
+            backgroundColor : "black",
+        }}
             change={handleOptionChange} options={['LUNCH','DINNER']}
-        val={props.val} width={ props.width ?? 150} />
+        val={props.val} width={ props.width ?? 160} />
     )
 }

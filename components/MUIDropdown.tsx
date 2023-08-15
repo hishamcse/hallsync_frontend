@@ -10,10 +10,11 @@ const MuiDropdown = (props: {
     val: string,
     change: (event: SelectChangeEvent) => void,
     disable? : boolean,
+    sx? : React.CSSProperties
 }) => {
 
     return (
-        <Box sx={{width: props.width}}>
+        <Box sx={{width: props.width, ... props.sx}} >
             <FormControl fullWidth>
                 <Select
                     labelId="demo-simple-select-label"
