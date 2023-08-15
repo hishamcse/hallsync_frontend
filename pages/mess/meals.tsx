@@ -1,6 +1,7 @@
 
-import MealView from "../../components/Meals/meals";
-//import StudentView from "../components/Meals/meals";
+import MealView from "../../components/StudentMeals/meals";
+//import MealView from "../../components/ManagerMeals/meals";
+
 
 function CreateMealView(){
     return (

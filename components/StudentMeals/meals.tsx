@@ -21,6 +21,7 @@ interface FoodItem {
   name: string;
   image: string; // Path to the food item's image
   cupCount?: number; // Cup count for protein food items
+  type: "Rice" | "Veg" | "Non Veg"; // Add the 'type' property
 }
 
 interface Meal {
@@ -39,19 +40,19 @@ const dummyData: DateInfo[] = [
     date: "August 14, 2023",
     lunch: {
       foodItems: [
-        { name: "Rice", image: "/images/rice.png" },
-        { name: "Meat", image: "/images/meat.png", cupCount: 150 },
-        { name: "Egg", image: "/images/egg.png", cupCount: 80 },
-        { name: "Alu Bhaji", image: "/images/aluBhaji.png" },
+        { name: "Rice", image: "/images/rice.png" , type: "Rice" },
+        { name: "Meat", image: "/images/meat.png", cupCount: 150, type: "Non Veg" },
+        { name: "Egg", image: "/images/egg.png", cupCount: 80, type: "Non Veg" },
+        { name: "Alu Bhaji", image: "/images/aluBhaji.png", type: "Veg" },
       ],
       optOut: false,
     },
     dinner: {
       foodItems: [
-        { name: "Rice", image: "/images/rice.png" },
-        { name: "Fish", image: "/images/fish.png", cupCount: 150 },
-        { name: "Egg", image: "/images/egg.png", cupCount: 80 },
-        { name: "Alu Bhaji", image: "/images/aluBhaji.png" },
+        { name: "Rice", image: "/images/rice.png" , type: "Rice"},
+        { name: "Fish", image: "/images/fish.png", cupCount: 150, type: "Non Veg" },
+        { name: "Egg", image: "/images/egg.png", cupCount: 80, type: "Non Veg" },
+        { name: "Alu Bhaji", image: "/images/aluBhaji.png", type: "Veg" },
       ],
       optOut: false,
     },
@@ -60,19 +61,19 @@ const dummyData: DateInfo[] = [
     date: "August 15, 2023",
     lunch: {
       foodItems: [
-        { name: "Rice", image: "/images/rice.png" },
-        { name: "Meat", image: "/images/meat.png", cupCount: 150 },
-        { name: "Egg", image: "/images/egg.png", cupCount: 80 },
-        { name: "Alu Bhaji", image: "/images/aluBhaji.png" },
+        { name: "Rice", image: "/images/rice.png" , type: "Rice" },
+        { name: "Meat", image: "/images/meat.png", cupCount: 150, type: "Non Veg" },
+        { name: "Egg", image: "/images/egg.png", cupCount: 80, type: "Non Veg" },
+        { name: "Alu Bhaji", image: "/images/aluBhaji.png", type: "Veg" },
       ],
       optOut: false,
     },
     dinner: {
       foodItems: [
-        { name: "Rice", image: "/images/rice.png" },
-        { name: "Fish", image: "/images/fish.png", cupCount: 150 },
-        { name: "Egg", image: "/images/egg.png", cupCount: 80 },
-        { name: "Alu Bhaji", image: "/images/aluBhaji.png" },
+        { name: "Rice", image: "/images/rice.png" , type: "Rice"},
+        { name: "Fish", image: "/images/fish.png", cupCount: 150, type: "Non Veg" },
+        { name: "Egg", image: "/images/egg.png", cupCount: 80, type: "Non Veg" },
+        { name: "Alu Bhaji", image: "/images/aluBhaji.png", type: "Veg" },
       ],
       optOut: false,
     },
@@ -91,14 +92,14 @@ const MealView: React.FC = () => {
               <div style={{ flexGrow: 1 }}>
                 <Typography variant="subtitle1">Lunch:</Typography>
                 <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                  {dateInfo.lunch.foodItems.map((foodItem: FoodItem, foodIndex: number) => (
-                    <div key={foodIndex}>
-                      <img src={`${foodItem.image}`} alt={foodItem.name} width={100} height={70} />
-                      <Typography variant="body2">
-                        {foodItem.name} {foodItem.cupCount !== undefined ? `(${foodItem.cupCount} cups)` : ""}
-                      </Typography>
-                    </div>
-                  ))}
+                {dateInfo.lunch.foodItems.map((foodItem: FoodItem, foodIndex: number) => (
+                  <div key={foodIndex}>
+                    <img src={`${foodItem.image}`} alt={foodItem.name} width={100} height={70} />
+                    <Typography variant="body2">
+                      {foodItem.name} {foodItem.cupCount !== undefined ? `(${foodItem.cupCount} cups)` : ""}
+                    </Typography>
+                  </div>
+                ))}
                 </div>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px", borderLeft: "1px solid #ccc", paddingLeft: "16px" }}>
@@ -110,14 +111,14 @@ const MealView: React.FC = () => {
               <div style={{ flexGrow: 1 }}>
                 <Typography variant="subtitle1">Dinner:</Typography>
                 <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-                  {dateInfo.dinner.foodItems.map((foodItem: FoodItem, foodIndex: number) => (
-                    <div key={foodIndex}>
-                      <img src={`${foodItem.image}`} alt={foodItem.name} width={100} height={70} />
-                      <Typography variant="body2">
-                        {foodItem.name} {foodItem.cupCount !== undefined ? `(${foodItem.cupCount} cups)` : ""}
-                      </Typography>
-                    </div>
-                  ))}
+                {dateInfo.dinner.foodItems.map((foodItem: FoodItem, foodIndex: number) => (
+                  <div key={foodIndex}>
+                    <img src={`${foodItem.image}`} alt={foodItem.name} width={100} height={70} />
+                    <Typography variant="body2">
+                      {foodItem.name} {foodItem.cupCount !== undefined ? `(${foodItem.cupCount} cups)` : ""}
+                    </Typography>
+                  </div>
+                ))}
                 </div>
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px", borderLeft: "1px solid #ccc", paddingLeft: "16px" }}>
