@@ -17,6 +17,7 @@ export const LOGIN = graphql(`
         studentId
         residencyStatus
         residency {
+          isCurrentMessManager
             seat {
               room {
                 roomNo
@@ -221,6 +222,7 @@ export const GET_INFO = graphql(`
         studentId
         residencyStatus
         residency {
+          isCurrentMessManager
             seat {
               room {
                 roomNo

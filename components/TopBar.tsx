@@ -7,6 +7,8 @@ import { userContext } from "../pages/_app";
 import { useLazyQuery } from "@apollo/client";
 import { GET_NOTIFICATIONS } from "../graphql/operations";
 import NotificationsList from "./notification";
+import { ResidencyStatus } from "../graphql/__generated__/graphql";
+import useResidencyStatus from "../hooks/useResidencyStatus";
 
 function Tab(
     props :{
@@ -52,6 +54,7 @@ function Tabs(){
 }
 
 function MessTabs() {
+    
     const router = useRouter();
     const routes = {
       meals: "meals",
@@ -60,14 +63,19 @@ function MessTabs() {
       feedbacks: "feedbacks",
       stats : "stats"
     };
-  
+    
+    let {messManager, authority} = useResidencyStatus()
+
     return (
       <ul className={topBarStyles.tabs}>
         <Tab href={"/mess/" + routes.application} isActive={checkRouteContains(router, routes.application)} name="Application" />
         <Tab href={"/mess/" + routes.meals} isActive={checkRouteContains(router, routes.meals)} name="Meals" />
         <Tab href={"/mess/" + routes.announcement} isActive={checkRouteContains(router, routes.announcement)} name="Announcement" />
         <Tab href={"/mess/" + routes.feedbacks} isActive={checkRouteContains(router, routes.feedbacks)} name="Feedbacks" />
-        <Tab href={"/mess/" + routes.stats} isActive={checkRouteContains(router, routes.stats)} name="Stats" />
+        {   
+            (messManager || authority) &&
+            <Tab href={"/mess/" + routes.stats} isActive={checkRouteContains(router, routes.stats)} name="Stats" />
+        }
 
       </ul>
     );

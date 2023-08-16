@@ -7,6 +7,8 @@ import { userContext } from '../pages/_app'
 import { useLazyQuery, useQuery } from '@apollo/client'
 import { GET_INFO } from '../graphql/operations'
 import { MyButton } from './button'
+import { ResidencyStatus } from '../graphql/__generated__/graphql'
+import useResidencyStatus from '../hooks/useResidencyStatus'
 
 
 export function SideBarIcon(
@@ -86,6 +88,8 @@ export function StudentNavBar(){
     let {user, setUser} = useContext(userContext);
     const router = useRouter();
 
+    let {resident} = useResidencyStatus();
+
     function logOutOnClick(){
         console.log("logged out");
         localStorage.removeItem("token");
@@ -113,7 +117,8 @@ export function StudentNavBar(){
     return(
         <ul  >
             <ListItem active = {checkRouteContains(router,activeIf.app)} href={'/' + routes.app} imgPath={imgPaths.app} text={texts.app} />
-            <ListItem active = {checkRouteContains(router,activeIf.mess)} href={'/' + routes.mess} imgPath={imgPaths.mess} text={texts.mess} />
+            { resident && 
+            <ListItem active = {checkRouteContains(router,activeIf.mess)} href={'/' + routes.mess} imgPath={imgPaths.mess} text={texts.mess} />}
             <li> <SideBarIcon src="/payments.svg" />  Payments</li>
             <li> <SideBarIcon src="/info.svg" /> Info</li>
             <li> <SideBarIcon src="/feAngry1.svg" /> Complaints</li>
