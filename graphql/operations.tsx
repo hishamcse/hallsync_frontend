@@ -493,3 +493,37 @@ export const GET_MEAL_PREF_STATS = graphql(`
     }
   }
 `)
+
+
+export const GET_PENDING_FEEDBACKS = graphql(`
+query PendingFeedbacks {
+  pendingFeedbacks {
+    startDate
+    startMealPlan {
+      day
+    }
+    endMealPlan {
+      day
+    }
+    feedbackId
+    messManager {
+      student {
+        name
+        levelTerm {
+          label
+        }
+        batch {
+          year
+        }
+      }
+    }
+  }
+}
+`)
+
+export const POST_FEEDBACK = graphql(`
+  mutation PostFeedback($feedbackId: Float!, $ratings: IntArray!) {
+    postFeedback(feedbackId: $feedbackId, ratings: $ratings)
+  }
+`)
+

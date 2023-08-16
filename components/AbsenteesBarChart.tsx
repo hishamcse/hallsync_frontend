@@ -74,7 +74,10 @@ export function AbsenteesBarChart() {
             }
             content={
                 <div>
-                    <BarChartWhite barDataKey={["absent"]} data={mData} xAxisDataKey="id" />
+                    {
+                        mData.length > 0 &&
+                        <BarChartWhite barDataKey={["absent"]} data={mData} xAxisDataKey="id" />
+                    }
                 </div>
             }
             style={{
@@ -82,29 +85,5 @@ export function AbsenteesBarChart() {
                 marginRight: 10
             }}
         />
-    )
-
-    return (
-        <BarChartCard barChart={
-            <BarChartWhite barDataKey={["absent"]} data={mData} xAxisDataKey="id" />
-        } date={date} handleDate={handleDate}
-            title="Absentees List" titleExtraContent={
-                <div>
-                    <TextField
-                        sx={{
-                            width: 120,
-                            marginLeft: "10px"
-                        }}
-                        label="Top"
-                        variant="outlined"
-                        type="number"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        value={top}
-                        onChange={(e: any) => setTop(parseInt(e.target.value))}
-                    />
-                </div>
-            } />
     )
 }

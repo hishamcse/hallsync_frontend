@@ -38,6 +38,8 @@ const documents = {
     "\nquery ExampleQuery($date: String!) {\n  ratings(date: $date) {\n    avg\n    type\n    feedback {\n      feedbackId\n      startMealPlan {\n        day\n      }\n      endMealPlan {\n        day\n      }\n    }\n  }\n}\n": types.ExampleQueryDocument,
     "\n  query OptOutQuery($mealTime: String!, $date: String!) {\n    optedOutStats(mealTime: $mealTime, date: $date) {\n      optedOut\n      total\n    }\n  }\n": types.OptOutQueryDocument,
     "\n  query MealPreferenceStats($mealTime: String!, $date: String!) {\n    mealPreferenceStats(mealTime: $mealTime, date: $date) {\n      count\n      order\n      item {\n        itemId\n        name\n        type\n      }\n    }\n  }\n": types.MealPreferenceStatsDocument,
+    "\nquery PendingFeedbacks {\n  pendingFeedbacks {\n    startDate\n    startMealPlan {\n      day\n    }\n    endMealPlan {\n      day\n    }\n    feedbackId\n    messManager {\n      student {\n        name\n        levelTerm {\n          label\n        }\n        batch {\n          year\n        }\n      }\n    }\n  }\n}\n": types.PendingFeedbacksDocument,
+    "\n  mutation PostFeedback($feedbackId: Float!, $ratings: IntArray!) {\n    postFeedback(feedbackId: $feedbackId, ratings: $ratings)\n  }\n": types.PostFeedbackDocument,
 };
 
 /**
@@ -154,6 +156,14 @@ export function graphql(source: "\n  query OptOutQuery($mealTime: String!, $date
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query MealPreferenceStats($mealTime: String!, $date: String!) {\n    mealPreferenceStats(mealTime: $mealTime, date: $date) {\n      count\n      order\n      item {\n        itemId\n        name\n        type\n      }\n    }\n  }\n"): (typeof documents)["\n  query MealPreferenceStats($mealTime: String!, $date: String!) {\n    mealPreferenceStats(mealTime: $mealTime, date: $date) {\n      count\n      order\n      item {\n        itemId\n        name\n        type\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\nquery PendingFeedbacks {\n  pendingFeedbacks {\n    startDate\n    startMealPlan {\n      day\n    }\n    endMealPlan {\n      day\n    }\n    feedbackId\n    messManager {\n      student {\n        name\n        levelTerm {\n          label\n        }\n        batch {\n          year\n        }\n      }\n    }\n  }\n}\n"): (typeof documents)["\nquery PendingFeedbacks {\n  pendingFeedbacks {\n    startDate\n    startMealPlan {\n      day\n    }\n    endMealPlan {\n      day\n    }\n    feedbackId\n    messManager {\n      student {\n        name\n        levelTerm {\n          label\n        }\n        batch {\n          year\n        }\n      }\n    }\n  }\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation PostFeedback($feedbackId: Float!, $ratings: IntArray!) {\n    postFeedback(feedbackId: $feedbackId, ratings: $ratings)\n  }\n"): (typeof documents)["\n  mutation PostFeedback($feedbackId: Float!, $ratings: IntArray!) {\n    postFeedback(feedbackId: $feedbackId, ratings: $ratings)\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

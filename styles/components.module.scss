@@ -44,3 +44,40 @@
         }
     }
 }
+.feedbackContentRoot{
+    padding-top: 10px;
+    .ratingsContainer{
+        width: 80%;
+        > div{
+            display: flex;
+            justify-content: space-between;
+            padding : 10px;
+        }
+    }
+
+    .textFieldContainer{
+        margin: 10px;
+    }
+    .labelContainer{
+        padding: 10px 0px;
+    }
+    .ratingsSubmitButtonContainer{
+        text-align: center;
+    }
+}
+.feedbackContainer{
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.dateWithIconContainer{
+    display: flex;
+
+}
+.feedbackTitleContainer{
+    display: flex;
+    justify-content: space-between;
+
+
+}
