@@ -428,6 +428,85 @@ export const GET_NOTIFICATIONS = graphql(`
 `)
 
 
+export const GET_MULTIPLE_MEALPLANS = graphql(`
+   query GetMealPlans($to: String!, $from: String!) {
+      getMealPlans(to: $to, from: $from) {
+        mealPlanId
+        day
+        mealTime
+        cupCount {
+          itemId
+          cupcount
+          item {
+            itemId
+            name
+            type
+            photo {
+              photoId
+              file {
+                fileName
+                filePath
+              }
+            }
+          }
+          mealPlan {
+            mealTime
+          }
+        }
+        preferences {
+          itemId
+          order
+        }
+        optedOut {
+          studentId
+          student9DigitId
+        }
+      }
+   }
+
+`)
+
+export const OPT_OUT_MEAL = graphql(`
+    mutation OptOut($mealPlanId: Float!) {
+      optOut(mealPlanId: $mealPlanId) {
+        mealPlanId
+        time
+        mealPlan {
+          day
+          mealTime
+        }
+        residencyId
+        residency {
+          studentId
+        }
+      }
+    }
+
+`)
+
+export const ADD_PREFERENCES = graphql(`
+     mutation AddPreferences($preferences: PreferenceInput!, $mealPlanId: Float!) {
+      addPreferences(preferences: $preferences, mealPlanId: $mealPlanId) {
+        mealPlanId
+        order
+        student {
+          student9DigitId
+        }
+        itemId
+        item {
+          name
+          type
+        }
+        mealPlan {
+          day
+          mealId
+          mealTime
+        }
+      }
+    }
+
+`)
+
 export const GET_PARTICIPATIONS = graphql(`
   query Participants($mealTime: String!, $from: String!) {
     participants(mealTime: $mealTime, from: $from) {

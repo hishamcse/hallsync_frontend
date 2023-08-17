@@ -101,7 +101,7 @@ function Feedback(props : {
                 </div>
                 <div className={styles.textFieldContainer} >
                     <MUIStyledTextarea placeHolder="Remarks" rows={6} val={comment}
-                    handleInput={setComment} />
+                    handleInput={setComment} disabled={disabled}/>
                 </div>
                 <div className={styles.ratingsSubmitButtonContainer}>
                     <MyButton buttonProps={{
@@ -130,7 +130,7 @@ export function GiveFeedback(){
     return (
         data && 
         data.pendingFeedbacks.map(feedback =>(
-            <div className={styles.feedbackContainer}>
+            <div className={styles.feedbackContainer} key={Math.random().toString()}>
                 <Feedback feedback={feedback} />
             </div>
         ))

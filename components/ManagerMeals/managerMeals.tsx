@@ -1,5 +1,5 @@
 //import NewSeat from "./NewSeat";
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {SelectChangeEvent} from "@mui/material/Select";
 //import TempSeat from "./TempSeat";
 //import RoomChange from "./RoomChange";
@@ -82,7 +82,7 @@ const dummyData: DateInfo[] = [
   // Add more dummy data entries here...
 ];
 
-const MealView: React.FC = () => {
+const ManagerMealView: React.FC = () => {
     // Define state for creating a meal plan
     const [mealType, setMealType] = useState<"lunch" | "dinner">("lunch");
     const [selectedDate, setSelectedDate] = useState("");
@@ -244,4 +244,4 @@ const MealView: React.FC = () => {
   );
 };
 
-export default MealView;
+export default ManagerMealView;

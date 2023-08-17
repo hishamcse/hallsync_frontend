@@ -1,12 +1,22 @@
-
 import MealView from "../../components/StudentMeals/meals";
-//import MealView from "../../components/ManagerMeals/meals";
+import useResidencyStatus from "../../hooks/useResidencyStatus";
+import ManagerMealView from "../../components/ManagerMeals/managerMeals";
 
 
 function CreateMealView(){
+
+    const {messManager, resident, authority} = useResidencyStatus();
+
     return (
         <div className={"contentRoot"}>
-            <MealView />
+            {
+                resident && !messManager &&
+                <MealView />
+            }
+            {
+                messManager &&
+                <ManagerMealView />
+            }
         </div>
     )
 }
