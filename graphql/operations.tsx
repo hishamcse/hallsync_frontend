@@ -520,10 +520,7 @@ export const GET_ANNOUNCEMENTS = graphql(`
         details
         messManagerId
         messManager {
-          student {
-            student9DigitId
-            studentId
-          }
+          messManagerId
         }
         authority {
           role
