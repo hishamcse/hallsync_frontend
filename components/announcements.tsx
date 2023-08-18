@@ -5,10 +5,10 @@ import {GetAnnouncementsQuery} from "../graphql/__generated__/graphql";
 import {useState} from "react";
 import MyCard from "./card";
 import {Button, Typography} from "@mui/material";
-import ViewStreamIcon from '@mui/icons-material/ViewStream';
 import {DateRangeIcon} from "@mui/x-date-pickers";
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import CampaignIcon from '@mui/icons-material/Campaign';
+import CustomizedDialog from "./MUIDialog";
 
 const SingleAnnouncement = (props: { announcement: GetAnnouncementsQuery['getAnnouncements'][0] }) => {
     return (
@@ -45,12 +45,35 @@ const SingleAnnouncement = (props: { announcement: GetAnnouncementsQuery['getAnn
 }
 
 const AnnounceTitle = (props: { announcement: GetAnnouncementsQuery['getAnnouncements'][0] }) => {
+
+    const [showDetails, setShowDetails] = useState<boolean>(false);
+
+    const handleShowDetails = () => {
+        setShowDetails(!showDetails);
+    }
+
+    const handleSubmission = () => {
+        console.log("Submission");
+    }
+
     return (
-        <div style={{display: 'flex', justifyContent: 'space-between', marginLeft: 20, marginRight: 20}}>
-            <Typography variant={"h6"}>
-                <span><CampaignIcon />&nbsp;&nbsp;&nbsp;<i>{props.announcement.title}</i></span>
-            </Typography>
-            <Button variant={"outlined"} color={"primary"} style={{marginTop: 10}}>View Details</Button>
+        <div>
+            <div style={{display: 'flex', justifyContent: 'space-between', marginLeft: 20, marginRight: 20}}>
+                <Typography variant={"h6"}>
+                    <span><CampaignIcon />&nbsp;&nbsp;&nbsp;<i>{props.announcement.title}</i></span>
+                </Typography>
+                <Button variant={"outlined"} color={"primary"} style={{marginTop: 10}} onClick={handleShowDetails}>
+                    View Details
+                </Button>
+            </div>
+            {
+                showDetails &&
+                <CustomizedDialog show={true} setShow={setShowDetails} addAnnouncement={false}
+                     cardTitle='Announcement Details' announcementTitle={props.announcement.title}
+                     announcementDetails={props.announcement.details} handleSubmission={handleSubmission}
+                     date={new Date(props.announcement.createdAt).toDateString()}
+                                  messManager={!!props.announcement.messManager}/>
+            }
         </div>
     )
 }
