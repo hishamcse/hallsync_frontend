@@ -61,7 +61,7 @@ export function CallApplicationTsx(){
             <div className={styles.callForContentRoot}>
                 <div>
                     <div>
-                        Mess Manager Assinged Till
+                        Mess Manager Assinged Upto
                     </div>
                     <div>
                         <span className={styles.rangeSpan}>
@@ -74,13 +74,13 @@ export function CallApplicationTsx(){
                     <div>
                         <div>
                             <div>
-                            from
+                            From
                             </div>
                             <MyDatePicker date={fromDate} handleDate={setFuncWrapper(setFromDate)} />
                         </div>
                         <div>
                             <div>
-                            to
+                            To
                             </div>
                             <MyDatePicker date={toDate} handleDate={setFuncWrapper(setToDate)} />
                         </div>
