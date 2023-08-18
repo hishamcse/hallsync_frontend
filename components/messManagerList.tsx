@@ -20,16 +20,16 @@ function MessManager(props : {
                 </div>
                 <div className={styles.infoRoot}>
                     <div>
-                        Name : {props.messManager.student.name}
+                        Name : {props.messManager.residency.student.name}
                     </div>
                     <div>
-                        Phone : {props.messManager.student.phone}
+                        Phone : {props.messManager.residency.student.phone}
                     </div>
                     <div>
-                        Email : {props.messManager.student.email}
+                        Email : {props.messManager.residency.student.email}
                     </div>
                     <div>
-                        id : {props.messManager.student.student9DigitId}
+                        id : {props.messManager.residency.student.student9DigitId}
                     </div>
                 </div>
             </div>

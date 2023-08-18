@@ -591,13 +591,15 @@ query PendingFeedbacks {
     }
     feedbackId
     messManager {
-      student {
-        name
-        levelTerm {
-          label
-        }
-        batch {
-          year
+      residency{
+        student {
+          name
+          levelTerm {
+            label
+          }
+          batch {
+            year
+          }
         }
       }
     }
@@ -619,7 +621,8 @@ query AssingedMessManagers {
     from
     residencyId
     to
-    student {
+    residency  {
+      student {
       name
       phone
       email
@@ -630,6 +633,7 @@ query AssingedMessManagers {
         year
       }
       student9DigitId
+      }
     }
   }
 }
@@ -686,6 +690,15 @@ query PrevCallQuery {
         }
       }
     }
+  }
+}
+`)
+
+
+export const APPROVE_MESS_MANAGER_APP = graphql(`
+mutation ApproveMessManagerApplication($messManagerApplicationId: Float!) {
+  approveMessManagerApplication(messManagerApplicationId: $messManagerApplicationId) {
+    residencyId
   }
 }
 `)

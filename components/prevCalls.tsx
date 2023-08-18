@@ -1,5 +1,5 @@
-import { useQuery } from "@apollo/client"
-import { PREV_CALLS } from "../graphql/operations"
+import { useMutation, useQuery } from "@apollo/client"
+import { APPROVE_MESS_MANAGER_APP, PREV_CALLS } from "../graphql/operations"
 import { PrevCallQueryQuery } from "../graphql/__generated__/graphql"
 import MyCard from "./card"
 import { getDayAndMonthAndYearString } from "./utilities"
@@ -15,9 +15,27 @@ import { Button } from "@mui/material"
 const fontSize = 16;
 
 function MessManagerApplication(props : {
-    applications : PrevCallQueryQuery['prevCalls'][0]['applications']
+    applications : PrevCallQueryQuery['prevCalls'][0]['applications'],
+    refetch : ()=>void
 }){
 
+
+    let [query, {data, error, loading}] = useMutation(
+        APPROVE_MESS_MANAGER_APP
+    )
+
+    function approve(
+        applicationId : number
+    ){
+        query({
+            variables : {
+                messManagerApplicationId : applicationId
+            }, 
+            onCompleted : (data)=>{
+                props.refetch();
+            }
+        })
+    }
     
     return (
         <TableContainer component={Paper} sx={{overflow: "hidden", marginTop : "15px"}}>
@@ -77,7 +95,7 @@ function MessManagerApplication(props : {
 
                             <TableCell align="center" sx={{ fontSize: fontSize }}>
                                 <Button variant='outlined' color='inherit'
-                                        onClick={()=>{}}>
+                                        onClick={()=>{approve(row.applicationId)}} disabled = {loading}>
                                     Approve
                                 </Button>
                             </TableCell>
@@ -90,7 +108,8 @@ function MessManagerApplication(props : {
 }
 
 function Call(props : {
-    call : PrevCallQueryQuery['prevCalls'][0]
+    call : PrevCallQueryQuery['prevCalls'][0],
+    refetch : ()=>void
 }){
     return (
         <div className={styles.callRoot}>
@@ -121,8 +140,8 @@ function Call(props : {
             </div>
             <div>
                 <details>
-                    <summary> Applcations </summary>
-                    <MessManagerApplication applications={props.call.applications} />
+                    <summary> Applications </summary>
+                    <MessManagerApplication refetch={props.refetch} applications={props.call.applications} />
                 </details>
             </div>
         </div>
@@ -132,10 +151,13 @@ function Call(props : {
 export function PrevCalls(){
  
 
-    let {data, loading, error} = useQuery(
+    let {data, loading, error, refetch} = useQuery(
         PREV_CALLS
     )
 
+    function refetchData(){
+        refetch();
+    }
 
 
     return (
@@ -144,7 +166,7 @@ export function PrevCalls(){
                 <div>
                     {
                         data?.prevCalls.map(d =>(
-                            <Call call={d} />
+                            <Call call={d} refetch={refetchData} />
                         ))
                     }
                 </div>
