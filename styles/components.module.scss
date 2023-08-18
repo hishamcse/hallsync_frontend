@@ -104,3 +104,84 @@
     //     }
     // }
 }
+
+.rangeSpan{
+    color : #00FFF5;
+}
+.callRoot{
+    
+    details {
+        padding : 20px;
+    }
+
+    summary{
+        font-size: larger;
+    }
+
+    padding : 10px;
+    
+    .totalApp{
+        color : #FFE605;
+    }
+    .acceptedApp{
+        color: greenyellow;
+    }
+
+    .callTimeCountsContainer{
+        display: flex;
+        justify-content: space-between;
+        >div{
+            padding : 10px;
+            display:  flex;
+            flex-direction: column;
+            div {
+                padding : 10px;
+            }
+            :nth-child(2){
+                text-align: right;
+            }
+        }
+        padding : 5px;
+        background-color: #111111;
+        border-radius: 10px;
+    }
+    .messApplicationRoot{
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.messAppProvost{
+    >div{
+        margin-bottom: 20px;
+    }
+}
+
+.callForContentRoot{
+    >:nth-child(1){
+        display: flex;
+        padding : 20px 0px;
+        // background-color: red;
+        justify-content: space-between;
+    }
+    >:nth-child(2){
+        >div{
+            display: flex;
+            // background-color: red;
+            justify-content: space-between;
+            align-content: center;
+            align-items: center;
+            padding : 10px 0px;
+            >div{
+                display: flex;
+                // background-color: red;
+                align-items: center;
+            }
+        }
+        // display: flex;
+        // justify-content: space-around;
+    }
+    >:nth-child(3){
+        padding : 10px;
+    }
+}

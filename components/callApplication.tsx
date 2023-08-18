@@ -6,6 +6,7 @@ import { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { MyDatePicker } from "./DatePicker";
 import { MyButton } from "./button";
+import styles from '../styles/components.module.scss'
 
 export function CallApplicationTsx(){
 
@@ -57,17 +58,33 @@ export function CallApplicationTsx(){
     return (
 
         <MyCard title={"Call For Mess Manager Applications"} content={
-            <div>
+            <div className={styles.callForContentRoot}>
                 <div>
-                    Mess Manager Assinged Till
-                </div>
-                <div>
-                    {data && getDayAndMonthAndYearString(new Date(data.messManagerAssignedTill).toString())}
+                    <div>
+                        Mess Manager Assinged Upto
+                    </div>
+                    <div>
+                        <span className={styles.rangeSpan}>
+                            {data && getDayAndMonthAndYearString(new Date(data.messManagerAssignedTill).toString())}
+                        </span>
+                    </div>
                 </div>
                 <div>
                     Call for applications
-                    <MyDatePicker date={fromDate} handleDate={setFuncWrapper(setFromDate)} />
-                    <MyDatePicker date={toDate} handleDate={setFuncWrapper(setToDate)} />
+                    <div>
+                        <div>
+                            <div>
+                            From
+                            </div>
+                            <MyDatePicker date={fromDate} handleDate={setFuncWrapper(setFromDate)} />
+                        </div>
+                        <div>
+                            <div>
+                            To
+                            </div>
+                            <MyDatePicker date={toDate} handleDate={setFuncWrapper(setToDate)} />
+                        </div>
+                    </div>
 
                 </div>
                 <div>
@@ -79,6 +96,8 @@ export function CallApplicationTsx(){
                     }
                 </div>
             </div>
-        } />
+        } style={{
+            minWidth : 600
+        }} />
     )
 }

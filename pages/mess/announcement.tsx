@@ -1,8 +1,9 @@
+import Announcements from "../../components/announcements";
 
 const Announcement = () => {
     return (
-        <div>
-            Announcement
+        <div className='contentRoot'>
+            <Announcements />
         </div>
     )
 }

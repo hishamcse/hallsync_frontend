@@ -510,6 +510,26 @@ export const ADD_PREFERENCES = graphql(`
 
 `)
 
+export const GET_ANNOUNCEMENTS = graphql(`
+    query GetAnnouncements {
+      getAnnouncements {
+        announcementId
+        authorityId
+        createdAt
+        title
+        details
+        messManagerId
+        messManager {
+          messManagerId
+        }
+        authority {
+          role
+        }
+      }
+    }
+
+`)
+
 export const GET_PARTICIPATIONS = graphql(`
   query Participants($mealTime: String!, $from: String!) {
     participants(mealTime: $mealTime, from: $from) {
@@ -591,13 +611,15 @@ query PendingFeedbacks {
     }
     feedbackId
     messManager {
-      student {
-        name
-        levelTerm {
-          label
-        }
-        batch {
-          year
+      residency{
+        student {
+          name
+          levelTerm {
+            label
+          }
+          batch {
+            year
+          }
         }
       }
     }
@@ -619,7 +641,8 @@ query AssingedMessManagers {
     from
     residencyId
     to
-    student {
+    residency  {
+      student {
       name
       phone
       email
@@ -630,6 +653,7 @@ query AssingedMessManagers {
         year
       }
       student9DigitId
+      }
     }
   }
 }
@@ -652,3 +676,62 @@ export const CREATE_CALL = graphql(`
     }
   }
 `)
+
+export const PREV_CALLS = graphql(`
+query PrevCallQuery {
+  prevCalls {
+    callId
+    createdAt
+    from
+    to
+    accepted
+    applicationsCount
+    applications {
+      appliedAt
+      applicationId
+      callId
+      residency {
+        messManagerTimes
+        from
+        isCurrentMessManager
+        residencyId
+        student {
+          batch {
+            year
+          }
+          name
+          levelTerm {
+            label
+          }
+          student9DigitId
+          department {
+            shortName
+          }
+        }
+      }
+    }
+  }
+}
+`)
+
+
+export const APPROVE_MESS_MANAGER_APP = graphql(`
+mutation ApproveMessManagerApplication($messManagerApplicationId: Float!) {
+  approveMessManagerApplication(messManagerApplicationId: $messManagerApplicationId) {
+    residencyId
+  }
+}
+`)
+
+export const GET_OLD_MEAL_ITEMS = graphql(`
+query GetOldItems {
+  getOldItems {
+    itemId
+    name
+    type
+    photoId
+  }
+}
+`)
+
+export const ADD_MEALPLAN = graphql(``)
