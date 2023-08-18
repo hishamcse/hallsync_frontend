@@ -239,13 +239,13 @@ const SingleMealPlanView = (props: { mealPlan: GetMealPlansQuery['getMealPlans']
                         <div style={{display: 'inline-grid'}}>
                             <Typography variant="body2" color="#00ff00"
                                         style={{marginTop: 10}}><b>Preferences</b></Typography>
-                            {!disabled && !optedOut &&
+                            {/*{!disabled &&*/}
                                 <DraggableList list={list} setList={handleList}
-                                               disabled={prefDisabled}/>
-                            }
+                                               disabled={prefDisabled || optedOut}/>
+                            {/*}*/}
                         </div>
 
-                        {!disabled && !prefDisabled && <div style={{textAlign: 'center'}}>
+                        {!disabled && <div style={{textAlign: 'center'}}>
                             <Button variant="outlined" color="primary"
                                     style={{marginTop: 10}} size='small' onClick={handleConfirm}>
                                 Confirm
