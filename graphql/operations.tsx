@@ -450,7 +450,11 @@ export const GET_MULTIPLE_MEALPLANS = graphql(`
       }
     }
     preferences {
-      itemId
+      item {
+        itemId
+        name
+        type
+      }
       order
     }
     optedOut {

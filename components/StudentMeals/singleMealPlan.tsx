@@ -71,12 +71,21 @@ const SingleMealPlanView = (props: { mealPlan: GetMealPlansQuery['getMealPlans']
 
     const router = useRouter();
 
-    const nonVegList = props.mealPlan.meal.items.filter((item) => {
-        return item.type.toString().toLowerCase() == 'non_veg';
-    });
+    let nonVegList;
+
+    if(!props.mealPlan.preferences || props.mealPlan.preferences.length === 0) {
+        nonVegList = props.mealPlan.meal.items.filter((item) => {
+            return item.type.toString().toLowerCase() == 'non_veg';
+        }).map((item) => item.name);
+    } else {
+        nonVegList = props.mealPlan.preferences.filter((pref) => {
+            return pref.item.type.toString().toLowerCase() == 'non_veg';
+        }).sort((a, b) => a.order - b.order)
+            .map((pref) => pref.item.name);
+    }
 
     const list = nonVegList.map((item) => {
-        return item.name;
+        return item;
     });
 
     const getSelecteds = (names: string[]) => {
