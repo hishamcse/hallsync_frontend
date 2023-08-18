@@ -11,7 +11,7 @@ function CreateMealView(){
         <div className={"contentRoot"}>
             {
                 resident && !messManager &&
-                <ManagerMealView />
+                <MealView />
             }
             {
                 messManager &&
