@@ -104,3 +104,49 @@
     //     }
     // }
 }
+
+
+.callRoot{
+    
+    details {
+        padding : 20px;
+    }
+
+    summary{
+        font-size: larger;
+    }
+
+    padding : 10px;
+    .rangeSpan{
+        color : #00FFF5;
+    }
+    .totalApp{
+        color : #FFE605;
+    }
+    .acceptedApp{
+        color: greenyellow;
+    }
+
+    .callTimeCountsContainer{
+        display: flex;
+        justify-content: space-between;
+        >div{
+            padding : 10px;
+            display:  flex;
+            flex-direction: column;
+            div {
+                padding : 10px;
+            }
+            :nth-child(2){
+                text-align: right;
+            }
+        }
+        padding : 5px;
+        background-color: #111111;
+        border-radius: 10px;
+    }
+    .messApplicationRoot{
+        display: flex;
+        justify-content: space-between;
+    }
+}

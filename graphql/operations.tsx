@@ -648,3 +648,40 @@ export const CREATE_CALL = graphql(`
     }
   }
 `)
+
+export const PREV_CALLS = graphql(`
+query PrevCallQuery {
+  prevCalls {
+    callId
+    createdAt
+    from
+    to
+    accepted
+    applicationsCount
+    applications {
+      appliedAt
+      applicationId
+      callId
+      residency {
+        messManagerTimes
+        from
+        isCurrentMessManager
+        residencyId
+        student {
+          batch {
+            year
+          }
+          name
+          levelTerm {
+            label
+          }
+          student9DigitId
+          department {
+            shortName
+          }
+        }
+      }
+    }
+  }
+}
+`)
