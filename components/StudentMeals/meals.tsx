@@ -35,7 +35,7 @@ const MealView: React.FC = () => {
             to: generateDateInfo(2)
         },
         onCompleted: (data) => {
-            console.log(data);
+            console.log("data", data);
             setMealPlans(data.getMealPlans);
         },
         onError: (error) => {

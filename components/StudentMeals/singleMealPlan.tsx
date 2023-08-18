@@ -71,19 +71,19 @@ const SingleMealPlanView = (props: { mealPlan: GetMealPlansQuery['getMealPlans']
 
     const router = useRouter();
 
-    const nonVegList = props.mealPlan.cupCount.filter((cupCountDetails) => {
-        return cupCountDetails.item.type.toString().toLowerCase() == 'non_veg';
+    const nonVegList = props.mealPlan.meal.items.filter((item) => {
+        return item.type.toString().toLowerCase() == 'non_veg';
     });
 
-    const list = nonVegList.map((cupCountDetails) => {
-        return cupCountDetails.item.name;
+    const list = nonVegList.map((item) => {
+        return item.name;
     });
 
     const getSelecteds = (names: string[]) => {
-        let selecteds: GetMealPlansQuery['getMealPlans'][0]['cupCount'] = [];
+        let selecteds: GetMealPlansQuery['getMealPlans'][0]['meal']['items'] = [];
         names.forEach((name) => {
-            selecteds.push(props.mealPlan.cupCount.filter((cupCountDetails) => {
-                return cupCountDetails.item.name == name;
+            selecteds.push(props.mealPlan.meal.items.filter((item) => {
+                return item.name == name;
             })[0]);
         });
 
@@ -159,9 +159,9 @@ const SingleMealPlanView = (props: { mealPlan: GetMealPlansQuery['getMealPlans']
 
         const selected = getSelecteds(strList);
 
-        const selectedPrefs = selected.map((cupCountDetails, index) => {
+        const selectedPrefs = selected.map((item, index) => {
             return {
-                itemId: cupCountDetails.item.itemId,
+                itemId: item.itemId,
                 order: index
             }
         });
@@ -196,20 +196,28 @@ const SingleMealPlanView = (props: { mealPlan: GetMealPlansQuery['getMealPlans']
             <div style={{borderTop: "1px solid #ccc"}}>
                 <div style={{display: "flex", margin: "16px"}}>
                     <div style={{display: "flex", alignItems: "center", justifyContent: 'space-between', margin: 10}}>
-                        {props.mealPlan.cupCount.map((cupCountDetails, index: number) => (
-                            <div key={index} style={{margin: 10}}>
-                                <Image src={importedImgPath(cupCountDetails.item.photo?.file.fileName ?? 'default.png')}
-                                       alt='foodItem'
-                                       width={820 / props.mealPlan.cupCount.length}
-                                       height={650 / props.mealPlan.cupCount.length}/>
-                                <Typography variant="body2" textAlign='center'>
-                                    {cupCountDetails.item.name}
-                                    {cupCountDetails.item.type.toString().toLowerCase() != 'rice' &&
-                                    cupCountDetails.item.type.toString().toLowerCase() != 'veg' ?
-                                        `(${cupCountDetails.cupcount} cups)` : ""}
-                                </Typography>
-                            </div>
-                        ))}
+                        {props.mealPlan.meal.items.map((item, index: number) => {
+                            let cupcountA = props.mealPlan.cupCount.filter(c => c.itemId == item.itemId);
+                            let cupcount = "NA"
+                            if(cupcountA.length  > 0){
+                                cupcount = cupcountA[0].cupcount.toString();
+                            }
+                            return (
+                                <div key={index} style={{margin: 10}}>
+                                    <Image src={importedImgPath(item.photo?.file.fileName ?? 'default.png')}
+                                           alt='foodItem'
+                                           width={820 / props.mealPlan.meal.items.length}
+                                           height={650 / props.mealPlan.meal.items.length}/>
+                                    <Typography variant="body2" textAlign='center'>
+                                        {item.name}
+                                        {item.type.toString().toLowerCase() != 'rice' &&
+                                        item.type.toString().toLowerCase() != 'veg' ?
+                                            `(${ cupcount } cups)` : ""}
+                                    </Typography>
+                                </div>
+                            )
+                        } 
+                        )}
                     </div>
 
                     <div style={{

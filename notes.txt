@@ -1,2 +1,5 @@
 new seat P error handling
 curr room no in viewing room change app from student 
+
+
+after giving preference, opt out is still shown, but no button to confirm
