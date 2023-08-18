@@ -430,39 +430,38 @@ export const GET_NOTIFICATIONS = graphql(`
 
 export const GET_MULTIPLE_MEALPLANS = graphql(`
    query GetMealPlans($to: String!, $from: String!) {
-      getMealPlans(to: $to, from: $from) {
-        mealPlanId
-        day
-        mealTime
-        cupCount {
-          itemId
-          cupcount
-          item {
-            itemId
-            name
-            type
-            photo {
-              photoId
-              file {
-                fileName
-                filePath
-              }
-            }
+  getMealPlans(to: $to, from: $from) {
+    mealPlanId
+    mealTime
+    day
+    mealTime
+    meal {
+      mealId
+      items {
+        itemId
+        name
+        photoId
+        type
+        photo {
+          file {
+            fileName
           }
-          mealPlan {
-            mealTime
-          }
-        }
-        preferences {
-          itemId
-          order
-        }
-        optedOut {
-          studentId
-          student9DigitId
         }
       }
-   }
+    }
+    preferences {
+      itemId
+      order
+    }
+    optedOut {
+      studentId
+    }
+    cupCount {
+      cupcount
+      itemId
+    }
+  }
+}
 
 `)
 
