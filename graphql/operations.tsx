@@ -510,6 +510,29 @@ export const ADD_PREFERENCES = graphql(`
 
 `)
 
+export const GET_ANNOUNCEMENTS = graphql(`
+    query GetAnnouncements {
+      getAnnouncements {
+        announcementId
+        authorityId
+        createdAt
+        title
+        details
+        messManagerId
+        messManager {
+          student {
+            student9DigitId
+            studentId
+          }
+        }
+        authority {
+          role
+        }
+      }
+    }
+
+`)
+
 export const GET_PARTICIPATIONS = graphql(`
   query Participants($mealTime: String!, $from: String!) {
     participants(mealTime: $mealTime, from: $from) {
