@@ -1,3 +1,5 @@
+@import './vars';
+
 .inputStyle{
     background: black;
     color: white;
@@ -80,4 +82,25 @@
     justify-content: space-between;
 
 
+}
+
+.messManagerRoot{
+    display: inline-block;
+    padding: 15px;
+    margin : 10px;
+    background-color: #111111;
+    .picAndInfoRoot{
+        display: flex;
+    }
+    .timeRangeContainer{
+        margin-top: 10px;
+        text-align: center;
+    }
+    border-radius: 10px;
+    // .infoRoot{
+    //     >div {
+    //         display: flex;
+    //         justify-content: space-between;
+    //     }
+    // }
 }

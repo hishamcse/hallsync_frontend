@@ -43,6 +43,9 @@ const documents = {
     "\n  query MealPreferenceStats($mealTime: String!, $date: String!) {\n    mealPreferenceStats(mealTime: $mealTime, date: $date) {\n      count\n      order\n      item {\n        itemId\n        name\n        type\n      }\n    }\n  }\n": types.MealPreferenceStatsDocument,
     "\nquery PendingFeedbacks {\n  pendingFeedbacks {\n    startDate\n    startMealPlan {\n      day\n    }\n    endMealPlan {\n      day\n    }\n    feedbackId\n    messManager {\n      student {\n        name\n        levelTerm {\n          label\n        }\n        batch {\n          year\n        }\n      }\n    }\n  }\n}\n": types.PendingFeedbacksDocument,
     "\n  mutation PostFeedback($feedbackId: Float!, $ratings: IntArray!) {\n    postFeedback(feedbackId: $feedbackId, ratings: $ratings)\n  }\n": types.PostFeedbackDocument,
+    "\nquery AssingedMessManagers {\n  assingedMessManagers {\n    from\n    residencyId\n    to\n    student {\n      name\n      phone\n      email\n      levelTerm {\n        label\n      }\n      batch {\n        year\n      }\n      student9DigitId\n    }\n  }\n}\n": types.AssingedMessManagersDocument,
+    "\n  query MessManagerAssignedTill {\n    messManagerAssignedTill\n  }\n": types.MessManagerAssignedTillDocument,
+    "\n  mutation CreateCallMutation($to: String!, $from: String!) {\n    createCall(to: $to, from: $from) {\n      callId\n      createdAt\n      from\n      to\n    }\n  }\n": types.CreateCallMutationDocument,
 };
 
 /**
@@ -179,6 +182,18 @@ export function graphql(source: "\nquery PendingFeedbacks {\n  pendingFeedbacks 
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation PostFeedback($feedbackId: Float!, $ratings: IntArray!) {\n    postFeedback(feedbackId: $feedbackId, ratings: $ratings)\n  }\n"): (typeof documents)["\n  mutation PostFeedback($feedbackId: Float!, $ratings: IntArray!) {\n    postFeedback(feedbackId: $feedbackId, ratings: $ratings)\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\nquery AssingedMessManagers {\n  assingedMessManagers {\n    from\n    residencyId\n    to\n    student {\n      name\n      phone\n      email\n      levelTerm {\n        label\n      }\n      batch {\n        year\n      }\n      student9DigitId\n    }\n  }\n}\n"): (typeof documents)["\nquery AssingedMessManagers {\n  assingedMessManagers {\n    from\n    residencyId\n    to\n    student {\n      name\n      phone\n      email\n      levelTerm {\n        label\n      }\n      batch {\n        year\n      }\n      student9DigitId\n    }\n  }\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query MessManagerAssignedTill {\n    messManagerAssignedTill\n  }\n"): (typeof documents)["\n  query MessManagerAssignedTill {\n    messManagerAssignedTill\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation CreateCallMutation($to: String!, $from: String!) {\n    createCall(to: $to, from: $from) {\n      callId\n      createdAt\n      from\n      to\n    }\n  }\n"): (typeof documents)["\n  mutation CreateCallMutation($to: String!, $from: String!) {\n    createCall(to: $to, from: $from) {\n      callId\n      createdAt\n      from\n      to\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

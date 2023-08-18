@@ -3,3 +3,5 @@ curr room no in viewing room change app from student
 
 
 after giving preference, opt out is still shown, but no button to confirm
+
+change from to date style in mess manager list

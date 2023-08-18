@@ -58,7 +58,7 @@ function MessTabs() {
     const router = useRouter();
     const routes = {
       meals: "meals",
-      application: "application",
+      application: "messApplication",
       announcement: "announcement",
       feedbacks: "feedbacks",
       stats : "stats"

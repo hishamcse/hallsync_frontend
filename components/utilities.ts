@@ -12,3 +12,11 @@ export function getDayAndMonthString(date : string){
         month : 'short'
     })
 }
+
+export function getDayAndMonthAndYearString(date : string){
+    return new Date(date).toLocaleString('default',{
+        day : 'numeric',
+        month : 'short',
+        year : 'numeric'
+    })
+}

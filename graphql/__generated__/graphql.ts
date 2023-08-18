@@ -202,7 +202,6 @@ export type MessManager = {
   residency: Residency;
   residencyId: Scalars['Float']['output'];
   student: Student;
-  studentStudentId: Scalars['Float']['output'];
   to: Scalars['DateTime']['output'];
 };
 
@@ -218,6 +217,16 @@ export type MessManagerApplication = {
   student: Student;
 };
 
+export type MessManagerApplicationCall = {
+  __typename?: 'MessManagerApplicationCall';
+  callId: Scalars['Float']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  createdBy: Authority;
+  createdById: Scalars['Float']['output'];
+  from: Scalars['DateTime']['output'];
+  to: Scalars['DateTime']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addAnnouncement: Announcement;
@@ -229,6 +238,7 @@ export type Mutation = {
   approveNewApplication: Residency;
   approveSeatChangeApplication: Residency;
   approveTempSeatApplication: TempResidency;
+  createCall: MessManagerApplicationCall;
   login: UserWithToken;
   newSeatApplication: NewApplication;
   optOut: OptedOut;
@@ -303,6 +313,12 @@ export type MutationApproveTempSeatApplicationArgs = {
   days: Scalars['Float']['input'];
   from: Scalars['String']['input'];
   seatId: Scalars['Float']['input'];
+};
+
+
+export type MutationCreateCallArgs = {
+  from: Scalars['String']['input'];
+  to: Scalars['String']['input'];
 };
 
 
@@ -454,6 +470,7 @@ export type Query = {
   applicationStatus: Array<StatusWithDefaultSelect>;
   applicationTypes: Array<Scalars['String']['output']>;
   applications: SeatApplicationsWithCount;
+  assingedMessManagers: Array<MessManager>;
   batches: Array<Batch>;
   departments: Array<Department>;
   freeFloors: Array<Floor>;
@@ -469,6 +486,7 @@ export type Query = {
   mealPreferenceStats: Array<MealPreferenceStats>;
   messManagerApplicationDetails: MessManagerApplication;
   messManagerApplications: MessApplicationsWithCount;
+  messManagerAssignedTill: Scalars['String']['output'];
   messManagingExperiences: Array<MessManager>;
   myapplications: Array<SeatApplication>;
   notifications: NotificationWithCount;
@@ -985,6 +1003,24 @@ export type PostFeedbackMutationVariables = Exact<{
 
 export type PostFeedbackMutation = { __typename?: 'Mutation', postFeedback: string };
 
+export type AssingedMessManagersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AssingedMessManagersQuery = { __typename?: 'Query', assingedMessManagers: Array<{ __typename?: 'MessManager', from: any, residencyId: number, to: any, student: { __typename?: 'Student', name: string, phone: string, email: string, student9DigitId: string, levelTerm: { __typename?: 'LevelTerm', label: string }, batch: { __typename?: 'Batch', year: string } } }> };
+
+export type MessManagerAssignedTillQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MessManagerAssignedTillQuery = { __typename?: 'Query', messManagerAssignedTill: string };
+
+export type CreateCallMutationMutationVariables = Exact<{
+  to: Scalars['String']['input'];
+  from: Scalars['String']['input'];
+}>;
+
+
+export type CreateCallMutationMutation = { __typename?: 'Mutation', createCall: { __typename?: 'MessManagerApplicationCall', callId: number, createdAt: any, from: any, to: any } };
+
 
 export const DepartmentsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deptCode"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]} as unknown as DocumentNode<DepartmentsQuery, DepartmentsQueryVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"loginId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}},{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"loginId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"studentId"}},{"kind":"Field","name":{"kind":"Name","value":"residencyStatus"}},{"kind":"Field","name":{"kind":"Name","value":"residency"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isCurrentMessManager"}},{"kind":"Field","name":{"kind":"Name","value":"seat"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomNo"}},{"kind":"Field","name":{"kind":"Name","value":"floor"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"floorNo"}},{"kind":"Field","name":{"kind":"Name","value":"roomLabelLen"}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"authority"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorityId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
@@ -1016,3 +1052,6 @@ export const OptOutQueryDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const MealPreferenceStatsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"MealPreferenceStats"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"mealTime"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"date"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mealPreferenceStats"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"mealTime"},"value":{"kind":"Variable","name":{"kind":"Name","value":"mealTime"}}},{"kind":"Argument","name":{"kind":"Name","value":"date"},"value":{"kind":"Variable","name":{"kind":"Name","value":"date"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"order"}},{"kind":"Field","name":{"kind":"Name","value":"item"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]}}]}}]} as unknown as DocumentNode<MealPreferenceStatsQuery, MealPreferenceStatsQueryVariables>;
 export const PendingFeedbacksDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"PendingFeedbacks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pendingFeedbacks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"startDate"}},{"kind":"Field","name":{"kind":"Name","value":"startMealPlan"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"endMealPlan"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"day"}}]}},{"kind":"Field","name":{"kind":"Name","value":"feedbackId"}},{"kind":"Field","name":{"kind":"Name","value":"messManager"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"levelTerm"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"label"}}]}},{"kind":"Field","name":{"kind":"Name","value":"batch"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<PendingFeedbacksQuery, PendingFeedbacksQueryVariables>;
 export const PostFeedbackDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"PostFeedback"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"feedbackId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ratings"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"IntArray"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"postFeedback"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"feedbackId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"feedbackId"}}},{"kind":"Argument","name":{"kind":"Name","value":"ratings"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ratings"}}}]}]}}]} as unknown as DocumentNode<PostFeedbackMutation, PostFeedbackMutationVariables>;
+export const AssingedMessManagersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AssingedMessManagers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"assingedMessManagers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"from"}},{"kind":"Field","name":{"kind":"Name","value":"residencyId"}},{"kind":"Field","name":{"kind":"Name","value":"to"}},{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"phone"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"levelTerm"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"label"}}]}},{"kind":"Field","name":{"kind":"Name","value":"batch"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"year"}}]}},{"kind":"Field","name":{"kind":"Name","value":"student9DigitId"}}]}}]}}]}}]} as unknown as DocumentNode<AssingedMessManagersQuery, AssingedMessManagersQueryVariables>;
+export const MessManagerAssignedTillDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"MessManagerAssignedTill"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"messManagerAssignedTill"}}]}}]} as unknown as DocumentNode<MessManagerAssignedTillQuery, MessManagerAssignedTillQueryVariables>;
+export const CreateCallMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCallMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"to"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"from"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCall"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"to"},"value":{"kind":"Variable","name":{"kind":"Name","value":"to"}}},{"kind":"Argument","name":{"kind":"Name","value":"from"},"value":{"kind":"Variable","name":{"kind":"Name","value":"from"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"callId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"from"}},{"kind":"Field","name":{"kind":"Name","value":"to"}}]}}]}}]} as unknown as DocumentNode<CreateCallMutationMutation, CreateCallMutationMutationVariables>;

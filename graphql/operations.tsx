@@ -607,3 +607,44 @@ export const POST_FEEDBACK = graphql(`
   }
 `)
 
+
+
+export const GET_ASSINGED_MESS_MANAGERS = graphql(`
+query AssingedMessManagers {
+  assingedMessManagers {
+    from
+    residencyId
+    to
+    student {
+      name
+      phone
+      email
+      levelTerm {
+        label
+      }
+      batch {
+        year
+      }
+      student9DigitId
+    }
+  }
+}
+`)
+
+
+export const GET_ASSIGNED_TILL = graphql(`
+  query MessManagerAssignedTill {
+    messManagerAssignedTill
+  }
+`)
+
+export const CREATE_CALL = graphql(`
+  mutation CreateCallMutation($to: String!, $from: String!) {
+    createCall(to: $to, from: $from) {
+      callId
+      createdAt
+      from
+      to
+    }
+  }
+`)
