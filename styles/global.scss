@@ -22,3 +22,10 @@ body{
 #__next{
     height: 100%;
 }
+
+.ACCEPTED{
+    color : $successColor;
+}
+.PENDING{
+    color : $alertColor;
+}

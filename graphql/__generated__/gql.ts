@@ -51,6 +51,8 @@ const documents = {
     "\nquery PrevCallQuery {\n  prevCalls {\n    callId\n    createdAt\n    from\n    to\n    accepted\n    applicationsCount\n    applications {\n      appliedAt\n      applicationId\n      callId\n      residency {\n        messManagerTimes\n        from\n        isCurrentMessManager\n        residencyId\n        student {\n          batch {\n            year\n          }\n          name\n          levelTerm {\n            label\n          }\n          student9DigitId\n          department {\n            shortName\n          }\n        }\n      }\n    }\n  }\n}\n": types.PrevCallQueryDocument,
     "\nmutation ApproveMessManagerApplication($messManagerApplicationId: Float!) {\n  approveMessManagerApplication(messManagerApplicationId: $messManagerApplicationId) {\n    residencyId\n  }\n}\n": types.ApproveMessManagerApplicationDocument,
     "\nquery GetOldItems {\n  getOldItems {\n    itemId\n    name\n    type\n    photoId\n  }\n}\n": types.GetOldItemsDocument,
+    "\n  query PrevCallsStudent {\n  prevCallsWithAppOfResident {\n    application {\n      status\n    }\n    call {\n      from\n      to\n      createdAt\n      callId\n    }\n  }\n}\n": types.PrevCallsStudentDocument,
+    "\nmutation ApplyMessManager($callId: Float!) {\n  applyMessManager(callId: $callId) {\n    applicationId\n  }\n}\n": types.ApplyMessManagerDocument,
 };
 
 /**
@@ -219,6 +221,14 @@ export function graphql(source: "\nmutation ApproveMessManagerApplication($messM
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\nquery GetOldItems {\n  getOldItems {\n    itemId\n    name\n    type\n    photoId\n  }\n}\n"): (typeof documents)["\nquery GetOldItems {\n  getOldItems {\n    itemId\n    name\n    type\n    photoId\n  }\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query PrevCallsStudent {\n  prevCallsWithAppOfResident {\n    application {\n      status\n    }\n    call {\n      from\n      to\n      createdAt\n      callId\n    }\n  }\n}\n"): (typeof documents)["\n  query PrevCallsStudent {\n  prevCallsWithAppOfResident {\n    application {\n      status\n    }\n    call {\n      from\n      to\n      createdAt\n      callId\n    }\n  }\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\nmutation ApplyMessManager($callId: Float!) {\n  applyMessManager(callId: $callId) {\n    applicationId\n  }\n}\n"): (typeof documents)["\nmutation ApplyMessManager($callId: Float!) {\n  applyMessManager(callId: $callId) {\n    applicationId\n  }\n}\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

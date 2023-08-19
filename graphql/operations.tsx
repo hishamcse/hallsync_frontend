@@ -750,4 +750,28 @@ query GetOldItems {
 `)
 
 
+export const GET_PREV_CALLS_STUDENT = graphql(`
+  query PrevCallsStudent {
+  prevCallsWithAppOfResident {
+    application {
+      status
+    }
+    call {
+      from
+      to
+      createdAt
+      callId
+    }
+  }
+}
+`)
+
+export const APPLY_FOR_MESS_MANAGER = graphql(`
+mutation ApplyMessManager($callId: Float!) {
+  applyMessManager(callId: $callId) {
+    applicationId
+  }
+}
+`)
+
 export const ADD_MEALPLAN = graphql(``)
