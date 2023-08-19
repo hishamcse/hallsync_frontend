@@ -530,6 +530,20 @@ export const GET_ANNOUNCEMENTS = graphql(`
 
 `)
 
+export const ADD_ANNOUNCEMENT = graphql(`
+    mutation AddAnnouncement($details: String!, $title: String!) {
+      addAnnouncement(details: $details, title: $title) {
+        announcementId
+        authorityId
+        createdAt
+        title
+        details
+        messManagerId
+      }
+    }
+
+`)
+
 export const GET_PARTICIPATIONS = graphql(`
   query Participants($mealTime: String!, $from: String!) {
     participants(mealTime: $mealTime, from: $from) {
