@@ -46,7 +46,7 @@ const documents = {
     "\nquery PendingFeedbacks {\n  pendingFeedbacks {\n    startDate\n    startMealPlan {\n      day\n    }\n    endMealPlan {\n      day\n    }\n    feedbackId\n    messManager {\n      residency{\n        student {\n          name\n          levelTerm {\n            label\n          }\n          batch {\n            year\n          }\n        }\n      }\n    }\n  }\n}\n": types.PendingFeedbacksDocument,
     "\n  mutation PostFeedback($feedbackId: Float!, $ratings: IntArray!) {\n    postFeedback(feedbackId: $feedbackId, ratings: $ratings)\n  }\n": types.PostFeedbackDocument,
     "\nquery AssingedMessManagers {\n  assingedMessManagers {\n    from\n    residencyId\n    to\n    residency  {\n      student {\n      name\n      phone\n      email\n      levelTerm {\n        label\n      }\n      batch {\n        year\n      }\n      student9DigitId\n      }\n    }\n  }\n}\n": types.AssingedMessManagersDocument,
-    "\n  query MessManagerAssignedTill {\n    messManagerAssignedTill\n  }\n": types.MessManagerAssignedTillDocument,
+    "\n  query TillQuery {\n    callUntil\n    messManagerAssignedTill\n  }\n": types.TillQueryDocument,
     "\n  mutation CreateCallMutation($to: String!, $from: String!) {\n    createCall(to: $to, from: $from) {\n      callId\n      createdAt\n      from\n      to\n    }\n  }\n": types.CreateCallMutationDocument,
     "\nquery PrevCallQuery {\n  prevCalls {\n    callId\n    createdAt\n    from\n    to\n    accepted\n    applicationsCount\n    applications {\n      appliedAt\n      applicationId\n      callId\n      residency {\n        messManagerTimes\n        from\n        isCurrentMessManager\n        residencyId\n        student {\n          batch {\n            year\n          }\n          name\n          levelTerm {\n            label\n          }\n          student9DigitId\n          department {\n            shortName\n          }\n        }\n      }\n    }\n  }\n}\n": types.PrevCallQueryDocument,
     "\nmutation ApproveMessManagerApplication($messManagerApplicationId: Float!) {\n  approveMessManagerApplication(messManagerApplicationId: $messManagerApplicationId) {\n    residencyId\n  }\n}\n": types.ApproveMessManagerApplicationDocument,
@@ -202,7 +202,7 @@ export function graphql(source: "\nquery AssingedMessManagers {\n  assingedMessM
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query MessManagerAssignedTill {\n    messManagerAssignedTill\n  }\n"): (typeof documents)["\n  query MessManagerAssignedTill {\n    messManagerAssignedTill\n  }\n"];
+export function graphql(source: "\n  query TillQuery {\n    callUntil\n    messManagerAssignedTill\n  }\n"): (typeof documents)["\n  query TillQuery {\n    callUntil\n    messManagerAssignedTill\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

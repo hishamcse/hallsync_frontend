@@ -675,7 +675,8 @@ query AssingedMessManagers {
 
 
 export const GET_ASSIGNED_TILL = graphql(`
-  query MessManagerAssignedTill {
+  query TillQuery {
+    callUntil
     messManagerAssignedTill
   }
 `)
@@ -747,5 +748,6 @@ query GetOldItems {
   }
 }
 `)
+
 
 export const ADD_MEALPLAN = graphql(``)

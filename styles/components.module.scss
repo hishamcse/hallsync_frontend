@@ -160,11 +160,17 @@
 .callForContentRoot{
     >:nth-child(1){
         display: flex;
-        padding : 20px 0px;
+        padding : 10px 0px;
         // background-color: red;
         justify-content: space-between;
     }
     >:nth-child(2){
+        display: flex;
+        padding: 10px 0px;
+        justify-content: space-between;
+    }
+    >:nth-child(3){
+        margin-top: 20px;
         >div{
             display: flex;
             // background-color: red;
@@ -182,6 +188,6 @@
         // justify-content: space-around;
     }
     >:nth-child(3){
-        padding : 10px;
+        padding : 10px 0px;
     }
 }
