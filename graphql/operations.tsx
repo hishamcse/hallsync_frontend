@@ -652,9 +652,11 @@ export const POST_FEEDBACK = graphql(`
 export const GET_ASSINGED_MESS_MANAGERS = graphql(`
 query AssingedMessManagers {
   assingedMessManagers {
-    from
+    call {
+      from 
+      to
+    }
     residencyId
-    to
     residency  {
       student {
       name
