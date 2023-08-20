@@ -7,6 +7,23 @@ import styles from '../styles/components.module.scss'
 import { MyButton } from "./button"
 
 
+export function FromToComp(props : {
+    from : string,
+    to : string
+}){
+    return (
+        <div className={styles.fromToContainer}>
+            <div>
+                <span>From</span> <span> {getDayAndMonthAndYearString(props.from)} </span>
+            </div>
+            
+            <div>
+                <span>To</span> <span> {getDayAndMonthAndYearString(props.to)} </span>
+            </div>
+        </div>
+    )
+}
+
 function Call(props : {
     call : PrevCallsStudentQuery['prevCallsWithAppOfResident'][0]['call'],
     app : PrevCallsStudentQuery['prevCallsWithAppOfResident'][0]['application'],
@@ -16,15 +33,7 @@ function Call(props : {
 }){
     return (
         <div className = {styles.callContainerStudentView}>
-            <div className={styles.fromToContainer}>
-                <div>
-                    <span>From</span> <span> {getDayAndMonthAndYearString(props.call.from)} </span>
-                </div>
-                
-                <div>
-                    <span>To</span> <span> {getDayAndMonthAndYearString(props.call.to)} </span>
-                </div>
-            </div>
+            <FromToComp from={props.call.from} to = {props.call.to} />
             {
                 props.app && 
 

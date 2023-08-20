@@ -2,6 +2,7 @@ import { CallApplicationTsx } from "../../components/callApplication";
 import { CallsAndApply } from "../../components/messApplicationResident";
 import { MessManagerList } from "../../components/messManagerList";
 import { PrevCalls } from "../../components/prevCalls";
+import { PreviousExp } from "../../components/previousMessManagerExp";
 import useResidencyStatus from "../../hooks/useResidencyStatus";
 import styles from '../../styles/components.module.scss'
 
@@ -23,7 +24,10 @@ export default function ApplicationView(){
                 }
                 {
                     resident && 
-                    <CallsAndApply />
+                    <>
+                        <CallsAndApply />
+                        <PreviousExp  />
+                    </>
                 }
             </div>
         </div>
