@@ -52,7 +52,9 @@ export function MessManagerList(){
 
     return (
             <MyCard title={"Assigned Mess Managers"} content={
-                <div>
+                <div style = {{
+                    display : "inline-block"
+                }}>
                     {
                         data?.assingedMessManagers.map(manager =>(
                             <MessManager messManager={manager} />

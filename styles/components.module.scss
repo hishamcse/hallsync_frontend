@@ -200,16 +200,7 @@
     display: inline-block;
     min-height: 110px;
     border-radius: 10px;
-    .fromToContainer{
-        >div{
-            display: flex;
-            justify-content: space-between;
-            padding : 5px;
-            :nth-child(2){
-                color : #00FFF5;
-            }
-        }
-    }
+    
 
     .applicationContainer{
         margin: 10px 5px;
@@ -223,3 +214,28 @@
         text-align: center;
     }
 }   
+
+.fromToContainer{
+    >div{
+        display: flex;
+        justify-content: space-between;
+        padding : 5px;
+        :nth-child(2){
+            color : #00FFF5;
+        }
+    }
+}
+
+.prevExpEachRoot{
+    margin: 10px ;
+    background-color: #111111;
+    min-width: 220px;
+    padding: 10px;
+    border-radius: 10px;
+    display: inline-block;
+    >:nth-child(2){
+        display: flex;
+        justify-content: space-between;
+        padding : 3px 5px;
+    }
+}
