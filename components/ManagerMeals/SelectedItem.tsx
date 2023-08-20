@@ -6,7 +6,7 @@ import TextField from "@mui/material/TextField";
 type SelectedItemsListProps = {
   selectedItems: Item[];
   type: string;
-  onChangeCupCount: (itemName: string, quantity: number) => void; // Update the prop type
+  onChangeCupCount?: (itemName: string, quantity: number) => void; // Update the prop type
 };
 
 const SelectedItemsList: React.FC<SelectedItemsListProps> = ({ selectedItems, type, onChangeCupCount }) => {
@@ -14,7 +14,7 @@ const SelectedItemsList: React.FC<SelectedItemsListProps> = ({ selectedItems, ty
 
   const handleCupCountChange = (itemName: string, quantity: number) => {
     setItemCupCount(prevCupCounts => ({ ...prevCupCounts, [itemName]: quantity }));
-    onChangeCupCount(itemName, quantity); // Update the function call
+    if(onChangeCupCount) onChangeCupCount(itemName, quantity); // Update the function call
   };
 
   return (
