@@ -166,7 +166,7 @@ export function PrevCalls(){
                 <div>
                     {
                         data?.prevCalls.map(d =>(
-                            <Call call={d} refetch={refetchData} />
+                            <Call key={d.callId} call={d} refetch={refetchData} />
                         ))
                     }
                 </div>

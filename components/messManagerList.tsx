@@ -56,8 +56,8 @@ export function MessManagerList(){
                     display : "inline-block"
                 }}>
                     {
-                        data?.assingedMessManagers.map(manager =>(
-                            <MessManager messManager={manager} />
+                        data?.assingedMessManagers.map((manager, index) =>(
+                            <MessManager key={index} messManager={manager} />
                         ))
                     }
                 </div>
