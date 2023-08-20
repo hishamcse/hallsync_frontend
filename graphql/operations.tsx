@@ -789,5 +789,6 @@ export const GET_MESS_MANAGER_EXPERIENCE = graphql(`
     }
   }
 `)
+export const ADD_ITEM = graphql(``)
 
 export const ADD_MEALPLAN = graphql(``)
