@@ -66,6 +66,7 @@ export function OptInPieChart(){
         <MyCard
             title={
                 <TitleMealTimeDate
+                datePickerLabel="Day"
                 date={date}
                 handleDate={handleDate}
                 mealTime={mealTime}

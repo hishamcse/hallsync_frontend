@@ -8,7 +8,8 @@ export function TitleDate(props : {
     title : string
     date : Dayjs | null,
     handleDate : (newValue: Dayjs | null) => void,
-    children?: ReactNode
+    children?: ReactNode,
+    datePickerLabel? : string
 }){
     return (
         <div className={styles.titleDateRoot}>
@@ -17,7 +18,7 @@ export function TitleDate(props : {
             </h4>
             <div className={styles.titleDateRootRight}>
                 <div>
-                    <MyDatePicker date={props.date} handleDate={props.handleDate} />
+                    <MyDatePicker label={props.datePickerLabel} date={props.date} handleDate={props.handleDate} />
                 </div>
                 {props.children}
             </div>
@@ -31,11 +32,13 @@ export function TitleMealTimeDate(props : {
     setMealTime : (v : string)=>void,
     date : Dayjs | null,
     handleDate : (newValue: Dayjs | null) => void,
-    children?: ReactNode
+    children?: ReactNode,
+    datePickerLabel? : string
+
 }) {
 
     return (
-        <TitleDate title={props.title} date={props.date} handleDate={props.handleDate} >
+        <TitleDate datePickerLabel={props.datePickerLabel} title={props.title} date={props.date} handleDate={props.handleDate} >
             <MealTimeDropDown setVal={props.setMealTime} val={props.mealTime} />
         </TitleDate>
     )

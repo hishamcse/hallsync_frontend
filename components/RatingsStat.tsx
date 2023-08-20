@@ -58,7 +58,7 @@ export function RatingBarChart(){
 
     return (
         <MyCard
-        title={<TitleDate date={date} handleDate={handleDate} title="Ratings" />}
+        title={<TitleDate datePickerLabel="Day" date={date} handleDate={handleDate} title="Ratings" />}
         content={
             <div>
                 {

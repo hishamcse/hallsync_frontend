@@ -54,7 +54,7 @@ export function AbsenteesBarChart() {
         <MyCard
 
             title={
-                <TitleDate date={date} handleDate={handleDate} title="Absentees" >
+                <TitleDate datePickerLabel="From" date={date} handleDate={handleDate} title="Absentees" >
                     <div>
                         <Box component="form" noValidate autoComplete="off">
                             <FormControl sx={{

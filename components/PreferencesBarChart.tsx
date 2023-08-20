@@ -100,6 +100,7 @@ export function MealPreferencesBarChart(){
     return(
         <MyCard title={
         <TitleMealTimeDate
+            datePickerLabel="Day"
             date={date}
             handleDate={handleDate}
             mealTime={mealTime}

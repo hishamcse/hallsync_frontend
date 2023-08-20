@@ -109,6 +109,7 @@ export default function ParticipationBarChart() {
         <MyCard 
         title={
             <TitleMealTimeDate
+            datePickerLabel="From"
             date={date}
             handleDate={handleDate}
             mealTime={mealTime}
