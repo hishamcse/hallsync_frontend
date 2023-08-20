@@ -776,4 +776,18 @@ mutation ApplyMessManager($callId: Float!) {
 }
 `)
 
+export const GET_MESS_MANAGER_EXPERIENCE = graphql(`
+  query MessManagingExperiences {
+    messManagingExperiences {
+      call {
+        from
+        to
+        authority {
+          name
+        }
+      }
+    }
+  }
+`)
+
 export const ADD_MEALPLAN = graphql(``)

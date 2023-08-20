@@ -170,10 +170,6 @@ export type MealPlan = {
   preferences?: Maybe<Array<Preference>>;
 };
 
-export type MealPlanInput = {
-  items: Array<SingleCupCountInput>;
-};
-
 export type MealPlanWithCount = {
   __typename?: 'MealPlanWithCount';
   _count: Scalars['Float']['output'];
@@ -242,9 +238,8 @@ export type MessManagerCallWithAppsOfResident = {
 export type Mutation = {
   __typename?: 'Mutation';
   addAnnouncement: Announcement;
-  addNewItem: Item;
-  addNewMealPlan: MealPlan;
-  addOldMealPlan: MealPlan;
+  addNewMealItem: CupCount;
+  addOldMealItem: CupCount;
   addPreferences: Array<Preference>;
   applyMessManager: MessManagerApplication;
   approveMessManagerApplication: MessManager;
@@ -272,24 +267,21 @@ export type MutationAddAnnouncementArgs = {
 };
 
 
-export type MutationAddNewItemArgs = {
+export type MutationAddNewMealItemArgs = {
+  cupCount: Scalars['Float']['input'];
+  date: Scalars['String']['input'];
   fileId: Scalars['Float']['input'];
+  mealTime: Scalars['String']['input'];
   name: Scalars['String']['input'];
   type: Scalars['String']['input'];
 };
 
 
-export type MutationAddNewMealPlanArgs = {
+export type MutationAddOldMealItemArgs = {
+  cupCount: Scalars['Float']['input'];
   date: Scalars['String']['input'];
-  items: MealPlanInput;
+  itemId: Scalars['Float']['input'];
   mealTime: Scalars['String']['input'];
-};
-
-
-export type MutationAddOldMealPlanArgs = {
-  date: Scalars['String']['input'];
-  mealTime: Scalars['String']['input'];
-  oldMealPlanId: Scalars['Float']['input'];
 };
 
 
@@ -581,11 +573,6 @@ export type QueryMessManagerApplicationsArgs = {
 };
 
 
-export type QueryMessManagingExperiencesArgs = {
-  studentId: Scalars['Float']['input'];
-};
-
-
 export type QueryOptedOutStatsArgs = {
   date: Scalars['String']['input'];
   mealTime: Scalars['String']['input'];
@@ -692,11 +679,6 @@ export type SeatChangeApplication = {
   toSeat: Seat;
   toSeatId: Scalars['Float']['output'];
   votes: Array<Vote>;
-};
-
-export type SingleCupCountInput = {
-  cupCount: Scalars['Float']['input'];
-  itemId: Scalars['Float']['input'];
 };
 
 export type SinglePreferenceInput = {
@@ -1085,6 +1067,11 @@ export type ApplyMessManagerMutationVariables = Exact<{
 
 export type ApplyMessManagerMutation = { __typename?: 'Mutation', applyMessManager: { __typename?: 'MessManagerApplication', applicationId: number } };
 
+export type MessManagingExperiencesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MessManagingExperiencesQuery = { __typename?: 'Query', messManagingExperiences: Array<{ __typename?: 'MessManager', call: { __typename?: 'MessManagerApplicationCall', from: any, to: any, authority: { __typename?: 'Authority', name: string } } }> };
+
 
 export const DepartmentsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deptCode"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]} as unknown as DocumentNode<DepartmentsQuery, DepartmentsQueryVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"loginId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}},{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"loginId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"studentId"}},{"kind":"Field","name":{"kind":"Name","value":"residencyStatus"}},{"kind":"Field","name":{"kind":"Name","value":"residency"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isCurrentMessManager"}},{"kind":"Field","name":{"kind":"Name","value":"seat"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomNo"}},{"kind":"Field","name":{"kind":"Name","value":"floor"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"floorNo"}},{"kind":"Field","name":{"kind":"Name","value":"roomLabelLen"}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"authority"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorityId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
@@ -1126,3 +1113,4 @@ export const ApproveMessManagerApplicationDocument = {"kind":"Document","definit
 export const GetOldItemsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOldItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getOldItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"photoId"}}]}}]}}]} as unknown as DocumentNode<GetOldItemsQuery, GetOldItemsQueryVariables>;
 export const PrevCallsStudentDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"PrevCallsStudent"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"prevCallsWithAppOfResident"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"application"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"status"}}]}},{"kind":"Field","name":{"kind":"Name","value":"call"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"from"}},{"kind":"Field","name":{"kind":"Name","value":"to"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"callId"}}]}}]}}]}}]} as unknown as DocumentNode<PrevCallsStudentQuery, PrevCallsStudentQueryVariables>;
 export const ApplyMessManagerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ApplyMessManager"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"callId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applyMessManager"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"callId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"callId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"applicationId"}}]}}]}}]} as unknown as DocumentNode<ApplyMessManagerMutation, ApplyMessManagerMutationVariables>;
+export const MessManagingExperiencesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"MessManagingExperiences"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"messManagingExperiences"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"call"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"from"}},{"kind":"Field","name":{"kind":"Name","value":"to"}},{"kind":"Field","name":{"kind":"Name","value":"authority"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<MessManagingExperiencesQuery, MessManagingExperiencesQueryVariables>;

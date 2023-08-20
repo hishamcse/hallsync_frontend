@@ -53,6 +53,7 @@ const documents = {
     "\nquery GetOldItems {\n  getOldItems {\n    itemId\n    name\n    type\n    photoId\n  }\n}\n": types.GetOldItemsDocument,
     "\n  query PrevCallsStudent {\n  prevCallsWithAppOfResident {\n    application {\n      status\n    }\n    call {\n      from\n      to\n      createdAt\n      callId\n    }\n  }\n}\n": types.PrevCallsStudentDocument,
     "\nmutation ApplyMessManager($callId: Float!) {\n  applyMessManager(callId: $callId) {\n    applicationId\n  }\n}\n": types.ApplyMessManagerDocument,
+    "\n  query MessManagingExperiences {\n    messManagingExperiences {\n      call {\n        from\n        to\n        authority {\n          name\n        }\n      }\n    }\n  }\n": types.MessManagingExperiencesDocument,
 };
 
 /**
@@ -229,6 +230,10 @@ export function graphql(source: "\n  query PrevCallsStudent {\n  prevCallsWithAp
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\nmutation ApplyMessManager($callId: Float!) {\n  applyMessManager(callId: $callId) {\n    applicationId\n  }\n}\n"): (typeof documents)["\nmutation ApplyMessManager($callId: Float!) {\n  applyMessManager(callId: $callId) {\n    applicationId\n  }\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query MessManagingExperiences {\n    messManagingExperiences {\n      call {\n        from\n        to\n        authority {\n          name\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query MessManagingExperiences {\n    messManagingExperiences {\n      call {\n        from\n        to\n        authority {\n          name\n        }\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

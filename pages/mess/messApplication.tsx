@@ -16,9 +16,9 @@ export default function ApplicationView(){
                 {
                     authority && 
                     <>
-                        <MessManagerList />
-                        <PrevCalls />
                         <CallApplicationTsx />
+                        <PrevCalls />
+                        <MessManagerList />
                     </>
                 }
                 {
