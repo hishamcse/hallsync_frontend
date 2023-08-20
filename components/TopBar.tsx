@@ -64,12 +64,15 @@ function MessTabs() {
       stats : "stats"
     };
     
-    let {messManager, authority} = useResidencyStatus()
+    let {messManager, authority, resident} = useResidencyStatus()
 
     return (
       <ul className={topBarStyles.tabs}>
         <Tab href={"/mess/" + routes.application} isActive={checkRouteContains(router, routes.application)} name="Application" />
-        <Tab href={"/mess/" + routes.meals} isActive={checkRouteContains(router, routes.meals)} name="Meals" />
+          {
+              (messManager || resident) &&
+              <Tab href={"/mess/" + routes.meals} isActive={checkRouteContains(router, routes.meals)} name="Meals" />
+          }
         <Tab href={"/mess/" + routes.announcement} isActive={checkRouteContains(router, routes.announcement)} name="Announcement" />
         <Tab href={"/mess/" + routes.feedbacks} isActive={checkRouteContains(router, routes.feedbacks)} name="Feedbacks" />
         {   

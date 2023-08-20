@@ -160,11 +160,17 @@
 .callForContentRoot{
     >:nth-child(1){
         display: flex;
-        padding : 20px 0px;
+        padding : 10px 0px;
         // background-color: red;
         justify-content: space-between;
     }
     >:nth-child(2){
+        display: flex;
+        padding: 10px 0px;
+        justify-content: space-between;
+    }
+    >:nth-child(3){
+        margin-top: 20px;
         >div{
             display: flex;
             // background-color: red;
@@ -182,6 +188,38 @@
         // justify-content: space-around;
     }
     >:nth-child(3){
-        padding : 10px;
+        padding : 10px 0px;
     }
 }
+
+.callContainerStudentView{
+    background-color: #111111;
+    margin: 10px 10px;
+    padding: 15px;
+    min-width: 280px;
+    display: inline-block;
+    min-height: 110px;
+    border-radius: 10px;
+    .fromToContainer{
+        >div{
+            display: flex;
+            justify-content: space-between;
+            padding : 5px;
+            :nth-child(2){
+                color : #00FFF5;
+            }
+        }
+    }
+
+    .applicationContainer{
+        margin: 10px 5px;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0px;
+    }
+    .applyContainer{
+        margin: 10px;
+        margin-bottom: 0px;
+        text-align: center;
+    }
+}   
