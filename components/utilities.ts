@@ -20,3 +20,16 @@ export function getDayAndMonthAndYearString(date : string){
         year : 'numeric'
     })
 }
+
+
+
+export function addDay(date : string){
+    let dt = new Date(date)
+    dt.setDate(dt.getDate() + 1)
+    return dt;
+}
+export function addDays(date : string, days : number){
+    let dt = new Date(date)
+    dt.setDate(dt.getDate() + days)
+    return dt;
+}

@@ -34,7 +34,7 @@ function MessManager(props : {
                 </div>
             </div>
             <div className={styles.timeRangeContainer}>
-                {getDayAndMonthAndYearString(props.messManager.from)} to {getDayAndMonthAndYearString(props.messManager.to)}
+                {getDayAndMonthAndYearString(props.messManager.call.from)} to {getDayAndMonthAndYearString(props.messManager.call.to)}
             </div>
         </div>
     )

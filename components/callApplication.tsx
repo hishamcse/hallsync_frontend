@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { CREATE_CALL, GET_ASSIGNED_TILL } from "../graphql/operations";
-import { getDayAndMonthAndYearString } from "./utilities";
+import { addDay, getDayAndMonthAndYearString , addDays} from "./utilities";
 import MyCard from "./card";
 import { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
@@ -15,7 +15,8 @@ export function CallApplicationTsx(){
         {
             onCompleted : (data)=>{
                 console.log(data);
-                setFromDate(dayjs(data.messManagerAssignedTill));
+                setFromDate(dayjs(addDay(data.callUntil)));
+                setToDate(dayjs(addDays(data.callUntil, 30)))
             }
         }
     )
@@ -66,6 +67,16 @@ export function CallApplicationTsx(){
                     <div>
                         <span className={styles.rangeSpan}>
                             {data && getDayAndMonthAndYearString(new Date(data.messManagerAssignedTill).toString())}
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        Applications Called Upto
+                    </div>
+                    <div>
+                        <span className={styles.rangeSpan}>
+                            {data && getDayAndMonthAndYearString(new Date(data.callUntil).toString())}
                         </span>
                     </div>
                 </div>

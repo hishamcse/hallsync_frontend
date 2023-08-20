@@ -37,6 +37,7 @@ const documents = {
     "\n    mutation OptOut($mealPlanId: Float!) {\n      optOut(mealPlanId: $mealPlanId) {\n        mealPlanId\n        time\n        mealPlan {\n          day\n          mealTime\n        }\n        residencyId\n        residency {\n          studentId\n        }\n      }\n    }\n\n": types.OptOutDocument,
     "\n     mutation AddPreferences($preferences: PreferenceInput!, $mealPlanId: Float!) {\n      addPreferences(preferences: $preferences, mealPlanId: $mealPlanId) {\n        mealPlanId\n        order\n        student {\n          student9DigitId\n        }\n        itemId\n        item {\n          name\n          type\n        }\n        mealPlan {\n          day\n          mealId\n          mealTime\n        }\n      }\n    }\n\n": types.AddPreferencesDocument,
     "\n    query GetAnnouncements {\n      getAnnouncements {\n        announcementId\n        authorityId\n        createdAt\n        title\n        details\n        messManagerId\n        messManager {\n          messManagerId\n        }\n        authority {\n          role\n        }\n      }\n    }\n\n": types.GetAnnouncementsDocument,
+    "\n    mutation AddAnnouncement($details: String!, $title: String!) {\n      addAnnouncement(details: $details, title: $title) {\n        announcementId\n        authorityId\n        createdAt\n        title\n        details\n        messManagerId\n      }\n    }\n\n": types.AddAnnouncementDocument,
     "\n  query Participants($mealTime: String!, $from: String!) {\n    participants(mealTime: $mealTime, from: $from) {\n      _count\n      mealPlan {\n        mealPlanId\n        day\n      }\n    }\n  }\n": types.ParticipantsDocument,
     "\nquery Absentees($take: Float!, $from: String!) {\n  absentees(take: $take, from: $from) {\n    _count\n    residency {\n      student {\n        student9DigitId\n      }\n    }\n  }\n}\n": types.AbsenteesDocument,
     "\nquery ExampleQuery($date: String!) {\n  ratings(date: $date) {\n    avg\n    type\n    feedback {\n      feedbackId\n      startMealPlan {\n        day\n      }\n      endMealPlan {\n        day\n      }\n    }\n  }\n}\n": types.ExampleQueryDocument,
@@ -44,11 +45,14 @@ const documents = {
     "\n  query MealPreferenceStats($mealTime: String!, $date: String!) {\n    mealPreferenceStats(mealTime: $mealTime, date: $date) {\n      count\n      order\n      item {\n        itemId\n        name\n        type\n      }\n    }\n  }\n": types.MealPreferenceStatsDocument,
     "\nquery PendingFeedbacks {\n  pendingFeedbacks {\n    startDate\n    startMealPlan {\n      day\n    }\n    endMealPlan {\n      day\n    }\n    feedbackId\n    messManager {\n      residency{\n        student {\n          name\n          levelTerm {\n            label\n          }\n          batch {\n            year\n          }\n        }\n      }\n    }\n  }\n}\n": types.PendingFeedbacksDocument,
     "\n  mutation PostFeedback($feedbackId: Float!, $ratings: IntArray!) {\n    postFeedback(feedbackId: $feedbackId, ratings: $ratings)\n  }\n": types.PostFeedbackDocument,
-    "\nquery AssingedMessManagers {\n  assingedMessManagers {\n    from\n    residencyId\n    to\n    residency  {\n      student {\n      name\n      phone\n      email\n      levelTerm {\n        label\n      }\n      batch {\n        year\n      }\n      student9DigitId\n      }\n    }\n  }\n}\n": types.AssingedMessManagersDocument,
-    "\n  query MessManagerAssignedTill {\n    messManagerAssignedTill\n  }\n": types.MessManagerAssignedTillDocument,
+    "\nquery AssingedMessManagers {\n  assingedMessManagers {\n    call {\n      from \n      to\n    }\n    residencyId\n    residency  {\n      student {\n      name\n      phone\n      email\n      levelTerm {\n        label\n      }\n      batch {\n        year\n      }\n      student9DigitId\n      }\n    }\n  }\n}\n": types.AssingedMessManagersDocument,
+    "\n  query TillQuery {\n    callUntil\n    messManagerAssignedTill\n  }\n": types.TillQueryDocument,
     "\n  mutation CreateCallMutation($to: String!, $from: String!) {\n    createCall(to: $to, from: $from) {\n      callId\n      createdAt\n      from\n      to\n    }\n  }\n": types.CreateCallMutationDocument,
     "\nquery PrevCallQuery {\n  prevCalls {\n    callId\n    createdAt\n    from\n    to\n    accepted\n    applicationsCount\n    applications {\n      appliedAt\n      applicationId\n      callId\n      residency {\n        messManagerTimes\n        from\n        isCurrentMessManager\n        residencyId\n        student {\n          batch {\n            year\n          }\n          name\n          levelTerm {\n            label\n          }\n          student9DigitId\n          department {\n            shortName\n          }\n        }\n      }\n    }\n  }\n}\n": types.PrevCallQueryDocument,
     "\nmutation ApproveMessManagerApplication($messManagerApplicationId: Float!) {\n  approveMessManagerApplication(messManagerApplicationId: $messManagerApplicationId) {\n    residencyId\n  }\n}\n": types.ApproveMessManagerApplicationDocument,
+    "\nquery GetOldItems {\n  getOldItems {\n    itemId\n    name\n    type\n    photoId\n  }\n}\n": types.GetOldItemsDocument,
+    "\n  query PrevCallsStudent {\n  prevCallsWithAppOfResident {\n    application {\n      status\n    }\n    call {\n      from\n      to\n      createdAt\n      callId\n    }\n  }\n}\n": types.PrevCallsStudentDocument,
+    "\nmutation ApplyMessManager($callId: Float!) {\n  applyMessManager(callId: $callId) {\n    applicationId\n  }\n}\n": types.ApplyMessManagerDocument,
 };
 
 /**
@@ -164,6 +168,10 @@ export function graphql(source: "\n    query GetAnnouncements {\n      getAnnoun
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n    mutation AddAnnouncement($details: String!, $title: String!) {\n      addAnnouncement(details: $details, title: $title) {\n        announcementId\n        authorityId\n        createdAt\n        title\n        details\n        messManagerId\n      }\n    }\n\n"): (typeof documents)["\n    mutation AddAnnouncement($details: String!, $title: String!) {\n      addAnnouncement(details: $details, title: $title) {\n        announcementId\n        authorityId\n        createdAt\n        title\n        details\n        messManagerId\n      }\n    }\n\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n  query Participants($mealTime: String!, $from: String!) {\n    participants(mealTime: $mealTime, from: $from) {\n      _count\n      mealPlan {\n        mealPlanId\n        day\n      }\n    }\n  }\n"): (typeof documents)["\n  query Participants($mealTime: String!, $from: String!) {\n    participants(mealTime: $mealTime, from: $from) {\n      _count\n      mealPlan {\n        mealPlanId\n        day\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -192,11 +200,11 @@ export function graphql(source: "\n  mutation PostFeedback($feedbackId: Float!, 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\nquery AssingedMessManagers {\n  assingedMessManagers {\n    from\n    residencyId\n    to\n    residency  {\n      student {\n      name\n      phone\n      email\n      levelTerm {\n        label\n      }\n      batch {\n        year\n      }\n      student9DigitId\n      }\n    }\n  }\n}\n"): (typeof documents)["\nquery AssingedMessManagers {\n  assingedMessManagers {\n    from\n    residencyId\n    to\n    residency  {\n      student {\n      name\n      phone\n      email\n      levelTerm {\n        label\n      }\n      batch {\n        year\n      }\n      student9DigitId\n      }\n    }\n  }\n}\n"];
+export function graphql(source: "\nquery AssingedMessManagers {\n  assingedMessManagers {\n    call {\n      from \n      to\n    }\n    residencyId\n    residency  {\n      student {\n      name\n      phone\n      email\n      levelTerm {\n        label\n      }\n      batch {\n        year\n      }\n      student9DigitId\n      }\n    }\n  }\n}\n"): (typeof documents)["\nquery AssingedMessManagers {\n  assingedMessManagers {\n    call {\n      from \n      to\n    }\n    residencyId\n    residency  {\n      student {\n      name\n      phone\n      email\n      levelTerm {\n        label\n      }\n      batch {\n        year\n      }\n      student9DigitId\n      }\n    }\n  }\n}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query MessManagerAssignedTill {\n    messManagerAssignedTill\n  }\n"): (typeof documents)["\n  query MessManagerAssignedTill {\n    messManagerAssignedTill\n  }\n"];
+export function graphql(source: "\n  query TillQuery {\n    callUntil\n    messManagerAssignedTill\n  }\n"): (typeof documents)["\n  query TillQuery {\n    callUntil\n    messManagerAssignedTill\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -209,6 +217,18 @@ export function graphql(source: "\nquery PrevCallQuery {\n  prevCalls {\n    cal
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\nmutation ApproveMessManagerApplication($messManagerApplicationId: Float!) {\n  approveMessManagerApplication(messManagerApplicationId: $messManagerApplicationId) {\n    residencyId\n  }\n}\n"): (typeof documents)["\nmutation ApproveMessManagerApplication($messManagerApplicationId: Float!) {\n  approveMessManagerApplication(messManagerApplicationId: $messManagerApplicationId) {\n    residencyId\n  }\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\nquery GetOldItems {\n  getOldItems {\n    itemId\n    name\n    type\n    photoId\n  }\n}\n"): (typeof documents)["\nquery GetOldItems {\n  getOldItems {\n    itemId\n    name\n    type\n    photoId\n  }\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query PrevCallsStudent {\n  prevCallsWithAppOfResident {\n    application {\n      status\n    }\n    call {\n      from\n      to\n      createdAt\n      callId\n    }\n  }\n}\n"): (typeof documents)["\n  query PrevCallsStudent {\n  prevCallsWithAppOfResident {\n    application {\n      status\n    }\n    call {\n      from\n      to\n      createdAt\n      callId\n    }\n  }\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\nmutation ApplyMessManager($callId: Float!) {\n  applyMessManager(callId: $callId) {\n    applicationId\n  }\n}\n"): (typeof documents)["\nmutation ApplyMessManager($callId: Float!) {\n  applyMessManager(callId: $callId) {\n    applicationId\n  }\n}\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

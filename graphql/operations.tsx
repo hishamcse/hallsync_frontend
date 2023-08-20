@@ -530,6 +530,20 @@ export const GET_ANNOUNCEMENTS = graphql(`
 
 `)
 
+export const ADD_ANNOUNCEMENT = graphql(`
+    mutation AddAnnouncement($details: String!, $title: String!) {
+      addAnnouncement(details: $details, title: $title) {
+        announcementId
+        authorityId
+        createdAt
+        title
+        details
+        messManagerId
+      }
+    }
+
+`)
+
 export const GET_PARTICIPATIONS = graphql(`
   query Participants($mealTime: String!, $from: String!) {
     participants(mealTime: $mealTime, from: $from) {
@@ -638,9 +652,11 @@ export const POST_FEEDBACK = graphql(`
 export const GET_ASSINGED_MESS_MANAGERS = graphql(`
 query AssingedMessManagers {
   assingedMessManagers {
-    from
+    call {
+      from 
+      to
+    }
     residencyId
-    to
     residency  {
       student {
       name
@@ -661,7 +677,8 @@ query AssingedMessManagers {
 
 
 export const GET_ASSIGNED_TILL = graphql(`
-  query MessManagerAssignedTill {
+  query TillQuery {
+    callUntil
     messManagerAssignedTill
   }
 `)
@@ -730,6 +747,31 @@ query GetOldItems {
     name
     type
     photoId
+  }
+}
+`)
+
+
+export const GET_PREV_CALLS_STUDENT = graphql(`
+  query PrevCallsStudent {
+  prevCallsWithAppOfResident {
+    application {
+      status
+    }
+    call {
+      from
+      to
+      createdAt
+      callId
+    }
+  }
+}
+`)
+
+export const APPLY_FOR_MESS_MANAGER = graphql(`
+mutation ApplyMessManager($callId: Float!) {
+  applyMessManager(callId: $callId) {
+    applicationId
   }
 }
 `)

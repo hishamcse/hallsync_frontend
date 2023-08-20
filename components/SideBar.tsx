@@ -132,6 +132,8 @@ export function AuthorityNabBar(){
     let {user, setUser} = useContext(userContext);
     const router = useRouter();
 
+    let {messManager, authority, resident} = useResidencyStatus();
+
     function logOutOnClick(){
         console.log("logged out");
         localStorage.removeItem("token");
@@ -140,7 +142,8 @@ export function AuthorityNabBar(){
     }
     const routes = {
         app : "seatManagement",
-        mess : 'mess/meals'
+        mess : 'mess/meals',
+        messApplication: "mess/messApplication",
     }
     const imgPaths = {
         app : "/application.svg",
@@ -151,10 +154,21 @@ export function AuthorityNabBar(){
         mess : 'Mess Management'
     }
 
+    const checkActiveMess = () => {
+        return router.pathname.includes('mess');
+    }
+
     return(
         <ul >
             <ListItem active = {checkRouteContains(router,routes.app)} href={'/' + routes.app} imgPath={imgPaths.app} text={texts.app} />
-            <ListItem active = {checkRouteContains(router,routes.mess)} href={'/' + routes.mess} imgPath={imgPaths.mess} text={texts.mess} />
+            {
+                (messManager || resident) &&
+                <ListItem active={checkActiveMess()} href={'/' + routes.mess} imgPath={imgPaths.mess} text={texts.mess}/>
+            }
+            {
+                authority &&
+                <ListItem active={checkActiveMess()} href={'/' + routes.messApplication} imgPath={imgPaths.mess} text={texts.mess}/>
+            }
             <li> <SideBarIcon src="/info.svg" /> Info</li>
             <li> <SideBarIcon src="/feAngry1.svg" /> Complaints</li>
             <ListItem width={25} href='/' imgPath='/logout.svg' active = {false} text='logout' onClick={logOutOnClick}  />

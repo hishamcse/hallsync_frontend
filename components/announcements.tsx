@@ -1,6 +1,6 @@
 import useResidencyStatus from "../hooks/useResidencyStatus";
-import {useQuery} from "@apollo/client";
-import {GET_ANNOUNCEMENTS} from "../graphql/operations";
+import {useMutation, useQuery} from "@apollo/client";
+import {ADD_ANNOUNCEMENT, GET_ANNOUNCEMENTS} from "../graphql/operations";
 import {GetAnnouncementsQuery} from "../graphql/__generated__/graphql";
 import {useState} from "react";
 import MyCard from "./card";
@@ -9,6 +9,7 @@ import {DateRangeIcon} from "@mui/x-date-pickers";
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import CustomizedDialog from "./MUIDialog";
+import {useRouter} from "next/router";
 
 const SingleAnnouncement = (props: { announcement: GetAnnouncementsQuery['getAnnouncements'][0] }) => {
     return (
@@ -80,8 +81,12 @@ const AnnounceTitle = (props: { announcement: GetAnnouncementsQuery['getAnnounce
 
 const Announcements = () => {
 
+    const router = useRouter();
+
     const {messManager, resident, authority} = useResidencyStatus();
     const [announcements, setAnnouncements] = useState<GetAnnouncementsQuery['getAnnouncements']>([]);
+
+    const [showDetails, setShowDetails] = useState<boolean>(false);
 
     const {data, loading, error} = useQuery(
         GET_ANNOUNCEMENTS, {
@@ -96,6 +101,37 @@ const Announcements = () => {
         }
     )
 
+    const [addAnnouncement] = useMutation(
+        ADD_ANNOUNCEMENT, {
+            onCompleted: (data) => {
+                console.log(data);
+                router.reload();
+            },
+            onError: (error) => {
+                console.log(error);
+            }
+        }
+    )
+
+    const handleShowDetails = () => {
+        setShowDetails(!showDetails);
+    }
+
+    const handleSubmission = (title: string, details: string) => {
+        console.log(title, details)
+
+        addAnnouncement({
+            variables : {
+                title : title,
+                details : details
+            },
+            onCompleted : (data) => {
+                console.log(data);
+                router.reload();
+            }
+        })
+    }
+
     return (
         <div>
             <div>
@@ -103,6 +139,21 @@ const Announcements = () => {
                     Announcements
                 </Typography>
             </div>
+            {
+                (messManager || authority) && <div>
+                <Button variant='contained' color="primary" size='large' style={{margin: 20}} onClick={handleShowDetails}>
+                    +&nbsp;Add Announcement
+                </Button>
+            </div>
+            }
+            {
+                (messManager || authority) && showDetails &&
+                <CustomizedDialog show={true} setShow={setShowDetails} addAnnouncement={true}
+                                  cardTitle='Add Announcement' announcementTitle=''
+                                  announcementDetails='' handleSubmission={handleSubmission}
+                                  date={new Date().toDateString()}
+                                  messManager={messManager ?? false}/>
+            }
             {
                 announcements.map((announcement, index) => (
                     <div key={index} style={{margin: 20}}>
