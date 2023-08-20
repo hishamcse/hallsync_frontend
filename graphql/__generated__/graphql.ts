@@ -170,6 +170,10 @@ export type MealPlan = {
   preferences?: Maybe<Array<Preference>>;
 };
 
+export type MealPlanInput = {
+  items: Array<SingleCupCountInput>;
+};
+
 export type MealPlanWithCount = {
   __typename?: 'MealPlanWithCount';
   _count: Scalars['Float']['output'];
@@ -238,8 +242,9 @@ export type MessManagerCallWithAppsOfResident = {
 export type Mutation = {
   __typename?: 'Mutation';
   addAnnouncement: Announcement;
-  addNewMealItem: CupCount;
-  addOldMealItem: CupCount;
+  addNewItem: Item;
+  addNewMealPlan: MealPlan;
+  addOldMealPlan: MealPlan;
   addPreferences: Array<Preference>;
   applyMessManager: MessManagerApplication;
   approveMessManagerApplication: MessManager;
@@ -267,21 +272,24 @@ export type MutationAddAnnouncementArgs = {
 };
 
 
-export type MutationAddNewMealItemArgs = {
-  cupCount: Scalars['Float']['input'];
-  date: Scalars['String']['input'];
+export type MutationAddNewItemArgs = {
   fileId: Scalars['Float']['input'];
-  mealTime: Scalars['String']['input'];
   name: Scalars['String']['input'];
   type: Scalars['String']['input'];
 };
 
 
-export type MutationAddOldMealItemArgs = {
-  cupCount: Scalars['Float']['input'];
+export type MutationAddNewMealPlanArgs = {
   date: Scalars['String']['input'];
-  itemId: Scalars['Float']['input'];
+  items: MealPlanInput;
   mealTime: Scalars['String']['input'];
+};
+
+
+export type MutationAddOldMealPlanArgs = {
+  date: Scalars['String']['input'];
+  mealTime: Scalars['String']['input'];
+  oldMealPlanId: Scalars['Float']['input'];
 };
 
 
@@ -679,6 +687,11 @@ export type SeatChangeApplication = {
   toSeat: Seat;
   toSeatId: Scalars['Float']['output'];
   votes: Array<Vote>;
+};
+
+export type SingleCupCountInput = {
+  cupCount: Scalars['Float']['input'];
+  itemId: Scalars['Float']['input'];
 };
 
 export type SinglePreferenceInput = {

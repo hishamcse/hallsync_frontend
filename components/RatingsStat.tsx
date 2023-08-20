@@ -68,7 +68,8 @@ export function RatingBarChart(){
             </div>
         }
         style={{
-            minWidth : 600
+            display: 'block',
+            marginRight: 20
         }}
         />
     )
