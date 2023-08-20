@@ -1,20 +1,18 @@
-import {GetMealPlansQuery} from "../../graphql/__generated__/graphql";
+import {GetMealPlansQuery, Item, ItemType} from "../../graphql/__generated__/graphql";
 import {useRouter} from "next/router";
 import React, {useRef, useState} from "react";
 import {useMutation, useQuery} from "@apollo/client";
-import {ADD_PREFERENCES, OPT_OUT_MEAL, ADD_MEALPLAN, GET_DEPTS} from "../../graphql/operations";
+import {ADD_PREFERENCES, OPT_OUT_MEAL, ADD_MEALPLAN, GET_OLD_MEAL_ITEMS} from "../../graphql/operations";
 import Typography from "@mui/material/Typography";
 import MUISelectStyled from "../MUIMultiSelectCheckbox";
+import dayjs, { Dayjs } from "dayjs";
 import { MyDatePicker } from "../DatePicker";
 import { MealTimeDropDown } from "../MealTimeDropDown";
+import SelectedItemsList from './SelectedItem';
 // import Image from "next/image";
 import {Button, Checkbox} from "@mui/material";
-// import Paper from "@mui/material/Paper";
-// import MenuList from "@mui/material/MenuList";
-// import MenuItem from "@mui/material/MenuItem";
-// import ListItemIcon from "@mui/material/ListItemIcon";
-// import ListItemText from "@mui/material/ListItemText";
-// import DragHandleIcon from "@mui/icons-material/DragHandle";
+
+
 
 
 const AddOrEditMealView = () => {
@@ -53,7 +51,7 @@ const AddOrEditMealView = () => {
     //const [optedOut, setOptedOut] = useState<boolean>(!!props.mealPlan.optedOut);
     const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
     const [selectedMealTime, setSelectedMealTime] = useState<string>('LUNCH');
-    const [selectedItems, setSelectedItems] = useState<string[]>([]);
+    //const [selectedItems, setSelectedItems] = useState<Item[]>([]);
 
     const [reqError, setReqError] = useState(false);
     const [reqErrorMsg, setReqErrorMsg] = useState('');
@@ -63,37 +61,6 @@ const AddOrEditMealView = () => {
     // let prefDisabled = (props.mealPlan.preferences && props.mealPlan.preferences.length > 0) || false;
 
 
-    
-
-    
-
-    const [optOutRequest, {}] = useMutation(
-        OPT_OUT_MEAL, {
-            onError: (error) => {
-                console.log(error);
-                setReqError(true)
-                setReqErrorMsg(error.message)
-            },
-            onCompleted: (data) => {
-                console.log(data);
-                router.reload();
-            }
-        }
-    )
-
-    const [addPreferences, {}] = useMutation(
-        ADD_PREFERENCES, {
-            onError: (error) => {
-                console.log(error);
-                setReqError(true)
-                setReqErrorMsg(error.message)
-            },
-            onCompleted: (data) => {
-                console.log(data);
-                router.reload();
-            }
-        }
-    )
 
     const [addMealPlan, {}] = useMutation(
         ADD_PREFERENCES, {
@@ -114,13 +81,6 @@ const AddOrEditMealView = () => {
         return "/images/" + imgName;
     }
 
-    const handleList = (list: string[]) => {
-        setStrList(list);
-    }
-
-    // const handleOptOut = () => {
-    //     setOptedOut(!optedOut);
-    // }
 
     const handleComplete = () => {
 
@@ -169,21 +129,31 @@ const AddOrEditMealView = () => {
     };
 
     // Define a function to handle the action based on selected departments
-    const handleItemSelection = (selected: string[]) => {
-        setSelectedItems(selected);
-        // Perform your desired action here based on the selected departments
-        // For example: update state, make API calls, etc.
-    };
+    // const handleItemSelection = (selected: Item[]) => {
+    //     setSelectedItems(selected);
+    //     // Perform your desired action here based on the selected departments
+    //     // For example: update state, make API calls, etc.
+    // };
 
 
 
     // done with departments for now. need replacing with food items
-    const { loading, error, data } = useQuery(GET_DEPTS);
+    const { loading, error, data } = useQuery(GET_OLD_MEAL_ITEMS);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error.message}</p>;
 
-    const oldItems = data?.departments;
+    const oldItems = data?.getOldItems ?? [];
+
+    // Separate arrays for different types of items
+    const riceItems = oldItems.filter((item) => item.type === 'RICE').map((item) => item.name);
+    const vegItems = oldItems.filter((item) => item.type === 'VEG').map((item) => item.name);
+    const nonVegItems = oldItems.filter((item) => item.type === 'NON_VEG').map((item) => item.name);
+
+    //const [selectedItems, setSelectedItems] = useState<Item[]>([]);
+    const [selectedRiceItems, setSelectedRiceItems] = useState<Item[]>([]);
+    const [selectedVegItems, setSelectedVegItems] = useState<Item[]>([]);
+    const [selectedNonVegItems, setSelectedNonVegItems] = useState<Item[]>([])
 
     return (
         
@@ -198,13 +168,41 @@ const AddOrEditMealView = () => {
             <div style={{ width: 20 }} /> {/* Add space */}
             <MyDatePicker date={selectedDate} handleDate={handleDateChange} />
           </div>
-          <MUISelectStyled
-            type="multiple"
-            items={oldItems.map((item) => item.name)}
-            placeHolder="Select Departments"
-            vals={selectedItems}
-            setVals={setSelectedItems}
-          />
+
+        {/* Render SelectedItemsList */}
+      {/* <SelectedItemsList selectedItems={selectedItems} /> */}
+      <SelectedItemsList selectedItems={selectedRiceItems} />
+      <SelectedItemsList selectedItems={selectedVegItems} />
+      <SelectedItemsList selectedItems={selectedNonVegItems} />
+          <div style={{ display: 'flex' }}>
+        {/* Dropdown for RICE items */}
+        <MUISelectStyled
+          type="multiple"
+          items={riceItems}
+          placeHolder="RICE"
+          vals={selectedRiceItems.map(item => item.name)} // Convert to string[]
+          setVals={(s: string[]) => setSelectedRiceItems(s.map(name => ({ name } as Item)))}
+        />
+        
+        <div style={{ width: 20 }} /> {/* Add space */}
+        {/* Dropdown for VEG items */}
+        <MUISelectStyled
+          type="multiple"
+          items={vegItems}
+          placeHolder="VEG"
+          vals={selectedVegItems.map(item => item.name)} // Convert to string[]
+          setVals={(s: string[]) => setSelectedVegItems(s.map(name => ({ name } as Item)))}
+        />
+        <div style={{ width: 20 }} /> {/* Add space */}
+        {/* Dropdown for NON_VEG items */}
+        <MUISelectStyled
+          type="multiple"
+          items={nonVegItems}
+          placeHolder="NON_VEG"
+          vals={selectedNonVegItems.map(item => item.name)} // Convert to string[]
+          setVals={(s: string[]) => setSelectedNonVegItems(s.map(name => ({ name } as Item)))}
+        />
+      </div>
           <div style={{ marginTop: 10 }}>
             <Button variant="outlined" color="primary" onClick={handleComplete}>
               Complete
@@ -217,60 +215,5 @@ const AddOrEditMealView = () => {
         </div>
       );
     };
-
-//     return (
-//         <div>
-//             {/* <Typography style={{marginTop: 15, marginBottom: 5}}>
-//                 <b>{props.mealPlan.mealTime.toString()}</b>
-//             </Typography> */}
-
-//             <div style={{borderTop: "1px solid #ccc"}}>
-//                 <div style={{display: "flex", margin: "16px"}}>
-//                     <div>
-//                     <MyDatePicker // Step 1
-//                         date={selectedDate}
-//                         handleDate={handleDateChange}
-//                     />
-                    
-//                         <Typography variant="h6" style={{ marginBottom: 10 }}>
-//                         Departments:
-//                         </Typography>
-//                         <MUISelectStyled
-//                             type="multiple"
-//                             items={oldItems.map(item => item.name)}
-//                             placeHolder="Select Departments"
-//                             vals={selectedItems}
-//                             setVals={handleItemSelection}
-//                         />
-//                     </div>
-
-
-//                     <div style={{
-//                         display: "block", alignItems: "center", borderLeft: "1px solid #ccc",
-//                         paddingLeft: "16px", marginLeft: 15
-//                     }}>
-       
-//                         {!disabled && <div style={{textAlign: 'center'}}>
-//                             <Button variant="outlined" color="primary"
-//                                     style={{marginTop: 10}} size='small' onClick={handleComplete}>
-//                                 Complete
-//                             </Button>
-//                         </div>}
-//                         {!disabled && <div style={{textAlign: 'center', color: 'red'}}>
-//                             <Button variant="outlined" color="primary"
-//                                     style={{marginTop: 10}} size='small' onClick={handleComplete}>
-//                                 Cancel
-//                             </Button>
-//                         </div>}
-
-//                         {reqError && <Typography variant="body2" color="red">
-//                             <b>{reqErrorMsg}</b>
-//                         </Typography>}
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-//     )
-// }
 
 export default AddOrEditMealView;

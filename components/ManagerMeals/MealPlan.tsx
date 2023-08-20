@@ -13,59 +13,59 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 
-const DraggableList = (props: { list: string[], setList: (list: string[]) => void, disabled: boolean }) => {
+// const DraggableList = (props: { list: string[], setList: (list: string[]) => void, disabled: boolean }) => {
 
-    const dragItem: React.MutableRefObject<any> = useRef();
-    const dragOverItem: React.MutableRefObject<any> = useRef();
-    const [list, setList] = useState(props.list);
+//     const dragItem: React.MutableRefObject<any> = useRef();
+//     const dragOverItem: React.MutableRefObject<any> = useRef();
+//     const [list, setList] = useState(props.list);
 
-    const dragStart = (e: any, position: number) => {
-        dragItem.current = position;
-        console.log(e.target.innerHTML);
-    };
+//     const dragStart = (e: any, position: number) => {
+//         dragItem.current = position;
+//         console.log(e.target.innerHTML);
+//     };
 
-    const dragEnter = (e: any, position: number) => {
-        dragOverItem.current = position;
-        console.log(e.target.innerHTML);
-    };
+//     const dragEnter = (e: any, position: number) => {
+//         dragOverItem.current = position;
+//         console.log(e.target.innerHTML);
+//     };
 
-    const drop = () => {
-        const copyListItems = [...list];
-        const dragItemContent = copyListItems[dragItem.current];
-        copyListItems.splice(dragItem.current, 1);
-        copyListItems.splice(dragOverItem.current, 0, dragItemContent);
-        dragItem.current = null;
-        dragOverItem.current = null;
-        setList(copyListItems);
-        props.setList(copyListItems);
-    };
+//     const drop = () => {
+//         const copyListItems = [...list];
+//         const dragItemContent = copyListItems[dragItem.current];
+//         copyListItems.splice(dragItem.current, 1);
+//         copyListItems.splice(dragOverItem.current, 0, dragItemContent);
+//         dragItem.current = null;
+//         dragOverItem.current = null;
+//         setList(copyListItems);
+//         props.setList(copyListItems);
+//     };
 
-    return (
-        <Paper sx={{maxWidth: '100%'}}>
-            <MenuList>
-                {
-                    list &&
-                    list.map((item, index) => (
-                        <MenuItem style={{
-                            textAlign: 'center', fontSize: '12px', backgroundColor: '#000',
-                            margin: '5px', padding: '10px', borderRadius: '10px', border: '1px solid #fff'
-                        }}
-                                  onDragStart={(e) => dragStart(e, index)}
-                                  onDragEnter={(e) => dragEnter(e, index)}
-                                  onDragEnd={drop}
-                                  key={index}
-                                  draggable disabled={props.disabled}>
-                            <ListItemIcon>
-                                {index + 1}
-                            </ListItemIcon>&nbsp;
-                            <ListItemText>{item}</ListItemText>&nbsp;&nbsp;
-                            <DragHandleIcon/>
-                        </MenuItem>
-                    ))}
-            </MenuList>
-        </Paper>
-    );
-}
+//     return (
+//         <Paper sx={{maxWidth: '100%'}}>
+//             <MenuList>
+//                 {
+//                     list &&
+//                     list.map((item, index) => (
+//                         <MenuItem style={{
+//                             textAlign: 'center', fontSize: '12px', backgroundColor: '#000',
+//                             margin: '5px', padding: '10px', borderRadius: '10px', border: '1px solid #fff'
+//                         }}
+//                                   onDragStart={(e) => dragStart(e, index)}
+//                                   onDragEnter={(e) => dragEnter(e, index)}
+//                                   onDragEnd={drop}
+//                                   key={index}
+//                                   draggable disabled={props.disabled}>
+//                             <ListItemIcon>
+//                                 {index + 1}
+//                             </ListItemIcon>&nbsp;
+//                             <ListItemText>{item}</ListItemText>&nbsp;&nbsp;
+//                             <DragHandleIcon/>
+//                         </MenuItem>
+//                     ))}
+//             </MenuList>
+//         </Paper>
+//     );
+// }
 
 const SingleMealPlanView = (props: { mealPlan: GetMealPlansQuery['getMealPlans'][0] }) => {
 

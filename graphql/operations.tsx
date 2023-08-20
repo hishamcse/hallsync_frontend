@@ -734,15 +734,6 @@ query GetOldItems {
 }
 `)
 
-export const GET_OLD_MEAL_ITEMS_BY_TYPE = graphql(`
-query GetItemsByType($type: String!) {
-  getItemsByType(type: $type) {
-    itemId
-    name
-    type
-    photoId
-  }
-}
-`)
+
 
 export const ADD_MEALPLAN = graphql(``)
