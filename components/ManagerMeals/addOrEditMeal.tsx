@@ -12,41 +12,9 @@ import SelectedItemsList from './SelectedItem';
 // import Image from "next/image";
 import {Button, Checkbox} from "@mui/material";
 
-
-
-
 const AddOrEditMealView = () => {
 
     const router = useRouter();
-
-    let nonVegList;
-
-    // if(!props.mealPlan.preferences || props.mealPlan.preferences.length === 0) {
-    //     nonVegList = props.mealPlan.meal.items.filter((item) => {
-    //         return item.type.toString().toLowerCase() == 'non_veg';
-    //     }).map((item) => item.name);
-    // } else {
-    //     nonVegList = props.mealPlan.preferences.filter((pref) => {
-    //         return pref.item.type.toString().toLowerCase() == 'non_veg';
-    //     }).sort((a, b) => a.order - b.order)
-    //         .map((pref) => pref.item.name);
-    // }
-
-    // const list = nonVegList.map((item) => {
-    //     return item;
-    // });
-
-    // const getSelecteds = (names: string[]) => {
-    //     let selecteds: GetMealPlansQuery['getMealPlans'][0]['meal']['items'] = [];
-    //     names.forEach((name) => {
-    //         selecteds.push(props.mealPlan.meal.items.filter((item) => {
-    //             return item.name == name;
-    //         })[0]);
-    //     });
-
-    //     return selecteds;
-    // }
-
     //const [strList, setStrList] = useState<string[]>(list);
     //const [optedOut, setOptedOut] = useState<boolean>(!!props.mealPlan.optedOut);
     const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
@@ -55,12 +23,29 @@ const AddOrEditMealView = () => {
 
     const [reqError, setReqError] = useState(false);
     const [reqErrorMsg, setReqErrorMsg] = useState('');
+    //const [selectedItems, setSelectedItems] = useState<Item[]>([]);
+    const [selectedRiceItems, setSelectedRiceItems] = useState<Item[]>([]);
+    const [selectedVegItems, setSelectedVegItems] = useState<Item[]>([]);
+    const [selectedNonVegItems, setSelectedNonVegItems] = useState<Item[]>([])
 
+    const [nonVegCupCount, setNonVegCupCount] = useState<Record<string, number>>({});
+
+    // Callback function to update the quantities of NON_VEG items
+    const handleNonVegCupCount = (itemName: string, cupCount: number) => {
+      setNonVegCupCount(prevCupCount => ({ ...prevCupCount, [itemName]: cupCount }));
+    };
+
+    const handleCancel = () => {
+      // Reset all selections to initial state
+      setSelectedDate(null);
+      setSelectedMealTime('LUNCH');
+      setSelectedRiceItems([]);
+      setSelectedVegItems([]);
+      setSelectedNonVegItems([]);
+    };
     // let disabled = !!props.mealPlan.optedOut;
 
     // let prefDisabled = (props.mealPlan.preferences && props.mealPlan.preferences.length > 0) || false;
-
-
 
     const [addMealPlan, {}] = useMutation(
         ADD_PREFERENCES, {
@@ -114,9 +99,6 @@ const AddOrEditMealView = () => {
         // });
     }
 
-    const handleCancel = () => {
-        // Handle the Cancel button action
-      };
 
     const handleDateChange = (newDate: Dayjs | null) => {
         setSelectedDate(newDate); // Step 3
@@ -150,10 +132,7 @@ const AddOrEditMealView = () => {
     const vegItems = oldItems.filter((item) => item.type === 'VEG').map((item) => item.name);
     const nonVegItems = oldItems.filter((item) => item.type === 'NON_VEG').map((item) => item.name);
 
-    //const [selectedItems, setSelectedItems] = useState<Item[]>([]);
-    const [selectedRiceItems, setSelectedRiceItems] = useState<Item[]>([]);
-    const [selectedVegItems, setSelectedVegItems] = useState<Item[]>([]);
-    const [selectedNonVegItems, setSelectedNonVegItems] = useState<Item[]>([])
+
 
     return (
         
@@ -171,9 +150,9 @@ const AddOrEditMealView = () => {
 
         {/* Render SelectedItemsList */}
       {/* <SelectedItemsList selectedItems={selectedItems} /> */}
-      <SelectedItemsList selectedItems={selectedRiceItems} />
-      <SelectedItemsList selectedItems={selectedVegItems} />
-      <SelectedItemsList selectedItems={selectedNonVegItems} />
+      <div><SelectedItemsList selectedItems={selectedRiceItems} type = "RICE" onChangeCupCount={handleNonVegCupCount}/></div>
+      <div><SelectedItemsList selectedItems={selectedVegItems} type = "VEG" onChangeCupCount={handleNonVegCupCount}/></div>
+      <div><SelectedItemsList selectedItems={selectedNonVegItems} type = "NON_VEG" onChangeCupCount={handleNonVegCupCount}/></div>
           <div style={{ display: 'flex' }}>
         {/* Dropdown for RICE items */}
         <MUISelectStyled
