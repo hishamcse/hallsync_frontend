@@ -469,6 +469,52 @@ export const GET_MULTIPLE_MEALPLANS = graphql(`
 
 `)
 
+export const GET_OLD_MEAL_ITEMS = graphql(`
+query GetOldItems {
+  getOldItems {
+    itemId
+    name
+    type
+    photoId
+  }
+}
+`)
+
+export const ADD_MEAL_PLAN = graphql(`
+   mutation AddNewMealPlan($items: MealPlanInput!, $mealTime: String!, $date: String!) {
+      addNewMealPlan(items: $items, mealTime: $mealTime, date: $date) {
+        day
+        mealId
+        mealPlanId
+        mealTime
+        cupCount {
+          item {
+            name
+            itemId
+            photoId
+            type
+          }
+          cupcount
+        }
+      }
+    }
+
+`)
+
+export const ADD_NEW_ITEM = graphql(`
+    mutation AddNewItem($type: String!, $name: String!, $fileId: Float!) {
+      addNewItem(type: $type, name: $name, fileId: $fileId) {
+        itemId
+        name
+        type
+        photo {
+          photoId
+          uploadedFileId
+        }
+      }
+    }
+`)
+
 export const OPT_OUT_MEAL = graphql(`
     mutation OptOut($mealPlanId: Float!) {
       optOut(mealPlanId: $mealPlanId) {
@@ -740,17 +786,6 @@ mutation ApproveMessManagerApplication($messManagerApplicationId: Float!) {
 }
 `)
 
-export const GET_OLD_MEAL_ITEMS = graphql(`
-query GetOldItems {
-  getOldItems {
-    itemId
-    name
-    type
-    photoId
-  }
-}
-`)
-
 
 export const GET_PREV_CALLS_STUDENT = graphql(`
   query PrevCallsStudent {
@@ -789,6 +824,3 @@ export const GET_MESS_MANAGER_EXPERIENCE = graphql(`
     }
   }
 `)
-export const ADD_ITEM = graphql(``)
-
-export const ADD_MEALPLAN = graphql(``)
