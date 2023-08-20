@@ -1,14 +1,11 @@
-import { SelectChangeEvent } from "@mui/material/Select";
 import { Dayjs } from "dayjs";
 import { CSSProperties, useState } from "react";
-import { Cell, Label, Legend, Pie, PieChart, Tooltip } from "recharts";
-import MyCard from "./card";
-import { GET_OPT_OUTS } from "../graphql/operations";
-import { useLazyQuery, useQuery } from "@apollo/client";
-import { MyDatePicker } from "./DatePicker";
-import { MealTimeDropDown } from "./MealTimeDropDown";
+import { Cell, Label, Legend, Pie, PieChart } from "recharts";
+import MyCard from "../card";
+import { GET_OPT_OUTS } from "../../graphql/operations";
+import { useLazyQuery } from "@apollo/client";
 import { Typography } from "@mui/material";
-import { TitleMealTimeDate } from "./TitleMealTimeDate";
+import { TitleMealTimeDate } from "../TitleMealTimeDate";
 
 
 export function OptInPieChart(){

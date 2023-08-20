@@ -1,12 +1,12 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { CREATE_CALL, GET_ASSIGNED_TILL } from "../graphql/operations";
-import { addDay, getDayAndMonthAndYearString , addDays} from "./utilities";
-import MyCard from "./card";
+import { CREATE_CALL, GET_ASSIGNED_TILL } from "../../graphql/operations";
+import { addDay, getDayAndMonthAndYearString , addDays} from "../utilities";
+import MyCard from "../card";
 import { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import { MyDatePicker } from "./DatePicker";
-import { MyButton } from "./button";
-import styles from '../styles/components.module.scss'
+import { MyDatePicker } from "../DatePicker";
+import { MyButton } from "../button";
+import styles from '../../styles/components.module.scss'
 
 export function CallApplicationTsx(){
 

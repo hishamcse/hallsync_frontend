@@ -1,14 +1,14 @@
 import { useMutation, useQuery } from "@apollo/client"
-import { GET_PENDING_FEEDBACKS, POST_FEEDBACK } from "../graphql/operations"
-import MyCard from "./card"
+import { GET_PENDING_FEEDBACKS, POST_FEEDBACK } from "../../graphql/operations"
+import MyCard from "../card"
 import { Rating, RatingProps } from "@mui/material"
 import { useState } from "react"
-import styles from '../styles/components.module.scss'
-import MUIStyledTextarea from "./MUITextArea"
-import { PendingFeedbacksQuery } from "../graphql/__generated__/graphql"
-import { getDayAndMonthString } from "./utilities"
+import styles from '../../styles/components.module.scss'
+import MUIStyledTextarea from "../MUITextArea"
+import { PendingFeedbacksQuery } from "../../graphql/__generated__/graphql"
+import { getDayAndMonthString } from "../utilities"
 import { DateRangeIcon } from "@mui/x-date-pickers"
-import { MyButton } from "./button"
+import { MyButton } from "../button"
 
 function Rating_(props : {
     val : number | null,

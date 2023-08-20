@@ -1,5 +1,5 @@
-import { GiveFeedback } from "../../components/GiveFeedback";
-import { RatingBarChart } from "../../components/RatingsStat";
+import { GiveFeedback } from "../../components/StatAndFeedback/GiveFeedback";
+import { RatingBarChart } from "../../components/StatAndFeedback/RatingsStat";
 import useResidencyStatus from "../../hooks/useResidencyStatus";
 
 export default function Feedback(){

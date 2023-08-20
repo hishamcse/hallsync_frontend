@@ -1,14 +1,14 @@
 import { useLazyQuery } from "@apollo/client";
 import { Dayjs } from "dayjs";
 import { useState } from "react";
-import { GET_MEAL_PREF_STATS } from "../graphql/operations";
-import MyCard from "./card";
-import { MealTimeDropDown } from "./MealTimeDropDown";
-import { MyDatePicker } from "./DatePicker";
-import { MealPreferenceStatsQuery } from "../graphql/__generated__/graphql";
+import { GET_MEAL_PREF_STATS } from "../../graphql/operations";
+import MyCard from "../card";
+import { MealTimeDropDown } from "../MealTimeDropDown";
+import { MyDatePicker } from "../DatePicker";
+import { MealPreferenceStatsQuery } from "../../graphql/__generated__/graphql";
 import { BarChartWhite } from "./ParticipationBarChart";
 import { PieChart_ } from "./OptInPieChart";
-import { TitleMealTimeDate } from "./TitleMealTimeDate";
+import { TitleMealTimeDate } from "../TitleMealTimeDate";
 
 const pieCharColors = ['#FF05C8', '#FFE605', '#00FFF5']
 

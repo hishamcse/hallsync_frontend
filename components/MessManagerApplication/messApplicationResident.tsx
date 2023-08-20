@@ -1,10 +1,10 @@
 import { useMutation, useQuery } from "@apollo/client"
-import { APPLY_FOR_MESS_MANAGER, GET_PREV_CALLS_STUDENT } from "../graphql/operations"
-import { PrevCallsStudentQuery } from "../graphql/__generated__/graphql"
-import MyCard from "./card"
-import { getDayAndMonthAndYearString } from "./utilities"
-import styles from '../styles/components.module.scss'
-import { MyButton } from "./button"
+import { APPLY_FOR_MESS_MANAGER, GET_PREV_CALLS_STUDENT } from "../../graphql/operations"
+import { PrevCallsStudentQuery } from "../../graphql/__generated__/graphql"
+import MyCard from "../card"
+import { getDayAndMonthAndYearString } from "../utilities"
+import styles from '../../styles/components.module.scss'
+import { MyButton } from "../button"
 
 
 export function FromToComp(props : {

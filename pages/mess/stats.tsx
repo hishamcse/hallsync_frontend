@@ -1,7 +1,7 @@
-import { AbsenteesBarChart } from "../../components/AbsenteesBarChart";
-import { OptInPieChart } from "../../components/OptInPieChart";
-import ParticipationBarChart from "../../components/ParticipationBarChart";
-import { MealPreferencesBarChart } from "../../components/PreferencesBarChart";
+import { AbsenteesBarChart } from "../../components/StatAndFeedback/AbsenteesBarChart";
+import { OptInPieChart } from "../../components/StatAndFeedback/OptInPieChart";
+import ParticipationBarChart from "../../components/StatAndFeedback/ParticipationBarChart";
+import { MealPreferencesBarChart } from "../../components/StatAndFeedback/PreferencesBarChart";
 import useResidencyStatus from "../../hooks/useResidencyStatus";
 import styles from '../../styles/stats.module.scss'
 

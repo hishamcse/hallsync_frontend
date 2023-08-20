@@ -14,11 +14,11 @@ const items = ['New Seat', 'Temp Seat','Room Change']
 
 
 import {PieChart, Pie, BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import ParticipationBarChart from '../components/ParticipationBarChart'
-import { AbsenteesBarChart } from '../components/AbsenteesBarChart'
-import { RatingBarChart } from '../components/RatingsStat'
-import { OptInPieChart } from '../components/OptInPieChart'
-import { MealPreferencesBarChart } from '../components/PreferencesBarChart'
+import ParticipationBarChart from '../components/StatAndFeedback/ParticipationBarChart'
+import { AbsenteesBarChart } from '../components/StatAndFeedback/AbsenteesBarChart'
+import { RatingBarChart } from '../components/StatAndFeedback/RatingsStat'
+import { OptInPieChart } from '../components/StatAndFeedback/OptInPieChart'
+import { MealPreferencesBarChart } from '../components/StatAndFeedback/PreferencesBarChart'
 
 
 

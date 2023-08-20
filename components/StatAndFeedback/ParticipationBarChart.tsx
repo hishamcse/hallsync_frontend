@@ -1,17 +1,17 @@
 import { useLazyQuery, useQuery } from "@apollo/client"
-import { GET_PARTICIPATIONS } from "../graphql/operations"
+import { GET_PARTICIPATIONS } from "../../graphql/operations"
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Label } from 'recharts';
 import { useState } from "react";
-import MyCard from "./card";
+import MyCard from "../card";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Dayjs } from "dayjs";
-import MuiDropdown from "./MUIDropdown";
+import MuiDropdown from "../MUIDropdown";
 import { SelectChangeEvent } from "@mui/material";
-import { getDayAndMonthString } from "./utilities";
-import { MyDatePicker } from "./DatePicker";
-import { MealTimeDropDown } from "./MealTimeDropDown";
-import { TitleMealTimeDate } from "./TitleMealTimeDate";
+import { getDayAndMonthString } from "../utilities";
+import { MyDatePicker } from "../DatePicker";
+import { MealTimeDropDown } from "../MealTimeDropDown";
+import { TitleMealTimeDate } from "../TitleMealTimeDate";
 
 
 export function BarChartCard(props: {

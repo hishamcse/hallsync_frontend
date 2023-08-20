@@ -1,9 +1,9 @@
 import { useMutation, useQuery } from "@apollo/client"
-import { APPROVE_MESS_MANAGER_APP, PREV_CALLS } from "../graphql/operations"
-import { PrevCallQueryQuery } from "../graphql/__generated__/graphql"
-import MyCard from "./card"
-import { getDayAndMonthAndYearString } from "./utilities"
-import styles from '../styles/components.module.scss'
+import { APPROVE_MESS_MANAGER_APP, PREV_CALLS } from "../../graphql/operations"
+import { PrevCallQueryQuery } from "../../graphql/__generated__/graphql"
+import MyCard from "../card"
+import { getDayAndMonthAndYearString } from "../utilities"
+import styles from '../../styles/components.module.scss'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';

@@ -1,11 +1,11 @@
-import { useLazyQuery, useQuery } from "@apollo/client"
-import { GET_ABSENTEES, GET_PARTICIPATIONS } from "../graphql/operations"
+import { useLazyQuery } from "@apollo/client"
+import { GET_ABSENTEES } from "../../graphql/operations"
 import { useState } from "react";
 import { Dayjs } from "dayjs";
-import { Box, FormControl, OutlinedInput, SelectChangeEvent, TextField } from "@mui/material";
-import { BarChartCard, BarChartWhite } from "./ParticipationBarChart";
-import MyCard from "./card";
-import { TitleDate } from "./TitleMealTimeDate";
+import { Box, FormControl, OutlinedInput } from "@mui/material";
+import { BarChartWhite } from "./ParticipationBarChart";
+import MyCard from "../card";
+import { TitleDate } from "../TitleMealTimeDate";
 
 
 export function AbsenteesBarChart() {

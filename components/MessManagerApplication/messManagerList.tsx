@@ -1,10 +1,10 @@
 import { useQuery } from "@apollo/client"
-import { GET_ASSINGED_MESS_MANAGERS } from "../graphql/operations"
-import { AssingedMessManagersQuery } from "../graphql/__generated__/graphql"
-import MyCard from "./card"
+import { GET_ASSINGED_MESS_MANAGERS } from "../../graphql/operations"
+import { AssingedMessManagersQuery } from "../../graphql/__generated__/graphql"
+import MyCard from "../card"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import styles from '../styles/components.module.scss'
-import { getDayAndMonthAndYearString } from "./utilities";
+import styles from '../../styles/components.module.scss'
+import { getDayAndMonthAndYearString } from "../utilities";
 
 
 function MessManager(props : {
