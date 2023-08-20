@@ -1,15 +1,10 @@
 //import NewSeat from "./NewSeat";
-//import React, {useContext, useEffect, useState} from "react";
 import {SelectChangeEvent} from "@mui/material/Select";
 //import TempSeat from "./TempSeat";
 //import RoomChange from "./RoomChange";
 import {userContext} from "../../pages/_app";
 import {ResidencyStatus} from "../../graphql/__generated__/graphql";
-
 import Image from "next/image";
-// import Card from "@mui/material/Card";
-// import CardContent from "@mui/material/CardContent";
-// import Typography from "@mui/material/Typography";
 import { Card, CardContent, Typography, Radio, TextField, Button, MenuItem } from "@mui/material";
 import { Checkbox, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import { DragDropContext, Draggable, Droppable, DropResult  } from 'react-beautiful-dnd';
@@ -17,12 +12,12 @@ import topBarStyles from "../../styles/topbar.module.scss";
 
 import React, {useState} from "react";
 import {GetMealPlansQuery} from "../../graphql/__generated__/graphql";
-
 import MyCard from "../card";
 import {useQuery} from "@apollo/client";
 import {GET_MULTIPLE_MEALPLANS} from "../../graphql/operations";
 import SingleMealPlanView from "./MealPlan";
 import AddOrEditMealView from "./addOrEditMeal";
+import MainContainer from "./mainContainer";
 
 
 const DayMealPlan = (props: { mealPlans: GetMealPlansQuery['getMealPlans'] }) => {
@@ -42,15 +37,6 @@ const generateDateInfo = (nextDay: number) => {
   return tomorrow.toLocaleDateString();
 }
 
-const ManagerAddOrEdit = (props: { mealPlans: GetMealPlansQuery['getMealPlans'] }) => {
-  return (
-    <div style={{width: '100%'}}>
-     {props.mealPlans.map((mealPlan, index) => (
-              <AddOrEditMealView mealPlan={mealPlan} key={index}/>
-          ))}
-    </div>
-  )
-}
 
 const ManagerMealView: React.FC = () => {
 
@@ -80,13 +66,8 @@ const ManagerMealView: React.FC = () => {
                           content={<DayMealPlan mealPlans={[mealPlans[index], mealPlans[index + 1]]}/>}/>
               </div>   
           ))}
-          {mealPlans.map((mealPlan, index) => (
-              index % 2 == 0 &&
-              <div key={index} style={{margin: 20}}>
-                  <MyCard title={new Date(mealPlan.day).toDateString()}
-                          content={<ManagerAddOrEdit mealPlans={[mealPlans[index], mealPlans[index + 1]]}/>}/>
-              </div>   
-          ))}
+          <MyCard title= "Add/Edit Meal"
+                          content={<MainContainer />}/>
       </div>
   );
 };
