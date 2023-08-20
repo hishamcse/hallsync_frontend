@@ -18,13 +18,13 @@ const SelectedItemsList: React.FC<SelectedItemsListProps> = ({ selectedItems, ty
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight : 150}}>
       {selectedItems.length > 0 ? (
         <ul style={{ listStyle: 'none', display: 'flex', flexWrap: 'wrap' }}>
           {selectedItems.map((item, index) => (
             <li key={index} style={{ margin: '10px'}}>
               <div>
-                <Image src={'/images/default.png'} alt='foodItem' width={100} height={75} />
+                <Image src={'/images/default.png'} alt='foodItem' width={150} height={100} />
               </div>
               <div>{item.name}</div>
               {type === 'NON_VEG' && (
@@ -35,7 +35,7 @@ const SelectedItemsList: React.FC<SelectedItemsListProps> = ({ selectedItems, ty
                     value={itemCupCount[item.name] || ''}
                     onChange={(e) => handleCupCountChange(item.name, parseInt(e.target.value))}
                     size= "small"
-                    style={{ width: '100px', height: '28px' }}
+                    style={{ width: '150px', height: '28px' , marginTop : 10}}
                   />
                 </div>
               )}
@@ -43,7 +43,12 @@ const SelectedItemsList: React.FC<SelectedItemsListProps> = ({ selectedItems, ty
           ))}
         </ul>
       ) : (
-        <p>No {type} selected.</p>
+        <div style={{
+          display : "flex",
+          alignItems : "center",
+          flexGrow : 1,
+          color : "yellow"
+        }} >No {type} selected.</div>
       )}
     </div>
   );
