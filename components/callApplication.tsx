@@ -62,7 +62,7 @@ export function CallApplicationTsx(){
             <div className={styles.callForContentRoot}>
                 <div>
                     <div>
-                        Mess Manager Assinged Upto
+                        Mess Manager Assigned Upto
                     </div>
                     <div>
                         <span className={styles.rangeSpan}>
@@ -108,7 +108,7 @@ export function CallApplicationTsx(){
                 </div>
             </div>
         } style={{
-            minWidth : 600
+            minWidth : 600,
         }} />
     )
 }
