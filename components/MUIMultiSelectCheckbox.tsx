@@ -10,7 +10,7 @@ import React, { ReactNode } from "react";
 type CheckBoxProps = {
 	type: 'multiple',
 	vals: string[],
-	setVals: (s: string[]) => void,
+	setVals?: (s: string[]) => void
 }
 type SigleSelectProps = {
 	type: 'single',

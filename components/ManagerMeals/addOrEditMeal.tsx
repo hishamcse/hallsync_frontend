@@ -2,7 +2,7 @@ import {GetMealPlansQuery, Item, ItemType} from "../../graphql/__generated__/gra
 import {useRouter} from "next/router";
 import React, {useRef, useState} from "react";
 import {useMutation, useQuery} from "@apollo/client";
-import {ADD_PREFERENCES, OPT_OUT_MEAL, ADD_MEALPLAN, GET_OLD_MEAL_ITEMS} from "../../graphql/operations";
+import {ADD_PREFERENCES, OPT_OUT_MEAL, GET_OLD_MEAL_ITEMS, ADD_MEAL_PLAN} from "../../graphql/operations";
 import Typography from "@mui/material/Typography";
 import MUISelectStyled from "../MUIMultiSelectCheckbox";
 import dayjs, { Dayjs } from "dayjs";
@@ -15,20 +15,47 @@ import {Button, Checkbox} from "@mui/material";
 const AddOrEditMealView = () => {
 
     const router = useRouter();
-    //const [strList, setStrList] = useState<string[]>(list);
+    const [strList, setStrList] = useState<string[]>([]);
     //const [optedOut, setOptedOut] = useState<boolean>(!!props.mealPlan.optedOut);
     const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
     const [selectedMealTime, setSelectedMealTime] = useState<string>('LUNCH');
-    //const [selectedItems, setSelectedItems] = useState<Item[]>([]);
 
     const [reqError, setReqError] = useState(false);
     const [reqErrorMsg, setReqErrorMsg] = useState('');
-    //const [selectedItems, setSelectedItems] = useState<Item[]>([]);
+    const [selectedItems, setSelectedItems] = useState<Item[]>([]);
+
     const [selectedRiceItems, setSelectedRiceItems] = useState<Item[]>([]);
     const [selectedVegItems, setSelectedVegItems] = useState<Item[]>([]);
     const [selectedNonVegItems, setSelectedNonVegItems] = useState<Item[]>([])
 
     const [nonVegCupCount, setNonVegCupCount] = useState<Record<string, number>>({});
+
+    const [addMealPlan, {}] = useMutation(
+        ADD_MEAL_PLAN, {
+            onError: (error) => {
+                console.log(error);
+                setReqError(true)
+                setReqErrorMsg(error.message)
+            },
+            onCompleted: (data) => {
+                console.log(data);
+                // router.reload();
+            }
+        }
+    )
+
+    // done with departments for now. need replacing with food items
+    const { loading, error, data } = useQuery(GET_OLD_MEAL_ITEMS);
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error.message}</p>;
+
+    const oldItems = data?.getOldItems ?? [];
+
+    // Separate arrays for different types of items
+    const riceItems = oldItems.filter((item) => item.type === 'RICE').map((item) => item.name);
+    const vegItems = oldItems.filter((item) => item.type === 'VEG').map((item) => item.name);
+    const nonVegItems = oldItems.filter((item) => item.type === 'NON_VEG').map((item) => item.name);
 
     // Callback function to update the quantities of NON_VEG items
     const handleNonVegCupCount = (itemName: string, cupCount: number) => {
@@ -46,57 +73,73 @@ const AddOrEditMealView = () => {
     // let disabled = !!props.mealPlan.optedOut;
 
     // let prefDisabled = (props.mealPlan.preferences && props.mealPlan.preferences.length > 0) || false;
-
-    const [addMealPlan, {}] = useMutation(
-        ADD_PREFERENCES, {
-            onError: (error) => {
-                console.log(error);
-                setReqError(true)
-                setReqErrorMsg(error.message)
-            },
-            onCompleted: (data) => {
-                console.log(data);
-                router.reload();
-            }
-        }
-    )
     
 
     const importedImgPath = (imgName: string) => {
         return "/images/" + imgName;
     }
 
+    const getSelecteds = (names: string[]) => {
+        let selecteds: GetMealPlansQuery['getMealPlans'][0]['meal']['items'] = [];
+        names.forEach((name) => {
+            selecteds.push(oldItems.filter((item) => {
+                return item.name.toLowerCase() == name.toLowerCase();
+            })[0]);
+        });
+
+        return selecteds;
+    }
+
 
     const handleComplete = () => {
 
-        // const selected = getSelecteds(strList);
+        const riceNames = selectedRiceItems.map(item => item.name)
+        const vegNames = selectedVegItems.map(item => item.name)
+        const nenVegNames = selectedNonVegItems.map(item => item.name)
 
-        // const selectedPrefs = selected.map((item, index) => {
-        //     return {
-        //         itemId: item.itemId,
-        //         order: index
-        //     }
-        // });
+        console.log(riceNames, vegNames, nenVegNames)
 
-        // const preferences = {
-        //     preferences: selectedPrefs
-        // }
+        const str: string[] = [...riceNames, ...vegNames, ...nenVegNames];
 
-        // console.log(selected)
-        // console.log(preferences)
+        setStrList(str)
 
-        // // call mutation to add preferences
-        // addPreferences({
-        //     variables: {
-        //         mealPlanId: props.mealPlan.mealPlanId,
-        //         preferences: preferences
-        //     }
-        // }).then((data) => {
-        //     prefDisabled = true;
-        //     console.log(data);
-        // }).catch((error) => {
-        //     console.log(error);
-        // });
+        const selected = getSelecteds(strList);
+
+        console.log(nonVegCupCount, selectedDate?.toDate().toLocaleDateString(), selectedMealTime)
+
+        const addedItems = str.map(itemName => {
+            let itemId = selected
+                .filter(s => s.name.toLowerCase() == itemName.toLowerCase())[0]?.itemId;
+            let cupCount = nonVegCupCount[itemName] ?? 150;
+
+            return {itemId, cupCount}
+        })
+
+        if(!selectedDate) {
+            setReqError(true)
+            setReqErrorMsg('date undefined');
+            return;
+        }
+
+        setReqError(false)
+
+        const items = {
+            items: addedItems
+        }
+
+        console.log(addedItems)
+
+        addMealPlan({
+            variables: {
+                mealTime: selectedMealTime,
+                date: selectedDate?.toDate().toLocaleDateString(),
+                items: items
+            }
+        }).then((data) => {
+            console.log(data);
+        }).catch((error) => {
+            console.log(error);
+        });
     }
 
 
@@ -117,23 +160,6 @@ const AddOrEditMealView = () => {
     //     // For example: update state, make API calls, etc.
     // };
 
-
-
-    // done with departments for now. need replacing with food items
-    const { loading, error, data } = useQuery(GET_OLD_MEAL_ITEMS);
-
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error.message}</p>;
-
-    const oldItems = data?.getOldItems ?? [];
-
-    // Separate arrays for different types of items
-    const riceItems = oldItems.filter((item) => item.type === 'RICE').map((item) => item.name);
-    const vegItems = oldItems.filter((item) => item.type === 'VEG').map((item) => item.name);
-    const nonVegItems = oldItems.filter((item) => item.type === 'NON_VEG').map((item) => item.name);
-
-
-
     return (
         
         <div>
@@ -150,8 +176,8 @@ const AddOrEditMealView = () => {
 
         {/* Render SelectedItemsList */}
       {/* <SelectedItemsList selectedItems={selectedItems} /> */}
-      <div><SelectedItemsList selectedItems={selectedRiceItems} type = "RICE" onChangeCupCount={handleNonVegCupCount}/></div>
-      <div><SelectedItemsList selectedItems={selectedVegItems} type = "VEG" onChangeCupCount={handleNonVegCupCount}/></div>
+      <div><SelectedItemsList selectedItems={selectedRiceItems} type = "RICE" /></div>
+      <div><SelectedItemsList selectedItems={selectedVegItems} type = "VEG" /></div>
       <div><SelectedItemsList selectedItems={selectedNonVegItems} type = "NON_VEG" onChangeCupCount={handleNonVegCupCount}/></div>
           <div style={{ display: 'flex' }}>
         {/* Dropdown for RICE items */}
