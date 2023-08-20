@@ -670,19 +670,6 @@ query PendingFeedbacks {
       day
     }
     feedbackId
-    messManager {
-      residency{
-        student {
-          name
-          levelTerm {
-            label
-          }
-          batch {
-            year
-          }
-        }
-      }
-    }
   }
 }
 `)
