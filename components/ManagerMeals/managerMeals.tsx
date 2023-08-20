@@ -18,6 +18,8 @@ import {GET_MULTIPLE_MEALPLANS} from "../../graphql/operations";
 import SingleMealPlanView from "./MealPlan";
 import AddOrEditMealView from "./addOrEditMeal";
 import MainContainer from "./mainContainer";
+import { Dayjs } from "dayjs";
+import { TitleMealTimeDate } from "../TitleMealTimeDate";
 
 
 const DayMealPlan = (props: { mealPlans: GetMealPlansQuery['getMealPlans'] }) => {
@@ -41,6 +43,9 @@ const generateDateInfo = (nextDay: number) => {
 const ManagerMealView: React.FC = () => {
 
   const [mealPlans, setMealPlans] = useState<GetMealPlansQuery['getMealPlans']>([]);
+  
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
+  const [selectedMealTime, setSelectedMealTime] = useState<string>('LUNCH');
 
   const {data} = useQuery(GET_MULTIPLE_MEALPLANS, {
       fetchPolicy: "no-cache",
@@ -59,15 +64,20 @@ const ManagerMealView: React.FC = () => {
 
   return (
       <div>
-          {mealPlans.map((mealPlan, index) => (
+          {/* {mealPlans.map((mealPlan, index) => (
               index % 2 == 0 &&
               <div key={index} style={{margin: 20}}>
                   <MyCard title={new Date(mealPlan.day).toDateString()}
                           content={<DayMealPlan mealPlans={[mealPlans[index], mealPlans[index + 1]]}/>}/>
               </div>   
-          ))}
-          <MyCard title= "Add/Edit Meal"
-                          content={<MainContainer />}/>
+          ))} */}
+          <MyCard title={<TitleMealTimeDate datePickerLabel="Day" date={selectedDate} handleDate={setSelectedDate} 
+          mealTime={selectedMealTime} setMealTime={setSelectedMealTime} title="Add Meal" />}
+                          content={<MainContainer selectedDate={selectedDate} selectedMealTime={selectedMealTime}
+                          setSelectedDate={setSelectedDate} setSelectedMealTime={setSelectedMealTime} />}
+                          style={{
+                            minWidth : 800
+                          }}/>
       </div>
   );
 };
