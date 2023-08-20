@@ -8,45 +8,15 @@ import { UploadFile } from '../fileUpload'; // Make sure to import the UploadFil
 import { UploadPhoto } from '../photoUpload';
 
 const AddNewItemView = () => {
-  const [itemName, setItemName] = useState('');
-  const [itemType, setItemType] = useState('');
+  const [itemName, setItemName] = useState<string>();
+  const [itemType, setItemType] = useState<string>();
   const [imageFile, setImageFile] = useState<File | null>(null);
 
-//   const [addItem, { loading }] = useMutation(ADD_ITEM, {
-//     // Replace ADD_ITEM with your actual mutation and handle success/error as needed
-//     onCompleted: (data) => {
-//       console.log('Item added:', data);
-//       // Reset the form after successfully adding the item
-//       setItemName('');
-//       setItemType('');
-//       setImageFile(null);
-//     },
-//     onError: (error) => {
-//       console.error('Error adding item:', error);
-//     },
-//   });
-
-//   const handleAddItem = () => {
-//     // Perform validation and other necessary checks before adding the item
-//     if (!itemName || !itemType || !imageFile) {
-//       console.log('Please fill in all fields.');
-//       return;
-//     }
-
-//     // Call the addItem mutation
-//     addItem({
-//       variables: {
-//         name: itemName,
-//         type: itemType,
-//         image: imageFile,
-//       },
-//     });
-//   };
 
   const handleCancel = () => {
     // Reset the form
-    setItemName('');
-    setItemType('');
+    setItemName(undefined);
+    setItemType(undefined);
     setImageFile(null);
   };
 
@@ -73,17 +43,31 @@ const AddNewItemView = () => {
   return (
     <div>
       <TextField label="Item Name" value={itemName} onChange={handleItemNameChange} />
-      <MealTypeDropDown val={itemType} setVal={handleMealTypeSelect} />
+      <div style = {{
+        display : "flex",
+        alignItems : "center",
+        justifyContent: "space-between",
+        marginTop : 10
+      }}>
+        Type
+        <MealTypeDropDown  val={itemType} setVal={handleMealTypeSelect} />
+      </div>
       <div>
         <UploadPhoto onChange={handleFileChange} />
       </div>
-      {/* <Button variant="contained" color="primary" onClick={handleAddItem} disabled={loading}> */}
-    <Button variant='contained' color = "primary">
-        Add
-      </Button>
-      <Button variant="outlined" color="secondary" onClick={handleCancel}>
-        Cancel
-      </Button>
+      <div style = {{
+        textAlign : "center"
+      }}>
+
+      <Button variant='contained' color = "primary" sx={{
+        marginRight : 10
+      }}>
+          Add
+        </Button>
+        <Button variant="outlined" color="secondary" onClick={handleCancel}>
+          Cancel
+        </Button>
+      </div>
     </div>
   );
 };

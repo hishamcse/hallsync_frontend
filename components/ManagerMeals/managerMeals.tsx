@@ -1,14 +1,3 @@
-//import NewSeat from "./NewSeat";
-import {SelectChangeEvent} from "@mui/material/Select";
-//import TempSeat from "./TempSeat";
-//import RoomChange from "./RoomChange";
-import {userContext} from "../../pages/_app";
-import {ResidencyStatus} from "../../graphql/__generated__/graphql";
-import Image from "next/image";
-import { Card, CardContent, Typography, Radio, TextField, Button, MenuItem } from "@mui/material";
-import { Checkbox, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
-import { DragDropContext, Draggable, Droppable, DropResult  } from 'react-beautiful-dnd';
-import topBarStyles from "../../styles/topbar.module.scss";
 
 import React, {useState} from "react";
 import {GetMealPlansQuery} from "../../graphql/__generated__/graphql";
@@ -20,7 +9,9 @@ import AddOrEditMealView from "./addOrEditMeal";
 import MainContainer from "./mainContainer";
 import { Dayjs } from "dayjs";
 import { TitleMealTimeDate } from "../TitleMealTimeDate";
+import AddNewItemView from "./addNewItem";
 
+import styles from '../../styles/components.module.scss'
 
 const DayMealPlan = (props: { mealPlans: GetMealPlansQuery['getMealPlans'] }) => {
   return (
@@ -63,7 +54,10 @@ const ManagerMealView: React.FC = () => {
   })
 
   return (
-      <div>
+      <div className={styles.managerMealRootContainer} style={{
+        display : "flex",
+        alignItems : "baseline"
+      }}>
           {/* {mealPlans.map((mealPlan, index) => (
               index % 2 == 0 &&
               <div key={index} style={{margin: 20}}>
@@ -73,11 +67,15 @@ const ManagerMealView: React.FC = () => {
           ))} */}
           <MyCard title={<TitleMealTimeDate datePickerLabel="Day" date={selectedDate} handleDate={setSelectedDate} 
           mealTime={selectedMealTime} setMealTime={setSelectedMealTime} title="Add Meal" />}
-                          content={<MainContainer selectedDate={selectedDate} selectedMealTime={selectedMealTime}
+                          content={
+                          <MainContainer selectedDate={selectedDate} selectedMealTime={selectedMealTime}
                           setSelectedDate={setSelectedDate} setSelectedMealTime={setSelectedMealTime} />}
                           style={{
                             minWidth : 800
                           }}/>
+        <MyCard title={"Add New Item"} content={
+            <AddNewItemView />
+        } />
       </div>
   );
 };

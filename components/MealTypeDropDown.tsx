@@ -3,7 +3,7 @@ import MuiDropdown from "./MUIDropdown";
 
 export function MealTypeDropDown(
     props : {
-        val : string,
+        val? : string,
         setVal : (v : string)=>void,
         width? : number
     }

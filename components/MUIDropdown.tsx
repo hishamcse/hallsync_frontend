@@ -7,10 +7,11 @@ import Select, {SelectChangeEvent} from '@mui/material/Select';
 const MuiDropdown = (props: {
     width: number,
     options: string[],
-    val: string,
+    val?: string,
     change: (event: SelectChangeEvent) => void,
     disable? : boolean,
-    sx? : React.CSSProperties
+    sx? : React.CSSProperties,
+    defaulValue? : string
 }) => {
 
     return (
@@ -24,6 +25,11 @@ const MuiDropdown = (props: {
                     onChange={props.change}
                     size='small'
                     disabled = {props.disable}
+                    // renderValue={(s)=>{
+                    //     if(s.length == 0)
+                    //         return props.defaulValue
+                    //     return s
+                    // }}
                 >
                     {props.options.map((v) => (
                         <MenuItem key={Math.random().toString()} value={v}>{v}</MenuItem>
