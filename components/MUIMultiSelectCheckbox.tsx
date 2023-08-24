@@ -73,7 +73,6 @@ export default function MUISelectStyled(props: Props) {
 
 
 	return (
-		<div>
 			<FormControl sx={{ m: 1, width: props.width ?? 180 }}>
 				<SelectWrapper option1={props.type == 'single' ? singleProps : undefined}
 					option2={props.type == 'multiple' ? multiProps : undefined}
@@ -90,7 +89,6 @@ export default function MUISelectStyled(props: Props) {
 					))}
 				</SelectWrapper>
 			</FormControl>
-		</div>
 	);
 }
 

@@ -3,9 +3,27 @@
 $itemBgColor : #111111;
 $listBgColor : #202020;
 
-.filtersContainer{
+.filtersContainer, .sortContainer{
     // display: flex;
     margin: 10px;
+    >div{
+        margin-right: 20px;
+        margin-top: 10px;
+    }
+}
+
+.sortContainer{
+    >div{
+        display: inline-block;
+    }
+    .sortButtonContainer{
+        display: flex;
+        justify-content: flex-end;
+        >button{
+            margin-top: 10px;
+            width:  100px;
+        }
+    }
 }
 
 .filtersRow{

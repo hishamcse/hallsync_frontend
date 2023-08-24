@@ -5,3 +5,6 @@ curr room no in viewing room change app from student
 after giving preference, opt out is still shown, but no button to confirm
 
 change from to date style in mess manager list
+
+
+seat app list: if i select a page, for example 12, then change filters, the selected page  should reset to 1?
