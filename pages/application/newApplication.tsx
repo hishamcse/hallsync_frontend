@@ -1,4 +1,4 @@
-import StudentView from "../../components/StudentSeat/StudentView";
+import StudentView from "../../components/Seat/StudentSeat/StudentView";
 
 function CreateApplication(){
     return (

@@ -1,7 +1,7 @@
 import {useQuery} from "@apollo/client";
 import { MY_APPLICATIONS } from "../../../graphql/operations";
-import { ApplicationList } from "../../seatManagement";
 import { useRouter } from "next/router";
+import { ApplicationList } from "../../../components/Seat/ProvostSeat/ApplicationsList/seatApplicationsList";
 
 
 function Applications(){

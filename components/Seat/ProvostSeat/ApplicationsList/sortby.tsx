@@ -1,7 +1,7 @@
-import styles from '../../../styles/seatManagementIndex.module.scss'
-import MuiDropdown from '../../MUIDropdown';
-import { MyButton } from '../../button';
-import MyCard from '../../card';
+import styles from "../../../../styles/seatManagementIndex.module.scss";
+import MuiDropdown from '../../../MUIDropdown';
+import { MyButton } from '../../../button';
+import MyCard from '../../../card';
 
 
 export function SortBy(

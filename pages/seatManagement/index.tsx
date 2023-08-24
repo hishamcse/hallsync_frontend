@@ -8,10 +8,10 @@ import { MyInput } from "../../components/input";
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { useRouter } from "next/router";
-import { Filters } from "../../components/ProvostSeat/ApplicationsList/filters";
-import { application } from "../../components/ProvostSeat/ApplicationsList/seatApplication";
-import { SortBy } from "../../components/ProvostSeat/ApplicationsList/sortby";
-import { ApplicationList } from "../../components/ProvostSeat/ApplicationsList/seatApplicationsList";
+import { Filters } from "../../components/Seat/ProvostSeat/ApplicationsList/filters";
+import { application } from "../../components/Seat/ProvostSeat/ApplicationsList/seatApplication";
+import { SortBy } from "../../components/Seat/ProvostSeat/ApplicationsList/sortby";
+import { ApplicationList } from "../../components/Seat/ProvostSeat/ApplicationsList/seatApplicationsList";
 
 export type student = Student;
 

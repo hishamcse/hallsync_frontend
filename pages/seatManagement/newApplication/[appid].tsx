@@ -1,9 +1,9 @@
-import NewSeatP from "../../../components/ProvostSeat/NewSeatP";
+import NewSeatP from "../../../components/Seat/ProvostSeat/NewSeatP";
 import { useQuery } from "@apollo/client";
 import { GET_APPLICATION } from "../../../graphql/operations";
 import { useRouter } from "next/router";
-import TempSeatP from "../../../components/ProvostSeat/TempSeatP";
-import RoomChangeP from "../../../components/ProvostSeat/RoomChangeP";
+import TempSeatP from "../../../components/Seat/ProvostSeat/TempSeatP";
+import RoomChangeP from "../../../components/Seat/ProvostSeat/RoomChangeP";
 
 export default function NewSeatAppView(){
 

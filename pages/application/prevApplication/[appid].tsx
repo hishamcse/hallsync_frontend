@@ -2,9 +2,9 @@ import {useContext} from 'react'
 import { useQuery } from "@apollo/client";
 import { GET_APPLICATION } from "../../../graphql/operations";
 import { useRouter } from "next/router";
-import NewSeat from "../../../components/StudentSeat/NewSeat";
-import TempSeat from "../../../components/StudentSeat/TempSeat";
-import RoomChange from "../../../components/StudentSeat/RoomChange";
+import NewSeat from "../../../components/Seat/StudentSeat/NewSeat";
+import TempSeat from "../../../components/Seat/StudentSeat/TempSeat";
+import RoomChange from "../../../components/Seat/StudentSeat/RoomChange";
 import { userContext } from "../../_app";
 
 export default function NewSeatAppViewStudent(){

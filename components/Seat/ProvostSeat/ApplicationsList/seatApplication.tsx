@@ -1,5 +1,6 @@
-import { ApplicationsQuery } from '../../../graphql/__generated__/graphql';
-import styles from '../../../styles/seatManagementIndex.module.scss'
+import { ApplicationsQuery } from '../../../../graphql/__generated__/graphql';
+
+import styles from "../../../../styles/seatManagementIndex.module.scss";
 export type application = ApplicationsQuery['applications']['applications'][0];
 
 

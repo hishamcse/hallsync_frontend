@@ -1,6 +1,7 @@
 import Stack from "@mui/material/Stack";
-import { ApplicationsQuery } from "../../../graphql/__generated__/graphql";
-import styles from '../../../styles/seatManagementIndex.module.scss'
+import { ApplicationsQuery } from "../../../../graphql/__generated__/graphql";
+
+import styles from "../../../../styles/seatManagementIndex.module.scss";
 import Skeleton from "@mui/material/Skeleton";
 import ApplicationTable from "./ApplicationTable";
 import { application } from "./seatApplication";

@@ -1,7 +1,8 @@
-import styles from '../../../styles/seatManagementIndex.module.scss'
-import MUISelectStyled from '../../MUIMultiSelectCheckbox';
-import { MyButton } from '../../button';
-import MyCard from '../../card';
+
+import styles from "../../../../styles/seatManagementIndex.module.scss";
+import MUISelectStyled from '../../../MUIMultiSelectCheckbox';
+import { MyButton } from '../../../button';
+import MyCard from '../../../card';
 
 
 type FilterProps  = {

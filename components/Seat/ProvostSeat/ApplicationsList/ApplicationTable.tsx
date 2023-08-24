@@ -6,10 +6,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {ApplicationsQuery} from "../../../graphql/__generated__/graphql";
-import styles from "../../../styles/seatManagementIndex.module.scss";
+import styles from "../../../../styles/seatManagementIndex.module.scss";
 import {Button} from "@mui/material";
 import { application } from './seatApplication';
+import { ApplicationsQuery } from '../../../../graphql/__generated__/graphql';
 
 const fontSize = 16;
 
