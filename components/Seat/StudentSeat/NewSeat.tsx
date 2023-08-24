@@ -257,33 +257,30 @@ const NewSeat = (props: {
 
     return (
         <div style={{marginBottom: 20}}>
-            <div className={styles.newSeat}>
+            {!props.application &&
+                <div style={{display: 'flex', justifyContent: 'right', marginRight: 20, marginBottom : 20}}>
+                <MUIDropdown width={200} options={[types[0], types[1]]} val={type} change={handleChange}/>
+                </div>
+            }
+            <div className={styles.row}>
                 <MyCard title='Questionnaire'>
                     <Questionnaire answers={allQuestionsAnswered}/>
                 </MyCard>
-                <div>
-                    {!props.application &&
-                        <div style={{display: 'flex', justifyContent: 'right', marginRight: 20}}>
-                        <MUIDropdown width={200} options={[types[0], types[1]]} val={type} change={handleChange}/>
-                        </div>
-                    }
-                    <div className={styles.doc}>
-                        <MyCard title='Upload Documents'>
-                            <Documents disabled = {docUploadDisabled} removeFile={removeFile}
-                                                        files = {files} onChange={handleFileChange}
-                                                        alreadyAdded={props?.application?.attachedFiles} />
+                    
+                <MyCard title='Upload Documents'>
+                    <Documents disabled = {docUploadDisabled} removeFile={removeFile}
+                    files = {files} onChange={handleFileChange}
+                    alreadyAdded={props?.application?.attachedFiles} />
+                </MyCard>
+            </div>
+            <div className={styles.row}>
+                {
+                    (props?.application?.status == ApplicationStatus.Accepted ||
+                        props?.application?.status == ApplicationStatus.Rejected) &&
+                        <MyCard title='Room Allotment'>
+                            <RoomAlloted student={props?.application.student} />
                         </MyCard>
-                        {
-                            (props?.application?.status == ApplicationStatus.Accepted ||
-                                props?.application?.status == ApplicationStatus.Rejected) &&
-                            <div style={{marginTop: 50}}>
-                                <MyCard title='Room Allotment'>
-                                    <RoomAlloted student={props?.application.student} />
-                                </MyCard>
-                            </div>
-                        }
-                    </div>
-                </div>
+                }
             </div>
             <div className={styles.agreement}>
                 <MyCard title=''>

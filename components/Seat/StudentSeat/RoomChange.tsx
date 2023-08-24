@@ -33,17 +33,14 @@ const RoomPreference = (props: {
 }) => {
     return (
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
-            <div style={{}}>
-                <span style={{marginLeft: 5}}>
-                    Currently Allocated Room: {props.currentRoom}
-                </span>
-                <FreeRoom initVal={props.seat ? {
-                        floorNo : props.seat.room.floor.floorNo,
-                        roomNo : props.seat.room.roomNo,
-                        seatLabel : props.seat.seatLabel
-                    } : undefined} disabled = {props.disable} setSeatId={props.setSeatId}  />
-                {/* <FreeRoom setSeatId={props.setSeatId} /> */}
-            </div>
+            <span style={{marginLeft: 5}}>
+                Currently Allocated Room: {props.currentRoom}
+            </span>
+            <FreeRoom initVal={props.seat ? {
+                    floorNo : props.seat.room.floor.floorNo,
+                    roomNo : props.seat.room.roomNo,
+                    seatLabel : props.seat.seatLabel
+                } : undefined} disabled = {props.disable} setSeatId={props.setSeatId}  />
         </div>
     )
 }
@@ -140,37 +137,21 @@ const RoomChange = (props: {
     
     return (
         <div style={{marginBottom: 20}}>
+            { !props.application &&
+
+                <div style={{display: 'flex', justifyContent: 'right', marginRight: 20}}>
+                    <MUIDropdown width={200} options={[types[2]]} val={type} change={handleChange}/>
+                </div>
+            }
             <div className={styles.newSeat}>
-                <div className={styles.doc}>
-                    <MyCard title='Reason for change'>
-                        <ReasonForChange disabled = {textAreaDisabled} initialVal={props.application?.seatChangeApplication?.reason} handleReason={handleReason}/>
-                    </MyCard>
-                </div>
-                <div>
-                { !props.application &&
-
-                    <div style={{display: 'flex', justifyContent: 'right', marginRight: 20}}>
-                        <MUIDropdown width={200} options={[types[2]]} val={type} change={handleChange}/>
-                    </div>
-                }
-                    <div className={styles.doc}>
-                        <MyCard title='Room Preference'>
-
-                        <RoomPreference
-                        currentRoom={props.room} setSeatId={setSeatId}
-                        seat={props.application?.seatChangeApplication?.toSeat}
-                        disable={textAreaDisabled} 
-                         />
-                        
-                            <RoomPreference
-                            currentRoom={props.room} setSeatId={setSeatId}
-                            seat={props.application?.seatChangeApplication?.toSeat}
-                            disable={textAreaDisabled} 
-                            />
-                            
-                        </MyCard>
-                    </div>
-                </div>
+                <ReasonForChange titleText="Reason For Change" disabled = {textAreaDisabled} initialVal={props.application?.seatChangeApplication?.reason} handleReason={handleReason}/>
+                <MyCard title='Room Preference'>
+                    <RoomPreference
+                    currentRoom={props.room} setSeatId={setSeatId}
+                    seat={props.application?.seatChangeApplication?.toSeat}
+                    disable={textAreaDisabled} 
+                    />
+                </MyCard>
             </div>
             <div className={styles.agreement}>
                 <MyCard title=''>

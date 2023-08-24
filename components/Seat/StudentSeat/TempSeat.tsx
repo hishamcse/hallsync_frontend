@@ -32,15 +32,18 @@ const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boo
 export const ReasonForChange = (props: {
     handleReason: (str: string) => void,
     initialVal? : string,
-    disabled? : boolean
+    disabled? : boolean,
+    titleText : string
 }) => {
     return (
-        <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
-            <MUIStyledTextarea val={props.initialVal}
-             rows={10} placeHolder="State your reason here" handleInput={props.handleReason}
-             disabled = {props.disabled}
-             />
-        </div>
+        <MyCard title={props.titleText}>
+            <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
+                <MUIStyledTextarea val={props.initialVal}
+                rows={10} placeHolder="State your reason here" handleInput={props.handleReason}
+                disabled = {props.disabled}
+                />
+            </div>
+        </MyCard>
     )
 }
 
@@ -221,32 +224,27 @@ const TempSeat = (props: {
     let agreementDisabled = props.application != undefined;
     return (
         <div style={{marginBottom: 20}}>
-            <div className={styles.newSeat}>
-                <MyCard title='Questionnaire'>
-                    <Questionnaire answers={allQuestionsAnswered}/>
-                </MyCard>
-                <div>
-                    { !props.application &&
-                        <div style={{display: 'flex', justifyContent: 'right', marginRight: 20}}>
-                            <MUIDropdown width={200} options={views} val={type} change={handleChange}/>
-                        </div>
-                    }
-                    <div className={styles.doc}>
-                        <MyCard title='Reason for Temporary Seat'>
-                            <ReasonForChange initialVal = {' '} handleReason={handleReason} disabled = {textAreaDisabled} />
-                        </MyCard>
-                    </div>
-                    <div className={styles.doc}>
-                        <MyCard title='Room Preference and Date'>
-                            <RoomPreference disable={textAreaDisabled} 
-                            date={props.application?.tempApplication?.from} setSeatId={setSeatId}  handleDays={handleDays} handleDate={handleDate}
-                            days={props.application?.tempApplication?.days}
-                            seat={props.application?.tempApplication?.prefSeat}
-                            />
-                        </MyCard>
-                    </div>
+            { !props.application &&
+                <div style={{display: 'flex', justifyContent: 'right', marginRight: 20, marginBottom : 20}}>
+                    <MUIDropdown width={200} options={views} val={type} change={handleChange}/>
                 </div>
-            </div>
+            }
+                <div className={styles.row}>
+                    <MyCard title='Questionnaire'>
+                        <Questionnaire answers={allQuestionsAnswered}/>
+                    </MyCard>
+                    
+                    <ReasonForChange titleText='Reason for Temporary Seat' initialVal = {' '} handleReason={handleReason} disabled = {textAreaDisabled} />
+                </div>
+                <div className={styles.row}>
+                    <MyCard title='Room Preference and Date'>
+                        <RoomPreference disable={textAreaDisabled} 
+                        date={props.application?.tempApplication?.from} setSeatId={setSeatId}  handleDays={handleDays} handleDate={handleDate}
+                        days={props.application?.tempApplication?.days}
+                        seat={props.application?.tempApplication?.prefSeat}
+                        />
+                    </MyCard>
+                </div>
 
             <div className={styles.agreement}>
                 <MyCard title=''>

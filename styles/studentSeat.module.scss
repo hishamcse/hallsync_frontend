@@ -2,6 +2,7 @@
   margin: 20px;
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
   .doc {
     margin-top: 50px;
     margin-right: 20px;
@@ -18,8 +19,9 @@
 
 .agreement {
     margin: 30px;
+    text-align: center;
     //display: flex;
-    justify-content: space-around;
+    // justify-content: space-around;
     .agreement-text {
         margin-top: 10px;
         margin-left: 10px;
@@ -27,9 +29,8 @@
 }
 
 .submit {
+  text-align: center;
     margin: auto;
-    display: flex;
-    justify-content: space-around;
     padding-bottom: 20px;
 
     .submit-text {
@@ -46,4 +47,29 @@
     margin-top: 10px;
     margin-left: 10px;
   }
+}
+
+.row{
+  // background-color: red;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  align-items: baseline;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.profDocCol{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  >div{
+    margin-bottom: 20px;
+  }
+}
+
+.prevAllocContainer{
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }

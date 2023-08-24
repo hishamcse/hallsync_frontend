@@ -11,18 +11,13 @@ import { ApplicationDetailsQuery } from "../../../graphql/__generated__/graphql"
 import { APPROVE_SEAT_CHANGE_APPLICATION, REJECT_APPLICATION } from "../../../graphql/operations";
 import MyCard from "../../card";
 import Confirmation from "./Confirmation";
+import { Title } from "./AppDetailsTitle";
+import { ReasonForChange } from "../StudentSeat/TempSeat";
 
-const ReasonForChange = (props : {reason: string}) => {
-    return (
-        <div style={{justifyContent: 'left', paddingTop: 15}}>
-            <MUIStyledTextarea rows={10} placeHolder={props.reason} disabled={true}/>
-        </div>
-    )
-}
 
 const RoomPreference = (props: {room: number}) => {
     return (
-        <div style={{justifyContent: 'left', width: 400, paddingTop: 15, margin: 'auto'}}>
+        <div style={{justifyContent: 'left',paddingTop: 15, margin: 'auto'}}>
             <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: 20}}>
                 <div>
                     Room No: {props.room.toString()}
@@ -38,7 +33,7 @@ const RoomResidents = (props: {room: number,
     return (
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15, margin: 'auto'}}>
             <div style={{marginBottom: 20}}>
-                <h5>Room No: &nbsp; {props.room.toString()}</h5>
+                <h6>Room No: &nbsp; {props.room.toString()}</h6>
             </div>
             <div>
                 <ResidentTable seatChangeApp={props.seatChangeApp}/>
@@ -123,44 +118,26 @@ const RoomChangeP = (props: {application: ApplicationDetailsQuery['applicationDe
 
     return (
         <div style={{marginBottom: 20}}>
-            <Card style={{margin: 30, textAlign: 'center', padding: 10, border: "1px solid white",
-                borderRadius: 10, backgroundColor: 'black'}}>
-                <h4>Room Change Application</h4>
-            </Card>
-            <div className={styles.newSeat} style={{display: 'flex', justifyContent: 'space-between'}}>
-                <div style={{margin: 25,}}>
-                    <div style={{marginBottom: 50}}>
-                        <MyCard style={{
-                            display : "block",
-                            flexGrow : "1", paddingLeft: 10
-                        }}  title='Reason for change'>
-                            <ReasonForChange reason={temp_chng || ''}/>
-                        </MyCard>
-                    </div>
-                    <div>
-                        <MyCard title='Room Residents'>
-                            <RoomResidents room={num} seatChangeApp={props.application.seatChangeApplication}/>
-                        </MyCard>
-                    </div>
-                </div>
-                <div style={{margin: 25, marginRight: 25}}>
-                    <div style={{marginBottom: 80}}>
-                        <MyCard style={{
-                            display : "block",
-                            flexGrow : "1"
-                        }} title='Profile'>
-                            <ProfileInfo info={props.application.student}/>
-                        </MyCard>
-                    </div>
-                    <div>
-                        <MyCard style={{
-                            display : "block",
-                            flexGrow : "1"
-                        }} title='Given Room Preference'>
-                            <RoomPreference room={num}/>
-                        </MyCard>
-                    </div>
-                </div>
+            <Title text="Room Change Application" />
+            <div className={styles.row}>
+                <ReasonForChange handleReason={()=>{}} titleText={"Reason For Change"}
+                disabled = {temp_chng != null} initialVal={temp_chng}  />
+
+                <MyCard  title={"Profile"} style={{
+                    minWidth : 500
+                }}>
+                    <ProfileInfo info={props.application.student} />
+                </MyCard>
+            </div>
+            <div className={styles.row}>
+                <MyCard title={"Room Residents"}>
+                    <RoomResidents room={num} seatChangeApp={props.application.seatChangeApplication}/>
+                </MyCard>
+                <MyCard title={"Given Room Preference"} style={{
+                    minWidth : 500
+                }} >
+                    <RoomPreference room={num} />
+                </MyCard>
             </div>
 
             { (props.application.status == "PENDING")  &&

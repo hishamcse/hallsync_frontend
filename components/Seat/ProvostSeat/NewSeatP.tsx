@@ -16,6 +16,7 @@ import {APPROVE_NEW_SEAT_APPLICATION, REJECT_APPLICATION} from "../../../graphql
 import {useMutation} from "@apollo/client";
 import {useRouter} from "next/router";
 import ProfileInfo from "./ProfileInfo";
+import { Title } from "./AppDetailsTitle";
 
 const Questionnaire = (props: {answers: boolean[]}) => {
     return (
@@ -185,39 +186,34 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
 
     return (
         <div style={{marginBottom: 20}}>
-            <Card style={{margin: 30, textAlign: 'center', padding: 10, border: "1px solid white",
-                borderRadius: 10, backgroundColor: 'black'}}>
-                <h4>New Seat Application</h4>
-            </Card>
-            <div className={styles.newSeat}>
-                <div style={{display: 'inline-grid', margin: 15}}>
-                    <MyCard title='Profile'>
+            <Title text="New Seat Application" />
+            <div className={styles.row}>
+                
+                <MyCard title='Questionnaire'>
+                    <Questionnaire answers={answers}/>
+                </MyCard>
+                <div className={styles.profDocCol}>
+                    <MyCard title='Profile' style={{
+                        minWidth : 500
+                    }}>
                         <ProfileInfo info={props.application.student}/>
                     </MyCard>
-                    <br/><br/>
-                    <MyCard title='Questionnaire'>
-                        <Questionnaire answers={answers}/>
+                    <MyCard title='Documents'>
+                        {<Documents files={props.application.attachedFiles}/>}
                     </MyCard>
                 </div>
-                <div style={{display: 'inline-block', margin: 15}}>
-                    <div>
-                        <MyCard title='Documents'>
-                            {<Documents files={props.application.attachedFiles}/>}
-                        </MyCard>
-                    </div>
-                    <div style={{marginTop: 50}}>
-                        <MyCard  title='Room Allotment'>
-                            {<RoomAllotment setSeatId={setSeatId}
-                            disabled={props.application.status == ApplicationStatus.Accepted ||
-                            props.application.status == ApplicationStatus.Rejected} student={props.application.student} />}
-                        </MyCard>
-                    </div>
-                    <div style={{marginTop: 50}}>
-                        <MyCard  title='Schedule Appointment'>
-                            <ScheduleAppointment />
-                        </MyCard>
-                    </div>
-                </div>
+            </div>
+            <br/>
+            <div className={styles.row}>
+                
+                <MyCard  title='Room Allotment'>
+                    {<RoomAllotment setSeatId={setSeatId}
+                    disabled={props.application.status == ApplicationStatus.Accepted ||
+                    props.application.status == ApplicationStatus.Rejected} student={props.application.student} />}
+                </MyCard>
+                <MyCard title='Schedule Appointment'>
+                    <ScheduleAppointment />
+                </MyCard>
             </div>
 
             { (props.application.status == "PENDING")  &&

@@ -19,18 +19,17 @@ import MUIDropdown from "../../MUIDropdown";
 import { FreeRoom } from "../../freeRoom";
 import { APPROVE_TEMP_SEAT_APPLICATION, REJECT_APPLICATION } from "../../../graphql/operations";
 import Confirmation from "./Confirmation";
+import { Title } from "./AppDetailsTitle";
 
 const Questionnaire = (props: {reason: string}) => {
     return (
         <div>
-            <div style={{justifyContent: 'left', width: 500, margin: 'auto', marginLeft: 20, marginTop: 20}}>
+            <div style={{justifyContent: 'left',  margin: 'auto', marginLeft: 20, marginTop: 20}}>
                 <QuestionBox text="Dummy question" checkBox={true} />
                 <QuestionBox text="Dummy question" checkBox={false} dropDown={["none", "hello", "hi"]}/>
                 <QuestionBox text="Dummy question" checkBox={true} />
             </div>
-            <MyCard title='Reason For Change'>
-                <ReasonForChange reason={props.reason}/>
-            </MyCard>
+
         </div>
 
     )
@@ -258,40 +257,37 @@ const TempSeatP = (props: {application: ApplicationDetailsQuery['applicationDeta
 
     return (
         <div style={{marginBottom: 20}}>
-            <Card style={{margin: 30, textAlign: 'center', padding: 10, border: "1px solid white",
-                borderRadius: 10, backgroundColor: 'black'}}>
-                <h4>Temporary Seat Application</h4>
-            </Card>
-            <div className={styles.newSeat} style={{display: 'flex', justifyContent: 'space-between'}}>
-                <div style={{margin: 25}}>
-                    <MyCard title='Questionnaire'>
-                        <Questionnaire reason={temp_chng}/>
-                    </MyCard>
-                </div>
-                <div style={{margin: 25, marginRight: 20}}>
-                    <div style={{marginBottom: 60}}>
-                        <MyCard style={{
-                            display : "block",
-                            flexGrow : "1"
-                        }} title='Profile'>
-                            <ProfileInfo info={props.application.student}/>
-                        </MyCard>
-                    </div>
-                    <div>
-                        <MyCard title='Room Allotment' >
-                            <RoomPreference tmpApp={props.application?.tempApplication}
-                                    disabled={props.application.status == "ACCEPTED" || props.application.status == "REJECTED"}
-                                                            setSeatId={setSeatId}/>
-                        </MyCard>
-                    </div>
-                </div>
+            <Title text="Temporary Seat Application" />
+            <div className={styles.row}>
+
+                <MyCard title='Questionnaire' style={{minWidth : 530}}>
+                    <Questionnaire reason={temp_chng}/>
+                </MyCard>
+                <MyCard title='Profile' style={{minWidth : 500}} >
+                    <ProfileInfo info={props.application.student}/>
+                </MyCard>
+            </div>
+            <div className={styles.row}>
+                <MyCard title='Reason For Change' style={{minWidth : 530}}>
+                    <ReasonForChange reason={temp_chng}/>
+                </MyCard>
+                
+                <MyCard title='Room Allotment' style={{
+                    minWidth : 500
+                }} >
+                    <RoomPreference tmpApp={props.application?.tempApplication}
+                    disabled={props.application.status == "ACCEPTED" || props.application.status == "REJECTED"}
+                        setSeatId={setSeatId}/>
+                </MyCard>
+
             </div>
 
-            <div className={styles.prevAllocations}>
+            <div className={styles.prevAllocContainer}>
                 <MyCard title='Previous Allocations'>
                     <PreviousTempAllocation allocations={allocations}/>
                 </MyCard>
             </div>
+
             <div style={{
                 margin : "20px"
             }}>
