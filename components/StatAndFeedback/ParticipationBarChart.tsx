@@ -25,17 +25,7 @@ export function BarChartCard(props: {
     return (
         <div>
             {
-                <MyCard content={
-                    <div style={{
-                        margin: "30px",
-                        padding: "20px",
-                        textAlign: "center",
-                        backgroundColor: "black",
-                        borderRadius: "10px",
-                    }}>
-                        {props.barChart}
-                    </div>
-                } title={
+                <MyCard title={
                     <div style={{
                         display: "flex",
                         alignItems: "center",
@@ -60,7 +50,17 @@ export function BarChartCard(props: {
                 } style={{
                     display: "block",
                     marginRight : 10
-                }} />
+                }}>
+                    <div style={{
+                        margin: "30px",
+                        padding: "20px",
+                        textAlign: "center",
+                        backgroundColor: "black",
+                        borderRadius: "10px",
+                    }}>
+                        {props.barChart}
+                    </div>
+                </MyCard>
             }
         </div>
     )
@@ -117,19 +117,19 @@ export default function ParticipationBarChart() {
             title="Participations"
          />
         }
-        content={
+        style = {{
+            display : "block",
+            marginRight : 10
+        }}
+        >
             <div>
                 {
                     mData.length > 0 &&
                     <BarChartWhite barDataKey={["_count"]} data={mData} xAxisDataKey="day" />
                 }
             </div>
-        }
-        style = {{
-            display : "block",
-            marginRight : 10
-        }}
-        />
+
+        </MyCard>
     )
 }
 

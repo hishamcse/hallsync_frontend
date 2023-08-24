@@ -18,8 +18,7 @@ export function UploadPhoto(props: UploadPhotoProps) {
 
   return (
     <div className="App" style={{ color: 'white' }}>
-      <MyCard
-        content={
+      <MyCard title="Upload Photo">
           <form>
             {file && <p>Selected File: {file.name}</p>}
             <Button variant="outlined" component="label">
@@ -27,9 +26,7 @@ export function UploadPhoto(props: UploadPhotoProps) {
               <input type="file" hidden onChange={handleChange} />
             </Button>
           </form>
-        }
-        title="Upload Photo"
-      />
+      </MyCard>
     </div>
   );
 }

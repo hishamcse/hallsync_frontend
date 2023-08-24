@@ -83,8 +83,10 @@ const AnnounceDetailsContent = (props: {
                 <span><CampaignIcon/>&nbsp;&nbsp;&nbsp;<i>{props.announcementTitle}</i></span>
             </Typography>
             <Typography gutterBottom>
-                <MyCard style={{marginTop: 10, marginBottom: 20}} title=''
-                        content={<CardContent announcementDetails={props.announcementDetails}/>}/>
+                <MyCard style={{marginTop: 10, marginBottom: 20}} title=''>
+                    <CardContent announcementDetails={props.announcementDetails}/>    
+                </MyCard>
+
             </Typography>
             <Typography gutterBottom>
                 <div

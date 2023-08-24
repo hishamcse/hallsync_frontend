@@ -37,7 +37,9 @@ export function SortBy(
     )
 
     return (
-        <MyCard title={"Sort By"} content={content ?? <div></div>} />
+        <MyCard title={"Sort By"}>
+            {content}
+        </MyCard>
     )
 
 }

@@ -108,7 +108,12 @@ export function MealPreferencesBarChart(){
             title="Preferences"
          />
     
-    } content={
+    }
+        style={{
+            marginRight : 10,
+            display : "block"
+        }}
+        >
             <div>
                 <div style={{
                     // display : "flex",
@@ -157,12 +162,7 @@ export function MealPreferencesBarChart(){
                     }
                 </div>
             </div>
-        } 
-        style={{
-            marginRight : 10,
-            display : "block"
-        }}
-        />
+        </MyCard>
         
         // <div>
         // </div>

@@ -39,7 +39,9 @@ export function Filters(
         </div>
     );
 
-    return <MyCard title={"Filters"} content={content ?? <div></div>}  style={{
+    return <MyCard title={"Filters"} style={{
         maxWidth : 550
-    }}/>
+    }}>
+        {content}
+    </MyCard>
 }

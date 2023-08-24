@@ -51,7 +51,9 @@ export function MessManagerList(){
 
 
     return (
-            <MyCard title={"Assigned Mess Managers"} content={
+            <MyCard title={"Assigned Mess Managers"} style={{
+                marginRight : 10,
+            }}>
                 <div style = {{
                     display : "inline-block"
                 }}>
@@ -61,8 +63,6 @@ export function MessManagerList(){
                         ))
                     }
                 </div>
-            } style={{
-                marginRight : 10,
-            }} />
+            </MyCard>
     )
 }

@@ -45,7 +45,7 @@ export function UploadFile() {
     }
     return (
         <div className="App" style={{color : "white"}}>
-            <MyCard content={
+            <MyCard title = "Uploaded documents">
                 <form onSubmit={handleSubmit}>
                     <ol>
                         {
@@ -58,9 +58,7 @@ export function UploadFile() {
                     </Button>
                     {/* <button type="submit">Upload</button> */}
                 </form>
-            } 
-            title = "Uploaded documents"
-            />
+            </MyCard>
         </div>
     )
 }

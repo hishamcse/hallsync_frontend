@@ -58,7 +58,9 @@ export function CallApplicationTsx(){
 
     return (
 
-        <MyCard title={"Call For Mess Manager Applications"} content={
+        <MyCard title={"Call For Mess Manager Applications"} style={{
+            minWidth : 600,
+        }}>
             <div className={styles.callForContentRoot}>
                 <div>
                     <div>
@@ -107,8 +109,6 @@ export function CallApplicationTsx(){
                     }
                 </div>
             </div>
-        } style={{
-            minWidth : 600,
-        }} />
+        </MyCard>
     )
 }

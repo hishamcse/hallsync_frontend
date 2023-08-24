@@ -77,7 +77,10 @@ function Login(){
     // <div>
     //   {content}
     // </div>
-    <MyCard title={title} content={content}   />
+    <MyCard title={title}>
+      {content}
+    </MyCard>
+
 
   )
 }

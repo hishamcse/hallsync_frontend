@@ -71,8 +71,12 @@ export function OptInPieChart(){
                 title="Opted In-Out"
             />
             }
-            content={
-                <div style={{
+
+            style={{
+                minWidth : 650
+            }}
+        >
+            <div style={{
                     display : "flex",
                     alignItems : "center"
                 }}>
@@ -97,12 +101,7 @@ export function OptInPieChart(){
                             
                     </div>
                 </div>
-            }
-
-            style={{
-                minWidth : 650
-            }}
-        />
+        </MyCard>
     )
 }
 

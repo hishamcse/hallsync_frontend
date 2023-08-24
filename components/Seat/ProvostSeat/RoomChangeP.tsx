@@ -133,11 +133,14 @@ const RoomChangeP = (props: {application: ApplicationDetailsQuery['applicationDe
                         <MyCard style={{
                             display : "block",
                             flexGrow : "1", paddingLeft: 10
-                        }} content={<ReasonForChange reason={temp_chng || ''}/>} title='Reason for change'/>
+                        }}  title='Reason for change'>
+                            <ReasonForChange reason={temp_chng || ''}/>
+                        </MyCard>
                     </div>
                     <div>
-                        <MyCard content={<RoomResidents room={num} seatChangeApp={props.application.seatChangeApplication}/>}
-                                title='Room Residents'/>
+                        <MyCard title='Room Residents'>
+                            <RoomResidents room={num} seatChangeApp={props.application.seatChangeApplication}/>
+                        </MyCard>
                     </div>
                 </div>
                 <div style={{margin: 25, marginRight: 25}}>
@@ -145,13 +148,17 @@ const RoomChangeP = (props: {application: ApplicationDetailsQuery['applicationDe
                         <MyCard style={{
                             display : "block",
                             flexGrow : "1"
-                        }} content={<ProfileInfo info={props.application.student}/>} title='Profile'/>
+                        }} title='Profile'>
+                            <ProfileInfo info={props.application.student}/>
+                        </MyCard>
                     </div>
                     <div>
                         <MyCard style={{
                             display : "block",
                             flexGrow : "1"
-                        }} content={<RoomPreference room={num}/>} title='Given Room Preference' />
+                        }} title='Given Room Preference'>
+                            <RoomPreference room={num}/>
+                        </MyCard>
                     </div>
                 </div>
             </div>
@@ -160,7 +167,9 @@ const RoomChangeP = (props: {application: ApplicationDetailsQuery['applicationDe
                 <div className={styles.submit}>
                     {reqError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
                         {reqErrorMsg}</div>}
-                    <MyCard content={<Confirmation rejectHandler={reject} successHandler={approve}/>} title=''/>
+                    <MyCard title=''>
+                        <Confirmation rejectHandler={reject} successHandler={approve}/>
+                    </MyCard>
                 </div>
             }
 

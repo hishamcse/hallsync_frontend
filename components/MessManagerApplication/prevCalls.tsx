@@ -162,7 +162,10 @@ export function PrevCalls(){
 
     return (
         <div>
-            <MyCard title={"Previous Calls"} content={
+            <MyCard title={"Previous Calls"} style={{
+                display : "block",
+                marginRight : 10,
+            }}>
                 <div>
                     {
                         data?.prevCalls.map(d =>(
@@ -170,10 +173,7 @@ export function PrevCalls(){
                         ))
                     }
                 </div>
-            } style={{
-                display : "block",
-                marginRight : 10,
-            }} />
+            </MyCard>
         </div>
     )
 }

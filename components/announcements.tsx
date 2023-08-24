@@ -157,9 +157,9 @@ const Announcements = () => {
             {
                 announcements.map((announcement, index) => (
                     <div key={index} style={{margin: 20}}>
-                        <MyCard title={<AnnounceTitle announcement={announcement}/>}
-                                content={<SingleAnnouncement announcement={announcement}/>}
-                                style={{width: '100%'}}/>
+                        <MyCard title={<AnnounceTitle announcement={announcement}/>} style={{width: '100%'}}>
+                            <SingleAnnouncement announcement={announcement}/>
+                        </MyCard>
                     </div>
                 ))
             }

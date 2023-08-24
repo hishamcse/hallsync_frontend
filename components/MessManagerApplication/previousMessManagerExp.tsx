@@ -27,7 +27,10 @@ export function PreviousExp(){
     )
 
     return (
-        <MyCard title={"Previous Mess Manager Experiences"} content={
+        <MyCard title={"Previous Mess Manager Experiences"} style={{
+            display : "block",
+            marginRight : 10
+        }}>
             <div className={styles.prevContentRoot}>
                 {
                     data && 
@@ -36,9 +39,6 @@ export function PreviousExp(){
                     ))
                 }
             </div>
-        } style={{
-            display : "block",
-            marginRight : 10
-        }} />
+        </MyCard>
     )
 }

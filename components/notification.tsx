@@ -51,8 +51,9 @@ function NotificationsList(props : {
     notifications : NotificationsQuery['notifications']
 }){
     return (
-        <MyCard title={"Notifications"} content={
-
+        <MyCard title={"Notifications"}style={{
+            border : "1px green solid"
+        }}>
             <List sx={{ 
                 overflowX : "hidden", overflowY : "scroll", maxHeight : 300, width: 350, bgcolor: 'background.paper' ,
                     "&::-webkit-scrollbar": {
@@ -72,9 +73,7 @@ function NotificationsList(props : {
                     ))
                 }
             </List>
-        } style={{
-            border : "1px green solid"
-        }} />        
+        </MyCard>        
     )
 }
 

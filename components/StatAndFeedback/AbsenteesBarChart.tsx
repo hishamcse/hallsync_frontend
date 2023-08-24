@@ -72,18 +72,17 @@ export function AbsenteesBarChart() {
                     </div>
                 </TitleDate>
             }
-            content={
+            style={{
+                display: "block",
+                marginRight: 10
+            }}
+        >
                 <div>
                     {
                         mData.length > 0 &&
                         <BarChartWhite barDataKey={["absent"]} data={mData} xAxisDataKey="id" />
                     }
                 </div>
-            }
-            style={{
-                display: "block",
-                marginRight: 10
-            }}
-        />
+        </MyCard>
     )
 }

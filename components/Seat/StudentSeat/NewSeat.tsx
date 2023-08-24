@@ -258,7 +258,9 @@ const NewSeat = (props: {
     return (
         <div style={{marginBottom: 20}}>
             <div className={styles.newSeat}>
-                <MyCard content={<Questionnaire answers={allQuestionsAnswered}/>} title='Questionnaire'/>
+                <MyCard title='Questionnaire'>
+                    <Questionnaire answers={allQuestionsAnswered}/>
+                </MyCard>
                 <div>
                     {!props.application &&
                         <div style={{display: 'flex', justifyContent: 'right', marginRight: 20}}>
@@ -266,21 +268,27 @@ const NewSeat = (props: {
                         </div>
                     }
                     <div className={styles.doc}>
-                        <MyCard content={<Documents disabled = {docUploadDisabled} removeFile={removeFile}
-                                                    files = {files} onChange={handleFileChange}
-                                                    alreadyAdded={props?.application?.attachedFiles} />} title='Upload Documents'/>
+                        <MyCard title='Upload Documents'>
+                            <Documents disabled = {docUploadDisabled} removeFile={removeFile}
+                                                        files = {files} onChange={handleFileChange}
+                                                        alreadyAdded={props?.application?.attachedFiles} />
+                        </MyCard>
                         {
                             (props?.application?.status == ApplicationStatus.Accepted ||
                                 props?.application?.status == ApplicationStatus.Rejected) &&
                             <div style={{marginTop: 50}}>
-                                <MyCard content={<RoomAlloted student={props?.application.student} />} title='Room Allotment' />
+                                <MyCard title='Room Allotment'>
+                                    <RoomAlloted student={props?.application.student} />
+                                </MyCard>
                             </div>
                         }
                     </div>
                 </div>
             </div>
             <div className={styles.agreement}>
-                <MyCard content={<Agreement disabled = {agreementDisabled} handleAgreement={handleAgreement}/>} title=''/>
+                <MyCard title=''>
+                    <Agreement disabled = {agreementDisabled} handleAgreement={handleAgreement}/>
+                </MyCard>
                 {showError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
                     Please agree to the terms and conditions</div>}
                 {reqError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
@@ -290,7 +298,9 @@ const NewSeat = (props: {
                 <div className={styles.submit} onClick={handleSubmit}>
                     {
                         !agreementDisabled &&
-                        <MyCard content={<Submit/>} title=''/>
+                        <MyCard title=''>
+                            <Submit/>
+                        </MyCard>
                     }
                 </div>
             

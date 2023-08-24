@@ -222,7 +222,9 @@ const TempSeat = (props: {
     return (
         <div style={{marginBottom: 20}}>
             <div className={styles.newSeat}>
-                <MyCard content={<Questionnaire answers={allQuestionsAnswered}/>} title='Questionnaire'/>
+                <MyCard title='Questionnaire'>
+                    <Questionnaire answers={allQuestionsAnswered}/>
+                </MyCard>
                 <div>
                     { !props.application &&
                         <div style={{display: 'flex', justifyContent: 'right', marginRight: 20}}>
@@ -230,22 +232,26 @@ const TempSeat = (props: {
                         </div>
                     }
                     <div className={styles.doc}>
-                        <MyCard content={<ReasonForChange initialVal = {' '} handleReason={handleReason} disabled = {textAreaDisabled} />} title='Reason for Temporary Seat'
-                        />
+                        <MyCard title='Reason for Temporary Seat'>
+                            <ReasonForChange initialVal = {' '} handleReason={handleReason} disabled = {textAreaDisabled} />
+                        </MyCard>
                     </div>
                     <div className={styles.doc}>
-                        <MyCard content={<RoomPreference disable={textAreaDisabled} 
-                        date={props.application?.tempApplication?.from} setSeatId={setSeatId}  handleDays={handleDays} handleDate={handleDate}
-                        days={props.application?.tempApplication?.days}
-                        seat={props.application?.tempApplication?.prefSeat}
-                        />}
-                                title='Room Preference and Date'/>
+                        <MyCard title='Room Preference and Date'>
+                            <RoomPreference disable={textAreaDisabled} 
+                            date={props.application?.tempApplication?.from} setSeatId={setSeatId}  handleDays={handleDays} handleDate={handleDate}
+                            days={props.application?.tempApplication?.days}
+                            seat={props.application?.tempApplication?.prefSeat}
+                            />
+                        </MyCard>
                     </div>
                 </div>
             </div>
 
             <div className={styles.agreement}>
-                <MyCard content={<Agreement disabled = {agreementDisabled} handleAgreement={handleAgreement}/>} title=''/>
+                <MyCard title=''>
+                    <Agreement disabled = {agreementDisabled} handleAgreement={handleAgreement}/>
+                </MyCard>
                 {showError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
                     Please agree to the terms and conditions</div>}
                 {blankError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
@@ -257,7 +263,9 @@ const TempSeat = (props: {
             <div className={styles.submit} onClick={submission}>
 
                 { !agreementDisabled &&
-                    <MyCard content={<Submit/>} title=''/>
+                    <MyCard title=''>
+                        <Submit/>
+                    </MyCard>
                 }
             </div>
         </div>

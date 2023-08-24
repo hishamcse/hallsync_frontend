@@ -59,18 +59,18 @@ export function RatingBarChart(){
     return (
         <MyCard
         title={<TitleDate datePickerLabel="From" date={date} handleDate={handleDate} title="Ratings" />}
-        content={
+        
+        style={{
+            display: 'block',
+            marginRight: 20
+        }}
+        >
             <div>
                 {
                     mData.length > 0 &&
                     <BarChartWhite colors={['#8884d8','#FCB07E','#EBE9E9', ]} barDataKey={["QUALITY","QUANTITY","MANAGEMENT"]} data={mData} xAxisDataKey="range" />
                 }
             </div>
-        }
-        style={{
-            display: 'block',
-            marginRight: 20
-        }}
-        />
+        </MyCard>
     )
 }

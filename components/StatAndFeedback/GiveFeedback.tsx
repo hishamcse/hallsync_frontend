@@ -86,7 +86,10 @@ function Feedback(props : {
             </div>
         }
         // title={`Rate Dining Experience (${getDayAndMonthString(props.feedback.startMealPlan.day)} - ${getDayAndMonthString(props.feedback.endMealPlan.day)})`}
-        content={
+        style={{
+            minWidth : 500
+        }}
+        >
             <div className={styles.feedbackContentRoot}>
                 <div className={styles.ratingsContainer}>
                     {
@@ -109,11 +112,7 @@ function Feedback(props : {
                     }} text="Submit" type="submit" onClick={submit}  />
                 </div>
             </div>
-        }
-        style={{
-            minWidth : 500
-        }}
-        />
+        </MyCard>
     )
 }
 

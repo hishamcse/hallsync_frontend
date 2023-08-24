@@ -191,21 +191,31 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
             </Card>
             <div className={styles.newSeat}>
                 <div style={{display: 'inline-grid', margin: 15}}>
-                    <MyCard content={<ProfileInfo info={props.application.student}/>} title='Profile'/>
+                    <MyCard title='Profile'>
+                        <ProfileInfo info={props.application.student}/>
+                    </MyCard>
                     <br/><br/>
-                    <MyCard content={<Questionnaire answers={answers}/>} title='Questionnaire'/>
+                    <MyCard title='Questionnaire'>
+                        <Questionnaire answers={answers}/>
+                    </MyCard>
                 </div>
                 <div style={{display: 'inline-block', margin: 15}}>
                     <div>
-                        <MyCard content={<Documents files={props.application.attachedFiles}/>} title='Documents'/>
+                        <MyCard title='Documents'>
+                            {<Documents files={props.application.attachedFiles}/>}
+                        </MyCard>
                     </div>
                     <div style={{marginTop: 50}}>
-                        <MyCard content={<RoomAllotment setSeatId={setSeatId}
-                        disabled={props.application.status == ApplicationStatus.Accepted ||
-                        props.application.status == ApplicationStatus.Rejected} student={props.application.student} />} title='Room Allotment' />
+                        <MyCard  title='Room Allotment'>
+                            {<RoomAllotment setSeatId={setSeatId}
+                            disabled={props.application.status == ApplicationStatus.Accepted ||
+                            props.application.status == ApplicationStatus.Rejected} student={props.application.student} />}
+                        </MyCard>
                     </div>
                     <div style={{marginTop: 50}}>
-                        <MyCard content={<ScheduleAppointment />} title='Schedule Appointment' />
+                        <MyCard  title='Schedule Appointment'>
+                            <ScheduleAppointment />
+                        </MyCard>
                     </div>
                 </div>
             </div>
@@ -216,7 +226,9 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
                         Please fill in all the fields</div>}
                     {reqError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
                         {reqErrorMsg}</div>}
-                    <MyCard content={<Confirmation rejectHandler={reject} successHandler={approve}/>} title=''/>
+                    <MyCard  title=''>
+                        <Confirmation rejectHandler={reject} successHandler={approve}/>
+                    </MyCard>
                 </div>
             }
         </div>

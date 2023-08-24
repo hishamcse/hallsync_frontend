@@ -142,7 +142,9 @@ const RoomChange = (props: {
         <div style={{marginBottom: 20}}>
             <div className={styles.newSeat}>
                 <div className={styles.doc}>
-                    <MyCard content={<ReasonForChange disabled = {textAreaDisabled} initialVal={props.application?.seatChangeApplication?.reason} handleReason={handleReason}/>} title='Reason for change'/>
+                    <MyCard title='Reason for change'>
+                        <ReasonForChange disabled = {textAreaDisabled} initialVal={props.application?.seatChangeApplication?.reason} handleReason={handleReason}/>
+                    </MyCard>
                 </div>
                 <div>
                 { !props.application &&
@@ -152,19 +154,28 @@ const RoomChange = (props: {
                     </div>
                 }
                     <div className={styles.doc}>
-                        <MyCard content={
+                        <MyCard title='Room Preference'>
+
                         <RoomPreference
                         currentRoom={props.room} setSeatId={setSeatId}
                         seat={props.application?.seatChangeApplication?.toSeat}
                         disable={textAreaDisabled} 
                          />
-                         
-                         } title='Room Preference'/>
+                        
+                            <RoomPreference
+                            currentRoom={props.room} setSeatId={setSeatId}
+                            seat={props.application?.seatChangeApplication?.toSeat}
+                            disable={textAreaDisabled} 
+                            />
+                            
+                        </MyCard>
                     </div>
                 </div>
             </div>
             <div className={styles.agreement}>
-                <MyCard content={<Agreement disabled = {agreementDisabled} handleAgreement={handleAgreement}/>} title=''/>
+                <MyCard title=''>
+                    <Agreement disabled = {agreementDisabled} handleAgreement={handleAgreement}/>
+                </MyCard>
                 {showError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
                     Please agree to the terms and conditions</div>}
                 {blankError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
@@ -175,7 +186,9 @@ const RoomChange = (props: {
             
             <div className={styles.submit} onClick={submission}>
                 { !textAreaDisabled && 
-                    <MyCard content={<Submit/>} title=''/>
+                    <MyCard title=''>
+                        <Submit/>
+                    </MyCard>
                 }
             </div>
         </div>

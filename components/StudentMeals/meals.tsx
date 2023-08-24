@@ -48,8 +48,9 @@ const MealView: React.FC = () => {
             {mealPlans.map((mealPlan, index) => (
                 index % 2 == 0 &&
                 <div key={index} style={{margin: 20}}>
-                    <MyCard title={new Date(mealPlan.day).toDateString()}
-                            content={<DayMealPlan mealPlans={[mealPlans[index], mealPlans[index + 1]]}/>}/>
+                    <MyCard title={new Date(mealPlan.day).toDateString()}>
+                        <DayMealPlan mealPlans={[mealPlans[index], mealPlans[index + 1]]}/>
+                    </MyCard>
                 </div>
             ))}
         </div>

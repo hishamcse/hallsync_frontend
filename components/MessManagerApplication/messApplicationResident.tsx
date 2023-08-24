@@ -88,7 +88,10 @@ export function CallsAndApply(){
 
     return (
         <div>
-            <MyCard title={"Application Calls"} content={
+            <MyCard title={"Application Calls"} style={{
+                // display : "block",
+                marginRight : 10
+            }}>
                 <div>
                     {
                     data?.prevCallsWithAppOfResident.map(d =>(
@@ -100,10 +103,7 @@ export function CallsAndApply(){
                     call={d.call} />
                     ))}
                 </div>
-            } style={{
-                // display : "block",
-                marginRight : 10
-            }} />
+            </MyCard>
         </div>
     )
 }
