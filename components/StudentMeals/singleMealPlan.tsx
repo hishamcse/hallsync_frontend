@@ -12,6 +12,7 @@ import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
+import { server } from "../utilities";
 
 const DraggableList = (props: { list: string[], setList: (list: string[]) => void, disabled: boolean }) => {
 
@@ -211,9 +212,13 @@ const SingleMealPlanView = (props: { mealPlan: GetMealPlansQuery['getMealPlans']
                             if(cupcountA.length  > 0){
                                 cupcount = cupcountA[0].cupcount.toString();
                             }
+                            let imagePath = './images/default.png';
+                            if(item.photo){
+                                imagePath = server + item.photo.file.newFileName;
+                            }
                             return (
                                 <div key={index} style={{margin: 10}}>
-                                    <Image src={importedImgPath(item.photo?.file.fileName ?? 'default.png')}
+                                    <Image loader={({src})=>src}  src={imagePath}
                                            alt='foodItem'
                                            width={820 / props.mealPlan.meal.items.length}
                                            height={650 / props.mealPlan.meal.items.length}/>

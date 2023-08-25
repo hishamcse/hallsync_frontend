@@ -446,6 +446,7 @@ export const GET_MULTIPLE_MEALPLANS = graphql(`
         photo {
           file {
             fileName
+            newFileName
           }
         }
       }
