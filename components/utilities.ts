@@ -33,3 +33,5 @@ export function addDays(date : string, days : number){
     dt.setDate(dt.getDate() + days)
     return dt;
 }
+
+export const server = "http://localhost:3000/"

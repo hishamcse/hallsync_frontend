@@ -17,6 +17,7 @@ import {useMutation} from "@apollo/client";
 import {useRouter} from "next/router";
 import ProfileInfo from "./ProfileInfo";
 import { Title } from "./AppDetailsTitle";
+import { UploadedDocsList } from "../UploadedDocsList";
 
 const Questionnaire = (props: {answers: boolean[]}) => {
     return (
@@ -32,30 +33,6 @@ const Questionnaire = (props: {answers: boolean[]}) => {
     )
 }
 
-const Documents = (props : {
-    files : ApplicationDetailsQuery['applicationDetails']['attachedFiles']
-}) => {
-    return (
-        <ol style={{justifyContent: 'left', width: 500}}>
-            {
-                props.files  &&
-                props.files.map(f =>{
-                    return (
-                        <li key={f.uploadedFile.uploadedFileId} style={{justifyContent: "space-between", padding: 5}}>
-                            <div style={{
-                                display : 'flex',
-                                justifyContent: "space-between",
-                                alignContent : "center"
-                            }}>
-                                {f.uploadedFile.fileName}
-                            </div>
-                        </li>
-                    )
-                })
-            }
-        </ol>
-    )
-}
 
 const RoomAllotment = (props : {
     setSeatId : (v : number | undefined)=>void,
@@ -199,7 +176,8 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
                         <ProfileInfo info={props.application.student}/>
                     </MyCard>
                     <MyCard title='Documents'>
-                        {<Documents files={props.application.attachedFiles}/>}
+                        <UploadedDocsList files={props.application.attachedFiles}/>
+                        {/* {<Documents files={props.application.attachedFiles}/>} */}
                     </MyCard>
                 </div>
             </div>

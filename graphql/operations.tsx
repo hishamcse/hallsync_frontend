@@ -114,6 +114,7 @@ export const GET_APPLICATION = graphql(`
           uploadedFile {
             fileName
             uploadedFileId
+            newFileName
           }
         }
         student {

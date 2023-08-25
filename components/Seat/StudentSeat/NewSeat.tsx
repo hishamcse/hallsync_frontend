@@ -4,7 +4,7 @@ import {ChangeEvent, useState} from "react";
 import MUIDropdown from "../../MUIDropdown";
 import * as React from "react";
 import {SelectChangeEvent} from "@mui/material/Select";
-import {Button, IconButton} from "@mui/material";
+import {Button, IconButton, Link} from "@mui/material";
 import QuestionBox from "../QuestionBox";
 import Agreement from "./Agreement";
 import Submit from "./Submit";
@@ -15,6 +15,9 @@ import {useRouter} from "next/router";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import {ApplicationDetailsQuery, ApplicationStatus} from "../../../graphql/__generated__/graphql";
 import {FreeRoom} from "../freeRoom";
+import { server } from "../../utilities";
+import { UploadedDocsList } from "../UploadedDocsList";
+import { UploadDocs } from "../UploadDocs";
 
 const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boolean>>[]}) => {
     return (
@@ -54,69 +57,6 @@ const RoomAlloted = (props : {
                 <FreeRoom initVal={initVal} disabled = {true} setSeatId={()=> {}} containerStyle={{
                 }} />
             </div>
-        </div>
-    )
-}
-
-const Documents = (props : {
-    onChange : (e : ChangeEvent<HTMLInputElement>) => void,
-    alreadyAdded?: ApplicationDetailsQuery['applicationDetails']['attachedFiles'],
-    files : Blob[],
-    removeFile  : (f : Blob)=>void,
-    disabled? : boolean
-}) => {
-    return (
-        <div style={{justifyContent: 'left', width: 500}}>
-            <ol style = {{
-                margin : "5px"
-            }}>
-                {
-                    props.files.map(f => (
-                        <li style = {{
-                            padding : "5px",
-                        }}  key = {f.name}> 
-                        <div style={{
-                            display : "flex",
-                            justifyContent : "space-between",
-                            alignItems : "center"
-                        }}>
-                            {f.name}
-                            <IconButton onClick={(_)=>props.removeFile(f)} >
-                                <CloseOutlinedIcon />
-                            </IconButton>
-                        </div>
-                        </li>
-                    )
-                    )
-                }
-            </ol>
-            {
-                props.disabled &&
-                <ol style={{justifyContent: 'left', width: 500}}>
-                    {
-                        props.alreadyAdded  &&
-                        props.alreadyAdded.map(f =>{
-                            return (
-                                <li key={f.uploadedFile.uploadedFileId} style={{justifyContent: "space-between", padding: 5}}>
-                                    <div style={{
-                                        display : 'flex',
-                                        justifyContent: "space-between",
-                                        alignContent : "center"
-                                    }}>
-                                        {f.uploadedFile.fileName}
-                                    </div>
-                                </li>
-                            )
-                        })
-                    }
-                </ol>
-            }
-            {   !props.disabled &&
-                <Button variant="outlined" component="label"  >
-                    Upload file
-                    <input type="file" hidden onChange={props.onChange} />
-                </Button>
-            }
         </div>
     )
 }
@@ -267,10 +207,15 @@ const NewSeat = (props: {
                     <Questionnaire answers={allQuestionsAnswered}/>
                 </MyCard>
                     
-                <MyCard title='Upload Documents'>
-                    <Documents disabled = {docUploadDisabled} removeFile={removeFile}
-                    files = {files} onChange={handleFileChange}
-                    alreadyAdded={props?.application?.attachedFiles} />
+                <MyCard title= { (props.application ? 'Uploaded ' : 'Upload ') +  'Documents'}>
+                    {
+                        props.application && 
+                        <UploadedDocsList files={props.application.attachedFiles} />
+                    }
+                    {
+                        !props.application && 
+                        <UploadDocs files={files} onChange={handleFileChange} removeFile={removeFile}  />
+                    }
                 </MyCard>
             </div>
             <div className={styles.row}>
