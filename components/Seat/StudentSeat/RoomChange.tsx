@@ -12,7 +12,7 @@ import {types} from "./StudentView";
 import {useMutation} from "@apollo/client";
 import {POST_SEAT_CHANGE_APPLICATION} from "../../../graphql/operations";
 import {useRouter} from "next/router";
-import { FreeRoom } from "../../freeRoom";
+import { FreeRoom } from "../freeRoom";
 import { ReasonForChange } from "./TempSeat";
 import { ApplicationDetailsQuery } from "../../../graphql/__generated__/graphql";
 

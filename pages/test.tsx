@@ -5,7 +5,7 @@ import MyDropDown from '../components/dropdown'
 import MyCard from '../components/card'
 import MyCheckBox from '../components/checkbox'
 import { UploadFile } from '../components/fileUpload'
-import { FreeRoom } from '../components/freeRoom'
+import { FreeRoom } from '../components/Seat/freeRoom'
 import AlignItemsList from '../components/notification'
 
 

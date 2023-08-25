@@ -7,9 +7,11 @@ export function MyDatePicker(
         date : Dayjs | null,
         handleDate : (newValue: Dayjs | null) => void,
         width? : number,
-        label? : string
+        label? : string,
+        disabled? : boolean
 }
 ){
+
 
     return (
         <div style={{
@@ -26,7 +28,7 @@ export function MyDatePicker(
                     '& input' : {
                         padding : '9px'
                     }
-                }} value={props.date} 
+                }} value={props.date} disabled = {props.disabled}
                                 onChange={props.handleDate}/>
             </LocalizationProvider>
         </div>

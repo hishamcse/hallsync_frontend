@@ -5,7 +5,7 @@ import MUIDropdown from "../../MUIDropdown";
 import * as React from "react";
 import {SelectChangeEvent} from "@mui/material/Select";
 import {Button, IconButton} from "@mui/material";
-import QuestionBox from "../../QuestionBox";
+import QuestionBox from "../QuestionBox";
 import Agreement from "./Agreement";
 import Submit from "./Submit";
 import {types} from "./StudentView";
@@ -14,7 +14,7 @@ import {POST_NEW_APPLICATION} from "../../../graphql/operations";
 import {useRouter} from "next/router";
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import {ApplicationDetailsQuery, ApplicationStatus} from "../../../graphql/__generated__/graphql";
-import {FreeRoom} from "../../freeRoom";
+import {FreeRoom} from "../freeRoom";
 
 const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boolean>>[]}) => {
     return (

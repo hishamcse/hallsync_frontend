@@ -1,8 +1,8 @@
 import { Button } from "@mui/material";
 import { useLazyQuery, useQuery } from "@apollo/client";
-import { GET_FREE_FLOORS, GET_FREE_ROOMS_IN_FLOOR, GET_FREE_SEAT, GET_FREE_SEATS_IN_ROOM } from "../graphql/operations";
+import { GET_FREE_FLOORS, GET_FREE_ROOMS_IN_FLOOR, GET_FREE_SEAT, GET_FREE_SEATS_IN_ROOM } from "../../graphql/operations";
 import { CSSProperties, useState } from "react";
-import MUISelectStyled from "./MUIMultiSelectCheckbox";
+import MUISelectStyled from "../MUIMultiSelectCheckbox";
 
 type InitVal = {
     roomNo : number,

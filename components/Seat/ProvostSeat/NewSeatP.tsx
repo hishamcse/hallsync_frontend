@@ -1,4 +1,4 @@
-import QuestionBox from "../../QuestionBox";
+import QuestionBox from "../QuestionBox";
 import {Button} from "@mui/material";
 import * as React from "react";
 import {useState} from "react";
@@ -11,7 +11,7 @@ import {DateTimePicker} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, {Dayjs} from "dayjs";
 import {ApplicationDetailsQuery, ApplicationStatus} from "../../../graphql/__generated__/graphql";
-import {FreeRoom} from "../../freeRoom";
+import {FreeRoom} from "../freeRoom";
 import {APPROVE_NEW_SEAT_APPLICATION, REJECT_APPLICATION} from "../../../graphql/operations";
 import {useMutation} from "@apollo/client";
 import {useRouter} from "next/router";

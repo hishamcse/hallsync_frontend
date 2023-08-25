@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { ADD_ITEM } from '../../graphql/operations'; // Replace with your actual mutation
 import { MealTypeDropDown } from '../MealTypeDropDown';
 import { SelectChangeEvent } from '@mui/material';
 import { Button, TextField } from '@mui/material';

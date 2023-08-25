@@ -4,7 +4,7 @@ import {SelectChangeEvent} from "@mui/material/Select";
 import MyCard from "../../card";
 import MUIDropdown from "../../MUIDropdown";
 import * as React from "react";
-import QuestionBox from "../../QuestionBox";
+import QuestionBox from "../QuestionBox";
 import Agreement from "./Agreement";
 import MUIStyledTextarea from "../../MUITextArea";
 import Submit from "./Submit";
@@ -16,8 +16,9 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers";
 import dayjs, {Dayjs} from "dayjs";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-import { FreeRoom } from "../../freeRoom";
+import { FreeRoom } from "../freeRoom";
 import { ApplicationDetailsQuery } from "../../../graphql/__generated__/graphql";
+import MUISelectStyled from "../../MUIMultiSelectCheckbox";
 
 const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boolean>>[]}) => {
     return (
@@ -93,7 +94,9 @@ const RoomPreference = (props: {
                                     onChange={handleDate}/>
                 </LocalizationProvider>
                 <div>
-                    <MUIDropdown width={120} disable = {props.disable} options={items} val={val} change={handleChange}/>
+                    <MUISelectStyled items={items} placeHolder="Days" disabled = {props.disable} 
+                    setVal={setVal} type="single" val={val} width={120}  />
+                    {/* <MUIDropdown width={120} disable = {props.disable} options={items} val={val} change={handleChange}/> */}
                 </div>
             </div>
             <div style={{ marginTop: 20}}>
