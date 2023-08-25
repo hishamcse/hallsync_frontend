@@ -478,6 +478,12 @@ query GetOldItems {
     name
     type
     photoId
+    photo {
+      file {
+        fileName
+        newFileName
+      }
+    }
   }
 }
 `)

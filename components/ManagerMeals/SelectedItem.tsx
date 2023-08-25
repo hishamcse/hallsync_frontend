@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Item } from '../../graphql/__generated__/graphql';
+import { GetOldItemsQuery, Item } from '../../graphql/__generated__/graphql';
 import Image from "next/image";
 import TextField from "@mui/material/TextField";
+import { server } from '../utilities';
 
 type SelectedItemsListProps = {
-  selectedItems: Item[];
+  selectedItems: GetOldItemsQuery['getOldItems'];
   type: string;
   onChangeCupCount?: (itemName: string, quantity: number) => void; // Update the prop type
 };
@@ -17,14 +18,21 @@ const SelectedItemsList: React.FC<SelectedItemsListProps> = ({ selectedItems, ty
     if(onChangeCupCount) onChangeCupCount(itemName, quantity); // Update the function call
   };
 
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight : 150}}>
       {selectedItems.length > 0 ? (
         <ul style={{ listStyle: 'none', display: 'flex', flexWrap: 'wrap' }}>
-          {selectedItems.map((item, index) => (
+          {selectedItems.map((item, index) => {
+            let imagePath = '/images/default.png';
+            console.log(item);
+            if(item.photo){
+              imagePath = server + item.photo.file.newFileName;
+            }
+            return (
             <li key={index} style={{ margin: '10px'}}>
               <div>
-                <Image src={'/images/default.png'} alt='foodItem' width={150} height={100} />
+                <Image loader={({src})=>src} src={imagePath} alt='foodItem' width={150} height={100} />
               </div>
               <div>{item.name}</div>
               {type === 'NON_VEG' && (
@@ -40,7 +48,8 @@ const SelectedItemsList: React.FC<SelectedItemsListProps> = ({ selectedItems, ty
                 </div>
               )}
             </li>
-          ))}
+          )}
+          )}
         </ul>
       ) : (
         <div style={{

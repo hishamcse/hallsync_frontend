@@ -5,7 +5,6 @@ import { useQuery } from "@apollo/client";
 import { GET_MULTIPLE_MEALPLANS } from "../../graphql/operations";
 import SingleMealPlanView from "./MealPlan";
 import AddOrEditMealView from "./addOrEditMeal";
-import MainContainer from "./mainContainer";
 import { Dayjs } from "dayjs";
 import { TitleMealTimeDate } from "../TitleMealTimeDate";
 import AddNewItemView from "./addNewItem";
@@ -84,7 +83,7 @@ const ManagerMealView: React.FC = () => {
                     minWidth: 800,
                 }}
             >
-                <MainContainer
+                <AddOrEditMealView
                     selectedDate={selectedDate}
                     selectedMealTime={selectedMealTime}
                     setSelectedDate={setSelectedDate}
@@ -92,7 +91,7 @@ const ManagerMealView: React.FC = () => {
                 />
             </MyCard>
             <MyCard title={"Add New Item"} >
-            <AddNewItemView />
+                <AddNewItemView />
             </MyCard>
         </div>
     );

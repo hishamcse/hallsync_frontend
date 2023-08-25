@@ -1,4 +1,4 @@
-import {GetMealPlansQuery, Item, ItemType} from "../../graphql/__generated__/graphql";
+import {GetMealPlansQuery, GetOldItemsQuery, Item, ItemType} from "../../graphql/__generated__/graphql";
 import {useRouter} from "next/router";
 import React, {useState} from "react";
 import {useMutation, useQuery} from "@apollo/client";
@@ -24,9 +24,9 @@ const AddOrEditMealView = (props : {
 	const [reqError, setReqError] = useState(false);
 	const [reqErrorMsg, setReqErrorMsg] = useState('');
 
-	const [selectedRiceItems, setSelectedRiceItems] = useState<Item[]>([]);
-	const [selectedVegItems, setSelectedVegItems] = useState<Item[]>([]);
-	const [selectedNonVegItems, setSelectedNonVegItems] = useState<Item[]>([])
+	const [selectedRiceItems, setSelectedRiceItems] = useState<GetOldItemsQuery['getOldItems']>([]);
+	const [selectedVegItems, setSelectedVegItems] = useState<GetOldItemsQuery['getOldItems']>([]);
+	const [selectedNonVegItems, setSelectedNonVegItems] = useState<GetOldItemsQuery['getOldItems']>([])
 
 	const [nonVegCupCount, setNonVegCupCount] = useState<Record<string, number>>({});
 
@@ -44,7 +44,6 @@ const AddOrEditMealView = (props : {
 		}
 	)
 
-	// done with departments for now. need replacing with food items
 	const { loading, error, data } = useQuery(GET_OLD_MEAL_ITEMS);
 
 	if (loading) return <p>Loading...</p>;
@@ -53,9 +52,9 @@ const AddOrEditMealView = (props : {
 	const oldItems = data?.getOldItems ?? [];
 
 	// Separate arrays for different types of items
-	const riceItems = oldItems.filter((item) => item.type === 'RICE').map((item) => item.name);
-	const vegItems = oldItems.filter((item) => item.type === 'VEG').map((item) => item.name);
-	const nonVegItems = oldItems.filter((item) => item.type === 'NON_VEG').map((item) => item.name);
+	const riceItems = oldItems.filter((item) => item.type === 'RICE');
+	const vegItems = oldItems.filter((item) => item.type === 'VEG');
+	const nonVegItems = oldItems.filter((item) => item.type === 'NON_VEG');
 
 	// Callback function to update the quantities of NON_VEG items
 	const handleNonVegCupCount = (itemName: string, cupCount: number) => {
@@ -70,14 +69,6 @@ const AddOrEditMealView = (props : {
 		setSelectedVegItems([]);
 		setSelectedNonVegItems([]);
 	};
-	// let disabled = !!props.mealPlan.optedOut;
-
-	// let prefDisabled = (props.mealPlan.preferences && props.mealPlan.preferences.length > 0) || false;
-
-
-	const importedImgPath = (imgName: string) => {
-		return "/images/" + imgName;
-	}
 
 	const getSelecteds = (names: string[]) => {
 		let selecteds: GetMealPlansQuery['getMealPlans'][0]['meal']['items'] = [];
@@ -97,7 +88,6 @@ const AddOrEditMealView = (props : {
 		const vegNames = selectedVegItems.map(item => item.name)
 		const nenVegNames = selectedNonVegItems.map(item => item.name)
 
-		console.log(riceNames, vegNames, nenVegNames)
 
 		const str: string[] = [...riceNames, ...vegNames, ...nenVegNames];
 
@@ -151,80 +141,63 @@ const AddOrEditMealView = (props : {
 		});
 	}
 
+
+	let arr = [
+		{
+			items : riceItems.map(r => r.name),
+			title : "RICE Items",
+			vals : selectedRiceItems.map(i => i.name),
+			setVals : (s : string[]) => setSelectedRiceItems(riceItems.filter(r => s.some(s => r.name == s))),
+			placeHolder : "RICE",
+			selectedItems : selectedRiceItems
+		},
+		{
+			items : vegItems.map(r => r.name),
+			title : "VEG Items",
+			vals : selectedVegItems.map(i => i.name),
+			setVals : (s : string[]) => setSelectedVegItems(vegItems.filter(r => s.some(s => r.name == s))),
+			placeHolder : "VEG",
+			selectedItems : selectedVegItems
+
+		},
+		{
+			items : nonVegItems.map(r => r.name),
+			title : "NON-VEG Items",
+			vals : selectedNonVegItems.map(i => i.name),
+			setVals : (s : string[]) => setSelectedNonVegItems(nonVegItems.filter(r => s.some(s => r.name == s))),
+			placeHolder : "NON_VEG",
+			selectedItems : selectedNonVegItems
+
+		},
+		
+	]
+
 	return (
 
 		<div>
-			{/* ... Other content ... */}
-			{/* <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
-				<MealTimeDropDown
-					val={selectedMealTime}
-					setVal={handleMealTimeChange}
-					width={160}
-				/>
-				<div style={{ width: 20 }} />
-				<MyDatePicker date={selectedDate} handleDate={handleDateChange} />
-			</div> */}
-
-			{/* Render SelectedItemsList */}
-			{/* <SelectedItemsList selectedItems={selectedItems} /> */}
-			<div>
-				<div style={{
-					display : "flex",
-					justifyContent : "space-between",
-					alignItems : "center"
-				}}>
-					<h6>
-						RICE Items
-					</h6>
-					<MUISelectStyled
-						type="multiple"
-						items={riceItems}
-						placeHolder="RICE"
-						vals={selectedRiceItems.map(item => item.name)} // Convert to string[]
-						setVals={(s: string[]) => setSelectedRiceItems(s.map(name => ({ name } as Item)))}
-					/>
-				</div>
-				<SelectedItemsList selectedItems={selectedRiceItems} type="RICE" onChangeCupCount={handleNonVegCupCount} />
-			</div>
-			<div>
-				<div style={{
-					display : "flex",
-					justifyContent : "space-between",
-					alignItems : "center"
-				}}>
-					<h6>
-						VEG Items
-					</h6>
-					<MUISelectStyled
-						type="multiple"
-						items={vegItems}
-						placeHolder="VEG"
-						vals={selectedVegItems.map(item => item.name)} // Convert to string[]
-						setVals={(s: string[]) => setSelectedVegItems(s.map(name => ({ name } as Item)))}
-					/>
-				</div>
-				<SelectedItemsList selectedItems={selectedVegItems} type="VEG" onChangeCupCount={handleNonVegCupCount} />
-			</div>
-			<div>
-
-				<div style={{
-					display : "flex",
-					justifyContent : "space-between",
-					alignItems : "center"
-				}}>
-					<h6>
-						NON-VEG Items
-					</h6>
-					<MUISelectStyled
-						type="multiple"
-						items={nonVegItems}
-						placeHolder="NON_VEG"
-						vals={selectedNonVegItems.map(item => item.name)} // Convert to string[]
-						setVals={(s: string[]) => setSelectedNonVegItems(s.map(name => ({ name } as Item)))}
-					/>
-				</div>
-				<SelectedItemsList selectedItems={selectedNonVegItems} type="NON_VEG" onChangeCupCount={handleNonVegCupCount} />
-			</div>
+			{
+				arr.map((a, i) =>(
+					<div key = {i}>
+						<div style={{
+							display : "flex",
+							justifyContent : "space-between",
+							alignItems : "center"
+						}}>
+							<h6>
+								{a.title}
+							</h6>
+							<MUISelectStyled
+								type="multiple"
+								items={a.items}
+								placeHolder={a.placeHolder}
+								vals={a.vals} 
+								setVals={a.setVals}
+							/>
+						</div>
+						<SelectedItemsList selectedItems={a.selectedItems} type={a.placeHolder} onChangeCupCount={handleNonVegCupCount} />
+					</div>
+				))
+			}
 
 			{
 				reqError &&
