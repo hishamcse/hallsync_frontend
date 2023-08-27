@@ -173,6 +173,12 @@ const PreviousTempAllocation = (props: {allocations:
                     </div>
                 )
             })}
+            {
+                // props.allocations.length == 0 && 
+                // <div>
+                //     No Previous Allocation
+                // </div>
+            }
         </div>
     )
 }
@@ -281,14 +287,16 @@ const TempSeatP = (props: {application: ApplicationDetailsQuery['applicationDeta
                 </MyCard>
 
             </div>
+            {
+                allocations.length > 0 &&
+                <div className={styles.prevAllocContainer}>
+                    <MyCard title='Previous Allocations'>
+                        <PreviousTempAllocation allocations={allocations}/>
+                    </MyCard>
+                </div>
+            }
 
-            <div className={styles.prevAllocContainer}>
-                <MyCard title='Previous Allocations'>
-                    <PreviousTempAllocation allocations={allocations}/>
-                </MyCard>
-            </div>
-
-            <div style={{
+            {/* <div style={{
                 margin : "20px"
             }}>
                 
@@ -304,13 +312,20 @@ const TempSeatP = (props: {application: ApplicationDetailsQuery['applicationDeta
                             {reqErrorMsg}
                         </div>
                     }
-            </div>
+            </div> */}
             { (props.application.status == "PENDING")  &&
                 <div className={styles.submit}>
-                    
-                    <MyCard title=''>
+                    <div  style={{color: 'red', fontSize: 14, textAlign: 'center', minHeight : 30}}> 
+                        {
+                            blankError && <span>Please fill in all the fields</span>
+                        }
+                        {
+                            reqError && <span>{reqErrorMsg}</span>
+                        }
+                    </div>
+                    {/* <MyCard title=''> */}
                         <Confirmation rejectHandler={reject} successHandler={approve}/>
-                    </MyCard>
+                    {/* </MyCard> */}
                 </div>
             }
 

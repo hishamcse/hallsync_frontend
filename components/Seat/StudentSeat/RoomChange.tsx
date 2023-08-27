@@ -15,6 +15,7 @@ import {useRouter} from "next/router";
 import { FreeRoom } from "../freeRoom";
 import { ReasonForChange } from "./TempSeat";
 import { ApplicationDetailsQuery } from "../../../graphql/__generated__/graphql";
+import { MyButton } from "../../button";
 
 // const ReasonForChange = (props: {handleReason: (str: string) => void}) => {
 //     return (
@@ -69,7 +70,8 @@ const RoomChange = (props: {
         , {
             onError : (error)=>{
                 setReqError(true)
-                setReqErrorMsg("Something went wrong!! Please double check your inputs")
+                // setReqErrorMsg("Something went wrong!! Please double check your inputs")
+                setReqErrorMsg(error.message)
             },
             onCompleted : (data)=>{
                 console.log(data);
@@ -100,8 +102,8 @@ const RoomChange = (props: {
         setReqError(false)
     }
 
-    const submission = (event: { preventDefault: () => void; }) => {
-        event.preventDefault();
+    const submission = () => {
+        // event.preventDefault();
         console.log('submitted');
         console.log(reason);
         console.log(seatId);
@@ -157,19 +159,25 @@ const RoomChange = (props: {
                 <MyCard title=''>
                     <Agreement disabled = {agreementDisabled} handleAgreement={handleAgreement}/>
                 </MyCard>
-                {showError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
-                    Please agree to the terms and conditions</div>}
-                {blankError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
-                    Please fill in all the fields</div>}
-                {reqError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
-                    {reqErrorMsg}</div>}
+                <div  style={{color: 'red', fontSize: 14, textAlign: 'center', minHeight : 30}}>
+                    {
+                        showError && <span>Please agree to the terms and conditions</span>
+                    }
+                    {
+                        blankError && <span>Please fill in all the fields</span>
+                    }
+                    {
+                        reqError && <span>{reqErrorMsg}</span>
+                    }
+                </div>
             </div>
             
-            <div className={styles.submit} onClick={submission}>
+            <div className={styles.submit}>
                 { !textAreaDisabled && 
-                    <MyCard title=''>
-                        <Submit/>
-                    </MyCard>
+                    <MyButton onClick={submission} text="Submit" type="submit" />
+                    // <MyCard title=''>
+                    //     <Submit onSubmit={submission} />
+                    // </MyCard>
                 }
             </div>
         </div>

@@ -196,13 +196,17 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
 
             { (props.application.status == "PENDING")  &&
                 <div className={styles.submit}>
-                    {blankError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
-                        Please fill in all the fields</div>}
-                    {reqError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
-                        {reqErrorMsg}</div>}
-                    <MyCard  title=''>
+                    <div  style={{color: 'red', fontSize: 14, textAlign: 'center', minHeight : 30}}> 
+                        {
+                            blankError && <span>Please fill in all the fields</span>
+                        }
+                        {
+                            reqError && <span>{reqErrorMsg}</span>
+                        }
+                    </div>
+                    {/* <MyCard  title=''> */}
                         <Confirmation rejectHandler={reject} successHandler={approve}/>
-                    </MyCard>
+                    {/* </MyCard> */}
                 </div>
             }
         </div>

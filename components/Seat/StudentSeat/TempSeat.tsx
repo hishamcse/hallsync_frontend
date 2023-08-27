@@ -19,6 +19,7 @@ import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import { FreeRoom } from "../freeRoom";
 import { ApplicationDetailsQuery } from "../../../graphql/__generated__/graphql";
 import MUISelectStyled from "../../MUIMultiSelectCheckbox";
+import { MyButton } from "../../button";
 
 const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boolean>>[]}) => {
     return (
@@ -49,39 +50,16 @@ export const ReasonForChange = (props: {
 }
 
 const RoomPreference = (props: {
-    handleDays: (event: SelectChangeEvent) => void, handleDate: (newValue: Dayjs | null) => void,
+    setDays: (e : number) => void, handleDate: (newValue: Dayjs | null) => void,
     setSeatId : (v : number | undefined)=>void,
-    date? : string,
+    date : Dayjs | null,
     disable? : boolean,
-    days? : number,
+    days : number,
     seat? : NonNullable<ApplicationDetailsQuery['applicationDetails']['tempApplication']>['prefSeat']
 }) => {
 
-    let initDate = null;
-    if(props.date){
-        initDate = dayjs(props.date, 'yyyy-mm-dd');
-        // initDate = dayjs("2023-08-03T00:00:00.000Z", 'yyyy-mm-dd');
-        console.log(initDate)
-    }
-    let initDays = 'Days'
-    if(props.days){
-        initDays = props.days.toString()
-    }
     
-    const [value, setValue] = useState<Dayjs | null>();
-
-    const [val, setVal] = useState(initDays);
-
-
-    const handleChange = (event: SelectChangeEvent) => {
-        setVal(event.target.value as string);
-        props.handleDays(event);
-    };
-
-    const handleDate = (newValue: Dayjs | null) => {
-        setValue(newValue);
-        props.handleDate(newValue);
-    }
+    
 
     const items: string[] = ['Days', ...Array.from({ length: 11 },
         (_, index) => (index + 5).toString())];
@@ -90,12 +68,12 @@ const RoomPreference = (props: {
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
             <div style={{display: 'flex', justifyContent: 'space-between', margin: 'auto'}}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker disabled = {props.disable} label="Date of hall entrance" value={dayjs(value)}
-                                    onChange={handleDate}/>
+                    <DatePicker disabled = {props.disable} label="Date of hall entrance" value={props.date}
+                                    onChange={props.handleDate}/>
                 </LocalizationProvider>
                 <div>
                     <MUISelectStyled items={items} placeHolder="Days" disabled = {props.disable} 
-                    setVal={setVal} type="single" val={val} width={120}  />
+                    setVal={(s) => props.setDays(parseInt(s))} type="single" val={props.days.toString()} width={120}  />
                     {/* <MUIDropdown width={120} disable = {props.disable} options={items} val={val} change={handleChange}/> */}
                 </div>
             </div>
@@ -119,11 +97,11 @@ const TempSeat = (props: {
 }) => {
 
     let initDate = null;
-    // if(props.application?.tempApplication?.from){
-    //     initDate = dayjs(props.application?.tempApplication?.from, 'yyyy-mm-dd');
-    //     initDate = dayjs("2023-08-03T00:00:00.000Z", 'yyyy-mm-dd');
-    //     console.log(initDate)
-    // }
+    if(props.application?.tempApplication?.from){
+        initDate = dayjs(props.application?.tempApplication?.from, 'yyyy-mm-dd');
+        initDate = dayjs("2023-08-03T00:00:00.000Z", 'yyyy-mm-dd');
+        console.log(initDate)
+    }
 
     let initDays = 0;
     if(props.application?.tempApplication){
@@ -182,8 +160,7 @@ const TempSeat = (props: {
         setShowError(false);
     }
 
-    const submission = (event: { preventDefault: () => void; }) => {
-        event.preventDefault();
+    const submission = () => {
         console.log('submitted');
         console.log(q1Ans);
         console.log(q2Ans);
@@ -191,6 +168,7 @@ const TempSeat = (props: {
         console.log(date?.format('YYYY-MM-DD'));
         console.log(days);
         console.log(agreed);
+        console.log(seatId);
 
         if(!agreed) {
             setShowError(true);
@@ -214,6 +192,8 @@ const TempSeat = (props: {
             }
         }).then(r => {
             console.log(r);
+        }).catch(err =>{
+            console.log(err);
         })
     }
 
@@ -242,8 +222,8 @@ const TempSeat = (props: {
                 <div className={styles.row}>
                     <MyCard title='Room Preference and Date'>
                         <RoomPreference disable={textAreaDisabled} 
-                        date={props.application?.tempApplication?.from} setSeatId={setSeatId}  handleDays={handleDays} handleDate={handleDate}
-                        days={props.application?.tempApplication?.days}
+                        date={date} setSeatId={setSeatId}  setDays={setDays} handleDate={handleDate}
+                        days={days}
                         seat={props.application?.tempApplication?.prefSeat}
                         />
                     </MyCard>
@@ -253,20 +233,26 @@ const TempSeat = (props: {
                 <MyCard title=''>
                     <Agreement disabled = {agreementDisabled} handleAgreement={handleAgreement}/>
                 </MyCard>
-                {showError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
-                    Please agree to the terms and conditions</div>}
-                {blankError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
-                    Please fill in all the fields</div>}
-                {reqError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
-                    {reqErrorMsg}</div>}
+                <div  style={{color: 'red', fontSize: 14, textAlign: 'center', minHeight : 30}}>
+                    {
+                        showError && <span>Please agree to the terms and conditions</span>
+                    }
+                    {
+                        blankError && <span>Please fill in all the fields</span>
+                    }
+                    {
+                        reqError && <span>{reqErrorMsg}</span>
+                    }
+                </div>
             </div>
 
             <div className={styles.submit} onClick={submission}>
 
                 { !agreementDisabled &&
-                    <MyCard title=''>
-                        <Submit/>
-                    </MyCard>
+                    <MyButton onClick={submission} text="Submit" type="submit" />
+                    // <MyCard title=''>
+                    //     <Submit/>
+                    // </MyCard>
                 }
             </div>
         </div>

@@ -142,11 +142,14 @@ const RoomChangeP = (props: {application: ApplicationDetailsQuery['applicationDe
 
             { (props.application.status == "PENDING")  &&
                 <div className={styles.submit}>
-                    {reqError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
-                        {reqErrorMsg}</div>}
-                    <MyCard title=''>
+                    <div  style={{color: 'red', fontSize: 14, textAlign: 'center', minHeight : 30}}>
+                    {
+                        reqError && <span>{reqError}</span>
+                    }
+                    </div>
+                    {/* <MyCard title=''> */}
                         <Confirmation rejectHandler={reject} successHandler={approve}/>
-                    </MyCard>
+                    {/* </MyCard> */}
                 </div>
             }
 

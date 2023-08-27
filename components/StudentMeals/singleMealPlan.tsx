@@ -138,9 +138,6 @@ const SingleMealPlanView = (props: { mealPlan: GetMealPlansQuery['getMealPlans']
         }
     )
 
-    const importedImgPath = (imgName: string) => {
-        return "/images/" + imgName;
-    }
 
     const handleList = (list: string[]) => {
         setStrList(list);

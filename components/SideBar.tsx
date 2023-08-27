@@ -9,17 +9,27 @@ import { GET_INFO } from '../graphql/operations'
 import { MyButton } from './button'
 import { ResidencyStatus } from '../graphql/__generated__/graphql'
 import useResidencyStatus from '../hooks/useResidencyStatus'
-
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 export function SideBarIcon(
     props : {
         src : string,
-        width? : number
+        width? : number,
+        icon? : React.ReactNode
+    
     }
 ){
     return (
         <div className={sideBarStyles.icon} >
-            <img width={props.width} src = {props.src} />
+            {
+                !props.icon &&
+
+                <img width={props.width} src = {props.src} />
+            }
+            {
+                props.icon
+            }
+
         </div>
     )
 }
@@ -30,11 +40,15 @@ function ListItem(props : {
     active : boolean,
     href : string,
     onClick? : ()=>void,
-    width? : number
+    width? : number,
+    icon? : React.ReactNode
 }){
      return (
         <li className={props.active ? sideBarStyles.focus : ''} onClick={props.onClick} > 
-            <SideBarIcon src={props.imgPath} width={props.width} />
+            {
+                <SideBarIcon src={props.imgPath} width={props.width} icon = {props.icon} />
+            }
+            
             <Link href={props.href}> 
                 {props.text} 
             </Link> 
@@ -119,11 +133,9 @@ export function StudentNavBar(){
             <ListItem active = {checkRouteContains(router,activeIf.app)} href={'/' + routes.app} imgPath={imgPaths.app} text={texts.app} />
             { resident && 
             <ListItem active = {checkRouteContains(router,activeIf.mess)} href={'/' + routes.mess} imgPath={imgPaths.mess} text={texts.mess} />}
-            <li> <SideBarIcon src="/payments.svg" />  Payments</li>
             <li> <SideBarIcon src="/info.svg" /> Info</li>
             <li> <SideBarIcon src="/feAngry1.svg" /> Complaints</li>
-            <li> <SideBarIcon src="/feAngry2.svg" /> Personal Info</li>
-            <ListItem width={25} href='/' imgPath='/logout.svg' active = {false} text='logout' onClick={logOutOnClick}  />
+            <ListItem width={25} href='/' imgPath='/logout.svg' active = {false} text='logout' onClick={logOutOnClick} icon = {<LogoutOutlinedIcon />}  />
         </ul>
     )
 }
@@ -171,7 +183,7 @@ export function AuthorityNabBar(){
             }
             <li> <SideBarIcon src="/info.svg" /> Info</li>
             <li> <SideBarIcon src="/feAngry1.svg" /> Complaints</li>
-            <ListItem width={25} href='/' imgPath='/logout.svg' active = {false} text='logout' onClick={logOutOnClick}  />
+            <ListItem width={25} href='/' imgPath='/logout.svg' active = {false} text='logout' onClick={logOutOnClick} icon = {<LogoutOutlinedIcon />}  />
         </ul>
     )
 }

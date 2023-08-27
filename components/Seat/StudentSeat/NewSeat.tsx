@@ -18,6 +18,7 @@ import {FreeRoom} from "../freeRoom";
 import { server } from "../../utilities";
 import { UploadedDocsList } from "../UploadedDocsList";
 import { UploadDocs } from "../UploadDocs";
+import { MyButton } from "../../button";
 
 const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boolean>>[]}) => {
     return (
@@ -231,18 +232,23 @@ const NewSeat = (props: {
                 <MyCard title=''>
                     <Agreement disabled = {agreementDisabled} handleAgreement={handleAgreement}/>
                 </MyCard>
-                {showError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
-                    Please agree to the terms and conditions</div>}
-                {reqError && <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
-                    {reqErrorMsg}</div>}
+                <div  style={{color: 'red', fontSize: 14, textAlign: 'center', minHeight : 30}}>
+                    {
+                        showError && <span>Please agree to the terms and conditions</span>
+                    }
+                    {
+                        reqError && <span>{reqErrorMsg}</span>
+                    }
+                </div>
             </div>
 
-                <div className={styles.submit} onClick={handleSubmit}>
+                <div className={styles.submit}>
                     {
                         !agreementDisabled &&
-                        <MyCard title=''>
-                            <Submit/>
-                        </MyCard>
+                        <MyButton text="Submit" type="submit" onClick={handleSubmit} />
+                        // <MyCard title=''>
+                        //     <Submit/>
+                        // </MyCard>
                     }
                 </div>
             
