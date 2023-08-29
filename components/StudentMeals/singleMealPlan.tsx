@@ -13,6 +13,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import { server } from "../utilities";
+import { MealItem } from "../itemCard";
 
 const DraggableList = (props: { list: string[], setList: (list: string[]) => void, disabled: boolean }) => {
 
@@ -201,12 +202,13 @@ const SingleMealPlanView = (props: { mealPlan: GetMealPlansQuery['getMealPlans']
             </Typography>
 
             <div style={{borderTop: "1px solid #ccc"}}>
-                <div style={{display: "flex", margin: "16px"}}>
+                <div style={{display: "flex", margin: "16px", justifyContent : "space-between"}}>
                     <div style={{display: "flex", alignItems: "center", justifyContent: 'space-between', margin: 10}}>
                         {props.mealPlan.meal.items.map((item, index: number) => {
+
                             let cupcountA = props.mealPlan.cupCount.filter(c => c.itemId == item.itemId);
                             let cupcount = "NA"
-                            if(cupcountA.length  > 0){
+                            if(cupcountA.length  > 0 && item.type.toString().toLowerCase() == 'non_veg'){
                                 cupcount = cupcountA[0].cupcount.toString();
                             }
                             let imagePath = './images/default.png';
@@ -214,18 +216,16 @@ const SingleMealPlanView = (props: { mealPlan: GetMealPlansQuery['getMealPlans']
                                 imagePath = server + item.photo.file.newFileName;
                             }
                             return (
-                                <div key={index} style={{margin: 10}}>
-                                    <Image loader={({src})=>src}  src={imagePath}
-                                           alt='foodItem'
-                                           width={820 / props.mealPlan.meal.items.length}
-                                           height={650 / props.mealPlan.meal.items.length}/>
-                                    <Typography variant="body2" textAlign='center'>
-                                        {item.name}
-                                        {item.type.toString().toLowerCase() != 'rice' &&
-                                        item.type.toString().toLowerCase() != 'veg' ?
-                                            `(${ cupcount } cups)` : ""}
-                                    </Typography>
-                                </div>
+                                <MealItem imagePath={imagePath} item={item} key={index}>
+                                    <div style={{minHeight : 20}}>
+                                        {
+                                            cupcount != "NA" &&
+                                            <Typography variant="body2" textAlign='center'>
+                                                {cupcount} Cups
+                                            </Typography>
+                                        }
+                                    </div>
+                                </MealItem>
                             )
                         } 
                         )}

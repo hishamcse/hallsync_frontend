@@ -3,6 +3,7 @@ import { GetOldItemsQuery, Item } from '../../graphql/__generated__/graphql';
 import Image from "next/image";
 import TextField from "@mui/material/TextField";
 import { server } from '../utilities';
+import { MealItem } from '../itemCard';
 
 type SelectedItemsListProps = {
   selectedItems: GetOldItemsQuery['getOldItems'];
@@ -30,24 +31,20 @@ const SelectedItemsList: React.FC<SelectedItemsListProps> = ({ selectedItems, ty
               imagePath = server + item.photo.file.newFileName;
             }
             return (
-            <li key={index} style={{ margin: '10px'}}>
-              <div>
-                <Image loader={({src})=>src} src={imagePath} alt='foodItem' width={150} height={100} />
-              </div>
-              <div>{item.name}</div>
-              {type === 'NON_VEG' && (
-                <div>
-                  <TextField
-                    label="Cup Count"
-                    type="number"
-                    value={itemCupCount[item.name] || ''}
-                    onChange={(e) => handleCupCountChange(item.name, parseInt(e.target.value))}
-                    size= "small"
-                    style={{ width: '150px', height: '28px' , marginTop : 10}}
-                  />
-                </div>
-              )}
-            </li>
+              <MealItem imagePath={imagePath} item={item} key={item.name}>
+                  {type === 'NON_VEG' && (
+                  <div>
+                    <TextField
+                      label="Cup Count"
+                      type="number"
+                      value={itemCupCount[item.name] || ''}
+                      onChange={(e) => handleCupCountChange(item.name, parseInt(e.target.value))}
+                      size= "small"
+                      style={{ width: '150px', height: '28px' , marginTop : 10}}
+                    />
+                  </div>
+                )}
+              </MealItem>
           )}
           )}
         </ul>
