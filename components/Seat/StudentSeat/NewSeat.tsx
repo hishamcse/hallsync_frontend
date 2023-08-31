@@ -4,18 +4,14 @@ import {ChangeEvent, useState} from "react";
 import MUIDropdown from "../../MUIDropdown";
 import * as React from "react";
 import {SelectChangeEvent} from "@mui/material/Select";
-import {Button, IconButton, Link} from "@mui/material";
 import QuestionBox from "../QuestionBox";
 import Agreement from "./Agreement";
-import Submit from "./Submit";
 import {types} from "./StudentView";
 import {useMutation} from "@apollo/client";
 import {POST_NEW_APPLICATION} from "../../../graphql/operations";
 import {useRouter} from "next/router";
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import {ApplicationDetailsQuery, ApplicationStatus} from "../../../graphql/__generated__/graphql";
 import {FreeRoom} from "../freeRoom";
-import { server } from "../../utilities";
 import { UploadedDocsList } from "../UploadedDocsList";
 import { UploadDocs } from "../UploadDocs";
 import { MyButton } from "../../button";
@@ -246,9 +242,6 @@ const NewSeat = (props: {
                     {
                         !agreementDisabled &&
                         <MyButton text="Submit" type="submit" onClick={handleSubmit} />
-                        // <MyCard title=''>
-                        //     <Submit/>
-                        // </MyCard>
                     }
                 </div>
             

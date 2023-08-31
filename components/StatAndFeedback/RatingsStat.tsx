@@ -1,9 +1,9 @@
 import { Dayjs } from "dayjs";
 import { useState } from "react";
 import { GET_RATINGS } from "../../graphql/operations";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { getDayAndMonthString } from "../utilities";
-import { BarChartCard, BarChartWhite } from "./ParticipationBarChart";
+import { BarChartWhite } from "./ParticipationBarChart";
 import { ExampleQueryQuery } from "../../graphql/__generated__/graphql";
 import MyCard from "../card";
 import { TitleDate } from "../TitleMealTimeDate";

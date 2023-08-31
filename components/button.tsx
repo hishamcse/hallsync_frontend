@@ -1,5 +1,4 @@
 import { Button, ButtonProps } from '@mui/material';
-import styles from '../styles/components.module.scss'
 
 export function MyButton(props : {
     type : 'submit' | 'cancel' | 'intermediate',

@@ -1,5 +1,4 @@
-import {GetMealPlansQuery, GetOldItemsQuery, Item, ItemType} from "../../graphql/__generated__/graphql";
-import {useRouter} from "next/router";
+import {GetMealPlansQuery, GetOldItemsQuery} from "../../graphql/__generated__/graphql";
 import React, {useState} from "react";
 import {useMutation, useQuery} from "@apollo/client";
 import {GET_OLD_MEAL_ITEMS, ADD_MEAL_PLAN} from "../../graphql/operations";
@@ -14,8 +13,6 @@ const AddOrEditMealView = (props : {
 	selectedDate : Dayjs | null,
 	setSelectedDate : (newValue: Dayjs | null) => void
 }) => {
-
-	const router = useRouter();
 
 	const [strList, setStrList] = useState<string[]>([]);
 

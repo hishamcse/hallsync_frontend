@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { GetOldItemsQuery, Item } from '../../graphql/__generated__/graphql';
-import Image from "next/image";
+import { GetOldItemsQuery } from '../../graphql/__generated__/graphql';
 import TextField from "@mui/material/TextField";
 import { server } from '../utilities';
 import { MealItem } from '../itemCard';

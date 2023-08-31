@@ -74,9 +74,6 @@ function Login(){
     </div>
   )
   return (
-    // <div>
-    //   {content}
-    // </div>
     <MyCard title={title}>
       {content}
     </MyCard>
