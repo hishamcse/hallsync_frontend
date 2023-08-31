@@ -66,7 +66,7 @@ function NotificationsList(props : {
                         backgroundColor: "grey",
                         borderRadius: 2
                     }
-                }}   >
+                }} onClick={ (e) => e.stopPropagation()} >
                 {
                     props.notifications.notifications.map((n, i) =>(
                         <Notification divider = {i !== props.notifications.notifications.length - 1} key={n.notificationId} notification={n} />

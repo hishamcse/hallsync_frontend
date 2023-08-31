@@ -3,7 +3,7 @@ import topBarStyles from "../styles/topbar.module.scss"
 import { NextRouter, useRouter } from "next/router"
 import { checkRouteContains } from "./utilities";
 import { CSSProperties, MutableRefObject, RefObject, createRef, useContext, useEffect, useRef, useState } from "react";
-import { userContext } from "../pages/_app";
+import { notificationContext, userContext } from "../pages/_app";
 import { useLazyQuery } from "@apollo/client";
 import { GET_NOTIFICATIONS } from "../graphql/operations";
 import NotificationsList from "./notification";
@@ -101,7 +101,7 @@ export function Logo(props : {
 export function TopBar(){
     const router = useRouter();
     let {user} = useContext(userContext);
-    const [showNotification , setShowNotification] = useState<boolean>(false);
+    let {showNotification, setShowNotification} = useContext(notificationContext);
     const divRef = useRef<HTMLDivElement>(null);
 
     let [query , {data, loading}] = useLazyQuery(
@@ -131,11 +131,11 @@ export function TopBar(){
                 {/* asdf */}
             </div>
             <div className={topBarStyles.notSection}>
-                <Icon src="/bell.svg" onClick={()=>{
-                    console.log("lkjasdf");
-                    setShowNotification((f)=>!f)
+                <Icon active = {showNotification} src="/bell.svg" onClick={()=>{
+                    console.log("lkjasdf", showNotification);
+                    setShowNotification(!showNotification)
                 }} refForDiv = {divRef} />
-                <Icon src="/avatar.svg" />
+                <Icon active = {false} src="/avatar.svg" />
             </div>
             {
                 data && showNotification &&
@@ -152,11 +152,17 @@ export function TopBar(){
 
 function Icon(props : {
     src : string,
+    active : boolean,
     onClick? : ()=>void,
     refForDiv? : RefObject<HTMLDivElement>
 }){
     return (
-        <div className={topBarStyles.icon} onClick={props.onClick} ref={props.refForDiv}>
+        <div className={topBarStyles.icon + ' ' + (
+            props.active ? topBarStyles.activeIcon : ''
+        )} onClick={ (e) =>{
+            e.stopPropagation();
+            if(props.onClick) props.onClick();
+        }} ref={props.refForDiv}>
             <div>
                 <img src={props.src}  />
 

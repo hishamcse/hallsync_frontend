@@ -61,17 +61,32 @@ export const userContext = React.createContext<{
   setUser : ()=>{}
 })
 
+export const notificationContext = React.createContext<{
+  showNotification : boolean,
+  setShowNotification : (s : boolean) => void
+}>({
+  showNotification : false,
+  setShowNotification : ()=>{}
+})
+
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   const [user, setUser] = useState<LoginMutation['login']>();
+  const [showNot, setShowNot] = useState<boolean>(false);
   const ctx = useContext(userContext);
   const value = {user, setUser};
+  const notVal = {showNot, setShowNot}
   // let getLayout;
   if (Component.getLayout){
     return (
       <ApolloProvider client={client}>
         <userContext.Provider value = {value}>
-          {Component.getLayout( <Component  {...pageProps} />)}
+          <notificationContext.Provider value = {{
+            showNotification : showNot,
+            setShowNotification : setShowNot
+          }}>
+            {Component.getLayout( <Component  {...pageProps} />)}
+          </notificationContext.Provider>
         </userContext.Provider>
       </ApolloProvider>
     )
@@ -100,7 +115,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <CssBaseline />
         <ApolloProvider client={client}>
           <userContext.Provider value = {value}>
-            <div>
+          <notificationContext.Provider value = {{
+            showNotification : showNot,
+            setShowNotification : setShowNot
+          }}>
+            <div onClick={()=>setShowNot(false)}>
               <NavBar />
               {/* { value.user && value.user.student && <StudentNavBar />}
               { value.user && value.user.authority && <AuthorityNabBar />} */}
@@ -111,6 +130,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                 <Component {...pageProps} />
               </div>
             </div>
+            </notificationContext.Provider>
           </userContext.Provider>
         </ApolloProvider>
       </ThemeProvider>

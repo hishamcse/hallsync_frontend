@@ -113,15 +113,20 @@ $iconHW : 50px;
     height: $iconHW;
     width: $iconHW;
     text-align: center;
-    background-color: $tbc;
+    background-color: black;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+.activeIcon{
+    background-color: dimgray;
+}
+
 .notificationContainer{
     position: absolute;
-    top : $topBarHeight;
-    right: 2 * $iconHW;
+    top : $topBarHeight - 10px;
+    right: 2 * $iconHW + 30px;
+    
 }
