@@ -198,6 +198,7 @@ export const GET_APPLICATION = graphql(`
             status
             reason
             student {
+              student9DigitId
               name
               department {
                 shortName

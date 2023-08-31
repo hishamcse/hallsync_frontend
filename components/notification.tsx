@@ -8,6 +8,7 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { NotificationsQuery } from '../graphql/__generated__/graphql';
 import MyCard from './card';
+import { useRouter } from 'next/router';
 
 type notification =  NotificationsQuery['notifications']['notifications'][0];
 
@@ -23,13 +24,35 @@ function getPrimaryText(
     return " "
 }
 
+function getClickToSeeText(
+    notification : notification
+){
+    if(notification.applicationId){
+        return "Click to see more details"
+    }
+    else if(notification.voteId){
+        return "Click to vote"
+    }
+    return " "
+}
+
 function Notification(props : {
     notification : NotificationsQuery['notifications']['notifications'][0],
     divider : boolean
 }){
+    const router = useRouter();
+
     return (
         <>
-            <ListItem alignItems="flex-start">
+            <ListItem alignItems="flex-start" sx={{
+                ':hover' : {
+                    opacity : .7,
+                }
+            }} onClick={()=>{
+                if(props.notification.applicationId){
+                    router.push("/application/prevApplication/" + props.notification.applicationId);
+                }
+            }} >
                 <ListItemText
                 sx={{
                     color : "white"
@@ -37,9 +60,9 @@ function Notification(props : {
                 primary={getPrimaryText(props.notification)}
                 secondary={
                     <React.Fragment>
-                        {props.notification.text}
+                        {props.notification.text}. {getClickToSeeText(props.notification)}
                     </React.Fragment>
-                }
+                } 
                 />
             </ListItem>
             { props.divider && <Divider variant="fullWidth" component="li" />}

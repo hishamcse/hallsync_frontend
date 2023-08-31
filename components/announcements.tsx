@@ -4,12 +4,13 @@ import {ADD_ANNOUNCEMENT, GET_ANNOUNCEMENTS} from "../graphql/operations";
 import {GetAnnouncementsQuery} from "../graphql/__generated__/graphql";
 import {useState} from "react";
 import MyCard from "./card";
-import {Button, Typography} from "@mui/material";
+import {Button, DialogActions, DialogContent, TextField, Typography} from "@mui/material";
 import {DateRangeIcon} from "@mui/x-date-pickers";
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import CustomizedDialog from "./MUIDialog";
 import {useRouter} from "next/router";
+import MUIStyledTextarea from "./MUITextArea";
 
 const SingleAnnouncement = (props: { announcement: GetAnnouncementsQuery['getAnnouncements'][0] }) => {
     return (
@@ -69,11 +70,13 @@ const AnnounceTitle = (props: { announcement: GetAnnouncementsQuery['getAnnounce
             </div>
             {
                 showDetails &&
-                <CustomizedDialog show={true} setShow={setShowDetails} addAnnouncement={false}
-                     cardTitle='Announcement Details' announcementTitle={props.announcement.title}
-                     announcementDetails={props.announcement.details} handleSubmission={handleSubmission}
-                     date={new Date(props.announcement.createdAt).toDateString()}
-                                  messManager={!!props.announcement.messManager}/>
+                <CustomizedDialog show={true} setShow={setShowDetails} cardTitle='Announcement Details'>
+                    <AnnounceDetailsContent announcementTitle={props.announcement.title}
+                                            announcementDetails={props.announcement.details}
+                                            date={new Date(props.announcement.createdAt).toDateString()}
+                                            messManager={props.announcement.messManager != null }
+                                            />
+                </CustomizedDialog>
             }
         </div>
     )
@@ -148,11 +151,10 @@ const Announcements = () => {
             }
             {
                 (messManager || authority) && showDetails &&
-                <CustomizedDialog show={true} setShow={setShowDetails} addAnnouncement={true}
-                                  cardTitle='Add Announcement' announcementTitle=''
-                                  announcementDetails='' handleSubmission={handleSubmission}
-                                  date={new Date().toDateString()}
-                                  messManager={messManager ?? false}/>
+                <CustomizedDialog show={true} setShow={setShowDetails} cardTitle='Add Announcement'>
+                    <AddAnnouncementContent messManager={messManager != null} date={new Date().toDateString()}
+                                            handleSubmission={handleSubmission}/>
+                </CustomizedDialog>
             }
             {
                 announcements.map((announcement, index) => (
@@ -166,5 +168,154 @@ const Announcements = () => {
         </div>
     )
 }
+
+
+
+const AnnounceDetailsContent = (props: {
+    announcementTitle?: string,
+    announcementDetails?: string,
+    date?: string,
+    messManager?: boolean
+}) => {
+    return (
+        <DialogContent dividers>
+            <Typography variant={"h6"} gutterBottom style={{marginBottom: 20}}>
+                <span><CampaignIcon/>&nbsp;&nbsp;&nbsp;<i>{props.announcementTitle}</i></span>
+            </Typography>
+            <Typography gutterBottom>
+                <MyCard style={{marginTop: 10, marginBottom: 20}} title=''>
+                    <CardContent announcementDetails={props.announcementDetails}/>    
+                </MyCard>
+
+            </Typography>
+            <Typography gutterBottom>
+                <div
+                    style={{display: 'flex', justifyContent: 'space-between', margin: 10}}>
+                    <div style={{color: "darkgrey"}}>
+                        <Typography variant={"body1"}>
+                       <span><DateRangeIcon/>&nbsp;&nbsp;&nbsp;
+                           {props.date}</span>
+                        </Typography>
+                    </div>
+                    <div style={{color: "darkgrey"}}>
+                        {props.messManager &&
+                            <Typography variant={"body1"}>
+                       <span><LocalOfferIcon/>&nbsp;
+                           Mess Manager</span>
+                            </Typography>
+                        }
+
+                        {!props.messManager &&
+                            <Typography variant={"body1"}>
+                       <span><LocalOfferIcon/>&nbsp;&nbsp;
+                           Provost</span>
+                            </Typography>
+                        }
+                    </div>
+                </div>
+            </Typography>
+        </DialogContent>
+    )
+}
+
+const AddAnnouncementContent = (props: {
+    messManager: boolean,
+    date: string,
+    handleSubmission: (title: string, details: string) => void
+}) => {
+
+    const [title, setTitle] = useState<string>();
+    const [details, setDetails] = useState<string>();
+
+    const [error, setError] = useState<boolean>(false);
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setTitle(event.target.value);
+    }
+
+    const handleSubmission = () => {
+        if(!title || !details) {
+            setError(true);
+            return;
+        }
+        setError(false)
+        props.handleSubmission(title, details);
+    }
+
+    return (
+        <div>
+            <DialogContent dividers>
+                <Typography variant={"body1"} gutterBottom style={{marginBottom: 20, alignItems: 'center'}}>
+                    <span><CampaignIcon/>&nbsp;&nbsp;Title</span><br/>
+                    <TextField placeholder="announcement title"
+                               style={{width: '100%', backgroundColor: '#000', color: '#fff'}}
+                               onChange={handleChange} value={title} onFocus={() => setError(false)}/>
+                </Typography>
+
+                <Typography variant={"body1"} gutterBottom style={{marginBottom: 20, alignItems: 'center'}}>
+                    <span><CampaignIcon/>&nbsp;&nbsp;Description</span><br/>
+                    <MUIStyledTextarea placeHolder="announcement details" rows={8} val={details}
+                                       handleInput={setDetails}/>
+                </Typography>
+
+                <Typography gutterBottom>
+                    <div
+                        style={{display: 'flex', justifyContent: 'space-between', margin: 10}}>
+                        <div style={{color: "darkgrey"}}>
+                            <Typography variant={"body1"}>
+                               <span><DateRangeIcon/>&nbsp;&nbsp;&nbsp;
+                                   {props.date}</span>
+                            </Typography>
+                        </div>
+                        <div style={{color: "darkgrey"}}>
+                            {props.messManager &&
+                                <Typography variant={"body1"}>
+                                   <span><LocalOfferIcon/>&nbsp;
+                                       Mess Manager</span>
+                                </Typography>
+                            }
+
+                            {!props.messManager &&
+                                <Typography variant={"body1"}>
+                                   <span><LocalOfferIcon/>&nbsp;&nbsp;
+                                       Provost</span>
+                                </Typography>
+                            }
+                        </div>
+                    </div>
+                </Typography>
+            </DialogContent>
+            {
+                error &&
+                <Typography variant={"body1"} style={{color: 'red', textAlign: 'center'}}>
+                    Please fill all fields
+                </Typography>
+            }
+            <DialogActions>
+                <Button autoFocus variant='outlined' color='inherit' size='large'
+                        onClick={handleSubmission}>
+                    Add
+                </Button>
+            </DialogActions>
+        </div>
+    )
+}
+
+const CardContent = (props: {announcementDetails?: string}) => {
+    return (
+        <div style={{color: "white", margin: 10, fontSize: 17}}>
+            {props.announcementDetails}
+            {/*<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium alias asperiores*/}
+            {/*    aut culpa et excepturi illum nam numquam provident quo. Commodi dicta harum illo ipsum*/}
+            {/*    itaque placeat sequi vel voluptatibus!*/}
+            {/*</div>*/}
+            {/*<div>Ab deleniti expedita facilis harum quam sint soluta voluptates! Animi assumenda,*/}
+            {/*    delectus dicta dolorum excepturi magnam magni, odio odit omnis quae quam ratione*/}
+            {/*    repudiandae rerum sint totam ut velit voluptas.*/}
+            {/*</div>*/}
+        </div>
+    )
+}
+
 
 export default Announcements;
