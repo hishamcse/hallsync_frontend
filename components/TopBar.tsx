@@ -2,7 +2,7 @@ import Link from "next/link";
 import topBarStyles from "../styles/topbar.module.scss"
 import { useRouter } from "next/router"
 import { checkRouteContains } from "./utilities";
-import { CSSProperties, RefObject, useContext, useEffect, useRef } from "react";
+import { CSSProperties, RefObject, useContext, useEffect, useRef, useState } from "react";
 import { notificationContext, userContext } from "../pages/_app";
 import { useLazyQuery } from "@apollo/client";
 import { GET_NOTIFICATIONS } from "../graphql/operations";
