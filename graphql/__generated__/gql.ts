@@ -32,7 +32,7 @@ const documents = {
     "\n    mutation ApproveTempSeatApplication($from: String!, $days: Float!, $seatId: Float!, $applicationId: Float!) {\n      approveTempSeatApplication(from: $from, days: $days, seatId: $seatId, applicationId: $applicationId) {\n        days\n        from\n        seat {\n          room {\n            roomNo\n            floor {\n              floorNo\n              roomLabelLen\n            }\n          }\n        }\n      }\n    }\n\n": types.ApproveTempSeatApplicationDocument,
     "\n    mutation ApproveSeatChangeApplication($seatId: Float!, $seatChangeApplicationId: Float!) {\n      approveSeatChangeApplication(seatId: $seatId, seatChangeApplicationId: $seatChangeApplicationId) {\n        seatId\n        student {\n          name\n        }\n      }\n    }\n\n": types.ApproveSeatChangeApplicationDocument,
     "\n  mutation RejectApplication($applicationId: Float!) {\n    rejectApplication(applicationId: $applicationId) {\n      applicationId\n    }\n  }\n": types.RejectApplicationDocument,
-    "\n  query Notifications {\n    notifications {\n      notifications {\n        time\n        text\n        seen\n        notificationId\n        applicationId\n        voteId\n      }\n      unseenCount\n    }\n  }\n": types.NotificationsDocument,
+    "\n  query Notifications {\n    notifications {\n      notifications {\n        time\n        text\n        seen\n        notificationId\n        applicationId\n        voteId\n        vote {\n          voteId\n          seatChangeApplication {\n            application {\n              student {\n                batch {\n                  year\n                }\n                department {\n                  shortName\n                }\n                name\n                levelTerm {\n                  label\n                }\n                email\n                phone\n                student9DigitId\n              }\n            }\n          }\n        }\n      }\n      unseenCount\n    }\n  }\n": types.NotificationsDocument,
     "\n   query GetMealPlans($to: String!, $from: String!) {\n  getMealPlans(to: $to, from: $from) {\n    mealPlanId\n    mealTime\n    day\n    mealTime\n    meal {\n      mealId\n      items {\n        itemId\n        name\n        photoId\n        type\n        photo {\n          file {\n            fileName\n            newFileName\n          }\n        }\n      }\n    }\n    preferences {\n      item {\n        itemId\n        name\n        type\n      }\n      order\n    }\n    optedOut {\n      studentId\n    }\n    cupCount {\n      cupcount\n      itemId\n    }\n  }\n}\n\n": types.GetMealPlansDocument,
     "\nquery GetOldItems {\n  getOldItems {\n    itemId\n    name\n    type\n    photoId\n    photo {\n      file {\n        fileName\n        newFileName\n      }\n    }\n  }\n}\n": types.GetOldItemsDocument,
     "\n   mutation AddNewMealPlan($items: MealPlanInput!, $mealTime: String!, $date: String!) {\n      addNewMealPlan(items: $items, mealTime: $mealTime, date: $date) {\n        day\n        mealId\n        mealPlanId\n        mealTime\n        cupCount {\n          item {\n            name\n            itemId\n            photoId\n            type\n          }\n          cupcount\n        }\n      }\n    }\n\n": types.AddNewMealPlanDocument,
@@ -56,6 +56,8 @@ const documents = {
     "\n  query PrevCallsStudent {\n  prevCallsWithAppOfResident {\n    application {\n      status\n    }\n    call {\n      from\n      to\n      createdAt\n      callId\n    }\n  }\n}\n": types.PrevCallsStudentDocument,
     "\nmutation ApplyMessManager($callId: Float!) {\n  applyMessManager(callId: $callId) {\n    applicationId\n  }\n}\n": types.ApplyMessManagerDocument,
     "\n  query MessManagingExperiences {\n    messManagingExperiences {\n      call {\n        from\n        to\n        authority {\n          name\n        }\n      }\n    }\n  }\n": types.MessManagingExperiencesDocument,
+    "\n  mutation VoteMutation($reason: String!, $vote: String!, $voteId: Float!) {\n    vote(reason: $reason, vote: $vote, voteId: $voteId) {\n      voteId\n    }\n  }": types.VoteMutationDocument,
+    "\nmutation Mark($notificationId: Float!) {\n  mark(notificationId: $notificationId)\n}\n": types.MarkDocument,
 };
 
 /**
@@ -151,7 +153,7 @@ export function graphql(source: "\n  mutation RejectApplication($applicationId: 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query Notifications {\n    notifications {\n      notifications {\n        time\n        text\n        seen\n        notificationId\n        applicationId\n        voteId\n      }\n      unseenCount\n    }\n  }\n"): (typeof documents)["\n  query Notifications {\n    notifications {\n      notifications {\n        time\n        text\n        seen\n        notificationId\n        applicationId\n        voteId\n      }\n      unseenCount\n    }\n  }\n"];
+export function graphql(source: "\n  query Notifications {\n    notifications {\n      notifications {\n        time\n        text\n        seen\n        notificationId\n        applicationId\n        voteId\n        vote {\n          voteId\n          seatChangeApplication {\n            application {\n              student {\n                batch {\n                  year\n                }\n                department {\n                  shortName\n                }\n                name\n                levelTerm {\n                  label\n                }\n                email\n                phone\n                student9DigitId\n              }\n            }\n          }\n        }\n      }\n      unseenCount\n    }\n  }\n"): (typeof documents)["\n  query Notifications {\n    notifications {\n      notifications {\n        time\n        text\n        seen\n        notificationId\n        applicationId\n        voteId\n        vote {\n          voteId\n          seatChangeApplication {\n            application {\n              student {\n                batch {\n                  year\n                }\n                department {\n                  shortName\n                }\n                name\n                levelTerm {\n                  label\n                }\n                email\n                phone\n                student9DigitId\n              }\n            }\n          }\n        }\n      }\n      unseenCount\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -244,6 +246,14 @@ export function graphql(source: "\nmutation ApplyMessManager($callId: Float!) {\
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query MessManagingExperiences {\n    messManagingExperiences {\n      call {\n        from\n        to\n        authority {\n          name\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query MessManagingExperiences {\n    messManagingExperiences {\n      call {\n        from\n        to\n        authority {\n          name\n        }\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation VoteMutation($reason: String!, $vote: String!, $voteId: Float!) {\n    vote(reason: $reason, vote: $vote, voteId: $voteId) {\n      voteId\n    }\n  }"): (typeof documents)["\n  mutation VoteMutation($reason: String!, $vote: String!, $voteId: Float!) {\n    vote(reason: $reason, vote: $vote, voteId: $voteId) {\n      voteId\n    }\n  }"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\nmutation Mark($notificationId: Float!) {\n  mark(notificationId: $notificationId)\n}\n"): (typeof documents)["\nmutation Mark($notificationId: Float!) {\n  mark(notificationId: $notificationId)\n}\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

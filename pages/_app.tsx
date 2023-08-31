@@ -63,10 +63,12 @@ export const userContext = React.createContext<{
 
 export const notificationContext = React.createContext<{
   showNotification : boolean,
-  setShowNotification : (s : boolean) => void
+  setShowNotification : (s : boolean) => void,
+  decreaseUnseenCount : () => void
 }>({
   showNotification : false,
-  setShowNotification : ()=>{}
+  setShowNotification : ()=>{},
+  decreaseUnseenCount : ()=>{}
 })
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
@@ -83,7 +85,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <userContext.Provider value = {value}>
           <notificationContext.Provider value = {{
             showNotification : showNot,
-            setShowNotification : setShowNot
+            setShowNotification : setShowNot,
+            decreaseUnseenCount : ()=>{}
           }}>
             {Component.getLayout( <Component  {...pageProps} />)}
           </notificationContext.Provider>
@@ -117,9 +120,12 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           <userContext.Provider value = {value}>
           <notificationContext.Provider value = {{
             showNotification : showNot,
-            setShowNotification : setShowNot
+            setShowNotification : setShowNot,
+            decreaseUnseenCount : ()=>{}
           }}>
-            <div onClick={()=>setShowNot(false)}>
+            <div onClick={()=>setShowNot(false)} style={{
+              minHeight : "100%"
+            }}>
               <NavBar />
               {/* { value.user && value.user.student && <StudentNavBar />}
               { value.user && value.user.authority && <AuthorityNabBar />} */}

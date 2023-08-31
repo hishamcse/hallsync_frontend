@@ -423,6 +423,28 @@ export const GET_NOTIFICATIONS = graphql(`
         notificationId
         applicationId
         voteId
+        vote {
+          voteId
+          seatChangeApplication {
+            application {
+              student {
+                batch {
+                  year
+                }
+                department {
+                  shortName
+                }
+                name
+                levelTerm {
+                  label
+                }
+                email
+                phone
+                student9DigitId
+              }
+            }
+          }
+        }
       }
       unseenCount
     }
@@ -819,4 +841,18 @@ export const GET_MESS_MANAGER_EXPERIENCE = graphql(`
       }
     }
   }
+`)
+
+export const POST_VOTE = graphql(`
+  mutation VoteMutation($reason: String!, $vote: String!, $voteId: Float!) {
+    vote(reason: $reason, vote: $vote, voteId: $voteId) {
+      voteId
+    }
+  }`
+)
+
+export const MARK_NOTIFICATION_SEEN = graphql(`
+mutation Mark($notificationId: Float!) {
+  mark(notificationId: $notificationId)
+}
 `)

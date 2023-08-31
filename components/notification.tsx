@@ -9,6 +9,16 @@ import Typography from '@mui/material/Typography';
 import { NotificationsQuery } from '../graphql/__generated__/graphql';
 import MyCard from './card';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import ProfileInfo from './Seat/ProvostSeat/ProfileInfo';
+import CustomizedDialog from './MUIDialog';
+import Submit from './Seat/StudentSeat/Submit';
+import { MyButton } from './button';
+import MUIStyledTextarea from './MUITextArea';
+import { useMutation } from '@apollo/client';
+import { MARK_NOTIFICATION_SEEN, POST_VOTE } from '../graphql/operations';
+import { getDayAndMonthAndYearString, getTimeAMPM } from './utilities';
+import { notificationContext } from '../pages/_app';
 
 type notification =  NotificationsQuery['notifications']['notifications'][0];
 
@@ -36,12 +46,75 @@ function getClickToSeeText(
     return " "
 }
 
+function VoteView(props : {
+    vote : NonNullable<NotificationsQuery['notifications']['notifications'][0]['vote']>,
+    setShow : (val : boolean) => void
+}){
+    const [reason, setReason] = useState<string>('');
+    let [postVoteQuery,{data, error}] = useMutation(POST_VOTE);
+
+    function postVote(vote : "YES" | "NO", reason : string){
+        postVoteQuery({
+            variables : {
+                voteId : props.vote.voteId,
+                vote : vote,
+                reason : reason
+            },
+            onCompleted : ()=>{
+                props.setShow(false);
+            },
+            onError : (err)=>{
+                console.error(err);
+            }
+        })
+    }
+
+    
+    return(
+        <div style={{
+            margin : "0px 20px",
+            marginBottom : 10
+        }} >
+            <MyCard title={''}>
+                <div>
+                    <ProfileInfo info={props.vote.seatChangeApplication.application.student} />
+                    <div style={{
+                        textAlign : "right",
+                        paddingRight : 40
+                    }}>
+                        <MyButton text='Accept' type='submit' onClick={()=>{
+                            postVote("YES", '');
+                        }}  />
+                    </div>
+                </div>
+            </MyCard>
+            <div style={{textAlign : "center", marginTop : 20}} >
+            </div>
+            <MyCard title={'Decline'}>
+                <MUIStyledTextarea width={420} val={reason} handleInput={setReason} placeHolder='Reason for rejection' rows={6}  />
+                <div style={{
+                    textAlign : "center",
+                    marginTop : 10
+                }}>
+                    <MyButton text='Reject' type='cancel' onClick={()=>{
+                        postVote("NO", reason);
+                    }} />
+                </div>
+            </MyCard>
+        </div>
+    )
+}
+
 function Notification(props : {
     notification : NotificationsQuery['notifications']['notifications'][0],
     divider : boolean
 }){
     const router = useRouter();
+    const [show, setShow] = useState(false);
+    let {decreaseUnseenCount} = React.useContext(notificationContext);
 
+    const [markQuery] = useMutation(MARK_NOTIFICATION_SEEN);
+    
     return (
         <>
             <ListItem alignItems="flex-start" sx={{
@@ -52,20 +125,52 @@ function Notification(props : {
                 if(props.notification.applicationId){
                     router.push("/application/prevApplication/" + props.notification.applicationId);
                 }
+                else if(props.notification.voteId){
+                    console.log("ah;lkfdjhkdjafh")
+                    setShow(true);
+                }
+                if(!props.notification.seen){
+                    markQuery({
+                        variables : {
+                            notificationId : props.notification.notificationId
+                        },
+                        onCompleted : ()=>{
+                            decreaseUnseenCount();
+                        }
+                    })
+                }
             }} >
                 <ListItemText
                 sx={{
                     color : "white"
                 }}
-                primary={getPrimaryText(props.notification)}
+                primary={<div>
+                    {getPrimaryText(props.notification)}
+                </div> }
                 secondary={
-                    <React.Fragment>
+                    <div>
                         {props.notification.text}. {getClickToSeeText(props.notification)}
-                    </React.Fragment>
+                        <div>
+                            <Typography
+                                sx={{ display: 'inline' }}
+                                component="span"
+                                variant="caption"
+                            >
+                                {getTimeAMPM(props.notification.time)}, {getDayAndMonthAndYearString(props.notification.time)}
+                            </Typography>
+                        </div>
+                    </div>
                 } 
                 />
+                
             </ListItem>
             { props.divider && <Divider variant="fullWidth" component="li" />}
+            {
+                show && props.notification.vote &&
+                <CustomizedDialog show={show} setShow={setShow} cardTitle={"Vote"} >
+                    <VoteView setShow={setShow} vote={props.notification.vote!} />
+                </CustomizedDialog>
+            }
         </>
     )
 }

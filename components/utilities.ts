@@ -21,6 +21,14 @@ export function getDayAndMonthAndYearString(date : string){
     })
 }
 
+export function getTimeAMPM(date : string){
+    return new Date(date).toLocaleString('default',{
+        hour : 'numeric',
+        minute : 'numeric',
+        hour12 : true
+    })
+}
+
 
 
 export function addDay(date : string){
@@ -33,5 +41,7 @@ export function addDays(date : string, days : number){
     dt.setDate(dt.getDate() + days)
     return dt;
 }
+
+
 
 export const server = "http://localhost:3000/"

@@ -9,6 +9,8 @@ import { GET_NOTIFICATIONS } from "../graphql/operations";
 import NotificationsList from "./notification";
 import { ResidencyStatus } from "../graphql/__generated__/graphql";
 import useResidencyStatus from "../hooks/useResidencyStatus";
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import { Badge } from "@mui/material";
 
 function Tab(
     props :{
@@ -103,6 +105,7 @@ export function TopBar(){
     let {user} = useContext(userContext);
     let {showNotification, setShowNotification} = useContext(notificationContext);
     const divRef = useRef<HTMLDivElement>(null);
+    const [unseecCount, setUnseenCount] = useState(0);
 
     let [query , {data, loading}] = useLazyQuery(
         GET_NOTIFICATIONS
@@ -110,7 +113,10 @@ export function TopBar(){
 
     useEffect(()=>{
         query({
-            onCompleted : (d)=>console.log(d),
+            onCompleted : (d)=>{
+                console.log(d);
+                setUnseenCount(d.notifications.unseenCount);
+            },
             onError : (err)=>console.log(err)
         });
 
@@ -131,11 +137,18 @@ export function TopBar(){
                 {/* asdf */}
             </div>
             <div className={topBarStyles.notSection}>
-                <Icon active = {showNotification} src="/bell.svg" onClick={()=>{
+                <Icon active = {showNotification} img={
+                     <Badge badgeContent={unseecCount} color="error">
+                         <NotificationsIcon style={{
+                             color : "yellow",
+                             fontSize : 30
+                         }}/>
+                     </Badge>
+                } onClick={()=>{
                     console.log("lkjasdf", showNotification);
                     setShowNotification(!showNotification)
                 }} refForDiv = {divRef} />
-                <Icon active = {false} src="/avatar.svg" />
+                <Icon active = {false} img = {<img src = '/avatar.svg' />} />
             </div>
             {
                 data && showNotification &&
@@ -143,7 +156,15 @@ export function TopBar(){
                     // left : divRef.current?.offsetLeft,
                     // top :  divRef.current?.offsetHeight
                 }} >
-                    <NotificationsList notifications={data.notifications} />
+                    <notificationContext.Provider value={{
+                        showNotification : showNotification,
+                        setShowNotification : setShowNotification,
+                        decreaseUnseenCount : ()=>{
+                            setUnseenCount((v)=>v-1);
+                        }
+                    }}>
+                        <NotificationsList notifications={data.notifications} />
+                    </notificationContext.Provider>
                 </div>
             }
         </div>
@@ -151,7 +172,7 @@ export function TopBar(){
 }
 
 function Icon(props : {
-    src : string,
+    img : React.ReactNode,
     active : boolean,
     onClick? : ()=>void,
     refForDiv? : RefObject<HTMLDivElement>
@@ -164,8 +185,9 @@ function Icon(props : {
             if(props.onClick) props.onClick();
         }} ref={props.refForDiv}>
             <div>
-                <img src={props.src}  />
-
+                {
+                    props.img
+                }
             </div>
         </div>
     )

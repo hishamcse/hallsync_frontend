@@ -3,7 +3,20 @@ import * as React from "react";
 import styles from '../../../styles/studentSeat.module.scss';
 import { ApplicationDetailsQuery } from "../../../graphql/__generated__/graphql";
 
-const ProfileInfo = (props: {info : ApplicationDetailsQuery['applicationDetails']['student']}) => {
+const ProfileInfo = (props: {info : {
+    name : string,
+    student9DigitId : string,
+    batch : {
+        year : string
+    },
+    department : {
+        shortName : string
+    },
+    levelTerm : {
+        label : string
+    }
+
+}}) => {
     return (
         <div style={{display: 'flex', justifyContent: 'space-around'}}>
             <div className={styles.profile}>

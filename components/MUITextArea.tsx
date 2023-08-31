@@ -26,7 +26,6 @@ const grey = {
 
 const StyledTextarea = styled(TextareaAutosize)(
     ({ theme }) => `
-    width: 470px;
     margin: auto;
     font-family: IBM Plex Sans, sans-serif;
     font-size: 0.875rem;
@@ -59,7 +58,7 @@ const StyledTextarea = styled(TextareaAutosize)(
 const MUIStyledTextarea = (props: {
   rows: number, placeHolder: string,
     disabled?: boolean, handleInput?: (str: string) => void,
-    val? : string
+    val? : string, width? : number
   }) => {
 
     const [value, setValue] = React.useState(props.val ?? '');
@@ -74,6 +73,9 @@ const MUIStyledTextarea = (props: {
 
     return (
         <StyledTextarea
+          style={{
+            width : props.width ?? 470
+          }}
             aria-label="minimum height"
             minRows={props.rows}
             placeholder={props.placeHolder}
