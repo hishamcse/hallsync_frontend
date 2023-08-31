@@ -210,8 +210,8 @@ const SingleMealPlanView = (props: { mealPlan: GetMealPlansQuery['getMealPlans']
                             if(cupcountA.length  > 0 && item.type.toString().toLowerCase() == 'non_veg'){
                                 cupcount = cupcountA[0].cupcount.toString();
                             }
-                            let imagePath = './images/default.png';
-                            if(item.photo){
+                            let imagePath = '../images/default.png';
+                            if(item.photo && item.photoId){
                                 imagePath = server + item.photo.file.newFileName;
                             }
                             return (
