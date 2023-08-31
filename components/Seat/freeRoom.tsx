@@ -87,7 +87,8 @@ export function FreeRoom(props : {
                 setSeat(data.freeSeat.seatLabel)
                 props.setSeatId(data.freeSeat.seatId);
             },
-            onError : (err)=>{
+            onError : (err)=> {
+                console.log(err);
             }
         });
     }

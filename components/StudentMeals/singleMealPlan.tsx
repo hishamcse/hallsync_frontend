@@ -4,7 +4,6 @@ import React, {useRef, useState} from "react";
 import {useMutation} from "@apollo/client";
 import {ADD_PREFERENCES, OPT_OUT_MEAL} from "../../graphql/operations";
 import Typography from "@mui/material/Typography";
-import Image from "next/image";
 import {Button, Checkbox} from "@mui/material";
 import Paper from "@mui/material/Paper";
 import MenuList from "@mui/material/MenuList";

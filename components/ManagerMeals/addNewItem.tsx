@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import { useMutation } from '@apollo/client';
 import { MealTypeDropDown } from '../MealTypeDropDown';
 import { SelectChangeEvent } from '@mui/material';
 import { Button, TextField } from '@mui/material';
-import { UploadFile } from '../fileUpload'; // Make sure to import the UploadFile component
 import { UploadPhoto } from '../photoUpload';
 
 const AddNewItemView = () => {

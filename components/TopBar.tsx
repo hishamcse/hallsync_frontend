@@ -1,13 +1,12 @@
 import Link from "next/link";
 import topBarStyles from "../styles/topbar.module.scss"
-import { NextRouter, useRouter } from "next/router"
+import { useRouter } from "next/router"
 import { checkRouteContains } from "./utilities";
-import { CSSProperties, MutableRefObject, RefObject, createRef, useContext, useEffect, useRef, useState } from "react";
+import { CSSProperties, RefObject, useContext, useEffect, useRef } from "react";
 import { notificationContext, userContext } from "../pages/_app";
 import { useLazyQuery } from "@apollo/client";
 import { GET_NOTIFICATIONS } from "../graphql/operations";
 import NotificationsList from "./notification";
-import { ResidencyStatus } from "../graphql/__generated__/graphql";
 import useResidencyStatus from "../hooks/useResidencyStatus";
 
 function Tab(
