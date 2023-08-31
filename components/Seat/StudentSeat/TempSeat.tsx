@@ -7,7 +7,6 @@ import * as React from "react";
 import QuestionBox from "../QuestionBox";
 import Agreement from "./Agreement";
 import MUIStyledTextarea from "../../MUITextArea";
-import Submit from "./Submit";
 import {types} from "./StudentView";
 import {useRouter} from "next/router";
 import {useMutation} from "@apollo/client";
@@ -151,10 +150,6 @@ const TempSeat = (props: {
         setDate(newValue);
     }
 
-    const handleDays = (event: SelectChangeEvent) => {
-        setDays(parseInt(event.target.value));
-    }
-
     const handleAgreement = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAgreed(event.target.checked);
         setShowError(false);
@@ -250,9 +245,6 @@ const TempSeat = (props: {
 
                 { !agreementDisabled &&
                     <MyButton onClick={submission} text="Submit" type="submit" />
-                    // <MyCard title=''>
-                    //     <Submit/>
-                    // </MyCard>
                 }
             </div>
         </div>

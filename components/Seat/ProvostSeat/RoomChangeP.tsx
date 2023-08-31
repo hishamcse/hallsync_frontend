@@ -1,4 +1,3 @@
-import Card from "@mui/material/Card";
 import styles from "../../../styles/studentSeat.module.scss";
 import ProfileInfo from "./ProfileInfo";
 import * as React from "react";
@@ -6,7 +5,6 @@ import ResidentTable from "./ResidentTable";
 import {useState} from "react";
 import {useMutation} from "@apollo/client";
 import {useRouter} from "next/router";
-import MUIStyledTextarea from "../../MUITextArea";
 import { ApplicationDetailsQuery } from "../../../graphql/__generated__/graphql";
 import { APPROVE_SEAT_CHANGE_APPLICATION, REJECT_APPLICATION } from "../../../graphql/operations";
 import MyCard from "../../card";

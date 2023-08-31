@@ -5,9 +5,6 @@ import {useState} from "react";
 import MyCard from "../../card";
 import MUIDropdown from "../../MUIDropdown";
 import Agreement from "./Agreement";
-import MUIStyledTextarea from "../../MUITextArea";
-import {Input} from "@mui/material";
-import Submit from "./Submit";
 import {types} from "./StudentView";
 import {useMutation} from "@apollo/client";
 import {POST_SEAT_CHANGE_APPLICATION} from "../../../graphql/operations";
@@ -103,11 +100,10 @@ const RoomChange = (props: {
     }
 
     const submission = () => {
-        // event.preventDefault();
-        console.log('submitted');
-        console.log(reason);
-        console.log(seatId);
-        console.log(agreed);
+        // console.log('submitted');
+        // console.log(reason);
+        // console.log(seatId);
+        // console.log(agreed);
 
         if(!agreed) {
             setShowError(true);
@@ -175,9 +171,6 @@ const RoomChange = (props: {
             <div className={styles.submit}>
                 { !textAreaDisabled && 
                     <MyButton onClick={submission} text="Submit" type="submit" />
-                    // <MyCard title=''>
-                    //     <Submit onSubmit={submission} />
-                    // </MyCard>
                 }
             </div>
         </div>

@@ -4,7 +4,6 @@ import * as React from "react";
 import {useState} from "react";
 import styles from '../../../styles/studentSeat.module.scss';
 import MyCard from "../../card";
-import Card from "@mui/material/Card";
 import Confirmation from "./Confirmation";
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider'
 import {DateTimePicker} from "@mui/x-date-pickers";
