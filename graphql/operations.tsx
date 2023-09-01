@@ -856,3 +856,25 @@ mutation Mark($notificationId: Float!) {
   mark(notificationId: $notificationId)
 }
 `)
+
+export const GET_SEAT_INFO_STATS = graphql(`
+    query FullSeatStats {
+      fullSeatStats {
+        freeRooms
+        freeSeats
+        totalRooms
+        totalSeats
+      }
+    }
+`)
+
+export const GET_STUDENT_INFO_STATS = graphql(`
+    query FullStudentStats {
+      fullStudentStats {
+        totalAttached
+        totalResidents
+        totalStudents
+        totalTempResidents
+      }
+    }
+`)

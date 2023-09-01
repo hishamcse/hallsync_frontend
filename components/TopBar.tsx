@@ -84,7 +84,22 @@ function MessTabs() {
       </ul>
     );
   }
-  
+
+function InfoTabs() {
+
+    const router = useRouter();
+    const routes = {
+        rooms: "rooms",
+        students: "students"
+    };
+
+    return (
+        <ul className={topBarStyles.tabs}>
+            <Tab href={"/infoSearch/" + routes.rooms} isActive={checkRouteContains(router, routes.rooms)} name="Rooms" />
+            <Tab href={"/infoSearch/" + routes.students} isActive={checkRouteContains(router, routes.students)} name="Students" />
+        </ul>
+    );
+}
 
 export function Logo(props : {
     containerStyle? : CSSProperties,
@@ -133,7 +148,10 @@ export function TopBar(){
                     router.pathname.includes('mess/') &&
                     <MessTabs />
                 }
-                {/* asdf */}
+                {
+                    router.pathname.includes('infoSearch/') &&
+                    <InfoTabs />
+                }
             </div>
             <div className={topBarStyles.notSection}>
                 <Icon active = {showNotification} img={

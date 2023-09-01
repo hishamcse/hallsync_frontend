@@ -58,6 +58,8 @@ const documents = {
     "\n  query MessManagingExperiences {\n    messManagingExperiences {\n      call {\n        from\n        to\n        authority {\n          name\n        }\n      }\n    }\n  }\n": types.MessManagingExperiencesDocument,
     "\n  mutation VoteMutation($reason: String!, $vote: String!, $voteId: Float!) {\n    vote(reason: $reason, vote: $vote, voteId: $voteId) {\n      voteId\n    }\n  }": types.VoteMutationDocument,
     "\nmutation Mark($notificationId: Float!) {\n  mark(notificationId: $notificationId)\n}\n": types.MarkDocument,
+    "\n    query FullSeatStats {\n      fullSeatStats {\n        freeRooms\n        freeSeats\n        totalRooms\n        totalSeats\n      }\n    }\n": types.FullSeatStatsDocument,
+    "\n    query FullStudentStats {\n      fullStudentStats {\n        totalAttached\n        totalResidents\n        totalStudents\n        totalTempResidents\n      }\n    }\n": types.FullStudentStatsDocument,
 };
 
 /**
@@ -254,6 +256,14 @@ export function graphql(source: "\n  mutation VoteMutation($reason: String!, $vo
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\nmutation Mark($notificationId: Float!) {\n  mark(notificationId: $notificationId)\n}\n"): (typeof documents)["\nmutation Mark($notificationId: Float!) {\n  mark(notificationId: $notificationId)\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    query FullSeatStats {\n      fullSeatStats {\n        freeRooms\n        freeSeats\n        totalRooms\n        totalSeats\n      }\n    }\n"): (typeof documents)["\n    query FullSeatStats {\n      fullSeatStats {\n        freeRooms\n        freeSeats\n        totalRooms\n        totalSeats\n      }\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    query FullStudentStats {\n      fullStudentStats {\n        totalAttached\n        totalResidents\n        totalStudents\n        totalTempResidents\n      }\n    }\n"): (typeof documents)["\n    query FullStudentStats {\n      fullStudentStats {\n        totalAttached\n        totalResidents\n        totalStudents\n        totalTempResidents\n      }\n    }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

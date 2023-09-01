@@ -113,7 +113,7 @@ export function StudentNavBar(){
     const routes = {
         app : "application/newApplication",
         mess : 'mess/meals',
-        info: 'infoSearch'
+        info: 'infoSearch/rooms'
     }
     const imgPaths = {
         app : "/application.svg",
@@ -128,7 +128,7 @@ export function StudentNavBar(){
     const activeIf = {
         app : 'application/',
         mess : 'mess/',
-        info: 'info/'
+        info: 'infoSearch/'
     }
 
     return(
