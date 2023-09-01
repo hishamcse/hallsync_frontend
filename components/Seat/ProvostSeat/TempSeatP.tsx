@@ -186,7 +186,8 @@ const PreviousTempAllocation = (props: {allocations:
 const TempSeatP = (props: {application: ApplicationDetailsQuery['applicationDetails']}) => {
 
     const router = useRouter();
-    const [seatId ,setSeatId] = useState<number>();
+    const [seatId ,setSeatId] = useState<number | undefined>(
+        props.application?.tempApplication?.prefSeat?.seatId);
 
     const [blankError, setBlankError] = useState(false);
     const [reqError, setReqError] = useState(false);

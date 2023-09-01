@@ -8,13 +8,13 @@ export function PieChart_(
         dataKey : string,
         colors : string[],
         ir? : number,
-        or? : number
+        or? : number,
+        name? : string
     }
 ) {
 
     return (
         <PieChart width={props.w} height={props.h}>
-            {/* <Pie data={data01} dataKey="value" cx="50%" cy="50%" outerRadius={60} fill="#8884d8" /> */}
             <Pie data={props.data} dataKey={props.dataKey}
                  cx="50%" cy="50%" innerRadius={props.ir ?? 70} outerRadius={props.or ?? 90}
                  label paddingAngle={5} >
@@ -23,8 +23,11 @@ export function PieChart_(
                         <Cell key={d.name} fill={props.colors[i]} />
                     ))
                 }
+                {
+                    props.name &&
+                    <Label value={props.name} position="center" fill='#F4DBD8'/>
+                }
             </Pie>
-            {/* <Tooltip /> */}
             <Legend  layout='vertical' align='right' verticalAlign='middle' />
             <Label>asdlfjsladfj sladkfj</Label>
         </PieChart>

@@ -43,3 +43,7 @@ export function addDays(date : string, days : number){
 
 
 export const server = "http://localhost:3000/"
+
+export const randomColorGenerator = () => {
+    return '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
+}

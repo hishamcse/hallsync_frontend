@@ -176,6 +176,7 @@ export const GET_APPLICATION = graphql(`
               }
             }
             seatLabel
+            seatId
           }
           days
         }
@@ -875,6 +876,15 @@ export const GET_STUDENT_INFO_STATS = graphql(`
         totalResidents
         totalStudents
         totalTempResidents
+      }
+    }
+`)
+
+export const GET_DEPT_WISE_RESIDENT_STATS = graphql(`
+    query DepartmentWiseResidentStats {
+      departmentWiseResidentStats {
+        deptName
+        totalResidents
       }
     }
 `)

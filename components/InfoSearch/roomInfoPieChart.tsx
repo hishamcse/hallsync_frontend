@@ -65,7 +65,7 @@ const RoomInfoPieChart = () => {
                 alignItems: "center",
                 justifyContent: "space-between"
             }}>
-                <PieChart_ colors={['#F2ED6F', '#FFFFFF']} data={seatInfoData} dataKey="count" h={250} w={400}/>
+                <PieChart_ colors={['#F2ED6F', '#FFFFFF']} data={seatInfoData} dataKey="count" h={250} w={400} name='Seat'/>
                 <div>
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
                         {
@@ -103,7 +103,7 @@ const RoomInfoPieChart = () => {
                         }
                     </div>
                 </div>
-                <PieChart_ colors={['#98D9C2', '#FFFFFF']} data={roomInfoData} dataKey="count" h={250} w={400}/>
+                <PieChart_ colors={['#98D9C2', '#FFFFFF']} data={roomInfoData} dataKey="count" h={250} w={400} name='Room'/>
             </div>
         </MyCard>
     )
