@@ -47,3 +47,27 @@ export const server = "http://localhost:3000/"
 export const randomColorGenerator = () => {
     return '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
 }
+
+
+export async function uploadFileToServer(files : File[]){
+    
+    const url = 'http://localhost:3000/upload';
+    const formData = new FormData();
+    files.forEach(f =>{
+        formData.append('file', f);
+        formData.append('filename', f.name);
+    })
+    let token = localStorage.getItem('token');
+
+    let data = await fetch(url, {
+        method : 'post',
+        body : formData,
+        headers : {
+            'authorization' : 'Bearer ' + token
+        }
+        // ... config
+    })
+    let ids = await data.json();
+    return ids.id;
+
+}

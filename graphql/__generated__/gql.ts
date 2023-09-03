@@ -61,6 +61,7 @@ const documents = {
     "\n    query FullSeatStats {\n      fullSeatStats {\n        freeRooms\n        freeSeats\n        totalRooms\n        totalSeats\n      }\n    }\n": types.FullSeatStatsDocument,
     "\n    query FullStudentStats {\n      fullStudentStats {\n        totalAttached\n        totalResidents\n        totalStudents\n        totalTempResidents\n      }\n    }\n": types.FullStudentStatsDocument,
     "\n    query DepartmentWiseResidentStats {\n      departmentWiseResidentStats {\n        deptName\n        totalResidents\n      }\n    }\n": types.DepartmentWiseResidentStatsDocument,
+    "\nmutation DeleteNotification($notificationId: Float!) {\n  deleteNotification(notificationId: $notificationId)\n}\n": types.DeleteNotificationDocument,
 };
 
 /**
@@ -269,6 +270,10 @@ export function graphql(source: "\n    query FullStudentStats {\n      fullStude
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n    query DepartmentWiseResidentStats {\n      departmentWiseResidentStats {\n        deptName\n        totalResidents\n      }\n    }\n"): (typeof documents)["\n    query DepartmentWiseResidentStats {\n      departmentWiseResidentStats {\n        deptName\n        totalResidents\n      }\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\nmutation DeleteNotification($notificationId: Float!) {\n  deleteNotification(notificationId: $notificationId)\n}\n"): (typeof documents)["\nmutation DeleteNotification($notificationId: Float!) {\n  deleteNotification(notificationId: $notificationId)\n}\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

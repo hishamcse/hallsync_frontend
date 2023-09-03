@@ -1,69 +1,94 @@
 import React, { useState } from 'react';
 import { MealTypeDropDown } from '../MealTypeDropDown';
-import { SelectChangeEvent } from '@mui/material';
-import { Button, TextField } from '@mui/material';
 import { UploadPhoto } from '../photoUpload';
+import { MyInput } from '../input';
+import { MyButton } from '../button';
+import { uploadFileToServer } from '../utilities';
+import { useMutation } from '@apollo/client';
+import { ADD_NEW_ITEM } from '../../graphql/operations';
 
 const AddNewItemView = () => {
   const [itemName, setItemName] = useState<string>();
-  const [itemType, setItemType] = useState<string>();
+  const [itemType, setItemType] = useState<string>('RICE');
   const [imageFile, setImageFile] = useState<File | null>(null);
 
 
   const handleCancel = () => {
     // Reset the form
     setItemName(undefined);
-    setItemType(undefined);
+    setItemType('RICE');
     setImageFile(null);
   };
 
-  const handleItemNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setItemName(event.target.value);
-  };
-
-  const handleMealTypeChange = (event: SelectChangeEvent) => {
-    setItemType(event.target.value);
-  };
 
   const handleMealTypeSelect = (selectedValue: string) => {
     setItemType(selectedValue);
   };
 
-  const handleFileUpload = (file: File | null) => {
-    setImageFile(file);
-  };
 
   const handleFileChange = (file: File | null) => {
     setImageFile(file);
   };
 
+  let imageUrl = "../../images/default.png"
+
+  if(imageFile){
+    imageUrl = URL.createObjectURL(imageFile);
+  }
+
+  let [addMutation, {data, error}] = useMutation(ADD_NEW_ITEM)
+
+  async function submit(){
+    if(imageFile == null || itemName == null){
+      return;
+    }
+    let id = await uploadFileToServer([imageFile]);
+    addMutation({
+      variables : {
+        name : itemName,
+        type : itemType,
+        fileId : id[0]
+      },
+      onCompleted : ()=> location.reload(),
+      onError : (err)=>console.log(err)
+    })
+  }
+
   return (
     <div>
-      <TextField label="Item Name" value={itemName} onChange={handleItemNameChange} />
-      <div style = {{
+      <div style={{
         display : "flex",
-        alignItems : "center",
-        justifyContent: "space-between",
-        marginTop : 10
+        justifyContent : "space-between"
       }}>
-        Type
-        <MealTypeDropDown  val={itemType} setVal={handleMealTypeSelect} />
+        <MyInput type='text' onChange={setItemName} value={itemName ?? ''} placeHolder='Item Name' style={{
+          height : 40
+        }}   />
+        <MealTypeDropDown width={150}  val={itemType} setVal={handleMealTypeSelect} />
       </div>
-      <div>
+
+      <div style={{
+        textAlign : 'center',
+        margin : 10
+      }}>
+          <img width={140} height = {120} src={imageUrl} alt='Selected' />
+        </div>
+      
+      <div style={{
+        textAlign : 'center',
+        margin : 10
+      }}>
         <UploadPhoto onChange={handleFileChange} />
       </div>
+
+        
+      
       <div style = {{
         textAlign : "center"
       }}>
 
-      <Button variant='contained' color = "primary" sx={{
-        marginRight : 10
-      }}>
-          Add
-        </Button>
-        <Button variant="outlined" color="secondary" onClick={handleCancel}>
-          Cancel
-        </Button>
+      <MyButton onClick={submit} text='Add' type='submit' style={{width : 100, marginRight : 10}}  />
+      <MyButton text='Reset' type='cancel' style={{width : 100}} onClick={handleCancel}  />
+
       </div>
     </div>
   );

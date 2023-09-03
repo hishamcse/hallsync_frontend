@@ -272,6 +272,7 @@ export type Mutation = {
   approveSeatChangeApplication: Residency;
   approveTempSeatApplication: TempResidency;
   createCall: MessManagerApplicationCall;
+  deleteNotification: Scalars['Float']['output'];
   login: UserWithToken;
   mark: Scalars['Float']['output'];
   newSeatApplication: NewApplication;
@@ -353,6 +354,11 @@ export type MutationApproveTempSeatApplicationArgs = {
 export type MutationCreateCallArgs = {
   from: Scalars['String']['input'];
   to: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteNotificationArgs = {
+  notificationId: Scalars['Float']['input'];
 };
 
 
@@ -1163,6 +1169,13 @@ export type DepartmentWiseResidentStatsQueryVariables = Exact<{ [key: string]: n
 
 export type DepartmentWiseResidentStatsQuery = { __typename?: 'Query', departmentWiseResidentStats: Array<{ __typename?: 'DeptWiseResident', deptName: string, totalResidents: number }> };
 
+export type DeleteNotificationMutationVariables = Exact<{
+  notificationId: Scalars['Float']['input'];
+}>;
+
+
+export type DeleteNotificationMutation = { __typename?: 'Mutation', deleteNotification: number };
+
 
 export const DepartmentsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"departments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deptCode"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]} as unknown as DocumentNode<DepartmentsQuery, DepartmentsQueryVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"loginId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}},{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"loginId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"student"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"studentId"}},{"kind":"Field","name":{"kind":"Name","value":"residencyStatus"}},{"kind":"Field","name":{"kind":"Name","value":"residency"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isCurrentMessManager"}},{"kind":"Field","name":{"kind":"Name","value":"seat"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"room"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roomNo"}},{"kind":"Field","name":{"kind":"Name","value":"floor"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"floorNo"}},{"kind":"Field","name":{"kind":"Name","value":"roomLabelLen"}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"authority"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorityId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}}]}}]}}]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
@@ -1212,3 +1225,4 @@ export const MarkDocument = {"kind":"Document","definitions":[{"kind":"Operation
 export const FullSeatStatsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FullSeatStats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fullSeatStats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"freeRooms"}},{"kind":"Field","name":{"kind":"Name","value":"freeSeats"}},{"kind":"Field","name":{"kind":"Name","value":"totalRooms"}},{"kind":"Field","name":{"kind":"Name","value":"totalSeats"}}]}}]}}]} as unknown as DocumentNode<FullSeatStatsQuery, FullSeatStatsQueryVariables>;
 export const FullStudentStatsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"FullStudentStats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fullStudentStats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalAttached"}},{"kind":"Field","name":{"kind":"Name","value":"totalResidents"}},{"kind":"Field","name":{"kind":"Name","value":"totalStudents"}},{"kind":"Field","name":{"kind":"Name","value":"totalTempResidents"}}]}}]}}]} as unknown as DocumentNode<FullStudentStatsQuery, FullStudentStatsQueryVariables>;
 export const DepartmentWiseResidentStatsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"DepartmentWiseResidentStats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"departmentWiseResidentStats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deptName"}},{"kind":"Field","name":{"kind":"Name","value":"totalResidents"}}]}}]}}]} as unknown as DocumentNode<DepartmentWiseResidentStatsQuery, DepartmentWiseResidentStatsQueryVariables>;
+export const DeleteNotificationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteNotification"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"notificationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteNotification"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"notificationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"notificationId"}}}]}]}}]} as unknown as DocumentNode<DeleteNotificationMutation, DeleteNotificationMutationVariables>;

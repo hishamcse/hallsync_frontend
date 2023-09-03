@@ -888,3 +888,9 @@ export const GET_DEPT_WISE_RESIDENT_STATS = graphql(`
       }
     }
 `)
+
+export const DELETE_NOTIFICATION = graphql(`
+mutation DeleteNotification($notificationId: Float!) {
+  deleteNotification(notificationId: $notificationId)
+}
+`)

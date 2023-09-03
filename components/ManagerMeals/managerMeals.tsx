@@ -58,7 +58,7 @@ const ManagerMealView: React.FC = () => {
             className={styles.managerMealRootContainer}
             style={{
                 display: "flex",
-                alignItems: "baseline",
+                alignItems: "flex-start",
             }}
         >
             <MyCard
@@ -73,7 +73,7 @@ const ManagerMealView: React.FC = () => {
                     />
                 }
                 style={{
-                    minWidth: 800,
+                    width: 650,
                 }}
             >
                 <AddOrEditMealView
@@ -83,7 +83,9 @@ const ManagerMealView: React.FC = () => {
                     setSelectedMealTime={setSelectedMealTime}
                 />
             </MyCard>
-            <MyCard title={"Add New Item"} >
+            <MyCard title={"Add New Item"} style={{
+                width : 500
+            }} >
                 <AddNewItemView />
             </MyCard>
         </div>

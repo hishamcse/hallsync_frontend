@@ -1,5 +1,6 @@
 import { HTMLInputTypeAttribute } from 'react'
 import styles from '../styles/components.module.scss'
+import { CSSProperties } from '@mui/material/styles/createMixins'
 
 
 export function MyInput(props: {
@@ -7,12 +8,17 @@ export function MyInput(props: {
     onChange: (v: string) => void,
     className? : string,
     placeHolder? : string,
-    type : HTMLInputTypeAttribute 
+    type : HTMLInputTypeAttribute ,
+    style? : CSSProperties
 }) {
     return (
         <input className={styles.inputStyle + ' ' + (props.className ?? '')} 
         type={props.type}  onChange={(e) => props.onChange(e.target.value)} placeholder={props.placeHolder ?? ''}
-         />
+        style={{
+            ... props.style
+        }}
+        
+        />
     )
 }
 
