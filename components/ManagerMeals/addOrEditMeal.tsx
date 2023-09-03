@@ -6,6 +6,7 @@ import MUISelectStyled from "../MUIMultiSelectCheckbox";
 import { Dayjs } from "dayjs";
 import SelectedItemsList from './SelectedItem';
 import {Button} from "@mui/material";
+import { MyButton } from "../button";
 
 const AddOrEditMealView = (props : {
 	selectedMealTime : string,
@@ -14,7 +15,6 @@ const AddOrEditMealView = (props : {
 	setSelectedDate : (newValue: Dayjs | null) => void
 }) => {
 
-	const [strList, setStrList] = useState<string[]>([]);
 
 	const {selectedDate, setSelectedDate, selectedMealTime, setSelectedMealTime} = props;
 
@@ -88,9 +88,8 @@ const AddOrEditMealView = (props : {
 
 		const str: string[] = [...riceNames, ...vegNames, ...nenVegNames];
 
-		setStrList(str)
 
-		const selected = getSelecteds(strList);
+		const selected = getSelecteds(str);
 
 		console.log(nonVegCupCount, selectedDate?.toDate().toLocaleDateString(), selectedMealTime)
 
@@ -99,28 +98,30 @@ const AddOrEditMealView = (props : {
 			setReqErrorMsg('Please try again!!')
 			return;
 		}
-
-		const addedItems = str.map(itemName => {
-			let itemId;
-			while(!itemId){
-				itemId = selected
-					.filter(s => s.name.toLowerCase() === itemName.toLowerCase())[0]?.itemId;
-			}
-			let cupCount = nonVegCupCount[itemName] ?? 150;
-
-			return {itemId, cupCount}
-		})
-
 		if(!selectedDate) {
 			setReqError(true)
 			setReqErrorMsg('date undefined');
 			return;
 		}
 
-		setReqError(false)
+		setReqError(false);
 
-		const items = {
-			items: addedItems
+		let addedItems = []
+		for(let i = 0; i < selected.length; i++){
+			let item = selected[i];
+			let cupCount = 150;
+			if(item.type === 'NON_VEG'){
+				if(!nonVegCupCount[item.name]){
+					setReqErrorMsg('cup count not found for ' + item.name);
+					setReqError(true);
+					return;
+				}
+				cupCount = nonVegCupCount[item.name];
+			}
+			addedItems.push({
+				itemId: item.itemId,
+				cupCount : cupCount
+			})
 		}
 
 		console.log(addedItems)
@@ -129,7 +130,9 @@ const AddOrEditMealView = (props : {
 			variables: {
 				mealTime: selectedMealTime,
 				date: selectedDate?.toDate().toLocaleDateString(),
-				items: items
+				items: {
+					items : addedItems
+				}
 			}
 		}).then((data) => {
 			console.log(data);
@@ -198,18 +201,25 @@ const AddOrEditMealView = (props : {
 
 			{
 				reqError &&
-				<p style={{color: 'red'}}>{reqErrorMsg}</p>
+				<div style={{color: 'red', textAlign : 'center'}}>{reqErrorMsg}</div>
 			}
 
 			<div style={{ marginTop: 10 , textAlign : "center"}}>
-				<Button variant="outlined" color="primary" onClick={handleComplete} style = {{
+				<MyButton text="Complete" type="submit" onClick={handleComplete} style={{
+					marginRight : 10, width : 110
+				}} />
+				<MyButton text="Cancel" type="cancel" onClick={handleCancel} style={{
+					width : 110
+				}} />
+
+				{/* <Button variant="outlined" color="primary" onClick={handleComplete} style = {{
 					marginRight : 10
 				}}>
 					Complete
 				</Button>
 				<Button variant="outlined" color="primary" onClick={handleCancel}>
 					Cancel
-				</Button>
+				</Button> */}
 			</div>
 			{/* ... Other content ... */}
 		</div>
