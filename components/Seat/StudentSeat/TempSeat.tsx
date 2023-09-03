@@ -241,7 +241,7 @@ const TempSeat = (props: {
                 </div>
             </div>
 
-            <div className={styles.submit} onClick={submission}>
+            <div className={styles.submit}>
 
                 { !agreementDisabled &&
                     <MyButton onClick={submission} text="Submit" type="submit" />

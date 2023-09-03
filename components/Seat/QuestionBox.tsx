@@ -15,9 +15,10 @@ const QuestionBox = (props : {text: string, checkBox: boolean,
     };
 
     return (
-        <Card sx={{width: 450, height: 35, border: 1, borderColor: 'white',
+        <Card sx={{width: 450, height: 50, border: 1, borderColor: 'white',
             padding: 1, marginBottom: 3, backgroundColor : "#000000",}}>
-            <div style={{display: 'flex', justifyContent: 'space-between', textAlign: 'center'}}>
+            <div style={{display: 'flex', justifyContent: 'space-between',
+                textAlign: 'center', margin: 'auto'}}>
                 <Typography variant="body2" color="text.secondary" fontSize='14px' paddingTop={1}>
                     {props.text}
                 </Typography>
