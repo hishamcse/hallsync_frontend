@@ -39,10 +39,12 @@ const AddNewItemView = () => {
   let [addMutation, {data, error}] = useMutation(ADD_NEW_ITEM)
 
   async function submit(){
-    if(imageFile == null || itemName == null){
+    if(itemName == null){
       return;
     }
-    let id = await uploadFileToServer([imageFile]);
+    let id = [-1];
+    if(imageFile)
+      id = await uploadFileToServer([imageFile]);
     addMutation({
       variables : {
         name : itemName,
