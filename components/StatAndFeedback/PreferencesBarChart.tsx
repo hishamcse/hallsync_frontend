@@ -7,8 +7,8 @@ import { MealTimeDropDown } from "../MealTimeDropDown";
 import { MyDatePicker } from "../DatePicker";
 import { MealPreferenceStatsQuery } from "../../graphql/__generated__/graphql";
 import { BarChartWhite } from "./ParticipationBarChart";
-import { PieChart_ } from "./OptInPieChart";
 import { TitleMealTimeDate } from "../TitleMealTimeDate";
+import {PieChart_} from "../PieChart_";
 
 const pieCharColors = ['#FF05C8', '#FFE605', '#00FFF5']
 
