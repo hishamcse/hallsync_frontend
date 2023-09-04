@@ -71,3 +71,8 @@ export async function uploadFileToServer(files : File[]){
     return ids.id;
 
 }
+
+export const generateRoomNumber = (floorNo : number, roomLabelLen: number, roomNo : number) => {
+    let num = Math.pow(10, roomLabelLen - 1);
+    return num * floorNo + roomNo;
+}

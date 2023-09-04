@@ -1,10 +1,12 @@
 import RoomInfoPieChart from "./roomInfoPieChart";
+import RoomSearch from "./RoomSearch";
 
 const RoomView = () => {
 
     return (
-        <div>
+        <div style={{marginRight: 20}}>
             <RoomInfoPieChart />
+            <RoomSearch />
         </div>
     )
 }

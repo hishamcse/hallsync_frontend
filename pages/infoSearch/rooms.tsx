@@ -1,6 +1,6 @@
 import RoomView from "../../components/InfoSearch/roomView";
 
-const RoomSearch = () => {
+const RoomInfoSearch = () => {
     return (
         <div className={"contentRoot"}>
             <RoomView />
@@ -8,4 +8,4 @@ const RoomSearch = () => {
     )
 }
 
-export default RoomSearch
+export default RoomInfoSearch

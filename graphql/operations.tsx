@@ -894,3 +894,41 @@ mutation DeleteNotification($notificationId: Float!) {
   deleteNotification(notificationId: $notificationId)
 }
 `)
+
+export const ALL_FLOORS = graphql(`
+    query AllFloors {
+      allFloors
+    }
+`)
+
+export const GET_ROOMS_IN_FLOOR = graphql(`
+    query SelectedFloorRooms($residentType: String!, $roomStatus: String!, $floorNo: Float!) {
+      selectedFloorRooms(residentType: $residentType, roomStatus: $roomStatus, floorNo: $floorNo) {
+        roomId
+        roomNo
+        seats {
+          seatId
+          seatLabel
+          residency {
+            student {
+              batch {
+                year
+              }
+              department {
+                shortName
+              }
+              levelTerm {
+                label
+              }
+              name
+              student9DigitId
+            }
+          }
+        }
+        floor {
+          floorNo
+          roomLabelLen
+        }
+      }
+    }
+`)

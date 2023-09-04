@@ -62,6 +62,8 @@ const documents = {
     "\n    query FullStudentStats {\n      fullStudentStats {\n        totalAttached\n        totalResidents\n        totalStudents\n        totalTempResidents\n      }\n    }\n": types.FullStudentStatsDocument,
     "\n    query DepartmentWiseResidentStats {\n      departmentWiseResidentStats {\n        deptName\n        totalResidents\n      }\n    }\n": types.DepartmentWiseResidentStatsDocument,
     "\nmutation DeleteNotification($notificationId: Float!) {\n  deleteNotification(notificationId: $notificationId)\n}\n": types.DeleteNotificationDocument,
+    "\n    query AllFloors {\n      allFloors\n    }\n": types.AllFloorsDocument,
+    "\n    query SelectedFloorRooms($residentType: String!, $roomStatus: String!, $floorNo: Float!) {\n      selectedFloorRooms(residentType: $residentType, roomStatus: $roomStatus, floorNo: $floorNo) {\n        roomId\n        roomNo\n        seats {\n          seatId\n          seatLabel\n          residency {\n            student {\n              batch {\n                year\n              }\n              department {\n                shortName\n              }\n              levelTerm {\n                label\n              }\n              name\n              student9DigitId\n            }\n          }\n        }\n        floor {\n          floorNo\n          roomLabelLen\n        }\n      }\n    }\n": types.SelectedFloorRoomsDocument,
 };
 
 /**
@@ -274,6 +276,14 @@ export function graphql(source: "\n    query DepartmentWiseResidentStats {\n    
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\nmutation DeleteNotification($notificationId: Float!) {\n  deleteNotification(notificationId: $notificationId)\n}\n"): (typeof documents)["\nmutation DeleteNotification($notificationId: Float!) {\n  deleteNotification(notificationId: $notificationId)\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    query AllFloors {\n      allFloors\n    }\n"): (typeof documents)["\n    query AllFloors {\n      allFloors\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    query SelectedFloorRooms($residentType: String!, $roomStatus: String!, $floorNo: Float!) {\n      selectedFloorRooms(residentType: $residentType, roomStatus: $roomStatus, floorNo: $floorNo) {\n        roomId\n        roomNo\n        seats {\n          seatId\n          seatLabel\n          residency {\n            student {\n              batch {\n                year\n              }\n              department {\n                shortName\n              }\n              levelTerm {\n                label\n              }\n              name\n              student9DigitId\n            }\n          }\n        }\n        floor {\n          floorNo\n          roomLabelLen\n        }\n      }\n    }\n"): (typeof documents)["\n    query SelectedFloorRooms($residentType: String!, $roomStatus: String!, $floorNo: Float!) {\n      selectedFloorRooms(residentType: $residentType, roomStatus: $roomStatus, floorNo: $floorNo) {\n        roomId\n        roomNo\n        seats {\n          seatId\n          seatLabel\n          residency {\n            student {\n              batch {\n                year\n              }\n              department {\n                shortName\n              }\n              levelTerm {\n                label\n              }\n              name\n              student9DigitId\n            }\n          }\n        }\n        floor {\n          floorNo\n          roomLabelLen\n        }\n      }\n    }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
