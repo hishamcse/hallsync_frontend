@@ -2,7 +2,7 @@ import { Button, ButtonProps } from '@mui/material';
 import { CSSProperties } from '@mui/material/styles/createMixins';
 
 export function MyButton(props : {
-    type : 'submit' | 'cancel' | 'intermediate',
+    type : 'submit' | 'cancel' | 'intermediate' | 'black',
     text : string,
     className? : string,
     onClick? : ()=>void,
@@ -22,6 +22,7 @@ export function MyButton(props : {
     let submitColor = "#00868D";
     let cancelColor = "#FF0000";
     let intermediateColor = "#FF6B00";
+    let black = "#000000";
     let sxProps = {
         backgroundColor : submitColor,
         color : "white",
@@ -37,6 +38,10 @@ export function MyButton(props : {
     else if(props.type == 'intermediate'){
         sxProps.backgroundColor = intermediateColor;
         sxProps[':hover'].backgroundColor = intermediateColor;
+    }
+    else if(props.type == 'black'){
+        sxProps.backgroundColor = black;
+        sxProps[':hover'].backgroundColor = black;
     }
     
     return (

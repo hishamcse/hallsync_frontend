@@ -5,6 +5,7 @@ import TempSeat from "./TempSeat";
 import RoomChange from "./RoomChange";
 import {userContext} from "../../../pages/_app";
 import {ResidencyStatus} from "../../../graphql/__generated__/graphql";
+import {generateRoomNumber} from "../../utilities";
 
 export const types = ['New Seat', 'Temporary Seat', 'Room Change'];
 
@@ -27,9 +28,7 @@ const StudentView = () => {
                 const block = room.floor.roomLabelLen;
                 const roomNo = room.roomNo;
 
-                let num = Math.pow(10, block - 1);
-                num = num * floor + roomNo;
-                setRoomNumber(num);
+                setRoomNumber(generateRoomNumber(floor, block, roomNo));
             }
         } else {
             setType('New Seat');
