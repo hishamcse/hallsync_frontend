@@ -155,7 +155,7 @@ export function TopBar(){
             </div>
             <div className={topBarStyles.notSection}>
                 <Icon active = {showNotification} img={
-                     <Badge badgeContent={unseecCount} color="error">
+                     <Badge badgeContent={(data?.notifications.notifications.filter(d => !d.seen ).length) ?? 0} color="error">
                          <NotificationsIcon style={{
                              color : "yellow",
                              fontSize : 30
@@ -175,10 +175,7 @@ export function TopBar(){
                 }} >
                     <notificationContext.Provider value={{
                         showNotification : showNotification,
-                        setShowNotification : setShowNotification,
-                        decreaseUnseenCount : ()=>{
-                            setUnseenCount((v)=>v-1);
-                        }
+                        setShowNotification : setShowNotification
                     }}>
                         <NotificationsList notifications={data.notifications} />
                     </notificationContext.Provider>

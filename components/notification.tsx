@@ -16,9 +16,12 @@ import Submit from './Seat/StudentSeat/Submit';
 import { MyButton } from './button';
 import MUIStyledTextarea from './MUITextArea';
 import { useMutation } from '@apollo/client';
-import { MARK_NOTIFICATION_SEEN, POST_VOTE } from '../graphql/operations';
+import { DELETE_NOTIFICATION, MARK_NOTIFICATION_SEEN, POST_VOTE } from '../graphql/operations';
 import { getDayAndMonthAndYearString, getTimeAMPM } from './utilities';
 import { notificationContext } from '../pages/_app';
+import CloseIcon from '@mui/icons-material/Close';
+import { IconButton, Link } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 type notification =  NotificationsQuery['notifications']['notifications'][0];
 
@@ -38,17 +41,18 @@ function getClickToSeeText(
     notification : notification
 ){
     if(notification.applicationId){
-        return "Click to see more details"
+        return "Click for Details"
     }
     else if(notification.voteId){
-        return "Click to vote"
+        return "Click to Vote"
     }
     return " "
 }
 
 function VoteView(props : {
     vote : NonNullable<NotificationsQuery['notifications']['notifications'][0]['vote']>,
-    setShow : (val : boolean) => void
+    setShow : (val : boolean) => void,
+    notificationId : number
 }){
     const [reason, setReason] = useState<string>('');
     let [postVoteQuery,{data, error}] = useMutation(POST_VOTE);
@@ -65,6 +69,14 @@ function VoteView(props : {
             },
             onError : (err)=>{
                 console.error(err);
+            },
+            update : (cache) =>{
+                let noti = cache.identify({
+                    __typename : "Notification",
+                    notificationId : props.notificationId
+                })
+                cache.evict({id : noti});
+                cache.gc()
             }
         })
     }
@@ -105,51 +117,88 @@ function VoteView(props : {
     )
 }
 
+
 function Notification(props : {
     notification : NotificationsQuery['notifications']['notifications'][0],
     divider : boolean
 }){
+
+
+    function showDetailsOnClick(){
+        if(props.notification.applicationId){
+            router.push("/application/prevApplication/" + props.notification.applicationId);
+        }
+        else if(props.notification.voteId){
+            console.log("ah;lkfdjhkdjafh")
+            setShow(true);
+        }
+        if(!props.notification.seen){
+            markQuery({
+                variables : {
+                    notificationId : props.notification.notificationId
+                },
+                onCompleted : ()=>{
+                }
+            })
+        }
+        setShowNotification(false);
+    }
+    
+    const {setShowNotification} = React.useContext(notificationContext);
+
     const router = useRouter();
     const [show, setShow] = useState(false);
-    let {decreaseUnseenCount} = React.useContext(notificationContext);
 
     const [markQuery] = useMutation(MARK_NOTIFICATION_SEEN);
+
+    const [query, {}] = useMutation(DELETE_NOTIFICATION, {
+        update : (cache, { data})=>{
+            if(data){
+                let noti = cache.identify({
+                    __typename : "Notification",
+                    notificationId : props.notification.notificationId
+                })
+                cache.evict({id : noti});
+                cache.gc()
+            }
+        }
+    })
     
     return (
         <>
             <ListItem alignItems="flex-start" sx={{
-                ':hover' : {
-                    opacity : .7,
-                }
-            }} onClick={()=>{
-                if(props.notification.applicationId){
-                    router.push("/application/prevApplication/" + props.notification.applicationId);
-                }
-                else if(props.notification.voteId){
-                    console.log("ah;lkfdjhkdjafh")
-                    setShow(true);
-                }
-                if(!props.notification.seen){
-                    markQuery({
-                        variables : {
-                            notificationId : props.notification.notificationId
-                        },
-                        onCompleted : ()=>{
-                            decreaseUnseenCount();
-                        }
-                    })
-                }
+                
             }} >
                 <ListItemText
                 sx={{
                     color : "white"
                 }}
-                primary={<div>
+                primary={<div style = {{
+                    display : "flex",
+                    justifyContent : "space-between",
+                    alignItems : "center"
+                }}>
                     {getPrimaryText(props.notification)}
+                    <IconButton onClick={()=>query({variables : {notificationId : props.notification.notificationId}})} >
+                        <DeleteIcon style={{
+                            fontSize : 22
+                        }} />
+                    </IconButton>
                 </div> }
                 secondary={
                     <div>
-                        {props.notification.text}. {getClickToSeeText(props.notification)}
+                        {props.notification.text}. 
+                        <div>
+                            <span style={{
+                                color : "crimson",
+                            }} onClick={showDetailsOnClick} > {getClickToSeeText(props.notification)} </span>
+                            {/* <MyButton text={getClickToSeeText(props.notification)} type='submit' style={{
+                                width : 30,
+                                height : 20,
+                                fontSize : 14
+                            }}/> */}
+                            {/* <Link href = "#" underline='always' onClick={showDetailsOnClick}> {getClickToSeeText(props.notification)} </Link>  */}
+                        </div>
                         <div>
                             <Typography
                                 sx={{ display: 'inline' }}
@@ -168,7 +217,7 @@ function Notification(props : {
             {
                 show && props.notification.vote &&
                 <CustomizedDialog show={show} setShow={setShow} cardTitle={"Vote"} >
-                    <VoteView setShow={setShow} vote={props.notification.vote!} />
+                    <VoteView notificationId={props.notification.notificationId} setShow={setShow} vote={props.notification.vote!} />
                 </CustomizedDialog>
             }
         </>
@@ -199,6 +248,17 @@ function NotificationsList(props : {
                     props.notifications.notifications.map((n, i) =>(
                         <Notification divider = {i !== props.notifications.notifications.length - 1} key={n.notificationId} notification={n} />
                     ))
+                }
+                {
+                    props.notifications.notifications.length === 0 &&   
+                    <div style={{
+                        textAlign : "center",
+                        color : "white",
+                        fontSize : 20,
+                        padding : 20
+                    }} >
+                        No notifications To Show
+                    </div>
                 }
             </List>
         </MyCard>        

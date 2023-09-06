@@ -39,8 +39,16 @@ const authLink = setContext((_, { headers }) => {
 });
 
 
+const cache = new InMemoryCache({
+  typePolicies : {
+    Notification : {
+      keyFields : ["notificationId"]
+    }
+  }
+})
+
 export const client = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache: cache,
   link: authLink.concat(link)
 });
 
@@ -63,12 +71,10 @@ export const userContext = React.createContext<{
 
 export const notificationContext = React.createContext<{
   showNotification : boolean,
-  setShowNotification : (s : boolean) => void,
-  decreaseUnseenCount : () => void
+  setShowNotification : (s : boolean) => void
 }>({
   showNotification : false,
-  setShowNotification : ()=>{},
-  decreaseUnseenCount : ()=>{}
+  setShowNotification : ()=>{}
 })
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
@@ -85,8 +91,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <userContext.Provider value = {value}>
           <notificationContext.Provider value = {{
             showNotification : showNot,
-            setShowNotification : setShowNot,
-            decreaseUnseenCount : ()=>{}
+            setShowNotification : setShowNot
           }}>
             {Component.getLayout( <Component  {...pageProps} />)}
           </notificationContext.Provider>
@@ -120,8 +125,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           <userContext.Provider value = {value}>
           <notificationContext.Provider value = {{
             showNotification : showNot,
-            setShowNotification : setShowNot,
-            decreaseUnseenCount : ()=>{}
+            setShowNotification : setShowNot
           }}>
             <div onClick={()=>setShowNot(false)} style={{
               minHeight : "100%"

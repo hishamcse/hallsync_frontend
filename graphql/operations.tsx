@@ -854,7 +854,15 @@ export const POST_VOTE = graphql(`
 
 export const MARK_NOTIFICATION_SEEN = graphql(`
 mutation Mark($notificationId: Float!) {
-  mark(notificationId: $notificationId)
+  mark(notificationId: $notificationId) {
+    seen
+    notificationId
+    applicationId
+    studentId
+    text
+    time
+    voteId
+  }
 }
 `)
 
@@ -887,12 +895,6 @@ export const GET_DEPT_WISE_RESIDENT_STATS = graphql(`
         totalResidents
       }
     }
-`)
-
-export const DELETE_NOTIFICATION = graphql(`
-mutation DeleteNotification($notificationId: Float!) {
-  deleteNotification(notificationId: $notificationId)
-}
 `)
 
 
@@ -964,3 +966,12 @@ export const GET_ROOMS_IN_FLOOR = graphql(`
       }
     }
 `)
+
+
+
+export const DELETE_NOTIFICATION = graphql(`
+mutation DeleteNotification($notificationId: Float!) {
+  deleteNotification(notificationId: $notificationId)
+}
+`)
+

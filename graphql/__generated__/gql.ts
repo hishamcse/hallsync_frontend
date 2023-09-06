@@ -57,7 +57,7 @@ const documents = {
     "\nmutation ApplyMessManager($callId: Float!) {\n  applyMessManager(callId: $callId) {\n    applicationId\n  }\n}\n": types.ApplyMessManagerDocument,
     "\n  query MessManagingExperiences {\n    messManagingExperiences {\n      call {\n        from\n        to\n        authority {\n          name\n        }\n      }\n    }\n  }\n": types.MessManagingExperiencesDocument,
     "\n  mutation VoteMutation($reason: String!, $vote: String!, $voteId: Float!) {\n    vote(reason: $reason, vote: $vote, voteId: $voteId) {\n      voteId\n    }\n  }": types.VoteMutationDocument,
-    "\nmutation Mark($notificationId: Float!) {\n  mark(notificationId: $notificationId)\n}\n": types.MarkDocument,
+    "\nmutation Mark($notificationId: Float!) {\n  mark(notificationId: $notificationId) {\n    seen\n    notificationId\n    applicationId\n    studentId\n    text\n    time\n    voteId\n  }\n}\n": types.MarkDocument,
     "\n    query FullSeatStats {\n      fullSeatStats {\n        freeRooms\n        freeSeats\n        totalRooms\n        totalSeats\n      }\n    }\n": types.FullSeatStatsDocument,
     "\n    query FullStudentStats {\n      fullStudentStats {\n        totalAttached\n        totalResidents\n        totalStudents\n        totalTempResidents\n      }\n    }\n": types.FullStudentStatsDocument,
     "\n    query DepartmentWiseResidentStats {\n      departmentWiseResidentStats {\n        deptName\n        totalResidents\n      }\n    }\n": types.DepartmentWiseResidentStatsDocument,
@@ -261,7 +261,7 @@ export function graphql(source: "\n  mutation VoteMutation($reason: String!, $vo
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\nmutation Mark($notificationId: Float!) {\n  mark(notificationId: $notificationId)\n}\n"): (typeof documents)["\nmutation Mark($notificationId: Float!) {\n  mark(notificationId: $notificationId)\n}\n"];
+export function graphql(source: "\nmutation Mark($notificationId: Float!) {\n  mark(notificationId: $notificationId) {\n    seen\n    notificationId\n    applicationId\n    studentId\n    text\n    time\n    voteId\n  }\n}\n"): (typeof documents)["\nmutation Mark($notificationId: Float!) {\n  mark(notificationId: $notificationId) {\n    seen\n    notificationId\n    applicationId\n    studentId\n    text\n    time\n    voteId\n  }\n}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
