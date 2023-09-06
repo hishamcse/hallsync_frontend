@@ -1,5 +1,5 @@
-import {GetMealPlansQuery, GetOldItemsQuery} from "../../graphql/__generated__/graphql";
-import React, {useState} from "react";
+import {GetMealPlanQuery, GetMealPlansQuery, GetOldItemsQuery} from "../../graphql/__generated__/graphql";
+import React, {useEffect, useState} from "react";
 import {useMutation, useQuery} from "@apollo/client";
 import {GET_OLD_MEAL_ITEMS, ADD_MEAL_PLAN} from "../../graphql/operations";
 import MUISelectStyled from "../MUIMultiSelectCheckbox";
@@ -13,7 +13,7 @@ const AddOrEditMealView = (props : {
 	setSelectedMealTime : (v : string)=>void,
 	selectedDate : Dayjs | null,
 	setSelectedDate : (newValue: Dayjs | null) => void,
-	selectedItemsFromMenu : GetMealPlansQuery['getMealPlans'][0]['meal']['items'],
+	selectedMeal? : GetMealPlanQuery['getMealPlan']['meal'],
 }) => {
 
 
@@ -23,20 +23,26 @@ const AddOrEditMealView = (props : {
 	const [reqErrorMsg, setReqErrorMsg] = useState('');
 
 	const [selectedRiceItems, setSelectedRiceItems] = useState<GetOldItemsQuery['getOldItems']>(
-		props.selectedItemsFromMenu.filter(i => i.type === 'RICE')
+		[]
 	);
 	const [selectedVegItems, setSelectedVegItems] = useState<GetOldItemsQuery['getOldItems']>(
-		props.selectedItemsFromMenu.filter(i => i.type === 'VEG')
-
+		[]
 	);
-	const [selectedNonVegItems, setSelectedNonVegItems] = useState<GetOldItemsQuery['getOldItems']>(
-		props.selectedItemsFromMenu.filter(i => i.type === 'NON_VEG')
+	const [selectedNonVegItems, setSelectedNonVegItems] = useState<GetOldItemsQuery['getOldItems']>([])
 
-	)
+	useEffect(()=>{
+		// console.log(";laksdjf;lkasjdfljk")
+		if(props.selectedMeal){
+
+			setSelectedRiceItems(props.selectedMeal.items.filter(i => i.type === 'RICE'));
+			setSelectedVegItems(props.selectedMeal.items.filter(i => i.type === 'VEG'));
+			setSelectedNonVegItems(props.selectedMeal.items.filter(i => i.type === 'NON_VEG'));
+		}
+	}, [props.selectedMeal])
 
 	const [nonVegCupCount, setNonVegCupCount] = useState<Record<string, number>>({});
 
-	const [addMealPlan, {}] = useMutation(
+	const [addMealPlan, {loading : addMealPlanLoading}] = useMutation(
 		ADD_MEAL_PLAN, {
 			onError: (error) => {
 				console.log(error);
@@ -76,33 +82,14 @@ const AddOrEditMealView = (props : {
 		setSelectedNonVegItems([]);
 	};
 
-	const getSelecteds = (names: string[]) => {
-		let selecteds: GetMealPlansQuery['getMealPlans'][0]['meal']['items'] = [];
-		names.forEach((name) => {
-			selecteds.push(oldItems.filter((item) => {
-				return item.name.toLowerCase() == name.toLowerCase();
-			})[0]);
-		});
-
-		return selecteds;
-	}
-
 
 	const handleComplete = () => {
 
-		const riceNames = selectedRiceItems.map(item => item.name)
-		const vegNames = selectedVegItems.map(item => item.name)
-		const nenVegNames = selectedNonVegItems.map(item => item.name)
-
-
-		const str: string[] = [...riceNames, ...vegNames, ...nenVegNames];
-
-
-		const selected = getSelecteds(str);
+		const selected = [...selectedRiceItems, ...selectedVegItems, ...selectedNonVegItems];
 
 		console.log(nonVegCupCount, selectedDate?.toDate().toLocaleDateString(), selectedMealTime)
 
-		if(str.length === 0 || selected.length === 0 || !nonVegCupCount || !selected) {
+		if(selected.length === 0 || !nonVegCupCount || !selected) {
 			setReqError(true)
 			setReqErrorMsg('Please try again!!')
 			return;
@@ -116,9 +103,14 @@ const AddOrEditMealView = (props : {
 		setReqError(false);
 
 		let addedItems = []
+		let notModified = props.selectedMeal?.items.length === selected.length;
+
 		for(let i = 0; i < selected.length; i++){
 			let item = selected[i];
 			let cupCount = 150;
+			if(props.selectedMeal && notModified){
+				notModified = notModified && props.selectedMeal.items.some(i => i.itemId === item.itemId);
+			}
 			if(item.type === 'NON_VEG'){
 				if(!nonVegCupCount[item.name]){
 					setReqErrorMsg('cup count not found for ' + item.name);
@@ -141,9 +133,11 @@ const AddOrEditMealView = (props : {
 				date: selectedDate?.toDate().toLocaleDateString(),
 				items: {
 					items : addedItems
-				}
+				},
+				mealId : props.selectedMeal?.mealId
 			}
 		}).then((data) => {
+			setSelectedDate(null);
 			console.log(data);
 		}).catch((error) => {
 			console.log(error);
@@ -214,7 +208,9 @@ const AddOrEditMealView = (props : {
 			}
 
 			<div style={{ marginTop: 10 , textAlign : "center"}}>
-				<MyButton text="Complete" type="submit" onClick={handleComplete} style={{
+				<MyButton text="Complete" buttonProps={{
+					disabled : addMealPlanLoading
+				}} type="submit" onClick={handleComplete} style={{
 					marginRight : 10, width : 110
 				}} />
 				<MyButton text="Cancel" type="cancel" onClick={handleCancel} style={{

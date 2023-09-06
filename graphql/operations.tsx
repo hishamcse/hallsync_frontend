@@ -513,8 +513,8 @@ query GetOldItems {
 `)
 
 export const ADD_MEAL_PLAN = graphql(`
-   mutation AddNewMealPlan($items: MealPlanInput!, $mealTime: String!, $date: String!) {
-      addNewMealPlan(items: $items, mealTime: $mealTime, date: $date) {
+   mutation AddNewMealPlan($items: MealPlanInput!, $mealTime: String!, $date: String!, $mealId : Float) {
+      addNewMealPlan(items: $items, mealTime: $mealTime, date: $date, mealId : $mealId) {
         day
         mealId
         mealPlanId
@@ -910,6 +910,7 @@ export const GET_MEAL_PLAN = graphql(`
 query GetMealPlan($mealTime: String!, $date: String!) {
   getMealPlan(mealTime: $mealTime, date: $date) {
     meal {
+      mealId
       items {
         itemId
         name

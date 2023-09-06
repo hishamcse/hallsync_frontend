@@ -44,7 +44,7 @@ const ManagerMealView: React.FC = () => {
     const [selectedMealTime, setSelectedMealTime] = useState<string>("LUNCH");
     const [selectedMealTimeCalender, setSelectedMealTimeCalender] = useState<string>("LUNCH");
     const [selectedDateCalender, setSelectedDateCalender] = useState<Dayjs | null>(null);
-    const [selectedMenuItems, setSelectedMenuItems ] = useState<GetMealPlanQuery['getMealPlan']['meal']['items']>([]);
+    const [selectedMeal, setSelectedMeal ] = useState<GetMealPlanQuery['getMealPlan']['meal']>();
 
     let [query, {data : mealData, error , loading}] = useLazyQuery(GET_MEAL_PLAN, {
         onError  : (err)=>{
@@ -109,7 +109,7 @@ const ManagerMealView: React.FC = () => {
                         selectedMealTime={selectedMealTime}
                         setSelectedDate={setSelectedDate}
                         setSelectedMealTime={setSelectedMealTime}
-                        selectedItemsFromMenu={selectedMenuItems}
+                        selectedMeal={selectedMeal}
                     />
                 </MyCard>
                 <div style = {{
@@ -150,7 +150,7 @@ const ManagerMealView: React.FC = () => {
                                 disabled : selectedDateCalender === null
                             }} text="Use Menu" type="submit" onClick={()=>{
                                 if(mealData)
-                                    setSelectedMenuItems(mealData.getMealPlan.meal.items);
+                                    setSelectedMeal(mealData.getMealPlan.meal);
                             }} />
                         </div>
                     </MyCard>
