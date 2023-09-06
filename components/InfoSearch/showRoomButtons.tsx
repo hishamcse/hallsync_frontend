@@ -4,13 +4,16 @@ import {generateRoomNumber} from "../utilities";
 import {useState} from "react";
 
 const ShowRoomButtons = (props: {
-    allRooms : SelectedFloorRoomsQuery['selectedFloorRooms']
+    allRooms : SelectedFloorRoomsQuery['selectedFloorRooms'],
+    getRoomResidents: (roomId : number, fullRoomNo: string) => void
 }) => {
 
     const [selectedRoomNo, setSelectedRoomNo] = useState<string>('');
 
     const handleRoomNo = (room : SelectedFloorRoomsQuery['selectedFloorRooms'][0]) => {
-        setSelectedRoomNo(generateRoomNumber(room.floor.floorNo, room.floor.roomLabelLen, room.roomNo).toString());
+        const fullRoomNo = generateRoomNumber(room.floor.floorNo, room.floor.roomLabelLen, room.roomNo).toString();
+        setSelectedRoomNo(fullRoomNo);
+        props.getRoomResidents(room.roomId, fullRoomNo.toString());
     }
 
     const setBackGroundColor = (room : SelectedFloorRoomsQuery['selectedFloorRooms'][0]) => {
