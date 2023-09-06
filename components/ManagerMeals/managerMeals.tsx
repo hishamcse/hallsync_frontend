@@ -115,11 +115,19 @@ const ManagerMealView: React.FC = () => {
                 <div style = {{
                     display : "inline-block"
                 }}>
+                    <MyCard title={"Add New Item"} style={{
+                        width : 550,
+                        display : "block",
+                    }} >
+                        <AddNewItemView />
+                    </MyCard>
+
                     <MyCard title = {<TitleMealTime mealTime={selectedMealTimeCalender} 
                     setMealTime={setSelectedMealTimeCalender} title="Meals Added"  />} style={{
                         display : "block",
                         textAlign : "center",
                         width : 550,
+                        marginTop   : 10,
                     }} >
                         <CustomDay date={selectedDateCalender} setDate={setSelectedDateCalender} mealTime={selectedMealTimeCalender} />
                         <div style={{
@@ -154,16 +162,11 @@ const ManagerMealView: React.FC = () => {
                             }} />
                         </div>
                     </MyCard>
+
+            
                 </div>
             </div>
 
-            <MyCard title={"Add New Item"} style={{
-                width : 600,
-                display : "block",
-                marginTop   : 10,
-            }} >
-                <AddNewItemView />
-            </MyCard>
         </div>
     );
 };
