@@ -964,3 +964,29 @@ export const GET_ROOMS_IN_FLOOR = graphql(`
       }
     }
 `)
+
+export const ROOM_RESIDENTS = graphql(`
+    query SelectedRoomStudents($roomId: Float!) {
+      selectedRoomStudents(roomId: $roomId) {
+        name
+        student9DigitId
+        batch {
+          year
+        }
+        department {
+          shortName
+        }
+        levelTerm {
+          label
+        }
+        residency {
+          seat {
+            seatLabel
+          }
+          from
+          isCurrentMessManager
+        }
+        residencyStatus
+      }
+    }
+`)

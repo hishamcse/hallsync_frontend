@@ -2,10 +2,11 @@ import MyCard from "../card";
 import {Typography} from "@mui/material";
 import MuiDropdown from "../MUIDropdown";
 import {useEffect, useState} from "react";
-import {useQuery} from "@apollo/client";
-import {ALL_FLOORS, GET_ROOMS_IN_FLOOR} from "../../graphql/operations";
-import {SelectedFloorRoomsQuery} from "../../graphql/__generated__/graphql";
+import {useLazyQuery, useQuery} from "@apollo/client";
+import {ALL_FLOORS, GET_ROOMS_IN_FLOOR, ROOM_RESIDENTS} from "../../graphql/operations";
+import {SelectedFloorRoomsQuery, SelectedRoomStudentsQuery} from "../../graphql/__generated__/graphql";
 import ShowRoomButtons from "./showRoomButtons";
+import RoomResidentTable from "./roomResidentTable";
 
 const OptionDropDown = (props: {title: string, options: string[], onChange: (e : any) => void, val: string}) => {
     return (
@@ -35,6 +36,11 @@ const RoomSearch = () => {
     const [roomsInFloor, setRoomsInFloor] =
         useState<SelectedFloorRoomsQuery['selectedFloorRooms']>([]);
 
+    const [fullRoomNo, setFullRoomNo] = useState<string>('');
+
+    const [roomResidents, setRoomResidents] =
+        useState<SelectedRoomStudentsQuery['selectedRoomStudents']>([]);
+
     let queryVars = {
         floorNo : parseInt(floorNo),
         roomStatus : roomStatus,
@@ -51,6 +57,8 @@ const RoomSearch = () => {
         }
     });
 
+    const [roomResidentsQuery] = useLazyQuery(ROOM_RESIDENTS);
+
     const { refetch } = useQuery(
         GET_ROOMS_IN_FLOOR, {
             variables : queryVars,
@@ -65,6 +73,22 @@ const RoomSearch = () => {
             ... queryVars
         })
     }, [])
+
+    const getRoomResidents = (roomId : number, fullRoomNo: string) => {
+        setFullRoomNo(fullRoomNo);
+        roomResidentsQuery({
+            variables : {
+                roomId : roomId
+            },
+            onCompleted: (data) => {
+                console.log(data);
+                setRoomResidents(data.selectedRoomStudents);
+            },
+            onError: (error) => {
+                console.log(error);
+            }
+        })
+    }
 
     const roomStatusOptions = ['All', 'Occupied', 'Free'];
     const residentTypeOptions = ['All', 'Resident', 'Temp Resident'];
@@ -108,8 +132,21 @@ const RoomSearch = () => {
                         marginTop: 20,
                     }}
             >
-                <ShowRoomButtons allRooms={roomsInFloor} />
+                <ShowRoomButtons allRooms={roomsInFloor} getRoomResidents={getRoomResidents}/>
             </MyCard>
+
+            {
+                roomResidents.length > 0 &&
+                <MyCard title={`Residents in Room ${fullRoomNo}`}
+                        style={{
+                            width: '100%',
+                            marginTop: 20,
+                        }}
+                >
+                    <RoomResidentTable roomResidents={roomResidents}/>
+                </MyCard>
+            }
+
         </div>
     )
 }
