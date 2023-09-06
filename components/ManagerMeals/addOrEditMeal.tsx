@@ -12,7 +12,8 @@ const AddOrEditMealView = (props : {
 	selectedMealTime : string,
 	setSelectedMealTime : (v : string)=>void,
 	selectedDate : Dayjs | null,
-	setSelectedDate : (newValue: Dayjs | null) => void
+	setSelectedDate : (newValue: Dayjs | null) => void,
+	selectedItemsFromMenu : GetMealPlansQuery['getMealPlans'][0]['meal']['items'],
 }) => {
 
 
@@ -21,9 +22,17 @@ const AddOrEditMealView = (props : {
 	const [reqError, setReqError] = useState(false);
 	const [reqErrorMsg, setReqErrorMsg] = useState('');
 
-	const [selectedRiceItems, setSelectedRiceItems] = useState<GetOldItemsQuery['getOldItems']>([]);
-	const [selectedVegItems, setSelectedVegItems] = useState<GetOldItemsQuery['getOldItems']>([]);
-	const [selectedNonVegItems, setSelectedNonVegItems] = useState<GetOldItemsQuery['getOldItems']>([])
+	const [selectedRiceItems, setSelectedRiceItems] = useState<GetOldItemsQuery['getOldItems']>(
+		props.selectedItemsFromMenu.filter(i => i.type === 'RICE')
+	);
+	const [selectedVegItems, setSelectedVegItems] = useState<GetOldItemsQuery['getOldItems']>(
+		props.selectedItemsFromMenu.filter(i => i.type === 'VEG')
+
+	);
+	const [selectedNonVegItems, setSelectedNonVegItems] = useState<GetOldItemsQuery['getOldItems']>(
+		props.selectedItemsFromMenu.filter(i => i.type === 'NON_VEG')
+
+	)
 
 	const [nonVegCupCount, setNonVegCupCount] = useState<Record<string, number>>({});
 

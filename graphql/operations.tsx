@@ -894,3 +894,35 @@ mutation DeleteNotification($notificationId: Float!) {
   deleteNotification(notificationId: $notificationId)
 }
 `)
+
+
+export const GET_MEALPLANS_CALENDER = graphql(`
+query GetAddedMealPlansByDateTime($mealTime: String!) {
+  getAddedMealPlansByDateTime(mealTime: $mealTime) {
+    day
+    mealId
+  }
+}
+`)
+
+
+export const GET_MEAL_PLAN = graphql(`
+query GetMealPlan($mealTime: String!, $date: String!) {
+  getMealPlan(mealTime: $mealTime, date: $date) {
+    meal {
+      items {
+        itemId
+        name
+        type
+        photo {
+          photoId
+          file {
+            newFileName
+            fileName
+          }
+        }
+      }
+    }
+  }
+}
+`)

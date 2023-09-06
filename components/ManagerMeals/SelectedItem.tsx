@@ -24,11 +24,12 @@ const SelectedItemsList: React.FC<SelectedItemsListProps> = ({ selectedItems, ty
       {selectedItems.length > 0 ? (
         <ul style={{ listStyle: 'none', display: 'flex', flexWrap: 'wrap' }}>
           {selectedItems.map((item, index) => {
-            let imagePath = '/images/default.png';
-            console.log(item);
+            let imagePath = 'default.png';
+            // console.log(item);
             if(item.photo){
-              imagePath = server + item.photo.file.newFileName;
+              imagePath = item.photo.file.newFileName;
             }
+            imagePath = server + imagePath;
             return (
               <MealItem imagePath={imagePath} item={item} key={item.name}>
                   {type === 'NON_VEG' && (

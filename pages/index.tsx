@@ -22,6 +22,12 @@ import { useRouter } from 'next/router'
 
 // }
 
+export function Loading(){
+  return (
+     <span className={styles.loadingTextContainer}> Loading </span>
+  )
+}
+
 function Login(){
   const [id, setId] = useState<string>('');
   const [pass, setPass] = useState<string>('');
@@ -42,6 +48,8 @@ function Login(){
     }
   })
 
+
+
   const title = (
     <div className={styles.logoContainer}> 
       <Logo /> 
@@ -59,7 +67,7 @@ function Login(){
         </div>
         <div className={styles.messageContainer}>
           {error && <span className={styles.errorTextContainer}> {error.message} </span>}
-          {loading && <span className={styles.loadingTextContainer}> Loading </span>}
+          {loading && <Loading />}
         </div>
 
       </div>

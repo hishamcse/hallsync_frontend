@@ -62,6 +62,8 @@ const documents = {
     "\n    query FullStudentStats {\n      fullStudentStats {\n        totalAttached\n        totalResidents\n        totalStudents\n        totalTempResidents\n      }\n    }\n": types.FullStudentStatsDocument,
     "\n    query DepartmentWiseResidentStats {\n      departmentWiseResidentStats {\n        deptName\n        totalResidents\n      }\n    }\n": types.DepartmentWiseResidentStatsDocument,
     "\nmutation DeleteNotification($notificationId: Float!) {\n  deleteNotification(notificationId: $notificationId)\n}\n": types.DeleteNotificationDocument,
+    "\nquery GetAddedMealPlansByDateTime($mealTime: String!) {\n  getAddedMealPlansByDateTime(mealTime: $mealTime) {\n    day\n    mealId\n  }\n}\n": types.GetAddedMealPlansByDateTimeDocument,
+    "\nquery GetMealPlan($mealTime: String!, $date: String!) {\n  getMealPlan(mealTime: $mealTime, date: $date) {\n    meal {\n      items {\n        itemId\n        name\n        type\n        photo {\n          photoId\n          file {\n            newFileName\n            fileName\n          }\n        }\n      }\n    }\n  }\n}\n": types.GetMealPlanDocument,
 };
 
 /**
@@ -274,6 +276,14 @@ export function graphql(source: "\n    query DepartmentWiseResidentStats {\n    
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\nmutation DeleteNotification($notificationId: Float!) {\n  deleteNotification(notificationId: $notificationId)\n}\n"): (typeof documents)["\nmutation DeleteNotification($notificationId: Float!) {\n  deleteNotification(notificationId: $notificationId)\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\nquery GetAddedMealPlansByDateTime($mealTime: String!) {\n  getAddedMealPlansByDateTime(mealTime: $mealTime) {\n    day\n    mealId\n  }\n}\n"): (typeof documents)["\nquery GetAddedMealPlansByDateTime($mealTime: String!) {\n  getAddedMealPlansByDateTime(mealTime: $mealTime) {\n    day\n    mealId\n  }\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\nquery GetMealPlan($mealTime: String!, $date: String!) {\n  getMealPlan(mealTime: $mealTime, date: $date) {\n    meal {\n      items {\n        itemId\n        name\n        type\n        photo {\n          photoId\n          file {\n            newFileName\n            fileName\n          }\n        }\n      }\n    }\n  }\n}\n"): (typeof documents)["\nquery GetMealPlan($mealTime: String!, $date: String!) {\n  getMealPlan(mealTime: $mealTime, date: $date) {\n    meal {\n      items {\n        itemId\n        name\n        type\n        photo {\n          photoId\n          file {\n            newFileName\n            fileName\n          }\n        }\n      }\n    }\n  }\n}\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

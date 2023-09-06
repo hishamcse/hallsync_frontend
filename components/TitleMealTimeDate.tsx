@@ -26,6 +26,25 @@ export function TitleDate(props : {
     )
 }
 
+export function TitleMealTime(props : {
+    title : string
+    mealTime : string,
+    setMealTime : (v : string)=>void,
+    children?: ReactNode,
+}) {
+    return (
+        <div className={styles.titleDateRoot}>
+            <h4>
+                {props.title}
+            </h4>
+            <div className={styles.titleDateRootRight}>
+                <MealTimeDropDown setVal={props.setMealTime} val={props.mealTime} />
+                {props.children}
+            </div>
+        </div>
+    )
+}
+
 export function TitleMealTimeDate(props : {
     title : string
     mealTime : string,

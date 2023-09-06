@@ -60,10 +60,14 @@ const AddNewItemView = () => {
     <div>
       <div style={{
         display : "flex",
-        justifyContent : "space-between"
+        justifyContent : "space-between",
+        marginBottom : 20,
+        marginTop : 20
+
       }}>
         <MyInput type='text' onChange={setItemName} value={itemName ?? ''} placeHolder='Item Name' style={{
-          height : 40
+          height : 40,
+          width : 300
         }}   />
         <MealTypeDropDown width={150}  val={itemType} setVal={handleMealTypeSelect} />
       </div>
