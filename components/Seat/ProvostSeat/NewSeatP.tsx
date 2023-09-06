@@ -11,12 +11,15 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, {Dayjs} from "dayjs";
 import {ApplicationDetailsQuery, ApplicationStatus} from "../../../graphql/__generated__/graphql";
 import {FreeRoom} from "../freeRoom";
-import {APPROVE_NEW_SEAT_APPLICATION, REJECT_APPLICATION} from "../../../graphql/operations";
+import {APPROVE_NEW_SEAT_APPLICATION, REJECT_APPLICATION, REVISE_APPLICATION} from "../../../graphql/operations";
 import {useMutation} from "@apollo/client";
 import {useRouter} from "next/router";
 import ProfileInfo from "./ProfileInfo";
 import { Title } from "./AppDetailsTitle";
 import { UploadedDocsList } from "../UploadedDocsList";
+import CustomizedDialog from "../../MUIDialog";
+import MUIStyledTextarea from "../../MUITextArea";
+import { MyButton } from "../../button";
 
 const Questionnaire = (props: {answers: boolean[]}) => {
     return (
@@ -131,6 +134,10 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
         }
     )
 
+    const [reviseMutation, {}] = useMutation(REVISE_APPLICATION,{
+        onCompleted : ()=> router.push('/seatManagement')
+    })
+
     function approve(){
         if(!seatId || !props.application?.newApplication?.newApplicationId){
             setBlankError(true);
@@ -158,7 +165,19 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
             console.log(r)
         })
      }
+    
+    function revise(){
+        if(val == undefined || val.trim() == '') return;
+        reviseMutation({
+            variables : {
+                applicationId : props.application.applicationId,
+                reason : val
+            }
+        })
+    }
 
+    const [show, setShow] = useState(false);
+    const [val, setVal] = useState<string>();
 
     return (
         <div style={{marginBottom: 20}}>
@@ -204,10 +223,29 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
                         }
                     </div>
                     {/* <MyCard  title=''> */}
-                        <Confirmation rejectHandler={reject} successHandler={approve}/>
+                        <Confirmation reviseHandler={()=>{setShow(true)}} includeRevise = {true} rejectHandler={reject} successHandler={approve}/>
                     {/* </MyCard> */}
                 </div>
             }
+            <CustomizedDialog
+                cardTitle="Revise Application"
+                show={show}
+                setShow={setShow}>
+
+                <div style={{
+                    padding : 10
+                }}>
+                    <MUIStyledTextarea placeHolder="Remark" rows={10} val={val ?? ''} handleInput={setVal} />
+                </div>
+                <div style={{
+                    textAlign : "center",
+                    marginBottom : 20
+                }}>
+                    <MyButton buttonProps={ {
+                        disabled : val == undefined || val.trim() == '',
+                    }} onClick={revise} text = "Confirm" type="submit" />
+                </div>
+            </CustomizedDialog>
         </div>
     )
 }

@@ -1,14 +1,19 @@
-import { Link } from "@mui/material"
+import { IconButton, Link } from "@mui/material"
 import { ApplicationDetailsQuery } from "../../graphql/__generated__/graphql"
 import { server } from "../utilities"
+import CloseIcon from '@mui/icons-material/Close';
 
 
 
 export const UploadedDocsList = (props : {
-    files : ApplicationDetailsQuery['applicationDetails']['attachedFiles']
+    files : ApplicationDetailsQuery['applicationDetails']['attachedFiles'],
+    removal? : {
+        removedFileIds : number[],
+        setRemovedFileIds : (v : number[])=>void
+    },
 }) => {
     return (
-        <ol style={{justifyContent: 'left', width: 500}}>
+        <ol style={{justifyContent: 'left'}}>
             {
                 props.files  &&
                 props.files.map(f =>{
@@ -17,11 +22,32 @@ export const UploadedDocsList = (props : {
                             <div style={{
                                 display : 'flex',
                                 justifyContent: "space-between",
-                                alignContent : "center"
+                                alignItems : "center"
                             }}>
                                 <Link href = {server + f.uploadedFile.newFileName} underline="hover" target = "blank">
-                                    {f.uploadedFile.fileName}
+                                    <span style = {{
+                                        ... (props.removal && props.removal.removedFileIds.includes(f.uploadedFile.uploadedFileId) ? {textDecoration: "line-through"} : {})
+                                    }}>
+                                        {f.uploadedFile.fileName}
+                                    </span>
                                 </Link>
+                                {
+                                    props.removal &&
+                                    <IconButton onClick={()=>{
+                                        if(props.removal){
+
+                                            if(!props.removal.removedFileIds.includes(f.uploadedFile.uploadedFileId)){
+                                                props.removal?.setRemovedFileIds([...props.removal.removedFileIds, f.uploadedFile.uploadedFileId]);
+                                            }
+                                            else{
+                                                props.removal.setRemovedFileIds(props.removal.removedFileIds.filter(id => id !== f.uploadedFile.uploadedFileId));
+                                            }
+                                        }
+
+                                    }} >
+                                        <CloseIcon fontSize="small" />
+                                    </IconButton>
+                                }
                             </div>
                         </li>
                     )

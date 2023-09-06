@@ -31,6 +31,7 @@ export default function ApplicationTable(props: {
         'PENDING': styles.pending,
         'ACCEPTED': styles.accepted,
         'REJECTED': styles.rejected,
+        'REVISE' : styles.revise
     }
 
     return (

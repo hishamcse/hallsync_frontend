@@ -1,14 +1,14 @@
 import { Button, IconButton } from "@mui/material"
 import { ChangeEvent } from "react"
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 
 export const UploadDocs = (props : {
     onChange : (e : ChangeEvent<HTMLInputElement>) => void,
-    files : Blob[],
-    removeFile  : (f : Blob)=>void
+    files : File[],
+    removeFile  : (f : File)=>void
 }) => {
     return (
-        <div style={{justifyContent: 'left', width: 500}}>
+        <div style={{justifyContent: 'left'}}>
             <ol style = {{
                 margin : "5px"
             }}>
@@ -24,7 +24,7 @@ export const UploadDocs = (props : {
                         }}>
                             {f.name}
                             <IconButton onClick={(_)=>props.removeFile(f)} >
-                                <CloseOutlinedIcon />
+                                <CloseIcon fontSize="small" />
                             </IconButton>
                         </div>
                         </li>

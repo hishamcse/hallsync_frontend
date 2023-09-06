@@ -5,7 +5,8 @@ import { MyButton } from "../../button";
 const Confirmation = (props : {
     successHandler? : ()=>void,
     rejectHandler? : ()=>void,
-    includeRevise? : boolean
+    includeRevise? : boolean,
+    reviseHandler? : ()=>void
 }) => {
     return (
         <div style={{display: 'flex', justifyContent: 'space-between', margin: 'auto', width: 220 + (props.includeRevise ? 110 : 0)}}>
@@ -13,7 +14,7 @@ const Confirmation = (props : {
             {/* <Button variant="contained" color='success' onClick={props.successHandler} >Approve</Button> */}
             {
                 props.includeRevise && 
-                <MyButton onClick={()=>{}} text="Revise" type="intermediate" />
+                <MyButton onClick={props.reviseHandler} text="Revise" type="intermediate" />
             }
             
             {/* <Button variant="contained" color='secondary'>Revise</Button> */}

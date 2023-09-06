@@ -110,6 +110,10 @@ export const GET_APPLICATION = graphql(`
         createdAt
         lastUpdate
         status
+        revisions {
+          reason
+          createdAt
+        }
         attachedFiles {
           uploadedFile {
             fileName
@@ -999,4 +1003,20 @@ export const ROOM_RESIDENTS = graphql(`
         residencyStatus
       }
     }
+`)
+
+export const REVISE_APPLICATION = graphql(`
+mutation ReviseApplication($reason: String!, $applicationId: Float!) {
+  reviseApplication(reason: $reason, applicationId: $applicationId) {
+    revisionId
+  }
+}
+`)
+
+export const RESUBMIT_APPLICATION = graphql(`
+mutation ResubmitMutation($addedFileIds: IntArray!, $removedFilesIds: IntArray!, $applicationId: Float!) {
+  reSubmitApplication(addedFileIds: $addedFileIds, removedFilesIds: $removedFilesIds, applicationId: $applicationId) {
+    applicationId
+  }
+}
 `)

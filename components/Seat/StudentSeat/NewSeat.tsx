@@ -8,13 +8,14 @@ import QuestionBox from "../QuestionBox";
 import Agreement from "./Agreement";
 import {types} from "./StudentView";
 import {useMutation} from "@apollo/client";
-import {POST_NEW_APPLICATION} from "../../../graphql/operations";
+import {POST_NEW_APPLICATION, RESUBMIT_APPLICATION} from "../../../graphql/operations";
 import {useRouter} from "next/router";
 import {ApplicationDetailsQuery, ApplicationStatus} from "../../../graphql/__generated__/graphql";
 import {FreeRoom} from "../freeRoom";
 import { UploadedDocsList } from "../UploadedDocsList";
 import { UploadDocs } from "../UploadDocs";
 import { MyButton } from "../../button";
+import { getDayAndMonthAndYearString, uploadFileToServer } from "../../utilities";
 
 const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boolean>>[]}) => {
     return (
@@ -68,12 +69,12 @@ const NewSeat = (props: {
     const [q1Ans, setQ1Ans] = useState(false);
     const [q2Ans, setQ2Ans] = useState(false);
 
-    const [agreed, setAgreed] = useState(false);
+    const [agreed, setAgreed] = useState(props.application ? true : false);
     const [showError, setShowError] = useState(false);
     const [reqError, setReqError] = useState(false);
     const [reqErrorMsg, setReqErrorMsg] = useState('');
 
-    const [files, setFiles] = useState<Blob[]>([])
+    const [files, setFiles] = useState<File[]>([])
 
     function handleFileChange(event : ChangeEvent<HTMLInputElement>) {
         console.log(event)
@@ -83,7 +84,7 @@ const NewSeat = (props: {
             return f;
         })
     }
-    function removeFile(f1: Blob){
+    function removeFile(f1: File){
         setFiles(f =>{
             let fc = [...f]
             fc.splice(fc.indexOf(f1))
@@ -110,74 +111,75 @@ const NewSeat = (props: {
                     setReqError(true)
             }
         })
+    
+    const [resubmitQuery, {}] = useMutation(
+        RESUBMIT_APPLICATION
+    )
 
     const allQuestionsAnswered = [setQ1Ans, setQ2Ans];
 
-    function handleSubmit() {
-        console.log("here");
+
+
+    async function handleSubmit() {
         if(!agreed) {
             setShowError(true);
             return;
         }        
+        let id : number[] = []
         if(files.length > 0){
-
-            const url = 'http://localhost:3000/upload';
-            const formData = new FormData();
-            files.forEach(f =>{
-                formData.append('file', f);
-                formData.append('filename', f.name);
-            })
-            let token = localStorage.getItem('token');
-    
-            fetch(url, {
-                method : 'post',
-                body : formData,
-                headers : {
-                    'authorization' : 'Bearer ' + token
-                }
-                // ... config
-            }).then(resp => resp.json()).then(data =>{
-                console.log(data);
-    
-                newSeatApplication({
-                    variables: {
-                        attachedFileIds: {
-                            array : data.id
-                        } ,
-                        q1: q1Ans,
-                        q2: q2Ans
-                    }
-                }).then(r => {
-                    console.log(r);
-                })
-                .catch(_ =>{
-                    setReqError(true)
-                })
-            })
-            .catch(err =>{
-                console.log(err);
+            try{
+                id = await uploadFileToServer(files);
+            }
+            catch(err){
                 setReqError(true);
+                return ;
+            }
+        }
+        if(props.application?.status == ApplicationStatus.Revise){
+            resubmitQuery({
+                variables : {
+                    addedFileIds : {
+                        array : id
+                    },
+                    removedFilesIds : {
+                        array : removedFileIds
+                    },
+                    applicationId : props.application.applicationId
+                },
+                onCompleted : ()=>{
+                    router.push('/application/prevApplication')
+                },
+                onError : (err)=>{
+                    console.log(err);
+                    setReqError(true);
+                    setReqErrorMsg(err.message);
+                }
             })
         }
         else{
             newSeatApplication({
                 variables: {
                     attachedFileIds: {
-                        array : []
+                        array : id
                     } ,
                     q1: q1Ans,
                     q2: q2Ans
+                },
+                onCompleted : ()=>{
+                    router.push('/application/prevApplication')
+                },
+                onError : (err)=>{
+                    console.log(err);
+                    setReqError(true);
+                    setReqErrorMsg(err.message);
                 }
-            }).then(r => {
-                console.log(r);
-            })
-            .catch(_ =>{
-                setReqError(true)
             })
         }
 
 
     }
+
+    const [removedFileIds, setRemovedFileIds] = useState<number[]>([]);
 
     const handleChange = (event: SelectChangeEvent) => {
         setType(event.target.value as string);
@@ -190,7 +192,7 @@ const NewSeat = (props: {
     }
 
     let docUploadDisabled = props.application && (props.application.status !== 'REVISE')
-    let agreementDisabled = props.application != undefined;
+    let agreementDisabled = props.application != undefined && (props.application.status !== 'REVISE');
 
     return (
         <div style={{marginBottom: 20}}>
@@ -203,17 +205,33 @@ const NewSeat = (props: {
                 <MyCard title='Questionnaire'>
                     <Questionnaire answers={allQuestionsAnswered}/>
                 </MyCard>
-                    
-                <MyCard title= { (props.application ? 'Uploaded ' : 'Upload ') +  'Documents'}>
+
+                <div style={{
+                    display : "inline-block",
+                    width : 500
+                }}>
                     {
                         props.application && 
-                        <UploadedDocsList files={props.application.attachedFiles} />
+                        <MyCard title= { (props.application ? 'Uploaded ' : 'Upload ') +  'Documents'} style={{
+                            width : 500
+                        }} >
+                                <UploadedDocsList files={props.application.attachedFiles} removal = {props.application.status == ApplicationStatus.Revise ? {
+                                    removedFileIds : removedFileIds,
+                                    setRemovedFileIds : setRemovedFileIds
+                                } : undefined } />
+                            
+                        </MyCard>
                     }
                     {
-                        !props.application && 
-                        <UploadDocs files={files} onChange={handleFileChange} removeFile={removeFile}  />
+                        (!props.application || props.application.status == ApplicationStatus.Revise) &&
+                        <MyCard title = "Upload Documents" style={{
+                            width : 500, marginTop : 10
+                        }}  >
+                            <UploadDocs files={files} onChange={handleFileChange} removeFile={removeFile}  />
+                        </MyCard>
                     }
-                </MyCard>
+                </div>
+
             </div>
             <div className={styles.row}>
                 {
@@ -224,6 +242,25 @@ const NewSeat = (props: {
                         </MyCard>
                 }
             </div>
+            {
+                props.application?.status == ApplicationStatus.Revise &&
+                <MyCard title={"Revision Remarks"} style={{width : 500}}>
+                    <ol style={{
+                        marginTop : 20
+                    }}>
+                        {
+                            props.application.revisions && props.application.revisions.map((rev, index) => {
+                                return (
+                                    <li>
+                                        {getDayAndMonthAndYearString(rev.createdAt)} : {rev.reason}
+                                    </li>
+                                )
+                            })
+                        }
+                    </ol>
+                </MyCard>
+            }
+
             <div className={styles.agreement}>
                 <MyCard title=''>
                     <Agreement disabled = {agreementDisabled} handleAgreement={handleAgreement}/>
