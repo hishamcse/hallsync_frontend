@@ -101,6 +101,20 @@ function InfoTabs() {
     );
 }
 
+function ComplaintsTabs() {
+
+    const router = useRouter();
+    const routes = {
+        complaints: "complaints"
+    };
+
+    return (
+        <ul className={topBarStyles.tabs}>
+            <Tab href={"/complaints/" + routes.complaints} isActive={checkRouteContains(router, routes.complaints)} name="Complaints" />
+        </ul>
+    );
+}
+
 export function Logo(props : {
     containerStyle? : CSSProperties,
     containerClassName? : string
@@ -151,6 +165,11 @@ export function TopBar(){
                 {
                     router.pathname.includes('infoSearch/') &&
                     <InfoTabs />
+                }
+
+                {
+                    router.pathname.includes('complaints/') &&
+                    <ComplaintsTabs />
                 }
             </div>
             <div className={topBarStyles.notSection}>

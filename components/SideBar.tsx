@@ -113,22 +113,26 @@ export function StudentNavBar(){
     const routes = {
         app : "application/newApplication",
         mess : 'mess/meals',
-        info: 'infoSearch/rooms'
+        info: 'infoSearch/rooms',
+        complaints: 'complaints/complaints'
     }
     const imgPaths = {
         app : "/application.svg",
         mess : '/mess.svg',
-        info : '/info.svg'
+        info : '/info.svg',
+        complaints: '/feAngry1.svg'
     }
     const texts = {
         app : 'Application',
         mess : 'Mess',
-        info: 'InfoSearch'
+        info: 'InfoSearch',
+        complaints: 'Complaints'
     }
     const activeIf = {
         app : 'application/',
         mess : 'mess/',
-        info: 'infoSearch/'
+        info: 'infoSearch/',
+        complaints: 'complaints/'
     }
 
     return(
@@ -137,7 +141,7 @@ export function StudentNavBar(){
             { resident && 
             <ListItem active = {checkRouteContains(router,activeIf.mess)} href={'/' + routes.mess} imgPath={imgPaths.mess} text={texts.mess} />}
             <ListItem active = {checkRouteContains(router,activeIf.info)} href={'/' + routes.info} imgPath={imgPaths.info} text={texts.info} />
-            <li> <SideBarIcon src="/feAngry1.svg" /> Complaints</li>
+            <ListItem active = {checkRouteContains(router,activeIf.complaints)} href={'/' + routes.complaints} imgPath={imgPaths.complaints} text={texts.complaints} />
             <ListItem width={25} href='/' imgPath='/logout.svg' active = {false} text='logout' onClick={logOutOnClick} icon = {<LogoutOutlinedIcon />}  />
         </ul>
     )
@@ -159,17 +163,20 @@ export function AuthorityNabBar(){
         app : "seatManagement",
         mess : 'mess/meals',
         messApplication: "mess/messApplication",
-        info: 'infoSearch'
+        info: 'infoSearch',
+        complaints: 'complaints'
     }
     const imgPaths = {
         app : "/application.svg",
         mess : '/mess.svg',
-        info : '/info.svg'
+        info : '/info.svg',
+        complaints: '/feAngry1.svg'
     }
     const texts = {
         app : 'Seat Management',
         mess : 'Mess Management',
-        info: 'InfoSearch'
+        info: 'InfoSearch',
+        complaints: 'Complaints'
     }
 
     const checkActiveMess = () => {
@@ -188,7 +195,12 @@ export function AuthorityNabBar(){
                 <ListItem active={checkActiveMess()} href={'/' + routes.messApplication} imgPath={imgPaths.mess} text={texts.mess}/>
             }
             <ListItem active = {checkRouteContains(router,routes.info)} href={'/' + routes.info} imgPath={imgPaths.info} text={texts.info} />
-            <li> <SideBarIcon src="/feAngry1.svg" /> Complaints</li>
+            {/* <li> <SideBarIcon src= /> Complaints</li> */}
+            
+            {
+                // (messManager || resident) &&
+                <ListItem active = {checkRouteContains(router,routes.complaints)} href={'/' + routes.complaints} imgPath={imgPaths.complaints} text={texts.complaints} />
+            }
             <ListItem width={25} href='/' imgPath='/logout.svg' active = {false} text='logout' onClick={logOutOnClick} icon = {<LogoutOutlinedIcon />}  />
         </ul>
     )
