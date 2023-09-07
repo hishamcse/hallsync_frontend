@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import {ResidencyStatus, SelectedRoomStudentsQuery} from "../../graphql/__generated__/graphql";
+import {ResidencyStatus, RetrieveStudentsQuery, SelectedRoomStudentsQuery} from "../../graphql/__generated__/graphql";
 
 const fontSize = 16;
 
@@ -46,8 +46,8 @@ const rows = (residents: SelectedRoomStudentsQuery['selectedRoomStudents']) => {
     return residentsList;
 }
 
-const RoomResidentTable = (props: {
-    roomResidents: SelectedRoomStudentsQuery['selectedRoomStudents']
+const InfoTable = (props: {
+    roomResidents: SelectedRoomStudentsQuery['selectedRoomStudents'] | RetrieveStudentsQuery['retrieveStudents']['students']
 }) => {
     return (
         <TableContainer component={Paper} sx={{overflow: "hidden"}}>
@@ -77,6 +77,8 @@ const RoomResidentTable = (props: {
                             <TableCell align="left" sx={{ fontSize: fontSize }}>{row.batch}</TableCell>
                             <TableCell align="left" sx={{ fontSize: fontSize }}>{row.levelTerm}</TableCell>
                             <TableCell align="left" sx={{ fontSize: fontSize }}>
+                                {row.residencyStatus == ResidencyStatus.Attached &&
+                                    <span style={{color: '#EFF1F3'}}>{row.residencyStatus}</span>}
                                 {row.residencyStatus == ResidencyStatus.Resident &&
                                     <span style={{color: '#00ff00'}}>{row.residencyStatus}</span>}
                                 {row.residencyStatus == ResidencyStatus.TempResident &&
@@ -90,4 +92,4 @@ const RoomResidentTable = (props: {
     );
 }
 
-export default RoomResidentTable;
+export default InfoTable;

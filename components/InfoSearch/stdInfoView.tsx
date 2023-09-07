@@ -1,10 +1,12 @@
 import StdInfoPieChart from "./stdInfoPieChart";
+import StudentSearch from "./StudentSearch";
 
 const StdInfoView = () => {
 
     return (
-        <div>
+        <div style={{marginRight: 20}}>
             <StdInfoPieChart />
+            <StudentSearch />
         </div>
     )
 }

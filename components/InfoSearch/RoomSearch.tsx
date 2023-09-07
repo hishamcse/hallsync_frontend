@@ -6,7 +6,7 @@ import {useLazyQuery, useQuery} from "@apollo/client";
 import {ALL_FLOORS, GET_ROOMS_IN_FLOOR, ROOM_RESIDENTS} from "../../graphql/operations";
 import {SelectedFloorRoomsQuery, SelectedRoomStudentsQuery} from "../../graphql/__generated__/graphql";
 import ShowRoomButtons from "./showRoomButtons";
-import RoomResidentTable from "./roomResidentTable";
+import InfoTable from "./infoTable";
 
 const OptionDropDown = (props: {title: string, options: string[], onChange: (e : any) => void, val: string}) => {
     return (
@@ -143,7 +143,7 @@ const RoomSearch = () => {
                             marginTop: 20,
                         }}
                 >
-                    <RoomResidentTable roomResidents={roomResidents}/>
+                    <InfoTable roomResidents={roomResidents}/>
                 </MyCard>
             }
 

@@ -61,12 +61,14 @@ const documents = {
     "\n    query FullSeatStats {\n      fullSeatStats {\n        freeRooms\n        freeSeats\n        totalRooms\n        totalSeats\n      }\n    }\n": types.FullSeatStatsDocument,
     "\n    query FullStudentStats {\n      fullStudentStats {\n        totalAttached\n        totalResidents\n        totalStudents\n        totalTempResidents\n      }\n    }\n": types.FullStudentStatsDocument,
     "\n    query DepartmentWiseResidentStats {\n      departmentWiseResidentStats {\n        deptName\n        totalResidents\n      }\n    }\n": types.DepartmentWiseResidentStatsDocument,
-    "\nmutation DeleteNotification($notificationId: Float!) {\n  deleteNotification(notificationId: $notificationId)\n}\n": types.DeleteNotificationDocument,
     "\nquery GetAddedMealPlansByDateTime($mealTime: String!) {\n  getAddedMealPlansByDateTime(mealTime: $mealTime) {\n    day\n    mealId\n  }\n}\n": types.GetAddedMealPlansByDateTimeDocument,
     "\nquery GetMealPlan($mealTime: String!, $date: String!) {\n  getMealPlan(mealTime: $mealTime, date: $date) {\n    meal {\n      mealId\n      items {\n        itemId\n        name\n        type\n        photo {\n          photoId\n          file {\n            newFileName\n            fileName\n          }\n        }\n      }\n    }\n  }\n}\n": types.GetMealPlanDocument,
     "\n    query AllFloors {\n      allFloors\n    }\n": types.AllFloorsDocument,
     "\n    query SelectedFloorRooms($residentType: String!, $roomStatus: String!, $floorNo: Float!) {\n      selectedFloorRooms(residentType: $residentType, roomStatus: $roomStatus, floorNo: $floorNo) {\n        roomId\n        roomNo\n        seats {\n          seatId\n          seatLabel\n          residency {\n            student {\n              batch {\n                year\n              }\n              department {\n                shortName\n              }\n              levelTerm {\n                label\n              }\n              name\n              student9DigitId\n            }\n          }\n        }\n        floor {\n          floorNo\n          roomLabelLen\n        }\n      }\n    }\n": types.SelectedFloorRoomsDocument,
+    "\nmutation DeleteNotification($notificationId: Float!) {\n  deleteNotification(notificationId: $notificationId)\n}\n": types.DeleteNotificationDocument,
     "\n    query SelectedRoomStudents($roomId: Float!) {\n      selectedRoomStudents(roomId: $roomId) {\n        name\n        student9DigitId\n        batch {\n          year\n        }\n        department {\n          shortName\n        }\n        levelTerm {\n          label\n        }\n        residency {\n          seat {\n            seatLabel\n          }\n          from\n          isCurrentMessManager\n        }\n        residencyStatus\n      }\n    }\n": types.SelectedRoomStudentsDocument,
+    "\n    query RetrieveStudents($page: Float!, $search: SearchInput, $sort: SortInput, $filters: StudentFilterInput) {\n      retrieveStudents(page: $page, search: $search, sort: $sort, filters: $filters) {\n        count\n        students {\n          name\n          levelTerm {\n            label\n          }\n          student9DigitId\n          residencyStatus\n          department {\n            shortName\n          }\n          batch {\n            year\n          }\n        }\n      }\n    }\n": types.RetrieveStudentsDocument,
+    "\n   query FILTER_STUDENT {\n      residencyStatus {\n        status\n        select\n      }\n      batches {\n        year\n      }\n      departments {\n        shortName\n      }\n      levelTerms {\n        label\n      }\n   }\n": types.Filter_StudentDocument,
 };
 
 /**
@@ -278,10 +280,6 @@ export function graphql(source: "\n    query DepartmentWiseResidentStats {\n    
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\nmutation DeleteNotification($notificationId: Float!) {\n  deleteNotification(notificationId: $notificationId)\n}\n"): (typeof documents)["\nmutation DeleteNotification($notificationId: Float!) {\n  deleteNotification(notificationId: $notificationId)\n}\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
 export function graphql(source: "\nquery GetAddedMealPlansByDateTime($mealTime: String!) {\n  getAddedMealPlansByDateTime(mealTime: $mealTime) {\n    day\n    mealId\n  }\n}\n"): (typeof documents)["\nquery GetAddedMealPlansByDateTime($mealTime: String!) {\n  getAddedMealPlansByDateTime(mealTime: $mealTime) {\n    day\n    mealId\n  }\n}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -298,7 +296,19 @@ export function graphql(source: "\n    query SelectedFloorRooms($residentType: S
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\nmutation DeleteNotification($notificationId: Float!) {\n  deleteNotification(notificationId: $notificationId)\n}\n"): (typeof documents)["\nmutation DeleteNotification($notificationId: Float!) {\n  deleteNotification(notificationId: $notificationId)\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n    query SelectedRoomStudents($roomId: Float!) {\n      selectedRoomStudents(roomId: $roomId) {\n        name\n        student9DigitId\n        batch {\n          year\n        }\n        department {\n          shortName\n        }\n        levelTerm {\n          label\n        }\n        residency {\n          seat {\n            seatLabel\n          }\n          from\n          isCurrentMessManager\n        }\n        residencyStatus\n      }\n    }\n"): (typeof documents)["\n    query SelectedRoomStudents($roomId: Float!) {\n      selectedRoomStudents(roomId: $roomId) {\n        name\n        student9DigitId\n        batch {\n          year\n        }\n        department {\n          shortName\n        }\n        levelTerm {\n          label\n        }\n        residency {\n          seat {\n            seatLabel\n          }\n          from\n          isCurrentMessManager\n        }\n        residencyStatus\n      }\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    query RetrieveStudents($page: Float!, $search: SearchInput, $sort: SortInput, $filters: StudentFilterInput) {\n      retrieveStudents(page: $page, search: $search, sort: $sort, filters: $filters) {\n        count\n        students {\n          name\n          levelTerm {\n            label\n          }\n          student9DigitId\n          residencyStatus\n          department {\n            shortName\n          }\n          batch {\n            year\n          }\n        }\n      }\n    }\n"): (typeof documents)["\n    query RetrieveStudents($page: Float!, $search: SearchInput, $sort: SortInput, $filters: StudentFilterInput) {\n      retrieveStudents(page: $page, search: $search, sort: $sort, filters: $filters) {\n        count\n        students {\n          name\n          levelTerm {\n            label\n          }\n          student9DigitId\n          residencyStatus\n          department {\n            shortName\n          }\n          batch {\n            year\n          }\n        }\n      }\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n   query FILTER_STUDENT {\n      residencyStatus {\n        status\n        select\n      }\n      batches {\n        year\n      }\n      departments {\n        shortName\n      }\n      levelTerms {\n        label\n      }\n   }\n"): (typeof documents)["\n   query FILTER_STUDENT {\n      residencyStatus {\n        status\n        select\n      }\n      batches {\n        year\n      }\n      departments {\n        shortName\n      }\n      levelTerms {\n        label\n      }\n   }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

@@ -1000,3 +1000,43 @@ export const ROOM_RESIDENTS = graphql(`
       }
     }
 `)
+
+export const RETRIEVE_STUDENTS = graphql(`
+    query RetrieveStudents($page: Float!, $search: SearchInput, $sort: SortInput, $filters: StudentFilterInput) {
+      retrieveStudents(page: $page, search: $search, sort: $sort, filters: $filters) {
+        count
+        students {
+          name
+          levelTerm {
+            label
+          }
+          student9DigitId
+          residencyStatus
+          department {
+            shortName
+          }
+          batch {
+            year
+          }
+        }
+      }
+    }
+`)
+
+export const FILTERS_STUDENT_DATA = graphql(`
+   query FILTER_STUDENT {
+      residencyStatus {
+        status
+        select
+      }
+      batches {
+        year
+      }
+      departments {
+        shortName
+      }
+      levelTerms {
+        label
+      }
+   }
+`);
