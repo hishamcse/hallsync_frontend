@@ -26,7 +26,6 @@ const StdInfoPieChart = () => {
         stdQuery({
             onCompleted: (data) => {
                 let arr_std = []
-                let colors1 = []
                 arr_std.push({
                     count: Math.round((data.fullStudentStats.totalAttached) * 100. / data.fullStudentStats.totalStudents),
                     name: "%Attached"

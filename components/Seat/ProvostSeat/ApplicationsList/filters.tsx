@@ -1,4 +1,3 @@
-
 import styles from "../../../../styles/seatManagementIndex.module.scss";
 import MUISelectStyled from '../../../MUIMultiSelectCheckbox';
 import { MyButton } from '../../../button';
@@ -11,7 +10,7 @@ type FilterProps  = {
     items : string[][],
     placeHolders : string[],
     resetOnClick : ()=> void,
-
+    width? : number
 }
 
 export function Filters(
@@ -40,7 +39,7 @@ export function Filters(
     );
 
     return <MyCard title={"Filters"} style={{
-        maxWidth : 550
+        maxWidth : props.width ?? 550
     }}>
         {content}
     </MyCard>

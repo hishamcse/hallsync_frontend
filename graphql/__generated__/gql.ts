@@ -69,6 +69,8 @@ const documents = {
     "\n    query SelectedRoomStudents($roomId: Float!) {\n      selectedRoomStudents(roomId: $roomId) {\n        name\n        student9DigitId\n        batch {\n          year\n        }\n        department {\n          shortName\n        }\n        levelTerm {\n          label\n        }\n        residency {\n          seat {\n            seatLabel\n          }\n          from\n          isCurrentMessManager\n        }\n        residencyStatus\n      }\n    }\n": types.SelectedRoomStudentsDocument,
     "\nmutation ReviseApplication($reason: String!, $applicationId: Float!) {\n  reviseApplication(reason: $reason, applicationId: $applicationId) {\n    revisionId\n  }\n}\n": types.ReviseApplicationDocument,
     "\nmutation ResubmitMutation($addedFileIds: IntArray!, $removedFilesIds: IntArray!, $applicationId: Float!) {\n  reSubmitApplication(addedFileIds: $addedFileIds, removedFilesIds: $removedFilesIds, applicationId: $applicationId) {\n    applicationId\n  }\n}\n": types.ResubmitMutationDocument,
+    "\n    query RetrieveStudents($page: Float!, $search: SearchInput, $sort: SortInput, $filters: StudentFilterInput) {\n      retrieveStudents(page: $page, search: $search, sort: $sort, filters: $filters) {\n        count\n        students {\n          name\n          levelTerm {\n            label\n          }\n          student9DigitId\n          residencyStatus\n          department {\n            shortName\n          }\n          batch {\n            year\n          }\n        }\n      }\n    }\n": types.RetrieveStudentsDocument,
+    "\n   query FILTER_STUDENT {\n      residencyStatus {\n        status\n        select\n      }\n      batches {\n        year\n      }\n      departments {\n        shortName\n      }\n      levelTerms {\n        label\n      }\n   }\n": types.Filter_StudentDocument,
 };
 
 /**
@@ -309,6 +311,14 @@ export function graphql(source: "\nmutation ReviseApplication($reason: String!, 
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\nmutation ResubmitMutation($addedFileIds: IntArray!, $removedFilesIds: IntArray!, $applicationId: Float!) {\n  reSubmitApplication(addedFileIds: $addedFileIds, removedFilesIds: $removedFilesIds, applicationId: $applicationId) {\n    applicationId\n  }\n}\n"): (typeof documents)["\nmutation ResubmitMutation($addedFileIds: IntArray!, $removedFilesIds: IntArray!, $applicationId: Float!) {\n  reSubmitApplication(addedFileIds: $addedFileIds, removedFilesIds: $removedFilesIds, applicationId: $applicationId) {\n    applicationId\n  }\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    query RetrieveStudents($page: Float!, $search: SearchInput, $sort: SortInput, $filters: StudentFilterInput) {\n      retrieveStudents(page: $page, search: $search, sort: $sort, filters: $filters) {\n        count\n        students {\n          name\n          levelTerm {\n            label\n          }\n          student9DigitId\n          residencyStatus\n          department {\n            shortName\n          }\n          batch {\n            year\n          }\n        }\n      }\n    }\n"): (typeof documents)["\n    query RetrieveStudents($page: Float!, $search: SearchInput, $sort: SortInput, $filters: StudentFilterInput) {\n      retrieveStudents(page: $page, search: $search, sort: $sort, filters: $filters) {\n        count\n        students {\n          name\n          levelTerm {\n            label\n          }\n          student9DigitId\n          residencyStatus\n          department {\n            shortName\n          }\n          batch {\n            year\n          }\n        }\n      }\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n   query FILTER_STUDENT {\n      residencyStatus {\n        status\n        select\n      }\n      batches {\n        year\n      }\n      departments {\n        shortName\n      }\n      levelTerms {\n        label\n      }\n   }\n"): (typeof documents)["\n   query FILTER_STUDENT {\n      residencyStatus {\n        status\n        select\n      }\n      batches {\n        year\n      }\n      departments {\n        shortName\n      }\n      levelTerms {\n        label\n      }\n   }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
