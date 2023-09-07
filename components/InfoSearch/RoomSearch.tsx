@@ -143,7 +143,7 @@ const RoomSearch = () => {
                             marginTop: 20,
                         }}
                 >
-                    <InfoTable roomResidents={roomResidents}/>
+                    <InfoTable students={roomResidents}/>
                 </MyCard>
             }
 

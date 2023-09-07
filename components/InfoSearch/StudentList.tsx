@@ -34,7 +34,7 @@ const StudentList = (props: {
                 ))}
             {props.students && (
                 <div style={{ margin: 15 }}>
-                    <InfoTable roomResidents={props.students}
+                    <InfoTable students={props.students}
                     />
                 </div>
             )}

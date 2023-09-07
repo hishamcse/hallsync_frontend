@@ -47,7 +47,7 @@ const rows = (residents: SelectedRoomStudentsQuery['selectedRoomStudents']) => {
 }
 
 const InfoTable = (props: {
-    roomResidents: SelectedRoomStudentsQuery['selectedRoomStudents'] | RetrieveStudentsQuery['retrieveStudents']['students']
+    students: SelectedRoomStudentsQuery['selectedRoomStudents'] | RetrieveStudentsQuery['retrieveStudents']['students']
 }) => {
     return (
         <TableContainer component={Paper} sx={{overflow: "hidden"}}>
@@ -64,7 +64,7 @@ const InfoTable = (props: {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows(props.roomResidents).map((row) => (
+                    {rows(props.students).map((row) => (
                         <TableRow
                             key={row.name + Math.random().toString()}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
