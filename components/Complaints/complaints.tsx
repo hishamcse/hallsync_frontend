@@ -15,117 +15,6 @@ import { MyDatePicker } from "../DatePicker";
 import { ComplaintTypeDropDown } from "./complaintTypeDropDown";
 import { Dayjs } from "dayjs";
 
-// const ComplaintView = () => {
-//     const [startDate, setStartDate] = useState<Dayjs | null>(null); // State for date filter 
-//     const [complaintType, setComplaintType] = useState(""); // State for complaint type filter
-//     const [studentId, setStudentId] = useState(""); // State for student ID filter
-//     const { attached, resident, messManager, authority } = useResidencyStatus();
-
-//     const { data, loading, error } = useQuery(GET_COMPLAINTS, {
-//         // Fetch all complaints
-//         fetchPolicy: "network-only",
-//     });
-//     const { data: complaintTypeData, loading: complaintTypeLoading, error: complaintTypeError } = useQuery(GET_COMPLAINT_BY_TYPE, {
-//         // Fetch all complaints
-//         fetchPolicy: "network-only",
-//     });
-//     const { data: complaintDateData, loading: complaintDateLoading, error: complaintDateError } = useQuery(GET_COMPLAINT_FROM_DATE, {
-//         // Fetch all complaints
-//         fetchPolicy: "network-only",
-//     });
-//     const { data: complaintStudentIdData, loading: complaintStudentIdLoading, error: complaintStudentIdError } = useQuery(GET_COMPLAINT_BY_STD_ID, {
-//         // Fetch all complaints
-//         fetchPolicy: "network-only",
-//     });
-//     if (loading || complaintTypeLoading || complaintDateLoading || complaintStudentIdLoading) return <p>Loading...</p>;
-    
-
-//     // Filter complaints based on user roles
-//     const filteredComplaints = data?.getComplaints.filter((complaint) => {
-//         if (resident) {
-//             // Students and residents can view all complaints
-//             // and add complaints
-//             return true;
-//         } else if ((authority && !messManager) || attached) {
-//             // Provosts and students with attached role can view complaints
-//             // but not add complaints
-//             return true;
-//         }
-//         // Handle other roles if needed
-//         return false;
-//     });
-
-//     // Filter complaints based on complaint type
-//     const filteredComplaintsByType = complaintTypeData?.getComplaintsByType.filter((complaint) => {
-//         if (complaintType === "") {
-//             return true;
-//         } else if (complaintType === complaint.type) {
-//             return true;
-//         }
-//         return false;
-//     });
-
-//     // Filter complaints based on date
-//     const filteredComplaintsByDate = complaintDateData?.getComplaintsFromDate.filter((complaint) => {
-//         if (startDate === null) {
-//             return true;
-//         } else if (startDate?.isSame(complaint.createdAt, "day")) {
-//             return true;
-//         }
-//         return false;
-//     });
-
-//     // Filter complaints based on student ID
-//     const filteredComplaintsByStudentId = complaintStudentIdData?.getComplaintsByStudentId.filter((complaint) => {
-//         if (studentId === "") {
-//             return true;
-//         } else if (studentId === complaint.students[0].student9DigitId) {
-//             return true;
-//         }
-//         return false;
-//     });
-
-//     // Handle filtering based on the selected date
-//     const handleDateFilter = () => {
-//         if (startDate) {
-//             // Use the GET_COMPLAINT_FROM_DATE query to fetch complaints from date
-
-//         } else {
-//             // Handle case when no date is selected
-//         }
-//     };
-
-//     // Handle filtering based on complaint type
-//     const handleTypeFilter = () => {
-//         if (complaintType) {
-//             // Use the GET_COMPLAINT_BY_TYPE query to fetch complaints by type
-//         } else {
-//             // Handle case when no type is selected
-//         }
-//     };
-
-//     // Handle filtering based on student ID
-//     const handleStudentIdFilter = () => {
-//         if (studentId) {
-//             // Use the GET_COMPLAINT_BY_STD_ID query to fetch complaints by student ID
-//         } else {
-//             // Handle case when no student ID is entered
-//         }
-//     };
-
-//     return (
-//         <div>
-//             asfasfas
-//         </div>
-//     );
-// }
-
-
-
-
-
-
-
 const SingleComplaint = (props: { complaint: GetComplaintsQuery['getComplaints'][0] }) => {
     
     return (
@@ -157,10 +46,10 @@ const SingleComplaint = (props: { complaint: GetComplaintsQuery['getComplaints']
                     }
                 </div> */}
                 <div style={{ color: "darkgrey" }}>
-                    {props.complaint.students && (
+                    {props.complaint.student.student9DigitId && (
                         <Typography variant={"body1"}>
                         <span><LocalOfferIcon />&nbsp;
-                            Student ID: {props.complaint.students[0].student9DigitId}
+                            Student ID: {props.complaint.student.student9DigitId}
                         </span>
                         </Typography>
                     )}
@@ -197,8 +86,8 @@ const ComplaintTitle = (props: { complaint: GetComplaintsQuery['getComplaints'][
                                                 complaintDetails={props.complaint.details}
                                                 date={new Date(props.complaint.createdAt).toDateString()}
                                                 //messManager={props.complaint.messManager}
-                                                studentId={props.complaint.students[0].student9DigitId}
-                                                studentName={props.complaint.students[0].name}
+                                                studentId={props.complaint.student.student9DigitId}
+                                                studentName={props.complaint.student.name}
                     />
                 </CustomizedDialog>
             }
@@ -282,7 +171,7 @@ const Complaints = () => {
                                          date={new Date().toDateString()}
                                             //messManager={messManager}
                                             //student Id from complaint data
-                                            studentId={complaints[0].students[0].student9DigitId}
+                                            studentId={complaints[0].student.student9DigitId}
                     />
                 </CustomizedDialog>
             }
