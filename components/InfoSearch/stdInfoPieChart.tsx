@@ -68,11 +68,11 @@ const StdInfoPieChart = () => {
     }, []);
 
     let textDivStyle: CSSProperties = {
-        padding: "10px 30px",
+        padding: "10px 20px",
         backgroundColor: "black",
         borderRadius: 10,
         margin: 10,
-        width: 180
+        width: 160
     }
 
     return (
