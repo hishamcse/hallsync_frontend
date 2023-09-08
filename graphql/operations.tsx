@@ -1060,3 +1060,51 @@ export const FILTERS_STUDENT_DATA = graphql(`
       }
    }
 `);
+
+export const GET_COMPLAINTS = graphql(`
+query GetComplaints {
+  getComplaints {
+    complaintId
+    complaintType
+    createdAt
+    details
+    title
+    type
+    students {
+      name
+      student9DigitId
+    }
+  }
+}
+`)
+
+export const GET_COMPLAINT_BY_STD_ID = graphql(`
+query GetComplaintsByStudent($studentId: Float!) {
+  getComplaintsByStudent(studentId: $studentId) {
+    complaintId
+    details
+    title
+    type
+    students {
+      name
+      student9DigitId
+    }
+  }
+}
+`)
+
+export const GET_COMPLAINT_BY_TYPE = graphql(`
+query GetComplaintsByType($type: String!) {
+  getComplaintsByType(type: $type) {
+    complaintId
+    createdAt
+    details
+    title
+    type
+    students {
+      name
+      student9DigitId
+    }
+  }
+}
+`)
