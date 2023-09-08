@@ -1108,3 +1108,19 @@ query GetComplaintsByType($type: String!) {
   }
 }
 `)
+
+export const GET_COMPLAINT_FROM_DATE = graphql(`
+query GetComplaintsFromDate($date: String!) {
+  getComplaintsFromDate(date: $date) {
+    complaintId
+    type
+    createdAt
+    details
+    title
+    students {
+      name
+      student9DigitId
+    }
+  }
+}
+`)
