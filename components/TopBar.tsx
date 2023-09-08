@@ -184,7 +184,10 @@ export function TopBar(){
                     console.log("lkjasdf", showNotification);
                     setShowNotification(!showNotification)
                 }} refForDiv = {divRef} />
-                <Icon active = {false} img = {<img src = '/avatar.svg' />} />
+                {
+                    user?.student &&
+                    <Icon active = {false} img = {<img src = '/avatar.svg' />} onClick={() => router.push('/profile/me')}/>
+                }
             </div>
             {
                 data && showNotification &&
