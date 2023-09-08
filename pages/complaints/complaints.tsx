@@ -1,6 +1,6 @@
 import Complaints from "../../components/Complaints/complaints";
 
-const Announcement = () => {
+const ComplaintPage = () => {
     return (
         <div className='contentRoot'>
             <Complaints />
@@ -8,4 +8,4 @@ const Announcement = () => {
     )
 }
 
-export default Announcement;
+export default ComplaintPage;
