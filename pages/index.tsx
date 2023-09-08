@@ -1,4 +1,3 @@
-import type { NextPage } from 'next'
 import {userContext, type NextPageWithLayout}  from './_app'
 import { ReactElement, useContext, useState } from 'react'
 import styles from '../styles/index.module.scss'
@@ -6,21 +5,9 @@ import { Logo } from '../components/TopBar'
 import MyCard from '../components/card'
 import { MyInput } from '../components/input'
 import { MyButton } from '../components/button'
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { LOGIN } from '../graphql/operations'
 import { useRouter } from 'next/router'
-
-// function loginOnSubmit(id : string, pass : string){
-//   const { loading, data } = useQuery(
-//     LOGIN,
-//     {variables : {
-//       loginId : id,
-//       password : pass
-//     }}
-//   );
-//   console.log(data);
-
-// }
 
 export function Loading(){
   return (
@@ -41,8 +28,10 @@ function Login(){
       // console.log(data);
       setUser(data.login);
       localStorage.setItem("token", data.login.token);
-      if(data.login.student)
-        router.push('./application/newApplication');
+      if(data.login.student) {
+        // router.push('./application/newApplication');
+        router.push('./profile/me')
+      }
       else
         router.push('./seatManagement')
     }

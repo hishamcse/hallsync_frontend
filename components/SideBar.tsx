@@ -111,21 +111,25 @@ export function StudentNavBar(){
     }
 
     const routes = {
+        profile : "profile/me",
         app : "application/newApplication",
         mess : 'mess/meals',
         info: 'infoSearch/rooms'
     }
     const imgPaths = {
+        profile : "/avatar.svg",
         app : "/application.svg",
         mess : '/mess.svg',
         info : '/info.svg'
     }
     const texts = {
+        profile : 'Profile',
         app : 'Application',
         mess : 'Mess',
         info: 'InfoSearch'
     }
     const activeIf = {
+        profile : 'profile/',
         app : 'application/',
         mess : 'mess/',
         info: 'infoSearch/'
@@ -133,6 +137,7 @@ export function StudentNavBar(){
 
     return(
         <ul  >
+            <ListItem active = {checkRouteContains(router,activeIf.profile)} href={'/' + routes.profile} imgPath={imgPaths.profile} text={texts.profile} />
             <ListItem active = {checkRouteContains(router,activeIf.app)} href={'/' + routes.app} imgPath={imgPaths.app} text={texts.app} />
             { resident && 
             <ListItem active = {checkRouteContains(router,activeIf.mess)} href={'/' + routes.mess} imgPath={imgPaths.mess} text={texts.mess} />}
