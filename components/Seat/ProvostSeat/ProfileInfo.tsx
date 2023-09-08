@@ -1,7 +1,6 @@
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import * as React from "react";
 import styles from '../../../styles/studentSeat.module.scss';
-import { ApplicationDetailsQuery } from "../../../graphql/__generated__/graphql";
 
 const ProfileInfo = (props: {info : {
     name : string,
@@ -14,7 +13,8 @@ const ProfileInfo = (props: {info : {
     },
     levelTerm : {
         label : string
-    }
+    },
+    phone : string
 
 }}) => {
     return (
@@ -25,6 +25,7 @@ const ProfileInfo = (props: {info : {
                 <p>Batch: {props.info.batch.year}</p>
                 <p>Department: {props.info.department.shortName.toUpperCase()}</p>
                 <p>Level/Term: {props.info.levelTerm.label}</p>
+                <p>Phone: {props.info.phone}</p>
             </div>
             <div>
                 <AccountCircleIcon sx={{ fontSize: 180 }}/>

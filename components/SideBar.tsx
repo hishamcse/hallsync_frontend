@@ -168,7 +168,7 @@ export function AuthorityNabBar(){
         app : "seatManagement",
         mess : 'mess/meals',
         messApplication: "mess/messApplication",
-        info: 'infoSearch',
+        info: 'infoSearch/rooms',
         complaints: 'complaints'
     }
     const imgPaths = {

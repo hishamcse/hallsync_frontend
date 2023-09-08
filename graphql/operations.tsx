@@ -133,6 +133,7 @@ export const GET_APPLICATION = graphql(`
             label
           }
           name
+          phone
           residencyStatus
           studentId
           residency {
@@ -227,17 +228,31 @@ export const GET_INFO = graphql(`
     selfInfo {
       student {
         studentId
+        name
+        student9DigitId
+        batch {
+           year
+        }
+        department {
+           shortName
+        }
+        levelTerm {
+           label
+        }
+        phone
         residencyStatus
         residency {
           isCurrentMessManager
             seat {
               room {
+                roomId
                 roomNo
                 floor {
                   floorNo
                   roomLabelLen
                 }
               }
+              seatLabel
             }
         }
       }
@@ -271,6 +286,7 @@ export const MY_APPLICATIONS = graphql(`
       name
       residencyStatus
       studentId
+      phone
     }
     newApplication {
       newApplicationId

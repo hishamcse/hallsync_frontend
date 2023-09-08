@@ -9,39 +9,10 @@ import {types} from "./StudentView";
 import {useMutation} from "@apollo/client";
 import {POST_SEAT_CHANGE_APPLICATION} from "../../../graphql/operations";
 import {useRouter} from "next/router";
-import { FreeRoom } from "../freeRoom";
 import { ReasonForChange } from "./TempSeat";
 import { ApplicationDetailsQuery } from "../../../graphql/__generated__/graphql";
 import { MyButton } from "../../button";
-
-// const ReasonForChange = (props: {handleReason: (str: string) => void}) => {
-//     return (
-//         <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
-//             <MUIStyledTextarea rows={10} placeHolder="State your reason here" handleInput={props.handleReason}/>
-//         </div>
-//     )
-// }
-
-const RoomPreference = (props: {
-    currentRoom: number,
-    setSeatId : (v : number | undefined)=>void,
-    disable? : boolean,
-    seat? : NonNullable<ApplicationDetailsQuery['applicationDetails']['seatChangeApplication']>['toSeat']
-
-}) => {
-    return (
-        <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
-            <span style={{marginLeft: 5}}>
-                Currently Allocated Room: {props.currentRoom}
-            </span>
-            <FreeRoom initVal={props.seat ? {
-                    floorNo : props.seat.room.floor.floorNo,
-                    roomNo : props.seat.room.roomNo,
-                    seatLabel : props.seat.seatLabel
-                } : undefined} disabled = {props.disable} setSeatId={props.setSeatId}  />
-        </div>
-    )
-}
+import RoomPreference from "./RoomPref";
 
 const RoomChange = (props: {
     changeType: (event: SelectChangeEvent) => void,
@@ -100,11 +71,6 @@ const RoomChange = (props: {
     }
 
     const submission = () => {
-        // console.log('submitted');
-        // console.log(reason);
-        // console.log(seatId);
-        // console.log(agreed);
-
         if(!agreed) {
             setShowError(true);
             setBlankError(false);
