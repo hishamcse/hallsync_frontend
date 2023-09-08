@@ -158,7 +158,7 @@ const Complaints = () => {
                 </Typography>
             </div>
             {
-                (messManager || authority) && <div>
+                (!(authority && !messManager)) && <div>
                 <Button variant='contained' color="primary" size='large' style={{margin: 20}} onClick={handleShowDetails}>
                     +&nbsp;Add Complaint
                 </Button>
