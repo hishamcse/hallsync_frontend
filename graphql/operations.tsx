@@ -1126,7 +1126,7 @@ query GetComplaintsFromDate($date: String!) {
 `)
 
 export const ADD_COMPLAINT = graphql(`
-mutation Mutation($type: String!, $details: String!, $title: String!) {
+mutation complaintMutation($type: String!, $details: String!, $title: String!) {
   addComplaint(type: $type, details: $details, title: $title) {
     complaintId
     title
