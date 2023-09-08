@@ -1,37 +1,26 @@
-import {GET_INFO, ROOM_RESIDENTS} from "../../graphql/operations";
+import {ROOM_RESIDENTS} from "../../graphql/operations";
 import {useQuery} from "@apollo/client";
-import {useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import ProfileInfo from "../Seat/ProvostSeat/ProfileInfo";
 import MyCard from "../card";
 import * as React from "react";
 import {Title} from "../Seat/ProvostSeat/AppDetailsTitle";
 import RoomPreference from "../Seat/StudentSeat/RoomPref";
 import {generateRoomNumber} from "../utilities";
-import {SelectedRoomStudentsQuery} from "../../graphql/__generated__/graphql";
+import {LoginMutation, ResidencyStatus, SelectedRoomStudentsQuery} from "../../graphql/__generated__/graphql";
 import InfoTable from "../InfoSearch/infoTable";
+import {userContext} from "../../pages/_app";
 
 const ProfileView = () => {
 
-    const [profileInfo, setProfileInfo] = useState<any>(undefined);
+    const {user} = useContext(userContext);
+    const [profileInfo, setProfileInfo] = useState<LoginMutation['login']['student']>();
     const [seat, setSeat] = useState<any>();
     const [fullRoomNo, setFullRoomNo] = useState<number>(0);
     const [roomId, setRoomId] = useState<number>(0);
 
     const [roomResidents, setRoomResidents] =
         useState<SelectedRoomStudentsQuery['selectedRoomStudents']>([]);
-
-    const {loading, error, data} = useQuery(GET_INFO, {
-        onCompleted: (data) => {
-            setProfileInfo(data.selfInfo.student);
-            if (data.selfInfo?.student?.residency?.seat) {
-                setSeat(data.selfInfo.student.residency.seat)
-                setFullRoomNo(generateRoomNumber(data.selfInfo.student.residency.seat.room.floor.floorNo,
-                    data.selfInfo.student.residency.seat.room.floor.roomLabelLen,
-                    data.selfInfo.student.residency.seat.room.roomNo))
-                setRoomId(data.selfInfo.student.residency.seat.room.roomId)
-            }
-        }
-    });
 
     useQuery(ROOM_RESIDENTS, {
         variables: {
@@ -46,14 +35,33 @@ const ProfileView = () => {
         }
     })
 
+    useEffect(() => {
+        let item = localStorage.getItem('token');
+        console.log(item)
+        if(item && user && user.student) setProfileInfo(user.student);
+        if(item && user && user.student && user.student.residencyStatus == ResidencyStatus.Resident) {
+            const room = user.student.residency?.seat.room;
+            if(room) {
+                const floor = room.floor.floorNo;
+                const block = room.floor.roomLabelLen;
+                const roomNo = room.roomNo;
+                const roomId = room.roomId;
+
+                setFullRoomNo(generateRoomNumber(floor, block, roomNo));
+                setSeat(user.student.residency?.seat)
+                setRoomId(roomId)
+            }
+        }
+    }, [user])
+
     return (
         <div>
-            <Title text="My Profile"/>
+            <Title text="Your Profile"/>
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 {
-                    profileInfo &&
+                    profileInfo && profileInfo.name &&
                     <MyCard title='Profile' style={{
-                        minWidth: 550, marginLeft: 30
+                        minWidth: 550, marginLeft: 35
                     }}>
                         <ProfileInfo info={profileInfo}/>
                     </MyCard>
@@ -61,7 +69,7 @@ const ProfileView = () => {
                 {
                     seat &&
                     <MyCard title='Alloted Room' style={{
-                        minWidth: 550, marginRight: 30, height: 200
+                        minWidth: 550, marginRight: 35, height: 200
                     }}>
                         <RoomPreference
                             currentRoom={fullRoomNo} setSeatId={() => {
@@ -77,7 +85,7 @@ const ProfileView = () => {
                 <MyCard title={`Residents of Your Room ${fullRoomNo}`}
                         style={{
                             width: '95%',
-                            margin: 30,
+                            margin: 35,
                         }}
                 >
                     <InfoTable students={roomResidents}/>

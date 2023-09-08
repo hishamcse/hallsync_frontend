@@ -14,12 +14,25 @@ export const LOGIN = graphql(`
   mutation Login($password: String!, $loginId: String!) {
     login(password: $password, id: $loginId) {
       student {
+        student9DigitId
+        batch {
+           year
+        }
+        department {
+          shortName
+        }
+        levelTerm {
+          label
+        }
+        name
+        phone
         studentId
         residencyStatus
         residency {
           isCurrentMessManager
             seat {
               room {
+                roomId
                 roomNo
                 floor {
                   floorNo
