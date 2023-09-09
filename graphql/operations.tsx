@@ -39,6 +39,7 @@ export const LOGIN = graphql(`
                   roomLabelLen
                 }
               }
+              seatLabel
             }
         }
       }

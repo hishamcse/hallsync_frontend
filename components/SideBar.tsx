@@ -9,6 +9,10 @@ import { GET_INFO } from '../graphql/operations'
 import { MyButton } from './button'
 import useResidencyStatus from '../hooks/useResidencyStatus'
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import RestaurantIcon from '@mui/icons-material/Restaurant';
+import SignalCellularAltOutlinedIcon from '@mui/icons-material/SignalCellularAltOutlined';
+import AppRegistrationOutlinedIcon from '@mui/icons-material/AppRegistrationOutlined';
 
 export function SideBarIcon(
     props : {
@@ -140,13 +144,19 @@ export function StudentNavBar(){
     }
 
     return(
-        <ul  >
-            <ListItem active = {checkRouteContains(router,activeIf.profile)} href={'/' + routes.profile} imgPath={imgPaths.profile} text={texts.profile} />
-            <ListItem active = {checkRouteContains(router,activeIf.app)} href={'/' + routes.app} imgPath={imgPaths.app} text={texts.app} />
+        <ul>
+            <ListItem active = {checkRouteContains(router,activeIf.profile)} href={'/' + routes.profile} imgPath={imgPaths.profile}
+                      text={texts.profile} icon={<PersonOutlineIcon />}/>
+            <ListItem active = {checkRouteContains(router,activeIf.app)} href={'/' + routes.app} imgPath={imgPaths.app}
+                      text={texts.app} icon={<AppRegistrationOutlinedIcon />}/>
             { resident && 
-            <ListItem active = {checkRouteContains(router,activeIf.mess)} href={'/' + routes.mess} imgPath={imgPaths.mess} text={texts.mess} />}
-            <ListItem active = {checkRouteContains(router,activeIf.info)} href={'/' + routes.info} imgPath={imgPaths.info} text={texts.info} />
-            <ListItem active = {checkRouteContains(router,activeIf.complaints)} href={'/' + routes.complaints} imgPath={imgPaths.complaints} text={texts.complaints} />
+            <ListItem active = {checkRouteContains(router,activeIf.mess)} href={'/' + routes.mess} imgPath={imgPaths.mess}
+                      text={texts.mess} icon={<RestaurantIcon />}/>
+            }
+            <ListItem active = {checkRouteContains(router,activeIf.info)} href={'/' + routes.info} imgPath={imgPaths.info}
+                      text={texts.info} icon={<SignalCellularAltOutlinedIcon />}/>
+            <ListItem active = {checkRouteContains(router,activeIf.complaints)} href={'/' + routes.complaints}
+                      imgPath={imgPaths.complaints} text={texts.complaints} />
             <ListItem width={25} href='/' imgPath='/logout.svg' active = {false} text='logout' onClick={logOutOnClick} icon = {<LogoutOutlinedIcon />}  />
         </ul>
     )
@@ -190,16 +200,20 @@ export function AuthorityNabBar(){
 
     return(
         <ul >
-            <ListItem active = {checkRouteContains(router,routes.app)} href={'/' + routes.app} imgPath={imgPaths.app} text={texts.app} />
+            <ListItem active = {checkRouteContains(router,routes.app)} href={'/' + routes.app} imgPath={imgPaths.app}
+                      text={texts.app} icon={<AppRegistrationOutlinedIcon />}/>
             {
                 (messManager || resident) &&
-                <ListItem active={checkActiveMess()} href={'/' + routes.mess} imgPath={imgPaths.mess} text={texts.mess}/>
+                <ListItem active={checkActiveMess()} href={'/' + routes.mess} imgPath={imgPaths.mess}
+                          text={texts.mess} icon={<RestaurantIcon />}/>
             }
             {
                 authority &&
-                <ListItem active={checkActiveMess()} href={'/' + routes.messApplication} imgPath={imgPaths.mess} text={texts.mess}/>
+                <ListItem active={checkActiveMess()} href={'/' + routes.messApplication} imgPath={imgPaths.mess}
+                          text={texts.mess} icon={<RestaurantIcon />}/>
             }
-            <ListItem active = {checkRouteContains(router,routes.info)} href={'/' + routes.info} imgPath={imgPaths.info} text={texts.info} />
+            <ListItem active = {checkRouteContains(router,routes.info)} href={'/' + routes.info} imgPath={imgPaths.info}
+                      text={texts.info} icon={<SignalCellularAltOutlinedIcon />}/>
             {/* <li> <SideBarIcon src= /> Complaints</li> */}
             
             {
