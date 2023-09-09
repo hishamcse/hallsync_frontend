@@ -18,6 +18,7 @@ import { Dayjs } from "dayjs";
 import { Filters } from "../Seat/ProvostSeat/ApplicationsList/filters";
 import { SortBy } from "../Seat/ProvostSeat/ApplicationsList/sortby";
 import styles from '../../styles/seatManagementIndex.module.scss'
+import { GET_COMPLAINTS_2 } from "../../graphql/operations";
 
 const SingleComplaint = (props: { complaint: GetComplaintsQuery['getComplaints'][0] }) => {
     
@@ -105,23 +106,96 @@ const Complaints = () => {
     const [options, setOptions] = useState<string[][]>([[]]);
     const [orderBy, setOrderBy] = useState<string>('Time');
     const [order, setOrder] = useState<string>('Newest');
+    const [search, setSearch] = useState<string>('');
+    const [searchGT3, setSearchGT3] = useState<string>('');
+    const [page, setPage] = useState(1);
+    const [type, setType] = useState<string>('');
 
     const isResident = user?.student?.residencyStatus === 'RESIDENT';
     const studentId = isResident ? user?.student?.studentId : null;
 
+    let queryVars  = {
+        filters : {
+            type : complaintType,
+        },
+        sort : {
+            order : order,
+            orderBy : orderBy
+        },
+        search : {
+            searchBy : searchGT3
+        },
+        page : page
+    }
 
-    // fetch the studentid of current user if user is a student resident
     
-    //const queryToUse = isResident ? GET_COMPLAINT_BY_STD_ID : GET_COMPLAINTS; // Use the appropriate query based on the user's role
+    const {data: dataByType, loading: loadingByType, error: errorByType, refetch} = useQuery(GET_COMPLAINTS_2, {
+        variables: queryVars,
+        onCompleted: (data) => {
+            console.log(data);
+            if(!isResident){
+                setComplaints(data.getComplaints2);
+                console.log("dekha jak ki hoy");
+            }
+        },
+        onError: (error) => {
+            console.log(error);
+        }
+    })
+
+    useEffect(()=>{
+        query({
+            onCompleted : (data)=>{
+                if(data){
+                    let arr : string[][] = [];
+                    arr.push(data.getComplaintsByType.map(b => b.type)); 
+                    setOptions(arr);
+                    console.log("dekha jak ki hoy");
+                    console.log(arr);
+                }
+            }
+        })
+    }, [complaintType])
+
+
+    function handleOptionChange(e : React.ChangeEvent<HTMLInputElement>){
+        setType(e.target.value);
+    }
+
+    function pageReset(s : (s : string[])=>void){
+        return (v : string[])=>{
+            s(v);
+            setPage(1);
+        }
+    }
+
+    function setSearch_(s : string){
+        setSearch(s);
+        if(s.trim().length >= 3){
+            setSearchGT3(s);
+            setPage(1);
+        }
+        else{
+            setSearchGT3('');
+        }
+    }
 
     function filterResetOnClick(){
         setComplaintType([]);
     }
 
     function sortResetOnClick(){
-        setOrder('Newest');
         setOrderBy('Time');
+        setOrder('Newest');
     }
+
+    function InitialStatusSelectReset(v : string[]){
+        refetch({
+            ... queryVars
+        });
+        setComplaintType(v);
+    }
+
 
 
     const studentIdWithDefault = studentId || 0;
@@ -153,23 +227,25 @@ const Complaints = () => {
         }
     })
 
+    
+
     const [query , {data : optionsData}] = useLazyQuery(
         GET_COMPLAINT_BY_TYPE
     )
 
-    useEffect(()=>{
-        query({
-            onCompleted : (data)=>{
-                if(data){
-                    let arr : string[][] = [];
-                    arr.push(data.getComplaintsByType.map(b => b.type)); 
-                    setOptions(arr);
-                    console.log("dekha jak ki hoy");
-                    console.log(arr);
-                }
-            }
-        })
-    }, [complaintType])
+    // useEffect(()=>{
+    //     query({
+    //         onCompleted : (data)=>{
+    //             if(data){
+    //                 let arr : string[][] = [];
+    //                 arr.push(data.getComplaintsByType.map(b => b.type)); 
+    //                 setOptions(arr);
+    //                 console.log("dekha jak ki hoy");
+    //                 console.log(arr);
+    //             }
+    //         }
+    //     })
+    // }, [complaintType])
 
 
 
