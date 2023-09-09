@@ -1109,8 +1109,8 @@ query GetComplaints {
 `)
 
 export const GET_COMPLAINTS_2 = graphql(`
-query GetComplaints2($page: Float!, $filters: complaintTypeFilerInput, $sort: SortInput) {
-  getComplaints2(page: $page, filters: $filters, sort: $sort) {
+query GetComplaints2($filters: complaintTypeFilerInput, $sort: SortInput, $search: SearchInput, $startDate: String, $studentId: Float) {
+  getComplaints2(filters: $filters, sort: $sort, search: $search, startDate: $startDate, studentId: $studentId) {
     complaintId
     createdAt
     type

@@ -1,6 +1,6 @@
 import useResidencyStatus from "../../hooks/useResidencyStatus";
 import {useMutation, useQuery, useLazyQuery} from "@apollo/client";
-import {GetAnnouncementsQuery, GetComplaintsQuery, GetComplaintsByStudentQuery} from "../../graphql/__generated__/graphql";
+import {GetComplaintsQuery, GetComplaintsByStudentQuery} from "../../graphql/__generated__/graphql";
 import {useContext, useEffect, useState} from "react";
 import {userContext} from "../../pages/_app";
 import MyCard from "../card";
@@ -104,15 +104,30 @@ const Complaints = () => {
     const [showDetails, setShowDetails] = useState<boolean>(false);
     const [complaintType, setComplaintType] = useState<string[]>([]);
     const [options, setOptions] = useState<string[][]>([[]]);
-    const [orderBy, setOrderBy] = useState<string>('Time');
-    const [order, setOrder] = useState<string>('Newest');
+    const [orderBy, setOrderBy] = useState<string>('createdAt');
+    const [order, setOrder] = useState<string>('asc');
     const [search, setSearch] = useState<string>('');
     const [searchGT3, setSearchGT3] = useState<string>('');
     const [page, setPage] = useState(1);
     const [type, setType] = useState<string>('');
+    const [startDate, setStartDate] = useState<string>('');
+    const [fromDate, setFromDate] = useState<Dayjs | null>(null);
+    const [message, setMessage] = useState<string>();
+
+
 
     const isResident = user?.student?.residencyStatus === 'RESIDENT';
     const studentId = isResident ? user?.student?.studentId : null;
+    const studentIdWithDefault = isResident ? user?.student?.studentId : -1;
+
+    function setFuncWrapper(f : (s : any)=>void){
+        return (a : any)=>{
+            f(a);
+            setMessage(undefined);
+        }
+    }
+
+    
 
     let queryVars  = {
         filters : {
@@ -125,37 +140,71 @@ const Complaints = () => {
         search : {
             searchBy : searchGT3
         },
-        page : page
+        startDate : fromDate?.toISOString(),
+        studentId : studentId,
     }
+
+
+    // const {data: dataByStudent, loading: loadingByStudent, error: errorByStudent} = useQuery(GET_COMPLAINT_BY_STD_ID, {
+    //     variables: {
+    //         studentId: studentIdWithDefault,
+    //     },
+    //     onCompleted: (data) => {
+    //         console.log(data);
+    //         if(isResident){
+    //             setComplaints(data.getComplaintsByStudent);
+    //         }
+    //     },
+    //     onError: (error) => {
+    //         console.log(error);
+    //     }
+    // })
+
+    // const {data, loading, error} = useQuery(GET_COMPLAINTS, {
+    //     onCompleted: (data) => {
+    //         console.log(data);
+    //         if(!isResident){
+    //             setComplaints(data.getComplaints);
+    //         }
+    //     },
+    //     onError: (error) => {
+    //         console.log(error);
+    //     }
+    // })
+
 
     
     const {data: dataByType, loading: loadingByType, error: errorByType, refetch} = useQuery(GET_COMPLAINTS_2, {
         variables: queryVars,
         onCompleted: (data) => {
             console.log(data);
-            if(!isResident){
+            
                 setComplaints(data.getComplaints2);
                 console.log("dekha jak ki hoy");
-            }
+                setOptions([['RESOURCE', 'STUFF', 'STUDENT']]);
         },
         onError: (error) => {
             console.log(error);
         }
     })
 
-    useEffect(()=>{
-        query({
-            onCompleted : (data)=>{
-                if(data){
-                    let arr : string[][] = [];
-                    arr.push(data.getComplaintsByType.map(b => b.type)); 
-                    setOptions(arr);
-                    console.log("dekha jak ki hoy");
-                    console.log(arr);
-                }
-            }
-        })
-    }, [complaintType])
+    
+
+    
+
+    // useEffect(()=>{
+    //     query({
+    //         onCompleted : (data)=>{
+    //             if(data){
+    //                 let arr : string[][] = [];
+                    
+    //                 setOptions(arr);
+    //                 console.log("dekha jak ki hoy");
+    //                 console.log(arr);
+    //             }
+    //         }
+    //     })
+    // }, [complaintType])
 
 
     function handleOptionChange(e : React.ChangeEvent<HTMLInputElement>){
@@ -185,8 +234,8 @@ const Complaints = () => {
     }
 
     function sortResetOnClick(){
-        setOrderBy('Time');
-        setOrder('Newest');
+        setOrderBy('createdAt');
+        setOrder('asc');
     }
 
     function InitialStatusSelectReset(v : string[]){
@@ -196,42 +245,9 @@ const Complaints = () => {
         setComplaintType(v);
     }
 
-
-
-    const studentIdWithDefault = studentId || 0;
-
-    const {data: dataByStudent, loading: loadingByStudent, error: errorByStudent} = useQuery(GET_COMPLAINT_BY_STD_ID, {
-        variables: {
-            studentId: studentIdWithDefault,
-        },
-        onCompleted: (data) => {
-            console.log(data);
-            if(isResident){
-                setComplaints(data.getComplaintsByStudent);
-            }
-        },
-        onError: (error) => {
-            console.log(error);
-        }
-    })
-
-    const {data, loading, error} = useQuery(GET_COMPLAINTS, {
-        onCompleted: (data) => {
-            console.log(data);
-            if(!isResident){
-                setComplaints(data.getComplaints);
-            }
-        },
-        onError: (error) => {
-            console.log(error);
-        }
-    })
-
-    
-
-    const [query , {data : optionsData}] = useLazyQuery(
-        GET_COMPLAINT_BY_TYPE
-    )
+    // const [query , {data : optionsData}] = useLazyQuery(
+    //     GET_COMPLAINT_BY_TYPE
+    // )
 
     // useEffect(()=>{
     //     query({
@@ -317,16 +333,30 @@ const Complaints = () => {
                     items={options}
                     setVals={[setComplaintType]}
                     placeHolders={['Complaint Type']}
-                    vals={[complaintType]}
+                    vals = {[complaintType]}
                     resetOnClick={filterResetOnClick}
                 />
                 <SortBy
-                    items={[['Time', 'Batch'], ['Newest', 'Oldest']]}
+                    items={[['createdAt'], ['asc', 'desc']]}
                     setVals={[setOrderBy, setOrder]}
                     vals={[orderBy, order]}
                     resetOnClick={sortResetOnClick}
                 />
+                <MyDatePicker date={fromDate} handleDate={setFuncWrapper(setFromDate)} />
+                {/* search option */}
+                <div className={styles.searchContainer}>
+                    <TextField
+                        placeholder="Search"
+                        style={{ width: '100%', backgroundColor: '#000', color: '#fff' }}
+                        onChange={(e) => setSearch_(e.target.value)}
+                        value={search}
+                    />
+                </div>
+
             </div>
+            
+
+
             {
                 showDetails &&
                 <CustomizedDialog show={true} setShow={setShowDetails} cardTitle='Add Complaint'>
