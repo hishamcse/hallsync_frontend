@@ -1108,6 +1108,23 @@ query GetComplaints {
 }
 `)
 
+export const GET_COMPLAINTS_2 = graphql(`
+query GetComplaints2($page: Float!, $filters: complaintTypeFilerInput, $sort: SortInput) {
+  getComplaints2(page: $page, filters: $filters, sort: $sort) {
+    complaintId
+    createdAt
+    type
+    details
+    title
+    student {
+      name
+      studentId
+      student9DigitId
+    }
+  }
+}
+`)
+
 export const GET_COMPLAINT_BY_STD_ID = graphql(`
 query GetComplaintsByStudent($studentId: Float!) {
   getComplaintsByStudent(studentId: $studentId) {
