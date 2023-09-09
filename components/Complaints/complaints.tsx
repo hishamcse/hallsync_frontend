@@ -1,7 +1,8 @@
 import useResidencyStatus from "../../hooks/useResidencyStatus";
 import {useMutation, useQuery} from "@apollo/client";
-import {GetAnnouncementsQuery, GetComplaintsQuery} from "../../graphql/__generated__/graphql";
-import {useState} from "react";
+import {GetAnnouncementsQuery, GetComplaintsQuery, GetComplaintsByStudentQuery} from "../../graphql/__generated__/graphql";
+import {useContext, useEffect, useState} from "react";
+import {userContext} from "../../pages/_app";
 import MyCard from "../card";
 import {Button, DialogActions, DialogContent, TextField, Typography} from "@mui/material";
 import {DateRangeIcon} from "@mui/x-date-pickers";
@@ -10,7 +11,7 @@ import CampaignIcon from '@mui/icons-material/Campaign';
 import CustomizedDialog from "../MUIDialog";
 import {useRouter} from "next/router";
 import MUIStyledTextarea from "../MUITextArea";
-import { GET_COMPLAINTS, GET_COMPLAINT_BY_STD_ID, GET_COMPLAINT_BY_TYPE, GET_COMPLAINT_FROM_DATE, ADD_COMPLAINT } from "../../graphql/operations";
+import { GET_COMPLAINTS, GET_COMPLAINT_BY_STD_ID,GET_INFO, GET_COMPLAINT_BY_TYPE, GET_COMPLAINT_FROM_DATE, ADD_COMPLAINT } from "../../graphql/operations";
 import { MyDatePicker } from "../DatePicker";
 import { ComplaintTypeDropDown } from "./complaintTypeDropDown";
 import { Dayjs } from "dayjs";
@@ -76,14 +77,14 @@ const ComplaintTitle = (props: { complaint: GetComplaintsQuery['getComplaints'][
             {
                 showDetails &&
                 <CustomizedDialog show={true} setShow={setShowDetails} cardTitle='Complaint Details'>
-                    <ComplaintDetailsContent complaintTitle={props.complaint.title}
+                    {<ComplaintDetailsContent complaintTitle={props.complaint.title}
                                                 complaintDetails={props.complaint.details}
                                                 complaintType={props.complaint.type}
                                                 date={new Date(props.complaint.createdAt).toDateString()}
-                                                //messManager={props.complaint.messManager}
-                                                studentId={props.complaint.student.student9DigitId}
+                                                studentId={props.complaint.student.studentId}
+                                                sudent9DigitId={props.complaint.student.student9DigitId}
                                                 studentName={props.complaint.student.name}
-                    />
+                    />}
                 </CustomizedDialog>
             }
         </div>
@@ -93,15 +94,25 @@ const ComplaintTitle = (props: { complaint: GetComplaintsQuery['getComplaints'][
 const Complaints = () => {
 
     const router = useRouter();
+    const {user} = useContext(userContext);
 
     const {messManager, resident, authority} = useResidencyStatus();
-    const [complaints, setcomplaints] = useState<GetComplaintsQuery['getComplaints']>([]);
+    
+    const [complaints, setComplaints] = useState<GetComplaintsQuery['getComplaints']>([]);
 
     const [showDetails, setShowDetails] = useState<boolean>(false);
     const [complaintType, setComplaintType] = useState<string[]>([]);
     const [options, setOptions] = useState<string[][]>([[]]);
     const [orderBy, setOrderBy] = useState<string>('Time');
     const [order, setOrder] = useState<string>('Newest');
+
+    const isResident = user?.student?.residencyStatus === 'RESIDENT';
+    const studentId = isResident ? user?.student?.studentId : null;
+
+
+    // fetch the studentid of current user if user is a student resident
+    
+    //const queryToUse = isResident ? GET_COMPLAINT_BY_STD_ID : GET_COMPLAINTS; // Use the appropriate query based on the user's role
 
     function filterResetOnClick(){
         setComplaintType([]);
@@ -112,18 +123,79 @@ const Complaints = () => {
         setOrderBy('Time');
     }
 
-    const {data, loading, error} = useQuery(
-        GET_COMPLAINTS, {
-            fetchPolicy: "network-only",
-            onCompleted: (data) => {
-                console.log(data);
-                setcomplaints(data.getComplaints);
-            },
-            onError: (error) => {
-                console.log(error);
+
+    const studentIdWithDefault = studentId || 0;
+
+    const {data: dataByStudent, loading: loadingByStudent, error: errorByStudent} = useQuery(GET_COMPLAINT_BY_STD_ID, {
+        variables: {
+            studentId: studentIdWithDefault,
+        },
+        onCompleted: (data) => {
+            console.log(data);
+            if(isResident){
+                setComplaints(data.getComplaintsByStudent);
             }
+        },
+        onError: (error) => {
+            console.log(error);
         }
-    )
+    })
+
+    const {data, loading, error} = useQuery(GET_COMPLAINTS, {
+        onCompleted: (data) => {
+            console.log(data);
+            if(!isResident){
+                setComplaints(data.getComplaints);
+            }
+        },
+        onError: (error) => {
+            console.log(error);
+        }
+    })
+
+    
+
+
+
+    // //console.log("log kortesi " + studentIdWithDefault);
+    // const { data, loading, error } = useQuery(queryToUse, {
+    //     variables: {
+    //       studentId: studentIdWithDefault,
+    //     },
+    //     fetchPolicy: "network-only",
+    //     onCompleted: (data) => {
+    //       console.log("inside onCompleted");
+    //       console.log(data);
+      
+    //       if (isResident) {
+    //         // Filter complaints by student ID for resident users
+    //         const filteredComplaints = data.getComplaints.filter(
+    //           (complaint) => complaint.student.studentId === studentIdWithDefault
+    //         );
+    //         setComplaints(data.getComplaintsByStudent);
+    //       } else {
+    //         setComplaints(data.getComplaints);
+    //       }
+    //       console.log(complaints);
+    //     },
+    //     onError: (error) => {
+    //       console.log(error);
+    //     },
+    //   });
+
+    // const {data, loading, error} = useQuery(GET_COMPLAINTS, {
+    //     onCompleted: (data) => {
+    //         console.log(data);
+    //         setComplaints(data.getComplaints);
+    //     },
+    //     onError: (error) => {
+    //         console.log(error);
+    //     }
+    // })
+
+
+
+    console.log(complaints);
 
     const [addcomplaint] = useMutation(
         ADD_COMPLAINT, {
@@ -164,30 +236,29 @@ const Complaints = () => {
                     Complaints
                 </Typography>
             </div>
-            {
-                (!(authority && !messManager)) && <div>
-                <Button variant='contained' color="primary" size='large' style={{margin: 20}} onClick={handleShowDetails}>
-                    +&nbsp;Add Complaint
-                </Button>
-                {/* Add filters by complaintType and sortBy date components */}
-                <div className={styles.filterSortContainer}>
-                    <Filters
-                        items={options}
-                        setVals={[setComplaintType]}
-                        placeHolders={['Batch', 'Dept', 'Status', 'Type','LevelTerm']}
-                        vals={[complaintType]}
-                        resetOnClick={filterResetOnClick}
-                    
-                    />
-                    <SortBy
-                        items={[['Time', 'Batch'], ['Newest', 'Oldest']]}
-                        setVals={[setOrderBy, setOrder]}
-                        vals={[orderBy, order]}
-                        resetOnClick={sortResetOnClick}
-                    />
+            {!authority || messManager ? (
+                <div>
+                    <Button variant='contained' color="primary" size='large' style={{ margin: 20 }} onClick={handleShowDetails}>
+                        +&nbsp;Add Complaint
+                    </Button>
                 </div>
+            ) : null}
+            {/* Add filters by complaintType and sortBy date components */}
+            <div className={styles.filterSortContainer}>
+                <Filters
+                    items={options}
+                    setVals={[setComplaintType]}
+                    placeHolders={['Batch', 'Dept', 'Status', 'Type', 'LevelTerm']}
+                    vals={[complaintType]}
+                    resetOnClick={filterResetOnClick}
+                />
+                <SortBy
+                    items={[['Time', 'Batch'], ['Newest', 'Oldest']]}
+                    setVals={[setOrderBy, setOrder]}
+                    vals={[orderBy, order]}
+                    resetOnClick={sortResetOnClick}
+                />
             </div>
-            }
             {
                 showDetails &&
                 <CustomizedDialog show={true} setShow={setShowDetails} cardTitle='Add Complaint'>
@@ -195,17 +266,18 @@ const Complaints = () => {
                                          date={new Date().toDateString()}
                                             //messManager={messManager}
                                             //student Id from complaint data
-                                            studentId={complaints[0].student.student9DigitId}
+                                            studentId={complaints[0].student.studentId}
                     />
                 </CustomizedDialog>
             }
             {
-                complaints.map((complaint, index) => {
+                complaints && complaints.map((complaint, index) => {
                     return (
                         // my card with complaints title and details
                         //<MyCard key={index} title={<complaintTitle complaint={complaint}/>}>
-                        <MyCard key={index} title={<ComplaintTitle complaint={complaint}/>}>
-                            <SingleComplaint complaint={complaint}/>
+                        <MyCard key={index} title={<ComplaintTitle complaint={complaint} />} >
+                            {<SingleComplaint complaint={complaint}/>}
+                            
                         </MyCard>
 
                     )
@@ -221,7 +293,8 @@ const ComplaintDetailsContent = (props: {
     complaintType?: string,
     date?: string,
     messManager?: boolean,
-    studentId?: string,
+    studentId?: number,
+    sudent9DigitId?: string,
     studentName?: string
 }) => {
     return (
@@ -248,10 +321,10 @@ const ComplaintDetailsContent = (props: {
                         </Typography>
                     </div>
                     <div style={{ color: "darkgrey" }}>
-                        {props.studentId && (
+                        {props.sudent9DigitId && (
                             <Typography variant={"body1"}>
                             <span><LocalOfferIcon />&nbsp;
-                                Student ID: {props.studentId}
+                                Student ID: {props.sudent9DigitId}
                             </span>
                             </Typography>
                         )}
@@ -264,7 +337,8 @@ const ComplaintDetailsContent = (props: {
 }
 
 const AddComplaintContent = (props: {
-    studentId?: string,
+    studentId?: number,
+    student9DigitId?: string,
     studentName?: string,
     date?: string,
     handleSubmission: (title: string, details: string, type: string) => void
@@ -327,10 +401,10 @@ const AddComplaintContent = (props: {
                         </div>
                         <div style={{color: "darkgrey"}}>
                             <div style={{ color: "darkgrey" }}>
-                                {props.studentId && (
+                                {props.student9DigitId && (
                                     <Typography variant={"body1"}>
                                     <span><LocalOfferIcon />&nbsp;
-                                        Student ID: {props.studentId}
+                                        Student ID: {props.student9DigitId}
                                     </span>
                                     </Typography>
                                 )}

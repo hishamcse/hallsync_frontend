@@ -1099,6 +1099,7 @@ query GetComplaints {
     title
     type
     student {
+      studentId
       name
       student9DigitId
     }
@@ -1110,10 +1111,12 @@ export const GET_COMPLAINT_BY_STD_ID = graphql(`
 query GetComplaintsByStudent($studentId: Float!) {
   getComplaintsByStudent(studentId: $studentId) {
     complaintId
+    createdAt
     details
     title
     type
     student {
+      studentId
       name
       student9DigitId
     }
@@ -1130,6 +1133,7 @@ query GetComplaintsByType($type: String!) {
     title
     type
     student {
+      studentId
       name
       student9DigitId
     }
@@ -1146,6 +1150,7 @@ query GetComplaintsFromDate($date: String!) {
     details
     title
     student {
+      studentId
       name
       student9DigitId
     }
@@ -1162,6 +1167,7 @@ mutation complaintMutation($type: String!, $details: String!, $title: String!) {
     createdAt
     type
     student {
+      studentId
       name
       student9DigitId
     }
