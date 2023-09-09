@@ -14,11 +14,20 @@ import { GET_COMPLAINTS, GET_COMPLAINT_BY_STD_ID, GET_COMPLAINT_BY_TYPE, GET_COM
 import { MyDatePicker } from "../DatePicker";
 import { ComplaintTypeDropDown } from "./complaintTypeDropDown";
 import { Dayjs } from "dayjs";
+import { Filters } from "../Seat/ProvostSeat/ApplicationsList/filters";
+import { SortBy } from "../Seat/ProvostSeat/ApplicationsList/sortby";
+import styles from '../../styles/seatManagementIndex.module.scss'
 
 const SingleComplaint = (props: { complaint: GetComplaintsQuery['getComplaints'][0] }) => {
     
     return (
         <div style={{margin: 20, width: '100%'}}>
+            <div style={{color: "white", margin: 30}}>
+                {/* write text "Type:"  followed by the complaint type*/}
+                <span>Type: {props.complaint.type}</span>
+
+                
+            </div>
             <div style={{color: "white", margin: 30}}>
                 {props.complaint.details.substring(0, 150)}....
             </div>
@@ -30,21 +39,6 @@ const SingleComplaint = (props: { complaint: GetComplaintsQuery['getComplaints']
                            {new Date(props.complaint.createdAt).toDateString()}</span>
                     </Typography>
                 </div>
-                {/* <div style={{color: "darkgrey"}}>
-                    {props.complaint.messManager &&
-                        <Typography variant={"body1"}>
-                       <span><LocalOfferIcon />&nbsp;
-                           Mess Manager</span>
-                        </Typography>
-                    }
-
-                    {props.complaint.authority &&
-                        <Typography variant={"body1"}>
-                       <span><LocalOfferIcon />&nbsp;&nbsp;
-                           Provost</span>
-                        </Typography>
-                    }
-                </div> */}
                 <div style={{ color: "darkgrey" }}>
                     {props.complaint.student.student9DigitId && (
                         <Typography variant={"body1"}>
@@ -84,6 +78,7 @@ const ComplaintTitle = (props: { complaint: GetComplaintsQuery['getComplaints'][
                 <CustomizedDialog show={true} setShow={setShowDetails} cardTitle='Complaint Details'>
                     <ComplaintDetailsContent complaintTitle={props.complaint.title}
                                                 complaintDetails={props.complaint.details}
+                                                complaintType={props.complaint.type}
                                                 date={new Date(props.complaint.createdAt).toDateString()}
                                                 //messManager={props.complaint.messManager}
                                                 studentId={props.complaint.student.student9DigitId}
@@ -103,6 +98,19 @@ const Complaints = () => {
     const [complaints, setcomplaints] = useState<GetComplaintsQuery['getComplaints']>([]);
 
     const [showDetails, setShowDetails] = useState<boolean>(false);
+    const [complaintType, setComplaintType] = useState<string[]>([]);
+    const [options, setOptions] = useState<string[][]>([[]]);
+    const [orderBy, setOrderBy] = useState<string>('Time');
+    const [order, setOrder] = useState<string>('Newest');
+
+    function filterResetOnClick(){
+        setComplaintType([]);
+    }
+
+    function sortResetOnClick(){
+        setOrder('Newest');
+        setOrderBy('Time');
+    }
 
     const {data, loading, error} = useQuery(
         GET_COMPLAINTS, {
@@ -133,15 +141,14 @@ const Complaints = () => {
         setShowDetails(!showDetails);
     }
 
-    const handleSubmission = (title: string, details: string) => {
-        console.log(title, details)
+    const handleSubmission = (title: string, details: string, type: string) => {
+        console.log(title, details, type)
 
         addcomplaint({
             variables : {
                 title : title,
                 details : details,
-                type : "stuff",
-                // studentId : complaints[0].students[0].student9DigitId
+                type : type,
             },
             onCompleted : (data) => {
                 console.log(data);
@@ -162,6 +169,23 @@ const Complaints = () => {
                 <Button variant='contained' color="primary" size='large' style={{margin: 20}} onClick={handleShowDetails}>
                     +&nbsp;Add Complaint
                 </Button>
+                {/* Add filters by complaintType and sortBy date components */}
+                <div className={styles.filterSortContainer}>
+                    <Filters
+                        items={options}
+                        setVals={[setComplaintType]}
+                        placeHolders={['Batch', 'Dept', 'Status', 'Type','LevelTerm']}
+                        vals={[complaintType]}
+                        resetOnClick={filterResetOnClick}
+                    
+                    />
+                    <SortBy
+                        items={[['Time', 'Batch'], ['Newest', 'Oldest']]}
+                        setVals={[setOrderBy, setOrder]}
+                        vals={[orderBy, order]}
+                        resetOnClick={sortResetOnClick}
+                    />
+                </div>
             </div>
             }
             {
@@ -191,13 +215,10 @@ const Complaints = () => {
     )
 }
 
-
-
-
-
 const ComplaintDetailsContent = (props: {
     complaintTitle?: string,
     complaintDetails?: string,
+    complaintType?: string,
     date?: string,
     messManager?: boolean,
     studentId?: string,
@@ -207,6 +228,9 @@ const ComplaintDetailsContent = (props: {
         <DialogContent dividers>
             <Typography variant={"h6"} gutterBottom style={{marginBottom: 20}}>
                 <span><CampaignIcon/>&nbsp;&nbsp;&nbsp;<i>{props.complaintTitle}</i></span>
+            </Typography>
+            <Typography variant={"body1"} gutterBottom style={{marginBottom: 20}}>
+                <span>Type : &nbsp;&nbsp;&nbsp;{props.complaintType}</span>
             </Typography>
             <Typography gutterBottom>
                 <MyCard style={{marginTop: 10, marginBottom: 20}} title=''>
@@ -223,21 +247,6 @@ const ComplaintDetailsContent = (props: {
                            {props.date}</span>
                         </Typography>
                     </div>
-                    {/* <div style={{color: "darkgrey"}}>
-                        {props.messManager &&
-                            <Typography variant={"body1"}>
-                       <span><LocalOfferIcon/>&nbsp;
-                           Mess Manager</span>
-                            </Typography>
-                        }
-
-                        {!props.messManager &&
-                            <Typography variant={"body1"}>
-                       <span><LocalOfferIcon/>&nbsp;&nbsp;
-                           Provost</span>
-                            </Typography>
-                        }
-                    </div> */}
                     <div style={{ color: "darkgrey" }}>
                         {props.studentId && (
                             <Typography variant={"body1"}>
@@ -258,10 +267,11 @@ const AddComplaintContent = (props: {
     studentId?: string,
     studentName?: string,
     date?: string,
-    handleSubmission: (title: string, details: string) => void
+    handleSubmission: (title: string, details: string, type: string) => void
 }) => {
 
     const [title, setTitle] = useState<string>();
+    const [type, setType] = useState<string>();
     const [details, setDetails] = useState<string>();
 
     const [error, setError] = useState<boolean>(false);
@@ -270,13 +280,17 @@ const AddComplaintContent = (props: {
         setTitle(event.target.value);
     }
 
+    const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setType(event.target.value);
+    }
+
     const handleSubmission = () => {
-        if(!title || !details) {
+        if(!title || !details || !type) {
             setError(true);
             return;
         }
         setError(false)
-        props.handleSubmission(title, details);
+        props.handleSubmission(title, details, type);
     }
 
     return (
@@ -288,6 +302,13 @@ const AddComplaintContent = (props: {
                                style={{width: '100%', backgroundColor: '#000', color: '#fff'}}
                                onChange={handleChange} value={title} onFocus={() => setError(false)}/>
                 </Typography>
+
+                {/* drop down menu of types */}
+                <Typography variant={"body1"} gutterBottom style={{marginBottom: 20, alignItems: 'center'}}>
+                    <span><CampaignIcon/>&nbsp;&nbsp;Type</span><br/>
+                    <ComplaintTypeDropDown val={type} setVal={setType}/>
+                </Typography>
+
 
                 <Typography variant={"body1"} gutterBottom style={{marginBottom: 20, alignItems: 'center'}}>
                     <span><CampaignIcon/>&nbsp;&nbsp;Description</span><br/>
@@ -305,29 +326,15 @@ const AddComplaintContent = (props: {
                             </Typography>
                         </div>
                         <div style={{color: "darkgrey"}}>
-                        <div style={{ color: "darkgrey" }}>
-                            {props.studentId && (
-                                <Typography variant={"body1"}>
-                                <span><LocalOfferIcon />&nbsp;
-                                    Student ID: {props.studentId}
-                                </span>
-                                </Typography>
-                            )}
-                        </div>
-                            {/* {props.messManager &&
-                                <Typography variant={"body1"}>
-                                   <span><LocalOfferIcon/>&nbsp;
-                                       Mess Manager</span>
-                                </Typography>
-                            }
-
-                            {!props.messManager &&
-                                <Typography variant={"body1"}>
-                                   <span><LocalOfferIcon/>&nbsp;&nbsp;
-                                       Provost</span>
-                                </Typography>
-                            } */}
-
+                            <div style={{ color: "darkgrey" }}>
+                                {props.studentId && (
+                                    <Typography variant={"body1"}>
+                                    <span><LocalOfferIcon />&nbsp;
+                                        Student ID: {props.studentId}
+                                    </span>
+                                    </Typography>
+                                )}
+                            </div>
 
                         </div>
                     </div>
