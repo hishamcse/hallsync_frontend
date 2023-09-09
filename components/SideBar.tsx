@@ -180,7 +180,7 @@ export function AuthorityNabBar(){
         mess : 'mess/meals',
         messApplication: "mess/messApplication",
         info: 'infoSearch/rooms',
-        complaints: 'complaints'
+        complaints: 'complaints/complaints'
     }
     const imgPaths = {
         app : "/application.svg",
