@@ -127,6 +127,7 @@ function Notification(props : {
     function showDetailsOnClick(){
         if(props.notification.applicationId){
             router.push("/application/prevApplication/" + props.notification.applicationId);
+            setShowNotification(false);
         }
         else if(props.notification.voteId){
             console.log("ah;lkfdjhkdjafh")
@@ -136,12 +137,9 @@ function Notification(props : {
             markQuery({
                 variables : {
                     notificationId : props.notification.notificationId
-                },
-                onCompleted : ()=>{
                 }
             })
         }
-        setShowNotification(false);
     }
     
     const {setShowNotification} = React.useContext(notificationContext);

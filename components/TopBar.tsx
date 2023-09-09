@@ -133,19 +133,19 @@ export function TopBar(){
     let {user} = useContext(userContext);
     let {showNotification, setShowNotification} = useContext(notificationContext);
     const divRef = useRef<HTMLDivElement>(null);
-    const [unseecCount, setUnseenCount] = useState(0);
 
     let [query , {data, loading}] = useLazyQuery(
-        GET_NOTIFICATIONS
+        GET_NOTIFICATIONS,
+        
     )
 
     useEffect(()=>{
         query({
             onCompleted : (d)=>{
                 console.log(d);
-                setUnseenCount(d.notifications.unseenCount);
             },
-            onError : (err)=>console.log(err)
+            onError : (err)=>console.log(err),
+            fetchPolicy : 'network-only'
         });
 
     }, [user?.student?.studentId]);

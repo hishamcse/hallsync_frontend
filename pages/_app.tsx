@@ -29,6 +29,7 @@ export const link = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => {
+  console.log("authLink");
   const token = localStorage.getItem('token');
   return {
     headers: {
@@ -46,6 +47,12 @@ const cache = new InMemoryCache({
     }
   }
 })
+
+
+export function resetCache(){
+  return cache.reset();
+}
+
 
 export const client = new ApolloClient({
   cache: cache,

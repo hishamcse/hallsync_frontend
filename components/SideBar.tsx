@@ -3,9 +3,9 @@ import sideBarStyles from '../styles/sidebar.module.scss'
 import { checkRouteContains } from './utilities'
 import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
-import { userContext } from '../pages/_app'
-import { useLazyQuery } from '@apollo/client'
-import { GET_INFO } from '../graphql/operations'
+import { resetCache, userContext } from '../pages/_app'
+import { useLazyQuery, useQuery } from '@apollo/client'
+import { GET_INFO, LOGIN } from '../graphql/operations'
 import { MyButton } from './button'
 import useResidencyStatus from '../hooks/useResidencyStatus'
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
@@ -158,10 +158,11 @@ export function AuthorityNabBar(){
 
     let {messManager, authority, resident} = useResidencyStatus();
 
-    function logOutOnClick(){
+    async function logOutOnClick(){
         console.log("logged out");
         localStorage.removeItem("token");
         setUser(undefined);
+        window.location.href = '/'
         // router.push('/')
     }
     const routes = {
