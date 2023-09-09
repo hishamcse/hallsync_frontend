@@ -179,7 +179,7 @@ const Complaints = () => {
         onCompleted: (data) => {
             console.log(data);
             
-                setComplaints(data.getComplaints2);
+                setComplaints(data.getSelectedComplaints);
                 console.log("dekha jak ki hoy");
                 setOptions([['RESOURCE', 'STUFF', 'STUDENT']]);
         },
