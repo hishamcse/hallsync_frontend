@@ -1,5 +1,5 @@
 import useResidencyStatus from "../../hooks/useResidencyStatus";
-import {useMutation, useQuery} from "@apollo/client";
+import {useMutation, useQuery, useLazyQuery} from "@apollo/client";
 import {GetAnnouncementsQuery, GetComplaintsQuery, GetComplaintsByStudentQuery} from "../../graphql/__generated__/graphql";
 import {useContext, useEffect, useState} from "react";
 import {userContext} from "../../pages/_app";
@@ -153,49 +153,41 @@ const Complaints = () => {
         }
     })
 
-    
+    const [query , {data : optionsData}] = useLazyQuery(
+        GET_COMPLAINT_BY_TYPE
+    )
+
+    useEffect(()=>{
+        query({
+            onCompleted : (data)=>{
+                if(data){
+                    let arr : string[][] = [];
+                    arr.push(data.getComplaintsByType.map(b => b.type)); 
+                    setOptions(arr);
+                    console.log("dekha jak ki hoy");
+                    console.log(arr);
+                }
+            }
+        })
+    }, [complaintType])
 
 
 
-    // //console.log("log kortesi " + studentIdWithDefault);
-    // const { data, loading, error } = useQuery(queryToUse, {
+    // const {data: dataByType, loading: loadingByType, error: errorByType} = useQuery(GET_COMPLAINT_BY_TYPE, {
     //     variables: {
-    //       studentId: studentIdWithDefault,
+    //         type: complaintType[0],
     //     },
-    //     fetchPolicy: "network-only",
-    //     onCompleted: (data) => {
-    //       console.log("inside onCompleted");
-    //       console.log(data);
-      
-    //       if (isResident) {
-    //         // Filter complaints by student ID for resident users
-    //         const filteredComplaints = data.getComplaints.filter(
-    //           (complaint) => complaint.student.studentId === studentIdWithDefault
-    //         );
-    //         setComplaints(data.getComplaintsByStudent);
-    //       } else {
-    //         setComplaints(data.getComplaints);
-    //       }
-    //       console.log(complaints);
-    //     },
-    //     onError: (error) => {
-    //       console.log(error);
-    //     },
-    //   });
-
-    // const {data, loading, error} = useQuery(GET_COMPLAINTS, {
     //     onCompleted: (data) => {
     //         console.log(data);
-    //         setComplaints(data.getComplaints);
+    //         if(!isResident){
+    //             setComplaints(data.getComplaintsByType);
+    //         }
     //     },
     //     onError: (error) => {
     //         console.log(error);
     //     }
     // })
-
-
-
-    console.log(complaints);
+    // console.log(complaints);
 
     const [addcomplaint] = useMutation(
         ADD_COMPLAINT, {
@@ -248,7 +240,7 @@ const Complaints = () => {
                 <Filters
                     items={options}
                     setVals={[setComplaintType]}
-                    placeHolders={['Batch', 'Dept', 'Status', 'Type', 'LevelTerm']}
+                    placeHolders={['Complaint Type']}
                     vals={[complaintType]}
                     resetOnClick={filterResetOnClick}
                 />
@@ -266,7 +258,7 @@ const Complaints = () => {
                                          date={new Date().toDateString()}
                                             //messManager={messManager}
                                             //student Id from complaint data
-                                            studentId={complaints[0].student.studentId}
+                                            studentId={studentIdWithDefault}
                     />
                 </CustomizedDialog>
             }
