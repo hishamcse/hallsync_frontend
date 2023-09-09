@@ -14,6 +14,9 @@ import { ComplaintTypeDropDown } from "./complaintTypeDropDown";
 import { Dayjs } from "dayjs";
 
 
+
+
+
 const ComplaintView = () => {
   const [startDate, setStartDate] = useState<Dayjs | null>(null); // State for date filter 
   const [complaintType, setComplaintType] = useState(""); // State for complaint type filter
@@ -127,7 +130,7 @@ const ComplaintView = () => {
       <button onClick={handleTypeFilter}>Filter by Type</button>
 
       
-      
+
 
 
       <input
