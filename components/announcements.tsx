@@ -305,14 +305,6 @@ const CardContent = (props: {announcementDetails?: string}) => {
     return (
         <div style={{color: "white", margin: 10, fontSize: 17}}>
             {props.announcementDetails}
-            {/*<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium alias asperiores*/}
-            {/*    aut culpa et excepturi illum nam numquam provident quo. Commodi dicta harum illo ipsum*/}
-            {/*    itaque placeat sequi vel voluptatibus!*/}
-            {/*</div>*/}
-            {/*<div>Ab deleniti expedita facilis harum quam sint soluta voluptates! Animi assumenda,*/}
-            {/*    delectus dicta dolorum excepturi magnam magni, odio odit omnis quae quam ratione*/}
-            {/*    repudiandae rerum sint totam ut velit voluptas.*/}
-            {/*</div>*/}
         </div>
     )
 }

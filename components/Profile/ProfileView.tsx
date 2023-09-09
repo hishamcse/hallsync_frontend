@@ -22,7 +22,7 @@ const ProfileView = () => {
     const [roomResidents, setRoomResidents] =
         useState<SelectedRoomStudentsQuery['selectedRoomStudents']>([]);
 
-    useQuery(ROOM_RESIDENTS, {
+    const {data} = useQuery(ROOM_RESIDENTS, {
         variables: {
             roomId: roomId
         },
@@ -52,7 +52,7 @@ const ProfileView = () => {
                 setRoomId(roomId)
             }
         }
-    }, [])
+    }, [user])
 
     return (
         <div>

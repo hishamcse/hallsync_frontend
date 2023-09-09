@@ -265,13 +265,11 @@ const Complaints = () => {
             {
                 complaints && complaints.map((complaint, index) => {
                     return (
-                        // my card with complaints title and details
-                        //<MyCard key={index} title={<complaintTitle complaint={complaint}/>}>
-                        <MyCard key={index} title={<ComplaintTitle complaint={complaint} />} >
-                            {<SingleComplaint complaint={complaint}/>}
-                            
-                        </MyCard>
-
+                        <div key={index} style={{margin: 20}}>
+                            <MyCard key={index} title={<ComplaintTitle complaint={complaint}/>} style={{width: '100%'}}>
+                                {<SingleComplaint complaint={complaint}/>}
+                            </MyCard>
+                        </div>
                     )
                 })
             }
@@ -426,14 +424,6 @@ const CardContent = (props: {complaintDetails?: string}) => {
     return (
         <div style={{color: "white", margin: 10, fontSize: 17}}>
             {props.complaintDetails}
-            {/*<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium alias asperiores*/}
-            {/*    aut culpa et excepturi illum nam numquam provident quo. Commodi dicta harum illo ipsum*/}
-            {/*    itaque placeat sequi vel voluptatibus!*/}
-            {/*</div>*/}
-            {/*<div>Ab deleniti expedita facilis harum quam sint soluta voluptates! Animi assumenda,*/}
-            {/*    delectus dicta dolorum excepturi magnam magni, odio odit omnis quae quam ratione*/}
-            {/*    repudiandae rerum sint totam ut velit voluptas.*/}
-            {/*</div>*/}
         </div>
     )
 }
