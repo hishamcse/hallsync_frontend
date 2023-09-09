@@ -20,8 +20,6 @@
 .agreement {
     margin: 30px;
     text-align: center;
-    //display: flex;
-    // justify-content: space-around;
     .agreement-text {
         margin-top: 10px;
         margin-left: 10px;
@@ -50,12 +48,11 @@
 }
 
 .row{
-  // background-color: red;
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
-  // align-items: baseline;
-  margin-right: 20px;
+  margin-right: 35px;
+  margin-left: 30px;
 }
 
 .profDocCol{

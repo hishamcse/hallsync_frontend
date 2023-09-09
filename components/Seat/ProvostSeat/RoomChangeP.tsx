@@ -11,6 +11,7 @@ import MyCard from "../../card";
 import Confirmation from "./Confirmation";
 import { Title } from "./AppDetailsTitle";
 import { ReasonForChange } from "../StudentSeat/TempSeat";
+import {generateRoomNumber} from "../../utilities";
 
 
 const RoomPreference = (props: {room: number}) => {
@@ -56,8 +57,7 @@ const RoomChangeP = (props: {application: ApplicationDetailsQuery['applicationDe
     let num = 0;
 
     if(floor && block && roomNo) {
-        num = Math.pow(10, block - 1);
-        num = num * floor + roomNo;
+        num = generateRoomNumber(floor, block, roomNo);
     }
 
     const [approveMutation, {}] = useMutation(
@@ -132,7 +132,8 @@ const RoomChangeP = (props: {application: ApplicationDetailsQuery['applicationDe
                     <RoomResidents room={num} seatChangeApp={props.application.seatChangeApplication}/>
                 </MyCard>
                 <MyCard title={"Given Room Preference"} style={{
-                    minWidth : 500
+                    minWidth : 500,
+                    height : 120
                 }} >
                     <RoomPreference room={num} />
                 </MyCard>

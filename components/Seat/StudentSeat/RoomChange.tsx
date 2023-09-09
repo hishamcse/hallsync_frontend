@@ -1,7 +1,7 @@
 import {SelectChangeEvent} from "@mui/material/Select";
 import styles from '../../../styles/studentSeat.module.scss';
 import * as React from "react";
-import {useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import MyCard from "../../card";
 import MUIDropdown from "../../MUIDropdown";
 import Agreement from "./Agreement";
@@ -10,9 +10,11 @@ import {useMutation} from "@apollo/client";
 import {POST_SEAT_CHANGE_APPLICATION} from "../../../graphql/operations";
 import {useRouter} from "next/router";
 import { ReasonForChange } from "./TempSeat";
-import { ApplicationDetailsQuery } from "../../../graphql/__generated__/graphql";
+import {ApplicationDetailsQuery, ResidencyStatus} from "../../../graphql/__generated__/graphql";
 import { MyButton } from "../../button";
 import RoomPreference from "./RoomPref";
+import {generateRoomNumber} from "../../utilities";
+import {userContext} from "../../../pages/_app";
 
 const RoomChange = (props: {
     changeType: (event: SelectChangeEvent) => void,
@@ -20,6 +22,9 @@ const RoomChange = (props: {
     application? : ApplicationDetailsQuery['applicationDetails']
 
 }) => {
+
+    const {user} = useContext(userContext);
+
     const [type, setType] = useState('Room Change');
 
     const [reason, setReason] = useState('');
@@ -31,7 +36,24 @@ const RoomChange = (props: {
     const [reqError, setReqError] = useState(false);
     const [reqErrorMsg, setReqErrorMsg] = useState('');
 
+    const [curRoom, setCurRoom] = useState<number>(0);
+
     const router = useRouter();
+
+    useEffect(() => {
+        let item = localStorage.getItem('token');
+        console.log(item)
+        if(item && user && user.student && user.student.residencyStatus == ResidencyStatus.Resident) {
+            const room = user.student.residency?.seat.room;
+            if(room) {
+                const floor = room.floor.floorNo;
+                const block = room.floor.roomLabelLen;
+                const roomNo = room.roomNo;
+
+                setCurRoom(generateRoomNumber(floor, block, roomNo));
+            }
+        }
+    }, [])
 
     const [seatChangeApplication, {error, loading, data}] = useMutation(
         POST_SEAT_CHANGE_APPLICATION
@@ -111,7 +133,7 @@ const RoomChange = (props: {
                 <ReasonForChange titleText="Reason For Change" disabled = {textAreaDisabled} initialVal={props.application?.seatChangeApplication?.reason} handleReason={handleReason}/>
                 <MyCard title='Room Preference'>
                     <RoomPreference
-                    currentRoom={props.room} setSeatId={setSeatId}
+                    currentRoom={curRoom} setSeatId={setSeatId}
                     seat={props.application?.seatChangeApplication?.toSeat}
                     disable={textAreaDisabled} 
                     />

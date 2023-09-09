@@ -20,6 +20,7 @@ import { FreeRoom } from "../freeRoom";
 import { APPROVE_TEMP_SEAT_APPLICATION, REJECT_APPLICATION } from "../../../graphql/operations";
 import Confirmation from "./Confirmation";
 import { Title } from "./AppDetailsTitle";
+import {generateRoomNumber} from "../../utilities";
 
 const Questionnaire = (props: {reason: string}) => {
     return (
@@ -48,17 +49,8 @@ const RoomPreference = (props : {
     tmpApp: ApplicationDetailsQuery['applicationDetails']['tempApplication'] }) => {
 
     const floor = props.tmpApp?.prefSeat?.room.floor.floorNo;
-    const block = props.tmpApp?.prefSeat?.room.floor.roomLabelLen;
+    // const block = props.tmpApp?.prefSeat?.room.floor.roomLabelLen;
     const roomNo = props.tmpApp?.prefSeat?.room.roomNo;
-
-    let num = 0;
-
-    if(floor && block && roomNo) {
-        num = Math.pow(10, block - 1);
-        num = num * floor + roomNo;
-    }
-
-    const entranceDate = new Date(props.tmpApp?.from.toString().split("T")[0]).toLocaleDateString()
 
     let initDate = null;
     if(props.tmpApp?.from){
@@ -117,8 +109,7 @@ const SingleApplication = (props: {allocation:
     let num = 0;
 
     if(floor && block && roomNo) {
-        num = Math.pow(10, block - 1);
-        num = num * floor + roomNo;
+        num = generateRoomNumber(floor, block, roomNo);
     }
 
     const fromDate = new Date(props.allocation.from.toString().split("T")[0]).toLocaleDateString();
@@ -173,12 +164,6 @@ const PreviousTempAllocation = (props: {allocations:
                     </div>
                 )
             })}
-            {
-                // props.allocations.length == 0 && 
-                // <div>
-                //     No Previous Allocation
-                // </div>
-            }
         </div>
     )
 }
@@ -280,7 +265,8 @@ const TempSeatP = (props: {application: ApplicationDetailsQuery['applicationDeta
                 </MyCard>
                 
                 <MyCard title='Room Allotment' style={{
-                    minWidth : 500
+                    minWidth : 500,
+                    height : 250
                 }} >
                     <RoomPreference tmpApp={props.application?.tempApplication}
                     disabled={props.application.status == "ACCEPTED" || props.application.status == "REJECTED"}
@@ -297,23 +283,6 @@ const TempSeatP = (props: {application: ApplicationDetailsQuery['applicationDeta
                 </div>
             }
 
-            {/* <div style={{
-                margin : "20px"
-            }}>
-                
-                    {
-                        blankError && 
-                        <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
-                            Please fill in all the fields
-                        </div>
-                    }
-                    {
-                    reqError && 
-                        <div style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
-                            {reqErrorMsg}
-                        </div>
-                    }
-            </div> */}
             { (props.application.status == "PENDING")  &&
                 <div className={styles.submit}>
                     <div  style={{color: 'red', fontSize: 14, textAlign: 'center', minHeight : 30}}> 
@@ -324,9 +293,7 @@ const TempSeatP = (props: {application: ApplicationDetailsQuery['applicationDeta
                             reqError && <span>{reqErrorMsg}</span>
                         }
                     </div>
-                    {/* <MyCard title=''> */}
-                        <Confirmation rejectHandler={reject} successHandler={approve}/>
-                    {/* </MyCard> */}
+                    <Confirmation rejectHandler={reject} successHandler={approve}/>
                 </div>
             }
 
