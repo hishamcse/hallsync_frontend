@@ -71,8 +71,8 @@ const StdInfoPieChart = () => {
         padding: "10px 20px",
         backgroundColor: "black",
         borderRadius: 10,
-        margin: 10,
-        width: 160
+        margin: 5,
+        width: 155
     }
 
     return (

@@ -28,7 +28,9 @@ export function PieChart_(
                     <Label value={props.name} position="center" fill='#F4DBD8'/>
                 }
             </Pie>
-            <Legend  layout='vertical' align='right' verticalAlign='middle' />
+            <Legend  layout='vertical' align='right' verticalAlign='middle' wrapperStyle={{
+                paddingLeft: 25
+            }}/>
             <Label>asdlfjsladfj sladkfj</Label>
         </PieChart>
     );

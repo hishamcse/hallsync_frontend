@@ -52,7 +52,7 @@ const ProfileView = () => {
                 setRoomId(roomId)
             }
         }
-    }, [user])
+    }, [])
 
     return (
         <div>
