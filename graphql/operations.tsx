@@ -1108,9 +1108,9 @@ query GetComplaints {
 }
 `)
 
-export const GET_COMPLAINTS_2 = graphql(`
-query GetComplaints2($filters: complaintTypeFilerInput, $sort: SortInput, $search: SearchInput, $startDate: String, $studentId: Float) {
-  getComplaints2(filters: $filters, sort: $sort, search: $search, startDate: $startDate, studentId: $studentId) {
+export const GET_SELECTED_COMPLAINTS = graphql(`
+query GetSelectedComplaints($filters: complaintTypeFilerInput, $sort: SortInput, $search: SearchInput, $startDate: String, $studentId: Float) {
+  getSelectedComplaints(filters: $filters, sort: $sort, search: $search, startDate: $startDate, studentId: $studentId) {
     complaintId
     createdAt
     type

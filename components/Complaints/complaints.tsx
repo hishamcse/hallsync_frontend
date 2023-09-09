@@ -18,7 +18,7 @@ import { Dayjs } from "dayjs";
 import { Filters } from "../Seat/ProvostSeat/ApplicationsList/filters";
 import { SortBy } from "../Seat/ProvostSeat/ApplicationsList/sortby";
 import styles from '../../styles/seatManagementIndex.module.scss'
-import { GET_COMPLAINTS_2 } from "../../graphql/operations";
+import { GET_SELECTED_COMPLAINTS } from "../../graphql/operations";
 
 const SingleComplaint = (props: { complaint: GetComplaintsQuery['getComplaints'][0] }) => {
     
@@ -174,7 +174,7 @@ const Complaints = () => {
 
 
     
-    const {data: dataByType, loading: loadingByType, error: errorByType, refetch} = useQuery(GET_COMPLAINTS_2, {
+    const {data: dataByType, loading: loadingByType, error: errorByType, refetch} = useQuery(GET_SELECTED_COMPLAINTS, {
         variables: queryVars,
         onCompleted: (data) => {
             console.log(data);
