@@ -1192,3 +1192,33 @@ mutation complaintMutation($type: String!, $details: String!, $title: String!) {
   }
 }
 `)
+
+
+export const GET_COMPLAINT_BY_ID = graphql(`
+query GetComplaint($complaintId: Float!) {
+  getComplaint(complaintId: $complaintId) {
+    createdAt
+    complaintId
+    details
+    title
+    studentId
+    type
+    student {
+      name
+      levelTerm {
+        label
+      }
+      department {
+        shortName
+      }
+      phone
+      student9DigitId
+      batch {
+        year
+      }
+      email
+      residencyStatus
+    }
+  }
+}
+`)

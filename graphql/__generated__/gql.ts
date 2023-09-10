@@ -77,6 +77,7 @@ const documents = {
     "\nquery GetComplaintsByType($type: String!) {\n  getComplaintsByType(type: $type) {\n    complaintId\n    createdAt\n    details\n    title\n    type\n    student {\n      studentId\n      name\n      student9DigitId\n    }\n  }\n}\n": types.GetComplaintsByTypeDocument,
     "\nquery GetComplaintsFromDate($date: String!) {\n  getComplaintsFromDate(date: $date) {\n    complaintId\n    type\n    createdAt\n    details\n    title\n    student {\n      studentId\n      name\n      student9DigitId\n    }\n  }\n}\n": types.GetComplaintsFromDateDocument,
     "\nmutation complaintMutation($type: String!, $details: String!, $title: String!) {\n  addComplaint(type: $type, details: $details, title: $title) {\n    complaintId\n    title\n    details\n    createdAt\n    type\n    student {\n      studentId\n      name\n      student9DigitId\n    }\n  }\n}\n": types.ComplaintMutationDocument,
+    "\nquery GetComplaint($complaintId: Float!) {\n  getComplaint(complaintId: $complaintId) {\n    createdAt\n    complaintId\n    details\n    title\n    studentId\n    type\n    student {\n      name\n      levelTerm {\n        label\n      }\n      department {\n        shortName\n      }\n      phone\n      student9DigitId\n      batch {\n        year\n      }\n      email\n      residencyStatus\n    }\n  }\n}\n": types.GetComplaintDocument,
 };
 
 /**
@@ -349,6 +350,10 @@ export function graphql(source: "\nquery GetComplaintsFromDate($date: String!) {
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\nmutation complaintMutation($type: String!, $details: String!, $title: String!) {\n  addComplaint(type: $type, details: $details, title: $title) {\n    complaintId\n    title\n    details\n    createdAt\n    type\n    student {\n      studentId\n      name\n      student9DigitId\n    }\n  }\n}\n"): (typeof documents)["\nmutation complaintMutation($type: String!, $details: String!, $title: String!) {\n  addComplaint(type: $type, details: $details, title: $title) {\n    complaintId\n    title\n    details\n    createdAt\n    type\n    student {\n      studentId\n      name\n      student9DigitId\n    }\n  }\n}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\nquery GetComplaint($complaintId: Float!) {\n  getComplaint(complaintId: $complaintId) {\n    createdAt\n    complaintId\n    details\n    title\n    studentId\n    type\n    student {\n      name\n      levelTerm {\n        label\n      }\n      department {\n        shortName\n      }\n      phone\n      student9DigitId\n      batch {\n        year\n      }\n      email\n      residencyStatus\n    }\n  }\n}\n"): (typeof documents)["\nquery GetComplaint($complaintId: Float!) {\n  getComplaint(complaintId: $complaintId) {\n    createdAt\n    complaintId\n    details\n    title\n    studentId\n    type\n    student {\n      name\n      levelTerm {\n        label\n      }\n      department {\n        shortName\n      }\n      phone\n      student9DigitId\n      batch {\n        year\n      }\n      email\n      residencyStatus\n    }\n  }\n}\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
