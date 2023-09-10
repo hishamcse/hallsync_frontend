@@ -1,10 +1,13 @@
 import React, {useState} from "react";
-import {Button, DialogActions, DialogContent, TextField, Typography} from "@mui/material";
-import CampaignIcon from "@mui/icons-material/Campaign";
-import {ComplaintTypeDropDown} from "./complaintTypeDropDown";
+import {TextField, Typography} from "@mui/material";
 import MUIStyledTextarea from "../MUITextArea";
-import {DateRangeIcon} from "@mui/x-date-pickers";
-import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import {SelectChangeEvent} from "@mui/material/Select";
+import {MyButton} from "../button";
+import MUIDropdown from "../MUIDropdown";
+import MyCard from "../card";
+import styles from "../../styles/studentSeat.module.scss";
+import {Title} from "../Seat/ProvostSeat/AppDetailsTitle";
+
 
 const AddComplaintContent = (props: {
     studentId?: number,
@@ -16,12 +19,20 @@ const AddComplaintContent = (props: {
 
     const [title, setTitle] = useState<string>();
     const [type, setType] = useState<string>('RESOURCE');
-    const [details, setDetails] = useState<string>();
+    const [details, setDetails] = useState<string>('');
 
     const [error, setError] = useState<boolean>(false);
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleTypeChange = (event: SelectChangeEvent) => {
+        setType(event.target.value as string);
+    };
+
+    const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(event.target.value);
+    }
+
+    const handleDetails = (val: string) => {
+        setDetails(val);
     }
 
     const handleSubmission = () => {
@@ -33,61 +44,41 @@ const AddComplaintContent = (props: {
         props.handleSubmission(title, details, type);
     }
 
+    const complaintTypes = ['RESOURCE', 'STUFF', 'STUDENT'];
+
+    const customStyles = {
+        display: 'block', width: '60%', alignItems: 'center', margin: 'auto', marginTop: 20, marginBottom: 20
+    }
+
     return (
-        <div>
-            <DialogContent dividers>
-                <Typography component={'span'} variant={"body1"} gutterBottom style={{marginBottom: 20, alignItems: 'center'}}>
-                    <span><CampaignIcon/>&nbsp;&nbsp;Title</span><br/>
+        <div style={{alignItems: 'center'}}>
+            <Title text="Add Complaint" />
+            <MyCard title='Complaint Title and Type' style={{...customStyles}}>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <TextField placeholder="Complaint title"
-                               style={{width: '100%', backgroundColor: '#000', color: '#fff'}}
-                               onChange={handleChange} value={title} onFocus={() => setError(false)}/>
-                </Typography>
-
-                <Typography variant={"body1"} gutterBottom style={{marginTop: 20, marginBottom: 20, alignItems: 'center'}}>
-                    <span><CampaignIcon/>&nbsp;&nbsp;Type</span><br/>
-                    <ComplaintTypeDropDown val={type} setVal={setType}/>
-                </Typography>
-
-
-                <Typography variant={"body1"} gutterBottom style={{marginBottom: 20, alignItems: 'center'}}>
-                    <span><CampaignIcon/>&nbsp;&nbsp;Description</span><br/>
-                    <MUIStyledTextarea placeHolder="complaint details" rows={8} val={details}
-                                       handleInput={setDetails}/>
-                </Typography>
-
-                <Typography gutterBottom>
-                    <div
-                        style={{display: 'flex', justifyContent: 'space-between', margin: 10}}>
-                        <div style={{color: "darkgrey"}}>
-                            <Typography variant={"body1"}>
-                    <span><DateRangeIcon/>&nbsp;&nbsp;&nbsp;
-                        {props.date}</span>
-                            </Typography>
-                        </div>
-                        <div style={{color: "darkgrey"}}>
-                            {props.student9DigitId && (
-                                <Typography variant={"body1"}>
-                        <span><LocalOfferIcon/>&nbsp;
-                            Student ID: {props.student9DigitId}
-                    </span>
-                                </Typography>
-                            )}
-                        </div>
+                               style={{width: '80%', backgroundColor: '#000', color: '#fff', marginTop: 20}}
+                               onChange={handleTitleChange} value={title} onFocus={() => setError(false)}/>
+                    <div style={{paddingTop: 25, marginLeft: 30}}>
+                        <MUIDropdown width={200} options={complaintTypes} val={type} change={handleTypeChange}/>
                     </div>
-                </Typography>
-            </DialogContent>
+                </div>
+            </MyCard>
+
+            <MyCard title='Complaint Details' style={{...customStyles}}>
+                <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
+                    <MUIStyledTextarea rows={15} width={770} placeHolder="State your complaint details" handleInput={handleDetails}
+                    />
+                </div>
+            </MyCard>
             {
                 error &&
                 <Typography variant={"body1"} style={{color: 'red', textAlign: 'center'}}>
                     Please fill all fields
                 </Typography>
             }
-            <DialogActions>
-                <Button autoFocus variant='outlined' color='inherit' size='large'
-                        onClick={handleSubmission}>
-                    Add
-                </Button>
-            </DialogActions>
+            <div className={styles.submit}>
+                <MyButton onClick={handleSubmission} text="Submit" type="submit"/>
+            </div>
         </div>
     )
 }

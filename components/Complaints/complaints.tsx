@@ -4,8 +4,6 @@ import {GetComplaintsQuery} from "../../graphql/__generated__/graphql";
 import {useContext, useState} from "react";
 import {userContext} from "../../pages/_app";
 import MyCard from "../card";
-import {Button, Typography} from "@mui/material";
-import CustomizedDialog from "../MUIDialog";
 import {useRouter} from "next/router";
 import {GET_COMPLAINT_BY_STD_ID, ADD_COMPLAINT} from "../../graphql/operations";
 import SingleComplaint from "./SingleComplaint";
@@ -20,8 +18,6 @@ const Complaints = () => {
     const {messManager, resident, authority} = useResidencyStatus();
 
     const [complaints, setComplaints] = useState<GetComplaintsQuery['getComplaints']>([]);
-
-    const [showDetails, setShowDetails] = useState<boolean>(false);
 
     const isResident = user?.student?.residencyStatus === 'RESIDENT';
     const studentIdWithDefault = isResident ? user?.student?.studentId : -1;
@@ -53,10 +49,6 @@ const Complaints = () => {
         }
     )
 
-    const handleShowDetails = () => {
-        setShowDetails(!showDetails);
-    }
-
     const handleSubmission = (title: string, details: string, type: string) => {
         console.log(title, details, type)
 
@@ -75,27 +67,10 @@ const Complaints = () => {
 
     return (
         <div>
-            <Typography variant={"h4"} style={{textAlign: 'center', color: '#fff'}}>
-                Complaints By You
-            </Typography>
-            {
-                resident &&
-                <div>
-                    <Button variant='contained' color="primary" size='large' style={{margin: 20}}
-                            onClick={handleShowDetails}>
-                        +&nbsp;Add Complaint
-                    </Button>
-                </div>
-            }
-            {
-                showDetails &&
-                <CustomizedDialog show={true} setShow={setShowDetails} cardTitle='Add Complaint'>
-                    <AddComplaintContent handleSubmission={handleSubmission}
-                                         date={new Date().toDateString()}
-                                         studentId={studentIdWithDefault}
-                    />
-                </CustomizedDialog>
-            }
+            <AddComplaintContent handleSubmission={handleSubmission}
+                                 date={new Date().toDateString()}
+                                 studentId={studentIdWithDefault}
+            />
             {
                 complaints && complaints.map((complaint, index) => {
                     return (
