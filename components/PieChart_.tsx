@@ -29,7 +29,7 @@ export function PieChart_(
                 }
             </Pie>
             <Legend  layout='vertical' align='right' verticalAlign='middle' wrapperStyle={{
-                paddingLeft: 25
+                paddingLeft: 10
             }}/>
             <Label>asdlfjsladfj sladkfj</Label>
         </PieChart>
