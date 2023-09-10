@@ -133,6 +133,7 @@ export function TopBar(){
     let {user} = useContext(userContext);
     let {showNotification, setShowNotification} = useContext(notificationContext);
     const divRef = useRef<HTMLDivElement>(null);
+    const {authority} = useResidencyStatus();
 
     let [query , {data, loading}] = useLazyQuery(
         GET_NOTIFICATIONS,
@@ -190,7 +191,7 @@ export function TopBar(){
                 }
             </div>
             {
-                data && showNotification &&
+                data && showNotification && !authority &&
                 <div className={topBarStyles.notificationContainer} style={{
                     // left : divRef.current?.offsetLeft,
                     // top :  divRef.current?.offsetHeight

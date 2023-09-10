@@ -244,14 +244,14 @@ const NewSeat = (props: {
             </div>
             {
                 props.application?.status == ApplicationStatus.Revise &&
-                <MyCard title={"Revision Remarks"} style={{width : 500}}>
+                <MyCard title={"Revision Remarks"} style={{width : 500, marginLeft: 30}}>
                     <ol style={{
                         marginTop : 20
                     }}>
                         {
                             props.application.revisions && props.application.revisions.map((rev, index) => {
                                 return (
-                                    <li>
+                                    <li key={index}>
                                         {getDayAndMonthAndYearString(rev.createdAt)} : {rev.reason}
                                     </li>
                                 )

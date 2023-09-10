@@ -1,33 +1,13 @@
-import useResidencyStatus from "../../hooks/useResidencyStatus";
-import {useMutation, useQuery, useLazyQuery} from "@apollo/client";
-import {GetComplaintsQuery, GetComplaintsByStudentQuery} from "../../graphql/__generated__/graphql";
-import {useContext, useEffect, useState} from "react";
-import {userContext} from "../../pages/_app";
+import {useQuery} from "@apollo/client";
+import {useState} from "react";
 import MyCard from "../card";
-import {Button, DialogActions, DialogContent, TextField, Typography} from "@mui/material";
-import {DateRangeIcon} from "@mui/x-date-pickers";
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
-import CampaignIcon from '@mui/icons-material/Campaign';
-import CustomizedDialog from "../MUIDialog";
-import {useRouter} from "next/router";
-import MUIStyledTextarea from "../MUITextArea";
-import {
-    GET_COMPLAINTS,
-    GET_COMPLAINT_BY_STD_ID,
-    GET_INFO,
-    GET_COMPLAINT_BY_TYPE,
-    GET_COMPLAINT_FROM_DATE,
-    ADD_COMPLAINT
-} from "../../graphql/operations";
 import {MyDatePicker} from "../DatePicker";
 import {Dayjs} from "dayjs";
 import {Filters} from "../Seat/ProvostSeat/ApplicationsList/filters";
 import {SortBy} from "../Seat/ProvostSeat/ApplicationsList/sortby";
 import styles from '../../styles/seatManagementIndex.module.scss'
 import {GET_SELECTED_COMPLAINTS} from "../../graphql/operations";
-import SingleComplaint, { SingleComplaint2 } from "./SingleComplaint";
-import AddComplaintContent from "./AddComplaint";
-import ComplaintTitle from "./ComplaintTitle";
+import { SingleComplaint2 } from "./SingleComplaint";
 import { Title } from "../Seat/ProvostSeat/AppDetailsTitle";
 import { MyInput } from "../input";
 
@@ -149,14 +129,6 @@ const ComplaintsP = () => {
                     </div>
                 </MyCard>
             </div>
-                    {/* <TextField
-                        placeholder="Search"
-                        style={{width: '100%', backgroundColor: '#000', color: '#fff'}}
-                        onChange={(e) => setSearch_(e.target.value)}
-                        value={search}
-                    /> */}
-
-
 
             {
                 <div style={{marginLeft : 15, marginTop : 30}}>

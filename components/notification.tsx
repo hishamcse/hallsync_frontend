@@ -189,6 +189,7 @@ function Notification(props : {
                         <div>
                             <span style={{
                                 color : "crimson",
+                                cursor : "pointer",
                             }} onClick={showDetailsOnClick} > {getClickToSeeText(props.notification)} </span>
                             {/* <MyButton text={getClickToSeeText(props.notification)} type='submit' style={{
                                 width : 30,

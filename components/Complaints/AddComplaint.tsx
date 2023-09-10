@@ -7,8 +7,6 @@ import MUIDropdown from "../MUIDropdown";
 import MyCard from "../card";
 import styles from "../../styles/studentSeat.module.scss";
 import {Title} from "../Seat/ProvostSeat/AppDetailsTitle";
-import MUISelectStyled from "../MUIMultiSelectCheckbox";
-
 
 const AddComplaintContent = (props: {
     studentId?: number,
@@ -45,7 +43,7 @@ const AddComplaintContent = (props: {
         props.handleSubmission(title, details, type);
     }
 
-    const complaintTypes = ['RESOURCE', 'STUFF', 'STUDENT'];
+    const complaintTypes = ['RESOURCE', 'STAFF', 'STUDENT'];
 
     const customStyles = {
         display: 'block', width: 900, alignItems: 'center', margin: 'auto', marginTop: 20, marginBottom: 20

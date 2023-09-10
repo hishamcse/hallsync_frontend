@@ -155,8 +155,11 @@ export function StudentNavBar(){
             }
             <ListItem active = {checkRouteContains(router,activeIf.info)} href={'/' + routes.info} imgPath={imgPaths.info}
                       text={texts.info} icon={<SignalCellularAltOutlinedIcon />}/>
-            <ListItem active = {checkRouteContains(router,activeIf.complaints)} href={'/' + routes.complaints}
-                      imgPath={imgPaths.complaints} text={texts.complaints} />
+            {
+                resident &&
+                <ListItem active = {checkRouteContains(router,activeIf.complaints)} href={'/' + routes.complaints}
+                          imgPath={imgPaths.complaints} text={texts.complaints} />
+            }
             <ListItem width={25} href='/' imgPath='/logout.svg' active = {false} text='logout' onClick={logOutOnClick} icon = {<LogoutOutlinedIcon />}  />
         </ul>
     )
