@@ -7,6 +7,7 @@ import MUIDropdown from "../MUIDropdown";
 import MyCard from "../card";
 import styles from "../../styles/studentSeat.module.scss";
 import {Title} from "../Seat/ProvostSeat/AppDetailsTitle";
+import MUISelectStyled from "../MUIMultiSelectCheckbox";
 
 
 const AddComplaintContent = (props: {
@@ -47,7 +48,7 @@ const AddComplaintContent = (props: {
     const complaintTypes = ['RESOURCE', 'STUFF', 'STUDENT'];
 
     const customStyles = {
-        display: 'block', width: '60%', alignItems: 'center', margin: 'auto', marginTop: 20, marginBottom: 20
+        display: 'block', width: 900, alignItems: 'center', margin: 'auto', marginTop: 20, marginBottom: 20
     }
 
     return (
@@ -59,6 +60,8 @@ const AddComplaintContent = (props: {
                                style={{width: '80%', backgroundColor: '#000', color: '#fff', marginTop: 20}}
                                onChange={handleTitleChange} value={title} onFocus={() => setError(false)}/>
                     <div style={{paddingTop: 25, marginLeft: 30}}>
+                        {/* <MUISelectStyled items={complaintTypes} 
+                        type="single" placeHolder="Complaint Type" setVal={setType} val={type} /> */}
                         <MUIDropdown width={200} options={complaintTypes} val={type} change={handleTypeChange}/>
                     </div>
                 </div>
@@ -66,7 +69,7 @@ const AddComplaintContent = (props: {
 
             <MyCard title='Complaint Details' style={{...customStyles}}>
                 <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
-                    <MUIStyledTextarea rows={15} width={770} placeHolder="State your complaint details" handleInput={handleDetails}
+                    <MUIStyledTextarea rows={20} width={850} placeHolder="State your complaint details" handleInput={handleDetails}
                     />
                 </div>
             </MyCard>
