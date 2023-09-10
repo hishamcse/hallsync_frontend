@@ -9,6 +9,8 @@ import {GET_COMPLAINT_BY_STD_ID, ADD_COMPLAINT} from "../../graphql/operations";
 import SingleComplaint from "./SingleComplaint";
 import AddComplaintContent from "./AddComplaint";
 import ComplaintTitle from "./ComplaintTitle";
+import { ComplaintCard, ComplaintDetails } from "../../pages/complaints/[complaintId]";
+import { Title } from "../Seat/ProvostSeat/AppDetailsTitle";
 
 const Complaints = () => {
 
@@ -71,14 +73,16 @@ const Complaints = () => {
                                  date={new Date().toDateString()}
                                  studentId={studentIdWithDefault}
             />
+            <Title text="Your Previous Components" />
             {
                 complaints && complaints.map((complaint, index) => {
                     return (
-                        <div key={index} style={{margin: 20}}>
-                            <MyCard key={index} title={<ComplaintTitle complaint={complaint}/>} style={{width: '100%'}}>
-                                <SingleComplaint complaint={complaint}/>
-                            </MyCard>
-                        </div>
+                        <ComplaintCard showDetailsDefault = {false} title={complaint.title} createdAt={complaint.createdAt}
+                        details={complaint.details} student9DigitId={complaint.student.student9DigitId}
+                        type={complaint.type} key={complaint.complaintId} cardStyle={{
+                            marginLeft : 30,
+                            marginRight : 30
+                        }} />
                     )
                 })
             }
