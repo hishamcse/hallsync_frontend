@@ -2,6 +2,9 @@ import {GetComplaintsQuery} from "../../graphql/__generated__/graphql";
 import {Typography} from "@mui/material";
 import {DateRangeIcon} from "@mui/x-date-pickers";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import MyCard from "../card";
+import { getDayAndMonthAndYearString } from "../utilities";
+import { MyButton } from "../button";
 
 const SingleComplaint = (props: { complaint: GetComplaintsQuery['getComplaints'][0] }) => {
 
@@ -36,3 +39,61 @@ const SingleComplaint = (props: { complaint: GetComplaintsQuery['getComplaints']
 }
 
 export default SingleComplaint;
+
+export function SingleComplaint2(props : {
+    complaint: GetComplaintsQuery['getComplaints'][0]
+}){
+    return (
+        <MyCard title={
+            <div style={{
+                display : "flex",
+                justifyContent : "space-between"
+            }}>
+                <h4 style={{
+                    width : "70%"
+                }}>
+                    {props.complaint.title}
+                </h4>
+                <h6 style = {{
+                    color : "#FFE605"
+                }}>
+                    {
+                        props.complaint.type
+                    }
+                </h6>
+            </div>
+        } style={{
+            width : 500
+        }} >
+            <div style={{
+                whiteSpace : "nowrap",
+                overflow : "hidden",
+                textOverflow : "ellipsis",
+                margin : "10px 10px"
+            }}>
+
+                {props.complaint.details}
+            </div>
+            <div style={{
+                display : "flex",
+                justifyContent : "space-between",
+                marginTop : 30,
+                marginBottom : 10
+            }}>
+                <div>
+                    <DateRangeIcon /> {getDayAndMonthAndYearString(props.complaint.createdAt)}
+                </div>
+                <div style={{
+                    color : "#00FFF5"
+                }}>
+                    {
+                        props.complaint.student.student9DigitId
+                    }
+                </div>
+            </div>
+            <div style={{textAlign : "center", marginTop : 20}}>
+                <MyButton text="More Details" type="submit"  />
+            </div>
+        </MyCard>
+    )
+}

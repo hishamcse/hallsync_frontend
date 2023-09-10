@@ -9,7 +9,8 @@ export function SortBy(
         vals : string[],
         setVals : ((s : string)=>void)[],
         items : string[][],
-        resetOnClick : ()=> void
+        resetOnClick : ()=> void,
+        cardStyle? : React.CSSProperties
     }
 ) {
 
@@ -37,7 +38,9 @@ export function SortBy(
     )
 
     return (
-        <MyCard title={"Sort By"}>
+        <MyCard title={"Sort By"} style={{
+            ... props.cardStyle
+        }}>
             {content}
         </MyCard>
     )

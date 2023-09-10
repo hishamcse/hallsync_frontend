@@ -10,7 +10,8 @@ type FilterProps  = {
     items : string[][],
     placeHolders : string[],
     resetOnClick : ()=> void,
-    width? : number
+    width? : number,
+    cardStyle? : React.CSSProperties
 }
 
 export function Filters(
@@ -39,7 +40,8 @@ export function Filters(
     );
 
     return <MyCard title={"Filters"} style={{
-        maxWidth : props.width ?? 550
+        maxWidth : props.width ?? 550,
+        ... props.cardStyle
     }}>
         {content}
     </MyCard>
