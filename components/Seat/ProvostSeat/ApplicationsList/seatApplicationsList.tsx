@@ -1,10 +1,9 @@
-import Stack from "@mui/material/Stack";
-import { ApplicationsQuery } from "../../../../graphql/__generated__/graphql";
-
+import React from "react";
+import {ApplicationsQuery} from "../../../../graphql/__generated__/graphql";
 import styles from "../../../../styles/seatManagementIndex.module.scss";
 import Skeleton from "@mui/material/Skeleton";
 import ApplicationTable from "./ApplicationTable";
-import { application } from "./seatApplication";
+import {application} from "./seatApplication";
 
 export function ApplicationList(props: {
     applications: ApplicationsQuery["applications"]["applications"] | undefined;
@@ -20,7 +19,7 @@ export function ApplicationList(props: {
             <div className={styles.applicationListSearchBarContainer}>
                 {props.search && (
                     <div className={styles.searchBarIconContainer}>
-                        <img src="/search.svg" />
+                        <img src="/search.svg"/>
                     </div>
                 )}
                 {props.search}
@@ -36,7 +35,7 @@ export function ApplicationList(props: {
                     </div>
                 ))}
             {props.applications && (
-                <div style={{ margin: 15 }}>
+                <div style={{margin: 15}}>
                     <ApplicationTable
                         applications={props.applications}
                         onClick={props.itemOnClickHandler}

@@ -1,23 +1,17 @@
-import useResidencyStatus from "../../hooks/useResidencyStatus";
 import {useMutation, useQuery} from "@apollo/client";
 import {GetComplaintsQuery} from "../../graphql/__generated__/graphql";
 import {useContext, useState} from "react";
 import {userContext} from "../../pages/_app";
-import MyCard from "../card";
 import {useRouter} from "next/router";
 import {GET_COMPLAINT_BY_STD_ID, ADD_COMPLAINT} from "../../graphql/operations";
-import SingleComplaint from "./SingleComplaint";
 import AddComplaintContent from "./AddComplaint";
-import ComplaintTitle from "./ComplaintTitle";
-import { ComplaintCard, ComplaintDetails } from "../../pages/complaints/[complaintId]";
-import { Title } from "../Seat/ProvostSeat/AppDetailsTitle";
+import {ComplaintCard} from "../../pages/complaints/[complaintId]";
+import {Title} from "../Seat/ProvostSeat/AppDetailsTitle";
 
 const Complaints = () => {
 
     const router = useRouter();
     const {user} = useContext(userContext);
-
-    const {messManager, resident, authority} = useResidencyStatus();
 
     const [complaints, setComplaints] = useState<GetComplaintsQuery['getComplaints']>([]);
 
@@ -73,16 +67,16 @@ const Complaints = () => {
                                  date={new Date().toDateString()}
                                  studentId={studentIdWithDefault}
             />
-            <Title text="Your Previous Components" />
+            <Title text="Your Previous Complaints"/>
             {
                 complaints && complaints.map((complaint, index) => {
                     return (
-                        <ComplaintCard showDetailsDefault = {false} title={complaint.title} createdAt={complaint.createdAt}
-                        details={complaint.details} student9DigitId={complaint.student.student9DigitId}
-                        type={complaint.type} key={complaint.complaintId} cardStyle={{
-                            marginLeft : 30,
-                            marginRight : 30
-                        }} />
+                        <ComplaintCard showDetailsDefault={false} title={complaint.title} createdAt={complaint.createdAt}
+                                       details={complaint.details} student9DigitId={complaint.student.student9DigitId}
+                                       type={complaint.type} key={complaint.complaintId} cardStyle={{
+                            marginLeft: 30,
+                            marginRight: 30
+                        }}/>
                     )
                 })
             }

@@ -9,13 +9,13 @@ const MuiDropdown = (props: {
     options: string[],
     val?: string,
     change: (event: SelectChangeEvent) => void,
-    disable? : boolean,
-    sx? : React.CSSProperties,
-    defaulValue? : string
+    disable?: boolean,
+    sx?: React.CSSProperties,
+    defaulValue?: string
 }) => {
 
     return (
-        <Box sx={{width: props.width, ... props.sx}} >
+        <Box sx={{width: props.width, ...props.sx}}>
             <FormControl fullWidth>
                 <Select
                     labelId="demo-simple-select-label"
@@ -24,12 +24,7 @@ const MuiDropdown = (props: {
                     defaultValue={props.options[0]}
                     onChange={props.change}
                     size='small'
-                    disabled = {props.disable}
-                    // renderValue={(s)=>{
-                    //     if(s.length == 0)
-                    //         return props.defaulValue
-                    //     return s
-                    // }}
+                    disabled={props.disable}
                 >
                     {props.options.map((v) => (
                         <MenuItem key={Math.random().toString()} value={v}>{v}</MenuItem>

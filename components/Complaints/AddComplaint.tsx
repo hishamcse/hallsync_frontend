@@ -51,15 +51,13 @@ const AddComplaintContent = (props: {
 
     return (
         <div style={{alignItems: 'center'}}>
-            <Title text="Add Complaint" />
+            <Title text="Add Complaint"/>
             <MyCard title='Complaint Title and Type' style={{...customStyles}}>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <TextField placeholder="Complaint title"
                                style={{width: '80%', backgroundColor: '#000', color: '#fff', marginTop: 20}}
                                onChange={handleTitleChange} value={title} onFocus={() => setError(false)}/>
                     <div style={{paddingTop: 25, marginLeft: 30}}>
-                        {/* <MUISelectStyled items={complaintTypes} 
-                        type="single" placeHolder="Complaint Type" setVal={setType} val={type} /> */}
                         <MUIDropdown width={200} options={complaintTypes} val={type} change={handleTypeChange}/>
                     </div>
                 </div>
@@ -67,7 +65,8 @@ const AddComplaintContent = (props: {
 
             <MyCard title='Complaint Details' style={{...customStyles}}>
                 <div style={{justifyContent: 'left', width: 500, paddingTop: 15}}>
-                    <MUIStyledTextarea rows={20} width={850} placeHolder="State your complaint details" handleInput={handleDetails}
+                    <MUIStyledTextarea rows={20} width={850} placeHolder="State your complaint details"
+                                       handleInput={handleDetails}
                     />
                 </div>
             </MyCard>

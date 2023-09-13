@@ -1,15 +1,15 @@
-import { useLazyQuery, useQuery } from "@apollo/client";
-import { APPLICATIONS, FILTERS_DATA } from "../../graphql/operations";
+import {useLazyQuery, useQuery} from "@apollo/client";
+import {APPLICATIONS, FILTERS_DATA} from "../../graphql/operations";
 import {useEffect, useState} from "react";
 import styles from '../../styles/seatManagementIndex.module.scss'
 import {Student} from "../../graphql/__generated__/graphql";
-import { MyInput } from "../../components/input";
+import {MyInput} from "../../components/input";
 
-import { useRouter } from "next/router";
-import { Filters } from "../../components/Seat/ProvostSeat/ApplicationsList/filters";
-import { application } from "../../components/Seat/ProvostSeat/ApplicationsList/seatApplication";
-import { SortBy } from "../../components/Seat/ProvostSeat/ApplicationsList/sortby";
-import { ApplicationList } from "../../components/Seat/ProvostSeat/ApplicationsList/seatApplicationsList";
+import {useRouter} from "next/router";
+import {Filters} from "../../components/Seat/ProvostSeat/ApplicationsList/filters";
+import {application} from "../../components/Seat/ProvostSeat/ApplicationsList/seatApplication";
+import {SortBy} from "../../components/Seat/ProvostSeat/ApplicationsList/sortby";
+import {ApplicationList} from "../../components/Seat/ProvostSeat/ApplicationsList/seatApplicationsList";
 import PaginationControlled from "../../components/Pagination";
 
 export type student = Student;
@@ -28,120 +28,111 @@ function Applications() {
     const [page, setPage] = useState(1);
     const [count, setCount] = useState(0);
 
-    const [options, setOptions] = useState<string[][]>([[],[],[],[],[]]);
+    const [options, setOptions] = useState<string[][]>([[], [], [], [], []]);
 
     const router = useRouter()
 
-    let queryVars  = {
-        filters : {
-            batch : batch,
-            dept : dept,
-            status : status,
-            type : type,
-            lt : lt
+    let queryVars = {
+        filters: {
+            batch: batch,
+            dept: dept,
+            status: status,
+            type: type,
+            lt: lt
         },
-        sort : {
-            order : order,
-            orderBy : orderBy
+        sort: {
+            order: order,
+            orderBy: orderBy
         },
-        search : {
-            searchBy : searchGT3
+        search: {
+            searchBy: searchGT3
         },
-        page : page
+        page: page
     }
 
 
-    const { loading, data, error, refetch } = useQuery(
-        APPLICATIONS,{
-            variables : queryVars,
-            onCompleted : (data)=>{
+    const {loading, data, error, refetch} = useQuery(
+        APPLICATIONS, {
+            variables: queryVars,
+            onCompleted: (data) => {
                 setCount(Math.ceil(data.applications.count / 10))
             }
         }
     )
 
 
-    const [query , {data : optionsData}] = useLazyQuery(
+    const [query, {data: optionsData}] = useLazyQuery(
         FILTERS_DATA
     )
 
-    useEffect(()=>{
+    useEffect(() => {
         query({
-            onCompleted : (data)=>{
-                if(data){
-                    let arr : string[][] = [];
+            onCompleted: (data) => {
+                if (data) {
+                    let arr: string[][] = [];
                     arr.push(data.batches.map(b => b.year))
                     arr.push(data.departments.map(d => d.shortName))
                     arr.push(data.applicationStatus.map(a => a.status))
                     arr.push(data.applicationTypes)
                     arr.push(data.levelTerms.map(lt => lt.label))
                     setOptions(arr);
-                    InitialStatusSelectReset(data.applicationStatus.filter(s=>s.select).map(v => v.status))
+                    InitialStatusSelectReset(data.applicationStatus.filter(s => s.select).map(v => v.status))
                 }
             }
         });
     }, [])
 
 
-
-    function InitialStatusSelectReset(v : string[]){
+    function InitialStatusSelectReset(v: string[]) {
         refetch({
-            ... queryVars
+            ...queryVars
         });
         setStatus(v);
     }
-        
-    useEffect(()=>{
+
+    useEffect(() => {
         console.log("use effect");
-        if(data){
+        if (data) {
             setCount(Math.floor(data.applications.count / 10))
         }
         console.log(status);
-        
+
     }, [])
 
-
-    function pageReset(s : (s : string[])=>void){
-        return (v : string[])=>{
-            s(v);
-            setPage(1);
-        }
-    }
-
-    function setSearch_(s : string){
+    function setSearch_(s: string) {
         setSearch(s);
-        if(s.trim().length >= 3){
+        if (s.trim().length >= 3) {
             setSearchGT3(s);
             setPage(1);
-        }
-        else{
+        } else {
             setSearchGT3('');
         }
     }
 
-    function filterResetOnClick(){
+    function filterResetOnClick() {
         setBatch([]);
         setDept([]);
         setStatus([]);
         setType([]);
         setLt([]);
     }
-    function sortResetOnClick(){
+
+    function sortResetOnClick() {
         setOrder('Newest');
         setOrderBy('Time');
     }
 
 
     return (
-        <div className={"contentRoot"} >
+        <div className={"contentRoot"}>
             <div className={styles.filterSortContainer}>
                 <Filters
                     items={options}
                     setVals={[setBatch, setDept, setStatus, setType, setLt]}
-                    placeHolders={['Batch', 'Dept', 'Status', 'Type','LevelTerm']}
+                    placeHolders={['Batch', 'Dept', 'Status', 'Type', 'LevelTerm']}
                     vals={[batch, dept, status, type, lt]}
                     resetOnClick={filterResetOnClick}
-                
+
                 />
                 <SortBy
                     items={[['Time', 'Batch'], ['Newest', 'Oldest']]}
@@ -150,19 +141,19 @@ function Applications() {
                     resetOnClick={sortResetOnClick}
                 />
             </div>
-                
-                <ApplicationList 
-                loading = {loading} 
+
+            <ApplicationList
+                loading={loading}
                 applications={data ? data.applications.applications : undefined}
-                itemOnClickHandler={(a : application)=>{
-                    router.push('./seatManagement/newApplication/' + a.applicationId )
+                itemOnClickHandler={(a: application) => {
+                    router.push('./seatManagement/newApplication/' + a.applicationId)
                 }}
                 search={
                     <MyInput className={styles.applicationListSearchBar} placeHolder="Search by Name or Id"
-                    onChange={setSearch_} type="text" value={search}/>
+                             onChange={setSearch_} type="text" value={search}/>
                 }
                 pagintaion={<PaginationControlled page={page} setPage={setPage} count={count}/>}
-                />
+            />
         </div>
 
     )

@@ -109,14 +109,6 @@ export const FILTERS_DATA = graphql(`
   }
 `);
 
-export const SORT_DATA = graphql(`
-  query Batches {
-    batches {
-      year
-    }
-  }
-`);
-
 export const GET_APPLICATION = graphql(`
   query ApplicationDetails($applicationId: Float!) {
       applicationDetails(applicationId: $applicationId) {
@@ -234,7 +226,6 @@ export const GET_APPLICATION = graphql(`
         }
       }
    }
-   
 `)
 
 export const GET_INFO = graphql(`
@@ -281,39 +272,38 @@ export const GET_INFO = graphql(`
 
 export const MY_APPLICATIONS = graphql(`
   query Myapplications {
-  myapplications {
-    applicationId
-    createdAt
-    lastUpdate
-    status
-    student {
-      student9DigitId
-      batch {
-        year
+      myapplications {
+        applicationId
+        createdAt
+        lastUpdate
+        status
+        student {
+          student9DigitId
+          batch {
+            year
+          }
+          department {
+            shortName
+          }
+          levelTerm {
+            label
+          }
+          name
+          residencyStatus
+          studentId
+          phone
+        }
+        newApplication {
+          newApplicationId
+        }
+        seatChangeApplication {
+          seatChangeApplicationId
+        }
+        tempApplication {
+          applicationId
+        }
       }
-      department {
-        shortName
-      }
-      levelTerm {
-        label
-      }
-      name
-      residencyStatus
-      studentId
-      phone
-    }
-    newApplication {
-      newApplicationId
-    }
-    seatChangeApplication {
-      seatChangeApplicationId
-    }
-    tempApplication {
-      applicationId
-    }
-  }
-}
-
+   }
 `)
 
 export const POST_NEW_APPLICATION = graphql(`
@@ -401,12 +391,12 @@ export const GET_FREE_SEAT = graphql(`
 `)
 
 export const APPROVE_NEW_SEAT_APPLICATION = graphql(`
-
-mutation Mutation($seatId: Float!, $newApplicationId: Float!) {
-  approveNewApplication(seatId: $seatId, newApplicationId: $newApplicationId) {
-    residencyId
-  }
-}`)
+    mutation Mutation($seatId: Float!, $newApplicationId: Float!) {
+      approveNewApplication(seatId: $seatId, newApplicationId: $newApplicationId) {
+        residencyId
+      }
+    }
+`)
 
 export const APPROVE_TEMP_SEAT_APPLICATION = graphql(`
     mutation ApproveTempSeatApplication($from: String!, $days: Float!, $seatId: Float!, $applicationId: Float!) {
@@ -424,7 +414,6 @@ export const APPROVE_TEMP_SEAT_APPLICATION = graphql(`
         }
       }
     }
-
 `)
 
 export const APPROVE_SEAT_CHANGE_APPLICATION = graphql(`
@@ -436,7 +425,6 @@ export const APPROVE_SEAT_CHANGE_APPLICATION = graphql(`
         }
       }
     }
-
 `)
 
 export const REJECT_APPLICATION = graphql(`
@@ -489,18 +477,53 @@ export const GET_NOTIFICATIONS = graphql(`
 
 export const GET_MULTIPLE_MEALPLANS = graphql(`
    query GetMealPlans($to: String!, $from: String!) {
-  getMealPlans(to: $to, from: $from) {
-    mealPlanId
-    mealTime
-    day
-    mealTime
-    meal {
-      mealId
-      items {
+      getMealPlans(to: $to, from: $from) {
+        mealPlanId
+        mealTime
+        day
+        mealTime
+        meal {
+          mealId
+          items {
+            itemId
+            name
+            photoId
+            type
+            photo {
+              file {
+                fileName
+                newFileName
+              }
+            }
+          }
+        }
+        preferences {
+          item {
+            itemId
+            name
+            type
+          }
+          order
+        }
+        optedOut {
+          studentId
+        }
+        cupCount {
+          cupcount
+          itemId
+        }
+      }
+   }
+
+`)
+
+export const GET_OLD_MEAL_ITEMS = graphql(`
+    query GetOldItems {
+      getOldItems {
         itemId
         name
-        photoId
         type
+        photoId
         photo {
           file {
             fileName
@@ -509,41 +532,6 @@ export const GET_MULTIPLE_MEALPLANS = graphql(`
         }
       }
     }
-    preferences {
-      item {
-        itemId
-        name
-        type
-      }
-      order
-    }
-    optedOut {
-      studentId
-    }
-    cupCount {
-      cupcount
-      itemId
-    }
-  }
-}
-
-`)
-
-export const GET_OLD_MEAL_ITEMS = graphql(`
-query GetOldItems {
-  getOldItems {
-    itemId
-    name
-    type
-    photoId
-    photo {
-      file {
-        fileName
-        newFileName
-      }
-    }
-  }
-}
 `)
 
 export const ADD_MEAL_PLAN = graphql(`
@@ -564,7 +552,6 @@ export const ADD_MEAL_PLAN = graphql(`
         }
       }
     }
-
 `)
 
 export const ADD_NEW_ITEM = graphql(`
@@ -596,7 +583,6 @@ export const OPT_OUT_MEAL = graphql(`
         }
       }
     }
-
 `)
 
 export const ADD_PREFERENCES = graphql(`
@@ -619,7 +605,6 @@ export const ADD_PREFERENCES = graphql(`
         }
       }
     }
-
 `)
 
 export const GET_ANNOUNCEMENTS = graphql(`
@@ -639,7 +624,6 @@ export const GET_ANNOUNCEMENTS = graphql(`
         }
       }
     }
-
 `)
 
 export const ADD_ANNOUNCEMENT = graphql(`
@@ -653,7 +637,6 @@ export const ADD_ANNOUNCEMENT = graphql(`
         messManagerId
       }
     }
-
 `)
 
 export const GET_PARTICIPATIONS = graphql(`
@@ -670,34 +653,34 @@ export const GET_PARTICIPATIONS = graphql(`
 
 
 export const GET_ABSENTEES = graphql(`
-query Absentees($take: Float!, $from: String!) {
-  absentees(take: $take, from: $from) {
-    _count
-    residency {
-      student {
-        student9DigitId
+    query Absentees($take: Float!, $from: String!) {
+      absentees(take: $take, from: $from) {
+        _count
+        residency {
+          student {
+            student9DigitId
+          }
+        }
       }
     }
-  }
-}
 `)
 
 export const GET_RATINGS = graphql(`
-query ExampleQuery($date: String!) {
-  ratings(date: $date) {
-    avg
-    type
-    feedback {
-      feedbackId
-      startMealPlan {
-        day
-      }
-      endMealPlan {
-        day
+    query ExampleQuery($date: String!) {
+      ratings(date: $date) {
+        avg
+        type
+        feedback {
+          feedbackId
+          startMealPlan {
+            day
+          }
+          endMealPlan {
+            day
+          }
+        }
       }
     }
-  }
-}
 `)
 
 
@@ -726,18 +709,18 @@ export const GET_MEAL_PREF_STATS = graphql(`
 
 
 export const GET_PENDING_FEEDBACKS = graphql(`
-query PendingFeedbacks {
-  pendingFeedbacks {
-    startDate
-    startMealPlan {
-      day
+    query PendingFeedbacks {
+      pendingFeedbacks {
+        startDate
+        startMealPlan {
+          day
+        }
+        endMealPlan {
+          day
+        }
+        feedbackId
+      }
     }
-    endMealPlan {
-      day
-    }
-    feedbackId
-  }
-}
 `)
 
 export const POST_FEEDBACK = graphql(`
@@ -749,29 +732,29 @@ export const POST_FEEDBACK = graphql(`
 
 
 export const GET_ASSINGED_MESS_MANAGERS = graphql(`
-query AssingedMessManagers {
-  assingedMessManagers {
-    call {
-      from 
-      to
+    query AssingedMessManagers {
+      assingedMessManagers {
+        call {
+          from 
+          to
+        }
+        residencyId
+        residency  {
+          student {
+          name
+          phone
+          email
+          levelTerm {
+            label
+          }
+          batch {
+            year
+          }
+          student9DigitId
+          }
+        }
+      }
     }
-    residencyId
-    residency  {
-      student {
-      name
-      phone
-      email
-      levelTerm {
-        label
-      }
-      batch {
-        year
-      }
-      student9DigitId
-      }
-    }
-  }
-}
 `)
 
 
@@ -794,74 +777,74 @@ export const CREATE_CALL = graphql(`
 `)
 
 export const PREV_CALLS = graphql(`
-query PrevCallQuery {
-  prevCalls {
-    callId
-    createdAt
-    from
-    to
-    accepted
-    applicationsCount
-    applications {
-      appliedAt
-      applicationId
-      callId
-      residency {
-        messManagerTimes
+    query PrevCallQuery {
+      prevCalls {
+        callId
+        createdAt
         from
-        isCurrentMessManager
-        residencyId
-        student {
-          batch {
-            year
-          }
-          name
-          levelTerm {
-            label
-          }
-          student9DigitId
-          department {
-            shortName
+        to
+        accepted
+        applicationsCount
+        applications {
+          appliedAt
+          applicationId
+          callId
+          residency {
+            messManagerTimes
+            from
+            isCurrentMessManager
+            residencyId
+            student {
+              batch {
+                year
+              }
+              name
+              levelTerm {
+                label
+              }
+              student9DigitId
+              department {
+                shortName
+              }
+            }
           }
         }
       }
     }
-  }
-}
 `)
 
 
 export const APPROVE_MESS_MANAGER_APP = graphql(`
-mutation ApproveMessManagerApplication($messManagerApplicationId: Float!) {
-  approveMessManagerApplication(messManagerApplicationId: $messManagerApplicationId) {
-    residencyId
-  }
-}
+    mutation ApproveMessManagerApplication($messManagerApplicationId: Float!) {
+      approveMessManagerApplication(messManagerApplicationId: $messManagerApplicationId) {
+        residencyId
+      }
+    }
 `)
 
 
 export const GET_PREV_CALLS_STUDENT = graphql(`
   query PrevCallsStudent {
-  prevCallsWithAppOfResident {
-    application {
-      status
-    }
-    call {
-      from
-      to
-      createdAt
-      callId
-    }
-  }
-}
+      prevCallsWithAppOfResident {
+        application {
+          status
+        }
+        call {
+          from
+          to
+          createdAt
+          callId
+        }
+      }
+   }
 `)
 
 export const APPLY_FOR_MESS_MANAGER = graphql(`
-mutation ApplyMessManager($callId: Float!) {
-  applyMessManager(callId: $callId) {
-    applicationId
-  }
-}
+    mutation ApplyMessManager($callId: Float!) {
+      applyMessManager(callId: $callId) {
+        applicationId
+      }
+    }
 `)
 
 export const GET_MESS_MANAGER_EXPERIENCE = graphql(`
@@ -887,17 +870,17 @@ export const POST_VOTE = graphql(`
 )
 
 export const MARK_NOTIFICATION_SEEN = graphql(`
-mutation Mark($notificationId: Float!) {
-  mark(notificationId: $notificationId) {
-    seen
-    notificationId
-    applicationId
-    studentId
-    text
-    time
-    voteId
-  }
-}
+    mutation Mark($notificationId: Float!) {
+      mark(notificationId: $notificationId) {
+        seen
+        notificationId
+        applicationId
+        studentId
+        text
+        time
+        voteId
+      }
+    }
 `)
 
 export const GET_SEAT_INFO_STATS = graphql(`
@@ -933,36 +916,37 @@ export const GET_DEPT_WISE_RESIDENT_STATS = graphql(`
 
 
 export const GET_MEALPLANS_CALENDER = graphql(`
-query GetAddedMealPlansByDateTime($mealTime: String!) {
-  getAddedMealPlansByDateTime(mealTime: $mealTime) {
-    day
-    mealId
-  }
-}
+    query GetAddedMealPlansByDateTime($mealTime: String!) {
+      getAddedMealPlansByDateTime(mealTime: $mealTime) {
+        day
+        mealId
+      }
+    }
 `)
 
 
 export const GET_MEAL_PLAN = graphql(`
-query GetMealPlan($mealTime: String!, $date: String!) {
-  getMealPlan(mealTime: $mealTime, date: $date) {
-    meal {
-      mealId
-      items {
-        itemId
-        name
-        type
-        photo {
-          photoId
-          file {
-            newFileName
-            fileName
+    query GetMealPlan($mealTime: String!, $date: String!) {
+      getMealPlan(mealTime: $mealTime, date: $date) {
+        meal {
+          mealId
+          items {
+            itemId
+            name
+            type
+            photo {
+              photoId
+              file {
+                newFileName
+                fileName
+              }
+            }
           }
         }
       }
     }
-  }
-}
 `)
+
 export const ALL_FLOORS = graphql(`
     query AllFloors {
       allFloors
@@ -1000,8 +984,6 @@ export const GET_ROOMS_IN_FLOOR = graphql(`
       }
     }
 `)
-
-
 
 export const DELETE_NOTIFICATION = graphql(`
 mutation DeleteNotification($notificationId: Float!) {
@@ -1092,133 +1074,99 @@ export const FILTERS_STUDENT_DATA = graphql(`
 `);
 
 export const GET_COMPLAINTS = graphql(`
-query GetComplaints {
-  getComplaints {
-    complaintId
-    createdAt
-    details
-    title
-    type
-    student {
-      studentId
-      name
-      student9DigitId
+    query GetComplaints {
+      getComplaints {
+        complaintId
+        createdAt
+        details
+        title
+        type
+        student {
+          studentId
+          name
+          student9DigitId
+        }
+      }
     }
-  }
-}
 `)
 
 export const GET_SELECTED_COMPLAINTS = graphql(`
-query GetSelectedComplaints($filters: complaintTypeFilerInput, $sort: SortInput, $search: SearchInput, $startDate: String, $studentId: Float) {
-  getSelectedComplaints(filters: $filters, sort: $sort, search: $search, startDate: $startDate, studentId: $studentId) {
-    complaintId
-    createdAt
-    type
-    details
-    title
-    student {
-      name
-      studentId
-      student9DigitId
+    query GetSelectedComplaints($filters: complaintTypeFilerInput, $sort: SortInput, $search: SearchInput, $startDate: String, $studentId: Float) {
+      getSelectedComplaints(filters: $filters, sort: $sort, search: $search, startDate: $startDate, studentId: $studentId) {
+        complaintId
+        createdAt
+        type
+        details
+        title
+        student {
+          name
+          studentId
+          student9DigitId
+        }
+      }
     }
-  }
-}
 `)
 
 export const GET_COMPLAINT_BY_STD_ID = graphql(`
-query GetComplaintsByStudent($studentId: Float!) {
-  getComplaintsByStudent(studentId: $studentId) {
-    complaintId
-    createdAt
-    details
-    title
-    type
-    student {
-      studentId
-      name
-      student9DigitId
+    query GetComplaintsByStudent($studentId: Float!) {
+      getComplaintsByStudent(studentId: $studentId) {
+        complaintId
+        createdAt
+        details
+        title
+        type
+        student {
+          studentId
+          name
+          student9DigitId
+        }
+      }
     }
-  }
-}
-`)
-
-export const GET_COMPLAINT_BY_TYPE = graphql(`
-query GetComplaintsByType($type: String!) {
-  getComplaintsByType(type: $type) {
-    complaintId
-    createdAt
-    details
-    title
-    type
-    student {
-      studentId
-      name
-      student9DigitId
-    }
-  }
-}
-`)
-
-export const GET_COMPLAINT_FROM_DATE = graphql(`
-query GetComplaintsFromDate($date: String!) {
-  getComplaintsFromDate(date: $date) {
-    complaintId
-    type
-    createdAt
-    details
-    title
-    student {
-      studentId
-      name
-      student9DigitId
-    }
-  }
-}
 `)
 
 export const ADD_COMPLAINT = graphql(`
-mutation complaintMutation($type: String!, $details: String!, $title: String!) {
-  addComplaint(type: $type, details: $details, title: $title) {
-    complaintId
-    title
-    details
-    createdAt
-    type
-    student {
-      studentId
-      name
-      student9DigitId
+    mutation complaintMutation($type: String!, $details: String!, $title: String!) {
+      addComplaint(type: $type, details: $details, title: $title) {
+        complaintId
+        title
+        details
+        createdAt
+        type
+        student {
+          studentId
+          name
+          student9DigitId
+        }
+      }
     }
-  }
-}
 `)
 
 
 export const GET_COMPLAINT_BY_ID = graphql(`
-query GetComplaint($complaintId: Float!) {
-  getComplaint(complaintId: $complaintId) {
-    createdAt
-    complaintId
-    details
-    title
-    studentId
-    type
-    student {
-      name
-      levelTerm {
-        label
+    query GetComplaint($complaintId: Float!) {
+      getComplaint(complaintId: $complaintId) {
+        createdAt
+        complaintId
+        details
+        title
+        studentId
+        type
+        student {
+          name
+          levelTerm {
+            label
+          }
+          department {
+            shortName
+          }
+          phone
+          student9DigitId
+          batch {
+            year
+          }
+          email
+          residencyStatus
+        }
       }
-      department {
-        shortName
-      }
-      phone
-      student9DigitId
-      batch {
-        year
-      }
-      email
-      residencyStatus
     }
-  }
-}
 `)

@@ -7,9 +7,9 @@ import {Filters} from "../Seat/ProvostSeat/ApplicationsList/filters";
 import {SortBy} from "../Seat/ProvostSeat/ApplicationsList/sortby";
 import styles from '../../styles/seatManagementIndex.module.scss'
 import {GET_SELECTED_COMPLAINTS} from "../../graphql/operations";
-import { SingleComplaint2 } from "./SingleComplaint";
-import { Title } from "../Seat/ProvostSeat/AppDetailsTitle";
-import { MyInput } from "../input";
+import {SingleComplaint2} from "./SingleComplaint";
+import {Title} from "../Seat/ProvostSeat/AppDetailsTitle";
+import {MyInput} from "../input";
 
 const orderBy = 'createdAt';
 const options = ['RESOURCE', 'STUFF', 'STUDENT']
@@ -19,7 +19,6 @@ const ComplaintsP = () => {
     const [order, setOrder] = useState<string>('asc');
     const [search, setSearch] = useState<string>('');
     const [searchGT3, setSearchGT3] = useState<string>('');
-    const [page, setPage] = useState(1);
     const [fromDate, setFromDate] = useState<Dayjs | null>(null);
 
 
@@ -39,7 +38,7 @@ const ComplaintsP = () => {
     }
 
 
-    const {data, loading: loadingByType, error: errorByType, refetch} = useQuery(GET_SELECTED_COMPLAINTS, {
+    const {data, loading, error, refetch} = useQuery(GET_SELECTED_COMPLAINTS, {
         variables: queryVars,
         onCompleted: (data) => {
             console.log(data);
@@ -49,19 +48,10 @@ const ComplaintsP = () => {
         }
     })
 
-
-    function pageReset(s: (s: string[]) => void) {
-        return (v: string[]) => {
-            s(v);
-            setPage(1);
-        }
-    }
-
     function setSearch_(s: string) {
         setSearch(s);
         if (s.trim().length >= 3) {
             setSearchGT3(s);
-            setPage(1);
         } else {
             setSearchGT3('');
         }
@@ -77,11 +67,11 @@ const ComplaintsP = () => {
 
     return (
         <div>
-            <Title text="Complaints" />
+            <Title text="Complaints"/>
             <div>
 
-                <div className={styles.filterSortContainer} style={{marginLeft : 20}}>
-                
+                <div className={styles.filterSortContainer} style={{marginLeft: 20}}>
+
                     <Filters
                         items={[options]}
                         setVals={[setSelectedTypes]}
@@ -94,7 +84,8 @@ const ComplaintsP = () => {
                     />
                     <SortBy
                         items={[['createdAt'], ['asc', 'desc']]}
-                        setVals={[()=>{}, setOrder]}
+                        setVals={[() => {
+                        }, setOrder]}
                         vals={[orderBy, order]}
                         resetOnClick={sortResetOnClick}
                         cardStyle={{
@@ -103,26 +94,26 @@ const ComplaintsP = () => {
                     />
                 </div>
                 <MyCard title={'Search From/By'} style={{
-                    width : 500, marginLeft : 28
+                    width: 500, marginLeft: 28
                 }}>
-                    
+
                     <div style={{
-                        display : 'flex',
-                        justifyContent : 'space-between',
-                        alignItems : 'center',
-                        marginTop : 20
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginTop: 20
                     }}>
                         <span> Title </span>
                         <MyInput type="text" value={search} onChange={setSearch_} placeHolder="Search By Title" style={{
-                            height : 40,
-                            width : '70%'
-                        }} />
+                            height: 40,
+                            width: '70%'
+                        }}/>
                     </div>
                     <div style={{
-                        display : 'flex',
-                        justifyContent : 'space-between',
-                        alignItems : 'center',
-                        marginTop : 20
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginTop: 20
                     }}>
                         <span> Application From </span>
                         <MyDatePicker date={fromDate} handleDate={setFromDate}/>
@@ -131,15 +122,13 @@ const ComplaintsP = () => {
             </div>
 
             {
-                <div style={{marginLeft : 15, marginTop : 30}}>
+                <div style={{marginLeft: 15, marginTop: 30}}>
 
                     {
                         data && data.getSelectedComplaints.map((complaint, index) => {
                             return (
-                                <div key={index} style={{margin: 15, display : "inline-block"}}>
-                                    {/* <MyCard key={index} title={<ComplaintTitle complaint={complaint}/>} style={{width: '100%'}}> */}
-                                        {<SingleComplaint2 complaint={complaint}/>}
-                                    {/* </MyCard> */}
+                                <div key={index} style={{margin: 15, display: "inline-block"}}>
+                                    {<SingleComplaint2 complaint={complaint}/>}
                                 </div>
                             )
                         })

@@ -22,21 +22,21 @@ const SingleAnnouncement = (props: { announcement: GetAnnouncementsQuery['getAnn
             <div style={{display: 'flex', justifyContent: 'space-between', marginLeft: 30, marginRight: 50}}>
                 <div style={{color: "darkgrey"}}>
                     <Typography variant={"body1"}>
-                       <span><DateRangeIcon />&nbsp;&nbsp;&nbsp;
+                       <span><DateRangeIcon/>&nbsp;&nbsp;&nbsp;
                            {new Date(props.announcement.createdAt).toDateString()}</span>
                     </Typography>
                 </div>
                 <div style={{color: "darkgrey"}}>
                     {props.announcement.messManager &&
                         <Typography variant={"body1"}>
-                       <span><LocalOfferIcon />&nbsp;
+                       <span><LocalOfferIcon/>&nbsp;
                            Mess Manager</span>
                         </Typography>
                     }
 
                     {props.announcement.authority &&
                         <Typography variant={"body1"}>
-                       <span><LocalOfferIcon />&nbsp;&nbsp;
+                       <span><LocalOfferIcon/>&nbsp;&nbsp;
                            Provost</span>
                         </Typography>
                     }
@@ -54,15 +54,11 @@ const AnnounceTitle = (props: { announcement: GetAnnouncementsQuery['getAnnounce
         setShowDetails(!showDetails);
     }
 
-    const handleSubmission = () => {
-        console.log("Submission");
-    }
-
     return (
         <div>
             <div style={{display: 'flex', justifyContent: 'space-between', marginLeft: 20, marginRight: 20}}>
                 <Typography variant={"h6"}>
-                    <span><CampaignIcon />&nbsp;&nbsp;&nbsp;<i>{props.announcement.title}</i></span>
+                    <span><CampaignIcon/>&nbsp;&nbsp;&nbsp;<i>{props.announcement.title}</i></span>
                 </Typography>
                 <Button variant={"outlined"} color={"primary"} style={{marginTop: 10}} onClick={handleShowDetails}>
                     View Details
@@ -74,8 +70,8 @@ const AnnounceTitle = (props: { announcement: GetAnnouncementsQuery['getAnnounce
                     <AnnounceDetailsContent announcementTitle={props.announcement.title}
                                             announcementDetails={props.announcement.details}
                                             date={new Date(props.announcement.createdAt).toDateString()}
-                                            messManager={props.announcement.messManager != null }
-                                            />
+                                            messManager={props.announcement.messManager != null}
+                    />
                 </CustomizedDialog>
             }
         </div>
@@ -124,11 +120,11 @@ const Announcements = () => {
         console.log(title, details)
 
         addAnnouncement({
-            variables : {
-                title : title,
-                details : details
+            variables: {
+                title: title,
+                details: details
             },
-            onCompleted : (data) => {
+            onCompleted: (data) => {
                 console.log(data);
                 router.reload();
             }
@@ -144,10 +140,11 @@ const Announcements = () => {
             </div>
             {
                 (messManager || authority) && <div>
-                <Button variant='contained' color="primary" size='large' style={{margin: 20}} onClick={handleShowDetails}>
-                    +&nbsp;Add Announcement
-                </Button>
-            </div>
+                    <Button variant='contained' color="primary" size='large' style={{margin: 20}}
+                            onClick={handleShowDetails}>
+                        +&nbsp;Add Announcement
+                    </Button>
+                </div>
             }
             {
                 (messManager || authority) && showDetails &&
@@ -170,7 +167,6 @@ const Announcements = () => {
 }
 
 
-
 const AnnounceDetailsContent = (props: {
     announcementTitle?: string,
     announcementDetails?: string,
@@ -184,7 +180,7 @@ const AnnounceDetailsContent = (props: {
             </Typography>
             <Typography gutterBottom>
                 <MyCard style={{marginTop: 10, marginBottom: 20}} title=''>
-                    <CardContent announcementDetails={props.announcementDetails}/>    
+                    <CardContent announcementDetails={props.announcementDetails}/>
                 </MyCard>
 
             </Typography>
@@ -234,7 +230,7 @@ const AddAnnouncementContent = (props: {
     }
 
     const handleSubmission = () => {
-        if(!title || !details) {
+        if (!title || !details) {
             setError(true);
             return;
         }
@@ -301,7 +297,7 @@ const AddAnnouncementContent = (props: {
     )
 }
 
-const CardContent = (props: {announcementDetails?: string}) => {
+const CardContent = (props: { announcementDetails?: string }) => {
     return (
         <div style={{color: "white", margin: 10, fontSize: 17}}>
             {props.announcementDetails}
