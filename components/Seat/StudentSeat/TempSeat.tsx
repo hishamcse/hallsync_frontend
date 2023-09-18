@@ -208,14 +208,14 @@ const TempSeat = (props: {
                 </div>
             }
                 <div className={styles.row}>
-                    <MyCard title='Questionnaire'>
+                    {/* <MyCard title='Questionnaire'>
                         <Questionnaire answers={allQuestionsAnswered}/>
-                    </MyCard>
+                    </MyCard> */}
                     
                     <ReasonForChange titleText='Reason for Temporary Seat' initialVal = {' '} handleReason={handleReason} disabled = {textAreaDisabled} />
-                </div>
-                <div className={styles.row}>
-                    <MyCard title='Room Preference and Date'>
+                {/* </div>
+                <div className={styles.row}> */}
+                    <MyCard title='Room Preference and Date' style={{ alignSelf : "baseline"}}>
                         <RoomPreference disable={textAreaDisabled} 
                         date={date} setSeatId={setSeatId}  setDays={setDays} handleDate={handleDate}
                         days={days}

@@ -26,11 +26,11 @@ const Questionnaire = (props: {answers: boolean[]}) => {
         <div className={styles.questionnaire}>
             <QuestionBox text="From Outside of Dhaka" checkBox={true} checked={props.answers[0]} disabled={true}/>
             <QuestionBox text="No Close Realtive in Dhaka" checkBox={true} checked={props.answers[1]} disabled={true}/>
-            <QuestionBox text="College Outside of Dhaka" checkBox={true} disabled={true}/>
-            <QuestionBox text="School Outside of Dhaka" checkBox={true} disabled={true}/>
-            <QuestionBox text="Dummy question" checkBox={true} disabled={true}/>
+            <QuestionBox text="School/College Outside of Dhaka" checkBox={true} disabled={true}/>
+            <QuestionBox text="BUET Bus Route within walking distance" checkBox={true} disabled={true}/>
+            {/* <QuestionBox text="Dummy question" checkBox={true} disabled={true}/>
             <QuestionBox text="Dummy question" checkBox={false} dropDown={["none", "hello", "hi"]}/>
-            <QuestionBox text="Dummy question" checkBox={true} />
+            <QuestionBox text="Dummy question" checkBox={true} /> */}
         </div>
     )
 }

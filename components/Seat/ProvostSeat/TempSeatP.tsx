@@ -251,18 +251,19 @@ const TempSeatP = (props: {application: ApplicationDetailsQuery['applicationDeta
         <div style={{marginBottom: 20}}>
             <Title text="Temporary Seat Application" />
             <div className={styles.row}>
-
-                <MyCard title='Questionnaire' style={{minWidth : 530}}>
-                    <Questionnaire reason={temp_chng}/>
+                <MyCard title='Reason For Temp Seat' style={{minWidth : 530}}>
+                    <ReasonForChange reason={temp_chng}/>
                 </MyCard>
+
+                {/* <MyCard title='Questionnaire' style={{minWidth : 530}}>
+                    <Questionnaire reason={temp_chng}/>
+                </MyCard> */}
                 <MyCard title='Profile' style={{minWidth : 500}} >
                     <ProfileInfo info={props.application.student}/>
                 </MyCard>
             </div>
             <div className={styles.row}>
-                <MyCard title='Reason For Change' style={{minWidth : 530}}>
-                    <ReasonForChange reason={temp_chng}/>
-                </MyCard>
+                
                 
                 <MyCard title='Room Allotment' style={{
                     minWidth : 500,

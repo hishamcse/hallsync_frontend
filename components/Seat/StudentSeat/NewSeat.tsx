@@ -22,11 +22,11 @@ const Questionnaire = (props: { answers: React.Dispatch<React.SetStateAction<boo
         <div className={styles.questionnaire}>
             <QuestionBox text="From Outside of Dhaka" checkBox={true} answer={props.answers[0]}/>
             <QuestionBox text="No Close Realtive in Dhaka" checkBox={true} answer={props.answers[1]}/>
-            <QuestionBox text="College Outside of Dhaka" checkBox={true}/>
-            <QuestionBox text="School Outside of Dhaka" checkBox={true}/>
-            <QuestionBox text="Dummy question" checkBox={true}/>
+            <QuestionBox text="School/College Outside of Dhaka" checkBox={true}/>
+            <QuestionBox text="BUET Bus Route within walking distance" checkBox={true}/>
+            {/* <QuestionBox text="Dummy question" checkBox={true}/>
             <QuestionBox text="Dummy question" checkBox={false} dropDown={["none", "hello", "hi"]}/>
-            <QuestionBox text="Dummy question" checkBox={true}/>
+            <QuestionBox text="Dummy question" checkBox={true}/> */}
         </div>
     )
 }
@@ -79,7 +79,7 @@ const NewSeat = (props: {
     function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
         console.log(event)
         setFiles((f) => {
-            if (event.target.files)
+            if (event.target.files && event.target.files[0] )
                 return [...f, event.target.files[0]]
             return f;
         })
