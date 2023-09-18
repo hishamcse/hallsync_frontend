@@ -1,14 +1,9 @@
 import QuestionBox from "../QuestionBox";
-import {Button} from "@mui/material";
 import * as React from "react";
 import {useState} from "react";
 import styles from '../../../styles/studentSeat.module.scss';
 import MyCard from "../../card";
 import Confirmation from "./Confirmation";
-import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider'
-import {DateTimePicker} from "@mui/x-date-pickers";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs, {Dayjs} from "dayjs";
 import {ApplicationDetailsQuery, ApplicationStatus} from "../../../graphql/__generated__/graphql";
 import {FreeRoom} from "../freeRoom";
 import {APPROVE_NEW_SEAT_APPLICATION, REJECT_APPLICATION, REVISE_APPLICATION} from "../../../graphql/operations";
@@ -73,21 +68,21 @@ const RoomAllotment = (props : {
     )
 }
 
-const ScheduleAppointment = () => {
-    const [value, setValue] = useState<Dayjs | null>();
-
-    return (
-        <div style={{justifyContent: 'left', width: 500, paddingTop: 15, marginTop: 20}}>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DateTimePicker label="Schedule date and time" value={dayjs(value)}
-                                        onChange={(newValue) => setValue(newValue)}/>
-                </LocalizationProvider>
-                <Button variant="outlined" color='primary'>Confirm Appointment</Button>
-            </div>
-        </div>
-    )
-}
+// const ScheduleAppointment = () => {
+//     const [value, setValue] = useState<Dayjs | null>();
+//
+//     return (
+//         <div style={{justifyContent: 'left', width: 500, paddingTop: 15, marginTop: 20}}>
+//             <div style={{display: 'flex', justifyContent: 'space-between'}}>
+//                 <LocalizationProvider dateAdapter={AdapterDayjs}>
+//                     <DateTimePicker label="Schedule date and time" value={dayjs(value)}
+//                                         onChange={(newValue) => setValue(newValue)}/>
+//                 </LocalizationProvider>
+//                 <Button variant="outlined" color='primary'>Confirm Appointment</Button>
+//             </div>
+//         </div>
+//     )
+// }
 
 const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetails']}) => {
     const router = useRouter();
@@ -207,9 +202,9 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
                     disabled={props.application.status == ApplicationStatus.Accepted ||
                     props.application.status == ApplicationStatus.Rejected} student={props.application.student} />}
                 </MyCard>
-                <MyCard title='Schedule Appointment'>
-                    <ScheduleAppointment />
-                </MyCard>
+                {/*<MyCard title='Schedule Appointment'>*/}
+                {/*    <ScheduleAppointment />*/}
+                {/*</MyCard>*/}
             </div>
 
             { (props.application.status == "PENDING")  &&
