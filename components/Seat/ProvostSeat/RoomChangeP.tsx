@@ -14,18 +14,6 @@ import {ReasonForChange} from "../StudentSeat/TempSeat";
 import {generateRoomNumber} from "../../utilities";
 
 
-// const RoomPreference = (props: { room: number }) => {
-//     return (
-//         <div style={{justifyContent: 'left', paddingTop: 15, margin: 'auto'}}>
-//             <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: 20}}>
-//                 <div>
-//                     Room No: {props.room.toString()}
-//                 </div>
-//             </div>
-//         </div>
-//     )
-// }
-
 const RoomResidents = (props: {
     room: number,
     seatChangeApp: ApplicationDetailsQuery['applicationDetails']['seatChangeApplication']

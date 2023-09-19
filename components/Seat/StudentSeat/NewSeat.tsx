@@ -24,9 +24,6 @@ const Questionnaire = (props: { answers: React.Dispatch<React.SetStateAction<boo
             <QuestionBox text="No Close Realtive in Dhaka" checkBox={true} answer={props.answers[1]}/>
             <QuestionBox text="School/College Outside of Dhaka" checkBox={true}/>
             <QuestionBox text="BUET Bus Route within walking distance" checkBox={true}/>
-            {/* <QuestionBox text="Dummy question" checkBox={true}/>
-            <QuestionBox text="Dummy question" checkBox={false} dropDown={["none", "hello", "hi"]}/>
-            <QuestionBox text="Dummy question" checkBox={true}/> */}
         </div>
     )
 }

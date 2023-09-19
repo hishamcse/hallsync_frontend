@@ -4,7 +4,6 @@ import {SelectChangeEvent} from "@mui/material/Select";
 import MyCard from "../../card";
 import MUIDropdown from "../../MUIDropdown";
 import * as React from "react";
-import QuestionBox from "../QuestionBox";
 import Agreement from "./Agreement";
 import MUIStyledTextarea from "../../MUITextArea";
 import {types} from "./StudentView";
@@ -20,15 +19,6 @@ import { ApplicationDetailsQuery } from "../../../graphql/__generated__/graphql"
 import MUISelectStyled from "../../MUIMultiSelectCheckbox";
 import { MyButton } from "../../button";
 
-const Questionnaire = (props: {answers:  React.Dispatch<React.SetStateAction<boolean>>[]}) => {
-    return (
-        <div className={styles.questionnaire}>
-            <QuestionBox text="Dummy question" checkBox={true} answer={props.answers[0]}/>
-            <QuestionBox text="Dummy question" checkBox={false} dropDown={["none", "hello", "hi"]}/>
-            <QuestionBox text="Dummy question" checkBox={true} answer={props.answers[1]}/>
-        </div>
-    )
-}
 
 export const ReasonForChange = (props: {
     handleReason: (str: string) => void,

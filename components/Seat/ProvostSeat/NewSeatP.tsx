@@ -10,83 +10,64 @@ import {APPROVE_NEW_SEAT_APPLICATION, REJECT_APPLICATION, REVISE_APPLICATION} fr
 import {useMutation} from "@apollo/client";
 import {useRouter} from "next/router";
 import ProfileInfo from "./ProfileInfo";
-import { Title } from "./AppDetailsTitle";
-import { UploadedDocsList } from "../UploadedDocsList";
+import {Title} from "./AppDetailsTitle";
+import {UploadedDocsList} from "../UploadedDocsList";
 import CustomizedDialog from "../../MUIDialog";
 import MUIStyledTextarea from "../../MUITextArea";
-import { MyButton } from "../../button";
+import {MyButton} from "../../button";
 
-const Questionnaire = (props: {answers: boolean[]}) => {
+const Questionnaire = (props: { answers: boolean[] }) => {
     return (
         <div className={styles.questionnaire}>
             <QuestionBox text="From Outside of Dhaka" checkBox={true} checked={props.answers[0]} disabled={true}/>
             <QuestionBox text="No Close Realtive in Dhaka" checkBox={true} checked={props.answers[1]} disabled={true}/>
             <QuestionBox text="School/College Outside of Dhaka" checkBox={true} disabled={true}/>
             <QuestionBox text="BUET Bus Route within walking distance" checkBox={true} disabled={true}/>
-            {/* <QuestionBox text="Dummy question" checkBox={true} disabled={true}/>
-            <QuestionBox text="Dummy question" checkBox={false} dropDown={["none", "hello", "hi"]}/>
-            <QuestionBox text="Dummy question" checkBox={true} /> */}
         </div>
     )
 }
 
 
-const RoomAllotment = (props : {
-    setSeatId : (v : number | undefined)=>void,
+const RoomAllotment = (props: {
+    setSeatId: (v: number | undefined) => void,
     disabled: boolean,
     student?: ApplicationDetailsQuery['applicationDetails']['student']
 }) => {
 
     let floor, roomNo, seatLabel;
     let initVal = undefined;
-    if(props?.student?.residency?.seat){
+    if (props?.student?.residency?.seat) {
         floor = props?.student?.residency?.seat.room.floor.floorNo;
         roomNo = props?.student?.residency?.seat.room.roomNo;
         seatLabel = props?.student?.residency?.seat.seatLabel;
-        initVal =  {
-            floorNo : floor,
-            roomNo : roomNo,
-            seatLabel : seatLabel
+        initVal = {
+            floorNo: floor,
+            roomNo: roomNo,
+            seatLabel: seatLabel
         };
     }
 
 
     return (
         <div style={{justifyContent: 'left', width: 500, paddingTop: 15, marginTop: 20}}>
-            <div style={{ justifyContent: 'space-between'}}>
+            <div style={{justifyContent: 'space-between'}}>
                 {
                     !props.disabled &&
-                    <FreeRoom setSeatId={props.setSeatId} autoAssign />
+                    <FreeRoom setSeatId={props.setSeatId} autoAssign/>
                 }
                 {
                     props.disabled &&
-                    <FreeRoom initVal={initVal} disabled = {props.disabled} setSeatId={props.setSeatId} containerStyle={{
-                    }} />
+                    <FreeRoom initVal={initVal} disabled={props.disabled} setSeatId={props.setSeatId}
+                              containerStyle={{}}/>
                 }
             </div>
         </div>
     )
 }
 
-// const ScheduleAppointment = () => {
-//     const [value, setValue] = useState<Dayjs | null>();
-//
-//     return (
-//         <div style={{justifyContent: 'left', width: 500, paddingTop: 15, marginTop: 20}}>
-//             <div style={{display: 'flex', justifyContent: 'space-between'}}>
-//                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-//                     <DateTimePicker label="Schedule date and time" value={dayjs(value)}
-//                                         onChange={(newValue) => setValue(newValue)}/>
-//                 </LocalizationProvider>
-//                 <Button variant="outlined" color='primary'>Confirm Appointment</Button>
-//             </div>
-//         </div>
-//     )
-// }
-
-const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetails']}) => {
+const NewSeatP = (props: { application: ApplicationDetailsQuery['applicationDetails'] }) => {
     const router = useRouter();
-    const [seatId ,setSeatId] = useState<number>();
+    const [seatId, setSeatId] = useState<number>();
 
     const [blankError, setBlankError] = useState(false);
     const [reqError, setReqError] = useState(false);
@@ -96,19 +77,19 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
 
     let answers = [false, false];
 
-    if(newApplication) {
+    if (newApplication) {
         answers = [newApplication.questionnaire.q1, newApplication.questionnaire.q2]
     }
 
     const [approveMutation, {}] = useMutation(
         APPROVE_NEW_SEAT_APPLICATION
         , {
-            onError : (error)=>{
+            onError: (error) => {
                 setReqError(true)
                 setReqErrorMsg(error.message)
                 setBlankError(false);
             },
-            onCompleted : (data)=>{
+            onCompleted: (data) => {
                 // console.log(data);
                 router.push('/seatManagement');
             }
@@ -117,24 +98,24 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
     const [rejectMutation, {}] = useMutation(
         REJECT_APPLICATION
         , {
-            onError : (error)=>{
+            onError: (error) => {
                 setReqError(true)
                 setReqErrorMsg(error.message)
                 setBlankError(false);
             },
-            onCompleted : (data)=>{
+            onCompleted: (data) => {
                 // console.log(data);
                 router.push('/seatManagement');
             }
         }
     )
 
-    const [reviseMutation, {}] = useMutation(REVISE_APPLICATION,{
-        onCompleted : ()=> router.push('/seatManagement')
+    const [reviseMutation, {}] = useMutation(REVISE_APPLICATION, {
+        onCompleted: () => router.push('/seatManagement')
     })
 
-    function approve(){
-        if(!seatId || !props.application?.newApplication?.newApplicationId){
+    function approve() {
+        if (!seatId || !props.application?.newApplication?.newApplicationId) {
             setBlankError(true);
             return;
         }
@@ -142,16 +123,16 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
         setBlankError(false);
 
         approveMutation({
-            variables : {
-                newApplicationId : props.application?.newApplication?.newApplicationId,
-                seatId : seatId
+            variables: {
+                newApplicationId: props.application?.newApplication?.newApplicationId,
+                seatId: seatId
             }
         }).then(r => {
             console.log(r)
         })
     }
 
-    function reject(){
+    function reject() {
         rejectMutation({
             variables: {
                 applicationId: props.application.applicationId
@@ -159,14 +140,14 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
         }).then(r => {
             console.log(r)
         })
-     }
-    
-    function revise(){
-        if(val == undefined || val.trim() == '') return;
+    }
+
+    function revise() {
+        if (val == undefined || val.trim() == '') return;
         reviseMutation({
-            variables : {
-                applicationId : props.application.applicationId,
-                reason : val
+            variables: {
+                applicationId: props.application.applicationId,
+                reason: val
             }
         })
     }
@@ -176,15 +157,15 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
 
     return (
         <div style={{marginBottom: 20}}>
-            <Title text="New Seat Application" />
+            <Title text="New Seat Application"/>
             <div className={styles.row}>
-                
+
                 <MyCard title='Questionnaire'>
                     <Questionnaire answers={answers}/>
                 </MyCard>
                 <div className={styles.profDocCol}>
                     <MyCard title='Profile' style={{
-                        minWidth : 500
+                        minWidth: 500
                     }}>
                         <ProfileInfo info={props.application.student}/>
                     </MyCard>
@@ -196,20 +177,18 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
             </div>
             <br/>
             <div className={styles.row}>
-                
-                <MyCard  title='Room Allotment'>
+
+                <MyCard title='Room Allotment'>
                     {<RoomAllotment setSeatId={setSeatId}
-                    disabled={props.application.status == ApplicationStatus.Accepted ||
-                    props.application.status == ApplicationStatus.Rejected} student={props.application.student} />}
+                                    disabled={props.application.status == ApplicationStatus.Accepted ||
+                                        props.application.status == ApplicationStatus.Rejected}
+                                    student={props.application.student}/>}
                 </MyCard>
-                {/*<MyCard title='Schedule Appointment'>*/}
-                {/*    <ScheduleAppointment />*/}
-                {/*</MyCard>*/}
             </div>
 
-            { (props.application.status == "PENDING")  &&
+            {(props.application.status == "PENDING") &&
                 <div className={styles.submit}>
-                    <div  style={{color: 'red', fontSize: 14, textAlign: 'center', minHeight : 30}}> 
+                    <div style={{color: 'red', fontSize: 14, textAlign: 'center', minHeight: 30}}>
                         {
                             blankError && <span>Please fill in all the fields</span>
                         }
@@ -217,9 +196,9 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
                             reqError && <span>{reqErrorMsg}</span>
                         }
                     </div>
-                    {/* <MyCard  title=''> */}
-                        <Confirmation reviseHandler={()=>{setShow(true)}} includeRevise = {true} rejectHandler={reject} successHandler={approve}/>
-                    {/* </MyCard> */}
+                    <Confirmation reviseHandler={() => {
+                        setShow(true)
+                    }} includeRevise={true} rejectHandler={reject} successHandler={approve}/>
                 </div>
             }
             <CustomizedDialog
@@ -228,17 +207,17 @@ const NewSeatP = (props: {application: ApplicationDetailsQuery['applicationDetai
                 setShow={setShow}>
 
                 <div style={{
-                    padding : 10
+                    padding: 10
                 }}>
-                    <MUIStyledTextarea placeHolder="Remark" rows={10} val={val ?? ''} handleInput={setVal} />
+                    <MUIStyledTextarea placeHolder="Remark" rows={10} val={val ?? ''} handleInput={setVal}/>
                 </div>
                 <div style={{
-                    textAlign : "center",
-                    marginBottom : 20
+                    textAlign: "center",
+                    marginBottom: 20
                 }}>
-                    <MyButton buttonProps={ {
-                        disabled : val == undefined || val.trim() == '',
-                    }} onClick={revise} text = "Confirm" type="submit" />
+                    <MyButton buttonProps={{
+                        disabled: val == undefined || val.trim() == '',
+                    }} onClick={revise} text="Confirm" type="submit"/>
                 </div>
             </CustomizedDialog>
         </div>
