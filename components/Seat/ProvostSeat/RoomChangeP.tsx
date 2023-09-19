@@ -14,17 +14,17 @@ import {ReasonForChange} from "../StudentSeat/TempSeat";
 import {generateRoomNumber} from "../../utilities";
 
 
-const RoomPreference = (props: { room: number }) => {
-    return (
-        <div style={{justifyContent: 'left', paddingTop: 15, margin: 'auto'}}>
-            <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: 20}}>
-                <div>
-                    Room No: {props.room.toString()}
-                </div>
-            </div>
-        </div>
-    )
-}
+// const RoomPreference = (props: { room: number }) => {
+//     return (
+//         <div style={{justifyContent: 'left', paddingTop: 15, margin: 'auto'}}>
+//             <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: 20}}>
+//                 <div>
+//                     Room No: {props.room.toString()}
+//                 </div>
+//             </div>
+//         </div>
+//     )
+// }
 
 const RoomResidents = (props: {
     room: number,
@@ -32,9 +32,9 @@ const RoomResidents = (props: {
 }) => {
 
     return (
-        <div style={{justifyContent: 'left', width: 500, paddingTop: 15, margin: 'auto'}}>
+        <div style={{paddingTop: 15, margin: 'auto'}}>
             <div style={{marginBottom: 20}}>
-                <h6>Room No: &nbsp; {props.room.toString()}</h6>
+                <h6>Given Room Preference: &nbsp; {props.room.toString()}</h6>
             </div>
             <div>
                 <ResidentTable seatChangeApp={props.seatChangeApp}/>
@@ -121,21 +121,16 @@ const RoomChangeP = (props: { application: ApplicationDetailsQuery['applicationD
                 }} titleText={"Reason For Change"}
                                  disabled={temp_chng != null} initialVal={temp_chng}/>
 
-                <MyCard title={"Profile"} style={{
-                    minWidth: 500
-                }}>
-                    <ProfileInfo info={props.application.student}/>
-                </MyCard>
+                    <MyCard title={"Profile"} style={{
+                        minWidth: 500
+                    }}>
+                        <ProfileInfo info={props.application.student}/>
+                    </MyCard>
             </div>
+
             <div className={styles.row}>
-                <MyCard title={"Room Residents"}>
+                <MyCard title={"Room Residents"} style={{width: '100%'}}>
                     <RoomResidents room={num} seatChangeApp={props.application.seatChangeApplication}/>
-                </MyCard>
-                <MyCard title={"Given Room Preference"} style={{
-                    minWidth: 500,
-                    height: 120
-                }}>
-                    <RoomPreference room={num}/>
                 </MyCard>
             </div>
 
