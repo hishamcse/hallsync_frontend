@@ -1,34 +1,85 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+<h1 align="center"> HallSync FrontEnd</h1><br />
 
-First, run the development server:
+### table of contents
+   * [Overview](#overview)
+   * [Configuring frontend](#configuring-frontend)
+      * [Production Build](#build)
+   * [Languages, Tools and Frameworks](#tools)
+   * [Project Scope](#scope)
+   * [Mock UI](#mock)
+   * [Project Architecture](#archi)
+   * [API Reference](#api-reference)
+   * [Modules & Features](#features)
+   * [60% Video Demonstration](#video-demonstration)
+   * [Contributors](#contribute)
+   * [Supervisor](#super)
 
-```bash
-npm run dev
-# or
-yarn dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Overview<a name="overview"></a>
+   This is the frontend of CSE 408 Software Development term project <b>HallSync</b> By <b>Syed Jarullah Hisham (1805004)</b>, <b>Abdur Rafi (1805008)</b> & <b>A.H.M Osama Haque (1805002)</b> <br />
+   <b>To see backend of this project, please use this link: </b> [HallSync Backend](https://github.com/abdur-rafi/hallsynch)
 
-You can start editing the page by modifying `pages/rooms.tsx`. The page auto-updates as you edit the file.
+## Configuring frontend<a name="configuring-frontend"></a>
+   1. clone this repository or download the repository as zip and unzip it
+   2. typescript should be installed if not already installed. to install typescript globally, run 
+   
+     npm install -g typescript
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+   3. use terminal inside the project and run 
+     
+     npm install
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+   4. ensure backend is configured and running correctly on "http://localhost:3000" (note the port number)
+   5. using the terminal inside project, run 
 
-## Learn More
+     npm run dev
 
-To learn more about Next.js, take a look at the following resources:
+that's it. This project should work perfectly now on "http://localhost:3001"
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+ ### Production build<a name="build"></a>
+   6. (optional) in case of production build, run
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+     npm run build
 
-## Deploy on Vercel
+   7. (optional) after build is finished, run 
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+     npm start
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Languages, Tools and Frameworks:<a name="tools"></a>
+### frontend:
+typescript, reactjs, nextjs, scss, apollo, graphql, react-bootstrap, material ui, recharts
+
+### backend: 
+typescript, nodejs, express, apollo, graphql, postgres, prisma
+
+## Project Scope<a name="scope"></a>
+* [Scope Presentation](https://docs.google.com/presentation/d/1HZqs8L87hZMDl6vFIrbbXwTb2OujFEmvzw0N6ZqaqfQ/edit?usp=sharing)
+
+## Mock UI<a name="mock"></a>
+* [Mock UI Presentation](https://docs.google.com/presentation/d/1im97rgSKxvw3j7o39X7TL8qRPl1_rPDF7WTA1r100UM/edit?usp=sharing)
+
+## Project Architecture<a name="archi"></a>
+* [Architecture Presentation](hhttps://docs.google.com/presentation/d/1rpH56H3i_tuJjli4yfSajR5Ape0ViHmi9psTVnRxats/edit?usp=sharing)
+
+## API Reference:<a name="api-reference"></a>
+* [Sample API Reference](https://docs.google.com/spreadsheets/d/1bzbqjXmUxGidomrpJ0jKK2NfvzD0NaEjbHeG4WBwJVg/edit?usp=sharing)
+
+## Modules & Features:<a name="features"></a>
+* [Full Features Demo](https://docs.google.com/presentation/d/1hdAMp-Ch___syEhl3d1bdcaObi3pzTZ3jvrld7EXEGo/edit?usp=sharing)
+   
+## 60% Video Demonstration:<a name="video-demonstration"></a>
+* [Demo (Youtube)](https://www.youtube.com/watch?v=zL0V96N6PM8)
+* Rest 40% part with this 60% all demonstrated in the presentation provided in [Modules & Features](#features) section
+ 
+## Contributors:<a name="contribute"></a>
+   * [Syed Jarullah Hisham (1805004)](https://hishamcse.github.io/)
+   * [Abdur Rafi (1805008)](https://github.com/abdur-rafi)
+   * [A.H.M Osama Haque (1805008)](https://github.com/Osama00112)
+
+## Supervisor:<a name="super"></a>
+   * [Dr. Mahmuda Naznin](https://cse.buet.ac.bd/faculty_list/detail/mahmudanaznin) <br />
+     Professor <br />
+     Department Of Computer Science And Engineering <br />
+     Bangladesh University Of Engineering and Technology
+     
