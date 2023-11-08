@@ -69,7 +69,7 @@ typescript, nodejs, express, apollo, graphql, postgres, prisma
 * [Full Features Demo](https://docs.google.com/presentation/d/1hdAMp-Ch___syEhl3d1bdcaObi3pzTZ3jvrld7EXEGo/edit?usp=sharing)
    
 ## 60% Video Demonstration:<a name="video-demonstration"></a>
-* [Demo (Youtube)](https://www.youtube.com/watch?v=zL0V96N6PM8)
+* [Demo](https://drive.google.com/file/d/1_rRpJUIOU9zjPquxmX92mtss_2Ztj1dl/view)
 * Rest 40% part with this 60% all demonstrated in the presentation provided in [Modules & Features](#features) section
  
 ## Contributors:<a name="contribute"></a>
