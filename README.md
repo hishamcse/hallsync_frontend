@@ -60,7 +60,7 @@ typescript, nodejs, express, apollo, graphql, postgres, prisma
 * [Mock UI Presentation](https://docs.google.com/presentation/d/1im97rgSKxvw3j7o39X7TL8qRPl1_rPDF7WTA1r100UM/edit?usp=sharing)
 
 ## Project Architecture<a name="archi"></a>
-* [Architecture Presentation](hhttps://docs.google.com/presentation/d/1rpH56H3i_tuJjli4yfSajR5Ape0ViHmi9psTVnRxats/edit?usp=sharing)
+* [Architecture Presentation](https://docs.google.com/presentation/d/1rpH56H3i_tuJjli4yfSajR5Ape0ViHmi9psTVnRxats/edit?usp=sharing)
 
 ## API Reference:<a name="api-reference"></a>
 * [Sample API Reference](https://docs.google.com/spreadsheets/d/1bzbqjXmUxGidomrpJ0jKK2NfvzD0NaEjbHeG4WBwJVg/edit?usp=sharing)
